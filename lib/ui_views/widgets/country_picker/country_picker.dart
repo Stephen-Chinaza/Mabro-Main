@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:mabro/res/colors.dart';
 
 class CountryPicker extends StatefulWidget {
   CountryPicker({@required this.callBackFunction, this.headerText, this.headerBackgroundColor, this.headerTextColor});
@@ -60,7 +61,7 @@ class _CountryPickerState extends State<CountryPicker> {
               ),
               Text(
                 selectedCountryData != null ? selectedCountryData.dialCode : '',
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16, color: ColorConstants.secondaryColor),
               )
             ],
           ),

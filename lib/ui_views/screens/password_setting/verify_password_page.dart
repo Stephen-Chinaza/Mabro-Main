@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
@@ -14,6 +15,7 @@ import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +37,17 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   bool pageState, checkState;
   String user;
 
+
+  var onTapRecognizer;
+
+  TextEditingController textEditingController = TextEditingController();
+
+  StreamController<ErrorAnimationType> errorController;
+
+  bool hasError = false;
+  String currentText = "";
+
+  final formKey = GlobalKey<FormState>();
   Future<void> checkFirstScreen() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     user = (pref.getString('user') ?? '');
@@ -49,6 +62,12 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
 
     confirmText = '';
     checkFirstScreen();
+
+    onTapRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        Navigator.pop(context);
+      };
+    errorController = StreamController<ErrorAnimationType>();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -60,10 +79,8 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
         buildSecondContainer(),
         Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Colors.white,
-          body: (pageState)
-              ? loadingPage(state: pageState)
-              : SingleChildScrollView(
+          backgroundColor: ColorConstants.primaryColor,
+          body:  SingleChildScrollView(
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     child: Expanded(
@@ -76,11 +93,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                SizedBox(
-                                  height: Dims.sizedBoxHeight(
-                                      height:
-                                          Dims.screenHeight(context) * 0.12),
-                                ),
+
                                 GestureDetector(
                                     onTap: () {}, child: _buildSecurityText()),
                                 SizedBox(
@@ -88,37 +101,125 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                       height:
                                           Dims.screenHeight(context) * 0.10),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 32.0),
-                                  child: PinEntryTextField(
-                                    showFieldAsBox: false,
-                                    isTextObscure: true,
-                                    fieldWidth: 30.0,
-                                    fontSize: 30.0,
-                                    fields: 4,
-                                    onSubmit: (text) {
-                                      confirmText = text as String;
+                                Visibility(
+                                  visible: !pageState,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Form(
+                                        key: formKey,
+                                        child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0, horizontal: 10),
+                                            child: PinCodeTextField(
+                                              appContext: context,
+                                              pastedTextStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              length: 6,
+                                              obscureText: true,
+                                              animationType: AnimationType.fade,
+                                              validator: (v) {
+                                                if (v.length < 6) {
+                                                  return "";
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                              pinTheme: PinTheme(
+                                                shape: PinCodeFieldShape.box,
+                                                fieldHeight: 50,
+                                                fieldWidth: 50,
+                                                activeFillColor:
+                                                hasError ? Colors.orange : Colors.white,
+                                              ),
+                                              cursorColor: Colors.white,
+                                              animationDuration: Duration(milliseconds: 300),
+                                              textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
+                                              backgroundColor: ColorConstants.transparent,
+                                              obscuringCharacter: '*',
+                                              enableActiveFill: false,
+                                              errorAnimationController: errorController,
+                                              controller: textEditingController,
+                                              keyboardType: TextInputType.number,
+                                              boxShadows: [
+                                                BoxShadow(
+                                                  offset: Offset(0, 1),
+                                                  color: Colors.black12,
+                                                  blurRadius: 10,
+                                                )
+                                              ],
+                                              onCompleted: (v) {
+                                                print(v);
 
-                                      if (widget.textPin == confirmText) {
-                                        _setPin(widget.textPin);
-                                      } else {
-                                        ShowSnackBar.showInSnackBar(
-                                            bgColor:
-                                                ColorConstants.primaryColor,
-                                            value: 'Pin does not match',
-                                            context: context,
-                                            scaffoldKey: _scaffoldKey,
-                                            timer: 5);
+                                                formKey.currentState.validate();
+                                                // conditions for validating
+                                                if (currentText.length != 6) {
 
-                                        Future.delayed(Duration(seconds: 5),
-                                            () {
-                                          kbackBtn(context);
-                                        });
-                                      }
-                                    },
+                                                } else {
+                                                  setState(() {
+                                                    hasError = false;
+                                                    textEditingController.text = '';
+                                                    _setPin(v);
+                                                  });
+                                                }
+                                              },
+                                              onChanged: (value) {
+                                                print(value);
+                                                setState(() {
+                                                  currentText = value;
+                                                });
+                                              },
+                                              beforeTextPaste: (text) {
+                                                print("Allowing to paste $text");
+                                                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                                //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                                return true;
+                                              },
+                                            )),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                        child: Text(
+                                          hasError ? "*Please fill up all the cells properly" : "",
+                                          style: TextStyle(
+                                              color: ColorConstants.secondaryColor,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: Dims.sizedBoxHeight(height: 30.0),
+                                      ),
+                                      GestureDetector(onTap: (){
+                                        kbackBtn(context);
+                                      },
+                                      child: TextStyles.textHeadings(
+                                          textValue: 'BACK',
+                                          textSize: 16.0,
+                                          textColor: ColorConstants.whiteLighterColor
+                                      ),
+                                      ),
+
+                                    ],
                                   ),
                                 ),
+                                Visibility(
+                                  visible: pageState,
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 20),
+                                      CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
+                                      SizedBox(height: 20),
+                                      Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
+                                    ],
+                                  ),
+                                ),
+
+
                               ],
                             )),
                       ]),
@@ -138,7 +239,9 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Enter pin again!',
-            style: TextStyle(fontSize: 20),
+            style: TextStyle(fontSize: 25,
+                color: ColorConstants.secondaryColor
+            ),
             textAlign: TextAlign.center,
           ),
         ),
@@ -148,7 +251,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
             child: Text(
               ' Please remember this pin. It will be used to keep your account secured.',
               style:
-                  TextStyle(fontSize: 22, color: ColorConstants.primaryColor),
+                  TextStyle(fontSize: 18, color: ColorConstants.whiteLighterColor),
               textAlign: TextAlign.center,
             ),
           ),
@@ -170,7 +273,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
+            bgColor: ColorConstants.secondaryColor,
             value: 'The connection has timed out, please try again!',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -192,6 +295,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
 
           ShowSnackBar.showInSnackBar(
               iconData: Icons.check_circle,
+              bgColor: ColorConstants.secondaryColor,
               value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -203,13 +307,15 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           ShowSnackBar.showInSnackBar(
               value: message,
               context: context,
+              bgColor: ColorConstants.secondaryColor,
+
               scaffoldKey: _scaffoldKey,
               timer: 5);
         }
       } else {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
+            bgColor: ColorConstants.secondaryColor,
             value: 'network error',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -218,7 +324,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
     } on SocketException {
       cPageState(state: false);
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           value: 'check your internet connection',
           context: context,
           scaffoldKey: _scaffoldKey,
@@ -296,20 +402,20 @@ class _PinScreenState extends State<PinScreen> {
 
                           if (widget.textPin == confirmText) {
                             ShowSnackBar.showInSnackBar(
-                                bgColor: Colors.green,
+                                bgColor: ColorConstants.secondaryColor,
                                 iconData: Icons.check_circle,
-                                value: 'Pin set sucessfully',
+                                value: 'Pin set successfully',
                                 context: context,
                                 scaffoldKey: widget.scaffold,
                                 timer: 5);
                             SharedPrefrences.addStringToSP(
                                 "lock_code", widget.textPin);
-                            // Future.delayed(Duration(seconds: 5), () {
-                            //   kopenPage(context, LandingPage());
-                            // });
+                            Future.delayed(Duration(seconds: 5), () {
+                              kopenPage(context, LandingPage());
+                            });
                           } else {
                             ShowSnackBar.showInSnackBar(
-                                bgColor: ColorConstants.primaryColor,
+                                bgColor: ColorConstants.secondaryColor,
                                 value: 'Pin does not match',
                                 context: context,
                                 scaffoldKey: widget.scaffold,

@@ -1,10 +1,7 @@
-import 'dart:async';
-
 
 import 'package:mabro/core/models/slider.dart';
 import 'package:mabro/ui_views/commons/slider_item.dart';
 import 'package:mabro/ui_views/widgets/onboarding_sliding_dots/slide_dots.dart';
-//import 'package:Mabro/ui_views/screens/authentication_pages/sign_up_page.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

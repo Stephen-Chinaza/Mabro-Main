@@ -19,7 +19,7 @@ class SentEmailPage extends StatelessWidget {
   final String code;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  SentEmailPage({Key key, this.emailAddress, this.code}) : super(key: key);
+  SentEmailPage({Key key, this.emailAddress , this.code}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -28,7 +28,7 @@ class SentEmailPage extends StatelessWidget {
         buildSecondContainer(),
         Scaffold(
           key: _scaffoldKey,
-          backgroundColor: Colors.white,
+          backgroundColor: ColorConstants.primaryColor,
           body: SingleChildScrollView(
               child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -54,20 +54,20 @@ class SentEmailPage extends StatelessWidget {
                   children: [
                     Text(
                       'A Verfication code has been sent to',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
                     ),
                     Text(
                       emailAddress,
                       style: TextStyle(
-                          fontSize: 14, color: ColorConstants.primaryColor),
+                          fontSize: 14, color: ColorConstants.secondaryColor),
                     ),
                     Text(
                       'Please check your mail to continue',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
                     ),
                     Text(
                       code,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
                     ),
                   ],
                 ),
@@ -98,7 +98,7 @@ class SentEmailPage extends StatelessWidget {
                     child: Text(
                       'Check Mail'.toUpperCase(),
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ColorConstants.whiteLighterColor),
                     ),
                   ),
                 ),

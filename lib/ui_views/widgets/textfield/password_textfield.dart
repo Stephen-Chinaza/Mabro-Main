@@ -45,12 +45,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 40,
+      height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(4),
-          topLeft: Radius.circular(4),
+        borderRadius: BorderRadius.all(
+          Radius.circular(4.0)
         ),
+          border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)
       ),
       child: TextField(
         obscureText: _obscureText,
@@ -59,35 +59,46 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
         focusNode: widget.myFocusNode,
         onChanged: widget.onChanged,
         cursorColor: ColorConstants.secondaryColor,
+        style: TextStyle(color: ColorConstants.white),
         decoration: InputDecoration(
+          filled: true,
+          fillColor: ColorConstants.primaryColor,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(4.0),
+            borderSide: const BorderSide(color: ColorConstants.whiteColor, width: 1.0),
+          ),
           hintText: widget.textHint,
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: ColorConstants.transparent, width: 0.2),
+            borderRadius: BorderRadius.circular(4.0),
+          ),
           enabledBorder: UnderlineInputBorder(
-            borderSide:
-            BorderSide(color: ColorConstants.lighterSecondaryColor.withOpacity(0.3)),
+            borderSide: BorderSide(color: ColorConstants.transparent),
+            borderRadius: BorderRadius.circular(4.0),
           ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: ColorConstants.secondaryColor),
-          ),
+
           prefixIcon: (widget.icon == null)
               ? Container()
               : Icon(
                   widget.icon,
                   color: (widget.iconColor == null)
-                      ? ColorConstants.primaryColor
+                      ? ColorConstants.whiteLighterColor
                       : widget.iconColor,
-                ),
+            size: 22,
+
+          ),
           hintStyle: TextStyle(
               fontStyle: FontStyle.normal,
-              color: Colors.black38,
+              color: ColorConstants.whiteLighterColor,
               fontSize: 16,
-              fontWeight: FontWeight.w400),
+              fontWeight: FontWeight.w300),
           contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 13),
           suffixIcon: GestureDetector(
             onTap: _toggleIcon,
             child: Icon(
               _obscureText ? FontAwesomeIcons.eye : FontAwesomeIcons.eyeSlash,
               size: 15.0,
-              color: Colors.black,
+              color: ColorConstants.whiteLighterColor,
             ),
           ),
         ),

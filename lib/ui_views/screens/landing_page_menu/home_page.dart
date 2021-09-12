@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     email = (pref.getString('email') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
-    firstname = (pref.getString('first_name') ?? '');
+    firstname = (pref.getString('first_name') ?? 'stephen');
 
     if (firstname == '') {
       username = '';
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: Colors.white,
+      backgroundColor: ColorConstants.primaryColor,
       drawer: _buildDrawer(context),
       body: CustomScrollView(
         physics: AlwaysScrollableScrollPhysics(),
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
   SliverToBoxAdapter _buildToolbar(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        height: 300,
+        height: 270,
         child: Stack(
           children: [
             Container(
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                 child: Icon(
                                   Icons.menu,
                                   size: 30,
-                                  color: Colors.white,
+                                  color: ColorConstants.whiteLighterColor,
                                 )),
                             SizedBox(width: 30),
                             Column(
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(
                                     fontStyle: FontStyle.normal,
                                     fontSize: 18,
-                                    color: Colors.white,
+                                    color: ColorConstants.whiteColor,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.start,
@@ -161,8 +161,8 @@ class _HomePageState extends State<HomePage> {
                                   username,
                                   style: TextStyle(
                                     fontStyle: FontStyle.normal,
-                                    fontSize: 13,
-                                    color: Colors.white,
+                                    fontSize: 18,
+                                    color: ColorConstants.whiteLighterColor,
                                   ),
                                   textAlign: TextAlign.start,
                                 ),
@@ -173,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     decoration: BoxDecoration(
-                      gradient: ColorConstants.primaryGradient,
+                      color: ColorConstants.primaryColor,
                     ),
                     height: MediaQuery.of(context).size.height * 0.29,
                     width: MediaQuery.of(context).size.width,
@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Positioned(top: 120, right: 4, left: 6, child: HomeWallet())
+            Positioned(top: 100, right: 4, left: 6, child: HomeWallet())
           ],
         ),
       ),
@@ -194,13 +194,13 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(bottom: 8.0, left: 8.0),
             child: Text(
               title.toUpperCase(),
               style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontSize: 14,
-                  color: Colors.black,
+                  color: ColorConstants.whiteColor,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -261,18 +261,22 @@ class _HomePageState extends State<HomePage> {
             },
             child: Card(
               elevation: 3,
-              shape: RoundedRectangleBorder(
+              color: ColorConstants.primaryLighterColor,
+              shape: RoundedRectangleBorder(side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                  width: 0.1),
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+
                     Icon(
                       subList[index].icon,
-                      size: 30,
-                      color: Colors
-                          .primaries[Random().nextInt(Colors.primaries.length)],
+                      size: 20,
+                      color: ColorConstants.yellow,
+                      // color: Colors
+                      //     .primaries[Random().nextInt(Colors.primaries.length)],
                     ),
                     SizedBox(height: 10),
                     Align(
@@ -284,7 +288,8 @@ class _HomePageState extends State<HomePage> {
                           child: Text(
                             subList[index].title,
                             style: TextStyle(
-                                fontSize: 11, fontWeight: FontWeight.w600),
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 11, fontWeight: FontWeight.w400),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -301,8 +306,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  final Color primary = Colors.white;
-  final Color active = Colors.grey.shade800;
+  final Color primary = ColorConstants.primaryColor;
+  final Color active =  ColorConstants.whiteLighterColor;
   final Color divider = Colors.grey.shade600;
 
   _buildDrawer(BuildContext context) {
@@ -310,7 +315,7 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         padding: const EdgeInsets.only(left: 16.0, right: 40),
         decoration: BoxDecoration(
-            color: primary, boxShadow: [BoxShadow(color: Colors.black45)]),
+            color:  ColorConstants.primaryColor, boxShadow: [BoxShadow(color: Colors.black45)]),
         width: 300,
         child: SafeArea(
           child: SingleChildScrollView(
@@ -323,8 +328,9 @@ class _HomePageState extends State<HomePage> {
                     height: 35,
                     width: 35,
                     decoration: BoxDecoration(
-                      gradient: ColorConstants.primaryGradient,
+                      gradient:  ColorConstants.primaryGradient,
                       borderRadius: BorderRadius.circular(35.0),
+                        border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)
                     ),
                     child: Center(
                       child: IconButton(
@@ -343,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                 Text(
                   'Hello',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: ColorConstants.secondaryColor,
                       fontSize: 22.0,
                       fontWeight: FontWeight.w600),
                 ),
@@ -360,17 +366,20 @@ class _HomePageState extends State<HomePage> {
                     tilePadding: EdgeInsets.all(0),
                     childrenPadding: EdgeInsets.only(left: 20),
                     leading: Container(
-                      height: 45,
-                      width: 45,
+                      height: 43,
+                      width: 43,
                       child: Card(
                         elevation: 5,
                         color: Colors.transparent,
                         shape: RoundedRectangleBorder(
+                          side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                              width: 0.2),
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
+
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient: ColorConstants.primaryGradient,
+                            gradient:  ColorConstants.primaryGradient,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50.0)),
                           ),
@@ -378,7 +387,7 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.all(6.0),
                             child: Icon(
                               Typicons.chart_bar_outline,
-                              size: 22,
+                              size: 18,
                               color: ColorConstants.white,
                             ),
                           ),
@@ -386,7 +395,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     title: Text('Bitcoin P2P Exchange',
-                        style: TextStyle(color: active, fontSize: 15)),
+                        style: TextStyle(color: active, fontSize: 14)),
                     children: <Widget>[
                       _buildRow(
                         Icons.arrow_forward,
@@ -413,6 +422,8 @@ class _HomePageState extends State<HomePage> {
                         elevation: 5,
                         color: Colors.transparent,
                         shape: RoundedRectangleBorder(
+                          side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                              width: 0.1),
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
                         child: Container(
@@ -425,7 +436,7 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.all(6.0),
                             child: Icon(
                               Typicons.spanner,
-                              size: 22,
+                              size: 18,
                               color: ColorConstants.white,
                             ),
                           ),
@@ -462,6 +473,8 @@ class _HomePageState extends State<HomePage> {
                           elevation: 5,
                           color: Colors.transparent,
                           shape: RoundedRectangleBorder(
+                            side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                                width: 0.1),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50.0)),
                           ),
@@ -475,7 +488,7 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.all(6.0),
                               child: Icon(
                                 Icons.data_usage,
-                                size: 22,
+                                size: 18,
                                 color: ColorConstants.white,
                               ),
                             ),
@@ -511,6 +524,8 @@ class _HomePageState extends State<HomePage> {
                           elevation: 5,
                           color: Colors.transparent,
                           shape: RoundedRectangleBorder(
+                            side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                            width: 0.1),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50.0)),
                           ),
@@ -524,7 +539,7 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.all(6.0),
                               child: Icon(
                                 Icons.settings,
-                                size: 22,
+                                size: 18,
                                 color: ColorConstants.white,
                               ),
                             ),
@@ -534,7 +549,7 @@ class _HomePageState extends State<HomePage> {
                       title: Text('Settings',
                           style: TextStyle(
                             color: active,
-                            fontSize: 15,
+                            fontSize: 14,
                           )),
                       children: <Widget>[
                         _buildRow(
@@ -610,6 +625,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       gradient: ColorConstants.primaryGradient,
                       borderRadius: BorderRadius.circular(35.0),
+                        border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.1)
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -639,7 +655,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildRow(IconData icon, String title,
       {Widget page, bool showBadge = false, bool openState = true}) {
     final TextStyle tStyle =
-        TextStyle(color: active, fontSize: 15, fontWeight: FontWeight.normal);
+        TextStyle(color: active, fontSize: 14, fontWeight: FontWeight.normal);
     return GestureDetector(
       onTap: () => {
         Navigator.pop(context),
@@ -654,7 +670,7 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 5.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: ColorConstants.primaryColor,
         ),
         child: ListTile(
           contentPadding: EdgeInsets.all(0),
@@ -665,6 +681,8 @@ class _HomePageState extends State<HomePage> {
               elevation: 5,
               color: Colors.transparent,
               shape: RoundedRectangleBorder(
+                side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                    width: 0.1),
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
               ),
               child: Container(
@@ -676,7 +694,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(6.0),
                   child: Icon(
                     icon,
-                    size: 22,
+                    size: 18,
                     color: ColorConstants.white,
                   ),
                 ),
@@ -695,8 +713,11 @@ class _HomePageState extends State<HomePage> {
   SliverToBoxAdapter _buildPictureDisplay() {
     return SliverToBoxAdapter(
         child: Container(
+          color: ColorConstants.primaryColor,
       height: 180,
       child: Card(
+        color: ColorConstants.primaryColor,
+
         child: Container(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -704,7 +725,7 @@ class _HomePageState extends State<HomePage> {
               align: IndicatorAlign.bottom,
               length: 2,
               indicatorSpace: 12.0,
-              padding: EdgeInsets.only(bottom: 0),
+              padding: EdgeInsets.only(bottom: 8),
               indicatorColor: ColorConstants.grey,
               indicatorSelectorColor: ColorConstants.primaryColor,
               shape: IndicatorShape.circle(size: 8),

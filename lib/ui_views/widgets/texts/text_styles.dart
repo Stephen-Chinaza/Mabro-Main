@@ -39,7 +39,8 @@ class TextStyles {
     @required String textValue,
     double textSize = 12,
     double lineSpacing = 1.1,
-    Color textColor,
+    Color textColor =  ColorConstants.whiteLighterColor,
+
     bool centerText = false,
   }) {
     return Text(
@@ -49,7 +50,7 @@ class TextStyles {
           fontStyle: FontStyle.normal,
           color: textColor,
           fontSize: textSize,
-          fontWeight: FontWeight.w600),
+          fontWeight: FontWeight.w400),
     );
   }
 
@@ -72,7 +73,7 @@ class TextStyles {
               text: text1,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
-                  color: Colors.black,
+                  color: ColorConstants.whiteLighterColor,
                   fontSize: size,
                   fontWeight: FontWeight.w400),
             ),
@@ -84,20 +85,17 @@ class TextStyles {
               text: text2,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
-                  color: ColorConstants.primaryColor,
+                  color: ColorConstants.secondaryColor,
+
                   fontSize: size,
                   fontWeight: FontWeight.w400),
             ),
-          ]),
-        ),
-        RichText(
-          textAlign: (centerText) ? TextAlign.center : TextAlign.start,
-          text: TextSpan(children: <InlineSpan>[
             TextSpan(
               text: text3,
               style: TextStyle(
                   fontStyle: FontStyle.normal,
-                  color: Colors.black,
+                  color: ColorConstants.whiteLighterColor,
+
                   fontSize: size,
                   fontWeight: FontWeight.w400),
             ),
@@ -108,11 +106,12 @@ class TextStyles {
                   },
                 text: text4,
                 style: TextStyle(
-                    color: ColorConstants.primaryColor,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: size,
                     fontWeight: FontWeight.w400)),
           ]),
         ),
+
       ],
     );
   }

@@ -55,123 +55,131 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: ColorConstants.primaryColor,
       body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: Dims.screenHeight(context) * 0.10,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/images/mabrologo.jpg',
-                    height: 110,
-                    width: 110,
-                  ),
-                  SizedBox(
-                    width: screenHeight * 0.01,
-                  ),
-                ],
-              ),
-              // Image.asset(
-              //   'assets/images/registration.png',
-              //   height: screenHeight * 0.25,
-              //   fit: BoxFit.contain,
-              // ),
-              SizedBox(
-                height: screenHeight * 0.04,
-              ),
-              TextStyles.textDetails(
-                centerText: true,
-                textSize: 16,
-                textValue:
-                    'Enter your mobile number to receive a verification code',
-              ),
-              SizedBox(
-                height: screenHeight * 0.04,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    horizontal: screenWidth > 600 ? screenWidth * 0.2 : 16),
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      const BoxShadow(
-                        color: Colors.grey,
-                        offset: Offset(0.0, 1.0),
-                        blurRadius: 2.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: Column(
+        child: Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: Dims.screenHeight(context) * 0.11,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.all(8),
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      height: 45,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: ColorConstants.secondaryColor,
-                        ),
-                        borderRadius: BorderRadius.circular(36),
-                      ),
-                      child: Row(
-                        children: [
-                          CountryPicker(
-                            callBackFunction: _callBackFunction,
-                            headerText: 'Select Country',
-                            headerBackgroundColor: ColorConstants.primaryColor,
-                            headerTextColor: Colors.white,
-                          ),
-                          SizedBox(
-                            width: screenWidth * 0.01,
-                          ),
-                          Expanded(
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                hintText: 'Contact Number',
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                contentPadding:
-                                    EdgeInsets.symmetric(vertical: 13.5),
-                              ),
-                              controller: _contactEditingController,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(10)
-                              ],
-                              onChanged: (String input) {
-                                setState(() {
-                                  inputNum = input.length;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    CustomButton(
-                      onPressed: () {
-                        clickOnLogin(context);
-                      },
-                      text: 'Send otp',
-                      disableButton: true,
-                    ),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: TextStyles.textDetails(
+                      centerText: true,
+                      textSize: 20,
+                      textColor: ColorConstants.secondaryColor,
+                      textValue:
+                      'Phone Number Verification',
+                    ),),
+
                   ],
                 ),
-              )
-            ],
+                SizedBox(
+                  height: 30,
+                ),
+                Image.asset('assets/images/registration.png', height: 130,width: 190,),
+                SizedBox(
+                  height: 30,
+                ),
+                Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: TextStyles.textDetails(
+                  centerText: true,
+                  textSize: 16,
+                  textColor: ColorConstants.whiteLighterColor,
+                  textValue:
+                  'Enter your mobile number to receive a verification code',
+                ),),
+                SizedBox(
+                  height: screenHeight * 0.04,
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: screenWidth > 600 ? screenWidth * 0.2 : 16),
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                      color: ColorConstants.primaryLighterColor,
+
+
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        height: 45,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: ColorConstants.whiteColor, width: 0.2,
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Row(
+                          children: [
+                            CountryPicker(
+                              callBackFunction: _callBackFunction,
+                              headerText: 'Select Country',
+                              headerBackgroundColor: ColorConstants.primaryColor,
+                              headerTextColor: Colors.white,
+
+                            ),
+                            SizedBox(
+                              width: screenWidth * 0.01,
+                            ),
+                            Expanded(
+                              child: TextField(
+                                cursorColor: ColorConstants.secondaryColor,
+                                style: TextStyle(color: ColorConstants.white),
+                                decoration: const InputDecoration(
+                                  hintText: 'Contact Number',
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                      fontStyle: FontStyle.normal,
+                                      color: ColorConstants.whiteLighterColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w300),
+                                  contentPadding:
+                                      EdgeInsets.symmetric(vertical: 13.5),
+                                ),
+                                controller: _contactEditingController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(10)
+                                ],
+                                onChanged: (String input) {
+                                  setState(() {
+                                    inputNum = input.length;
+                                  });
+                                },
+
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      CustomButton(
+                        onPressed: () {
+                          clickOnLogin(context);
+                        },
+                        text: 'Send otp',
+                        disableButton: true,
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

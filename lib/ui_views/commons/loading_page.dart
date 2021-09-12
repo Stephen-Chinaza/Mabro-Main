@@ -6,7 +6,7 @@ Widget loadingPage({bool state = false}) {
   return Visibility(
     visible: state,
     child: Container(
-      color: ColorConstants.secondaryColor,
+      color: ColorConstants.primaryColor,
       child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),)),
     ),
   );

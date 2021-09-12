@@ -18,7 +18,7 @@ class CustomButton extends StatelessWidget {
       this.height = 45,
       this.icon,
       this.margin = 8.0,
-      this.borderRadius = 3.0,
+      this.borderRadius = 4.0,
       this.disableButton = false});
 
   @override
@@ -34,6 +34,8 @@ class CustomButton extends StatelessWidget {
           gradient: (!disableButton)
               ? ColorConstants.disabledGradient
               : ColorConstants.primaryGradient,
+            border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)
+
         ),
         alignment: Alignment.center,
         child: Row(

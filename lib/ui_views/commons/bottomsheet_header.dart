@@ -16,7 +16,7 @@ class BottomSheetHeader extends StatelessWidget {
     return Column(
       children: [
         Container(
-            decoration: BoxDecoration(gradient: ColorConstants.primaryGradient),
+            decoration: BoxDecoration(color: ColorConstants.primaryLighterColor),
             width: double.infinity,
             height: 55,
             alignment: Alignment.center,

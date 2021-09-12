@@ -66,7 +66,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            color: ColorConstants.secondaryColor,
+            color: ColorConstants.primaryColor,
             child: Column(
               children: [
                 SizedBox(
@@ -81,7 +81,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                         child: Container(
                           height: 70,
                           width: size.width,
-                          color: ColorConstants.lightSecondaryColor,
+                          color: ColorConstants.primaryLighterColor,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -96,7 +96,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   SizedBox(width: 20),
                                   Text(defaultCoinTitle,
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: 16)),
+                                          color: ColorConstants.whiteLighterColor, fontSize: 16)),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -111,7 +111,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   child: Container(
                                     child: Card(
                                         color: ColorConstants
-                                            .lighterSecondaryColor,
+                                            .secondaryColor,
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Text(
@@ -140,7 +140,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8.0)),
-                                    color: ColorConstants.lightSecondaryColor,
+                                    color: ColorConstants.primaryLighterColor,
                                   ),
                                   width: 40,
                                   child: Padding(
@@ -160,12 +160,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             ),
                                             Text('Selling price:',
                                                 style: TextStyle(
-                                                    color: Colors.white)),
+                                                    color: ColorConstants.whiteLighterColor)),
                                           ],
                                         ),
                                         Divider(
                                             color: ColorConstants
-                                                .lighterSecondaryColor),
+                                                .whiteLighterColor),
                                         SizedBox(height: 5),
                                         Text('20,200,000.00',
                                             style: TextStyle(
@@ -174,7 +174,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                         SizedBox(height: 5),
                                         Text('NGN',
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: ColorConstants.whiteLighterColor,
                                                 fontWeight: FontWeight.bold)),
                                         SizedBox(height: 15),
                                         CustomButton(
@@ -209,7 +209,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8.0)),
-                                    color: ColorConstants.lightSecondaryColor,
+                                    color: ColorConstants.primaryLighterColor,
                                   ),
                                   width: 40,
                                   child: Padding(
@@ -229,7 +229,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             ),
                                             Text('Buying price:',
                                                 style: TextStyle(
-                                                    color: Colors.white)),
+                                                    color: ColorConstants.whiteLighterColor)),
                                           ],
                                         ),
                                         Divider(
@@ -243,7 +243,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                         SizedBox(height: 5),
                                         Text('NGN',
                                             style: TextStyle(
-                                                color: Colors.white,
+                                                color: ColorConstants.whiteLighterColor,
                                                 fontWeight: FontWeight.bold)),
                                         SizedBox(height: 15),
                                         CustomButton(
@@ -786,7 +786,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
     return Column(
       children: [
         BottomSheetHeader(
-          buttomSheetTitle: 'coin name'.toUpperCase(),
+          buttomSheetTitle: 'Select Coin',
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: 6),
@@ -840,14 +840,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 1.0,
-                ),
-              ],
+
             ),
             child: Container(
               child: Row(
@@ -877,7 +870,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                     fontWeight: FontWeight.bold)),
                             Text('$subtitle',
                                 style: TextStyle(
-                                    color: ColorConstants.lighterSecondaryColor,
+                                    color: ColorConstants.whiteLighterColor,
                                     fontSize: 14)),
                           ],
                         ),
@@ -892,7 +885,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                     fontWeight: FontWeight.bold)),
                             Text('$rise',
                                 style: TextStyle(
-                                    color: ColorConstants.lighterSecondaryColor,
+                                    color: ColorConstants.whiteLighterColor,
                                     fontSize: 12)),
                           ],
                         ),

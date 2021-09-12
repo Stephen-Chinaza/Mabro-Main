@@ -87,60 +87,49 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: ColorConstants.primaryColor,
       body: (isFirstScreen)
           ? MainScreenLock()
           : (pageState)
               ? loadingPage(state: pageState)
               : SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(children: <Widget>[
                       SizedBox(
-                        height: Dims.screenHeight(context) * 0.05,
+                        height: Dims.screenHeight(context) * 0.08,
                       ),
-                      CircleAvatar(
-                        maxRadius: 45,
-                        backgroundColor: ColorConstants.lightSecondaryColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              kopenPage(context, LandingPage());
-                            },
-                            child: Image(
-                              image: AssetImage('assets/images/mabrologo.jpg'),
-                              width: 100,
-                              height: 100,
-                            ),
-                          ),
+                      GestureDetector(
+                        onTap: (){
+                          kopenPage(context, LandingPage());
+                        },
+                        child: Text(
+                          'Sign Up'.toUpperCase(),
+                          style: TextStyle(fontSize: 20, color: ColorConstants.secondaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(
-                            height: Dims.screenHeight(context) * 0.014),
-                      ),
-                      Text(
-                        'Sign Up'.toUpperCase(),
-                        style: TextStyle(fontSize: 16),
+                      Divider(
+                        color:  ColorConstants.whiteLighterColor,
                       ),
                       SizedBox(
                         height: Dims.sizedBoxHeight(
                             height: Dims.screenHeight(context) * 0.04),
                       ),
                       _buildSignUpForm(context),
-                      Padding(
-                        padding: Dims.horizontalPadding(value: 8),
-                        child: Text(
-                          Constants.PASSWORD_DETAILS,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
+
                       SizedBox(
                         height: Dims.sizedBoxHeight(
                             height: Dims.screenHeight(context) * 0.04),
                       ),
                       Container(
-                        color: ColorConstants.grey.withOpacity(0.4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(4.0)
+                            ),
+                          color: ColorConstants.primaryLighterColor,
+
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -151,6 +140,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                     height: 20,
                                     width: 20,
                                     child: Checkbox(
+                                      activeColor: ColorConstants.secondaryColor,
+                                        checkColor: ColorConstants.whiteLighterColor,
+                                        side: BorderSide(color: ColorConstants.whiteLighterColor),
                                         value: checkState,
                                         onChanged: (state) {
                                           setState(() {
@@ -173,7 +165,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                         text1: 'By signing up, I agree to the ',
                                         text2: ' terms of use',
                                         text3:
-                                            'and processsing of my personal data as stated in the ',
+                                            ' and processsing of my personal data as stated in the ',
                                         text4: 'privacy policy'),
                                   ),
                                 ],
@@ -201,12 +193,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                   children: [
                                     TextStyles.textDetails(
                                         textValue: 'Already have an account?',
+
                                         textSize: 16),
                                     SizedBox(width: 10),
                                     TextStyles.textDetails(
                                         textValue: 'Sign In'.toUpperCase(),
                                         textSize: 16,
-                                        textColor: Colors.red),
+                                        textColor: ColorConstants.secondaryColor),
                                   ],
                                 ),
                               ),
@@ -221,52 +214,65 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildSignUpForm(BuildContext context) {
-    return Form(
-      child: Column(children: [
-        RoundedTextfield(
-          icon: Icons.email_outlined,
-          hintText: 'Email',
-          labelText: 'Email',
-          controller: signupEmailController,
-          myFocusNode: myFocusNodeEmail,
-          textInputType: TextInputType.emailAddress,
-          onChanged: (email) {
-            _email = email;
-          },
+    return Card(
+      color: ColorConstants.primaryLighterColor,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          child: Column(children: [
+            RoundedTextfield(
+              icon: Icons.email_outlined,
+              hintText: 'Email',
+              labelText: 'Email',
+              controller: signupEmailController,
+              myFocusNode: myFocusNodeEmail,
+              textInputType: TextInputType.emailAddress,
+              onChanged: (email) {
+                _email = email;
+              },
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            PasswordTextField(
+              icon: Icons.lock,
+              textHint: 'Password',
+              controller: signupPasswordController,
+              myFocusNode: myFocusNodePassword,
+              labelText: '',
+              onChanged: (password) {
+                setState(() {
+                  _password = password;
+                  charLength = password.length;
+                });
+              },
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            PasswordTextField(
+              icon: Icons.lock,
+              textHint: 'Confirm Password',
+              controller: signupConfirmPasswordController,
+              myFocusNode: myFocusNodeConfirmPassword,
+              labelText: '',
+              onChanged: (cpassword) {
+                _confirmPassword = cpassword;
+              },
+            ),
+            SizedBox(
+              height: Dims.sizedBoxHeight(),
+            ),
+            Padding(
+              padding: Dims.horizontalPadding(value: 8),
+              child: Text(
+                Constants.PASSWORD_DETAILS,
+                style: TextStyle(fontSize: 14, color: ColorConstants.whiteLighterColor),
+              ),
+            ),
+          ]),
         ),
-        SizedBox(
-          height: 30,
-        ),
-        PasswordTextField(
-          icon: Icons.lock,
-          textHint: 'Password',
-          controller: signupPasswordController,
-          myFocusNode: myFocusNodePassword,
-          labelText: '',
-          onChanged: (password) {
-            setState(() {
-              _password = password;
-              charLength = password.length;
-            });
-          },
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        PasswordTextField(
-          icon: Icons.lock,
-          textHint: 'Confirm Password',
-          controller: signupConfirmPasswordController,
-          myFocusNode: myFocusNodeConfirmPassword,
-          labelText: '',
-          onChanged: (cpassword) {
-            _confirmPassword = cpassword;
-          },
-        ),
-        SizedBox(
-          height: Dims.sizedBoxHeight(),
-        ),
-      ]),
+      ),
     );
   }
 
@@ -274,32 +280,32 @@ class _SignUpPageState extends State<SignUpPage> {
     if (signupEmailController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'email field required',
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
     } else if (signupPasswordController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'password field required',
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
     } else if (signupConfirmPasswordController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'confirm password field required',
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
     } else if (signupPasswordController.text !=
         signupConfirmPasswordController.text) {
       ShowSnackBar.showInSnackBar(
           value: 'password does not match',
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
     } else if (charLength < 8) {
       ShowSnackBar.showInSnackBar(
           value: 'password must not be less than 8 characters',
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
@@ -316,7 +322,7 @@ class _SignUpPageState extends State<SignUpPage> {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
-              bgColor: ColorConstants.primaryColor,
+              bgColor: ColorConstants.secondaryColor,
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);

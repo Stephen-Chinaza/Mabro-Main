@@ -35,34 +35,49 @@ class RoundedTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
+      height: 50,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          border:
+              Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)),
       child: TextField(
         onChanged: onChanged,
         controller: controller,
         focusNode: myFocusNode,
         keyboardType: textInputType ?? TextInputType.text,
-        cursorColor: ColorConstants.primaryColor,
+        cursorColor: ColorConstants.secondaryColor,
+        style: TextStyle(color: ColorConstants.white),
         decoration: InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: ColorConstants.lighterSecondaryColor.withOpacity(0.3)),
+            filled: true,
+            fillColor: ColorConstants.primaryColor,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: const BorderSide(
+                  color: ColorConstants.whiteColor, width: 0.2),
             ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: ColorConstants.secondaryColor),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: ColorConstants.whiteColor, width: 0.2),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ColorConstants.transparent),
+              borderRadius: BorderRadius.circular(4.0),
             ),
             hintText: hintText,
             hintStyle: TextStyle(
                 fontStyle: FontStyle.normal,
-                color: Colors.black38,
+                color: ColorConstants.whiteLighterColor,
                 fontSize: 16,
-                fontWeight: FontWeight.w400),
+                fontWeight: FontWeight.w300),
             prefixIcon: (icon == null)
-                ? Container()
+                ? SizedBox.shrink()
                 : Icon(
                     icon,
                     color: (iconColor == null)
-                        ? ColorConstants.primaryColor
+                        ? ColorConstants.whiteLighterColor
                         : iconColor,
+                    size: 22,
                   ),
             contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 13)),
       ),

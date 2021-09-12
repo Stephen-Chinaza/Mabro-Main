@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/register_user.dart';
@@ -16,6 +17,7 @@ import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,6 +45,17 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  var onTapRecognizer;
+
+  TextEditingController textEditingController = TextEditingController();
+
+
+  StreamController<ErrorAnimationType> errorController;
+
+  bool hasError = false;
+  String currentText = "";
+  final formKey = GlobalKey<FormState>();
+
   Future<void> getUserData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     user = (pref.getString('user') ?? '');
@@ -53,6 +66,12 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
     super.initState();
     pageState = false;
     getUserData();
+
+    onTapRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        Navigator.pop(context);
+      };
+    errorController = StreamController<ErrorAnimationType>();
   }
 
   @override
@@ -61,9 +80,8 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
-      body: (pageState)
-          ? loadingPage(state: pageState)
-          : SingleChildScrollView(
+      backgroundColor: ColorConstants.primaryColor,
+      body: SingleChildScrollView(
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 width: double.infinity,
@@ -72,42 +90,41 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: Dims.screenHeight(context) * 0.10,
+                      height: Dims.screenHeight(context) * 0.11,
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset(
-                          'assets/images/mabrologo.jpg',
-                          height: 110,
-                          width: 110,
-                        ),
-                        SizedBox(
-                          width: screenHeight * 0.01,
-                        ),
+                        Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: TextStyles.textDetails(
+                          centerText: true,
+                          textSize: 20,
+                          textColor: ColorConstants.secondaryColor,
+                          textValue:
+                          'Phone Number Verification',
+                        ),),
+
                       ],
                     ),
                     SizedBox(
-                      height: screenHeight * 0.04,
+                      height: 20,
                     ),
-                    TextStyles.textHeadings(
-                      textColor: Colors.black,
-                      textSize: 18,
-                      textValue: 'Verification',
+                    Image.asset('assets/images/registration.png', height: 100,width: 160,),
+                    SizedBox(
+                      height: 10,
                     ),
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
                     TextStyles.textDetails(
                       centerText: true,
-                      textColor: Colors.black,
+                      textColor: ColorConstants.whiteLighterColor,
                       textSize: 14,
                       textValue:
                           'Enter A 6 digit number that was sent to ${widget.contact}',
                     ),
                     TextStyles.textSubHeadings(
-                      textColor: Colors.black,
+                      textColor: ColorConstants.whiteLighterColor,
                       textSize: 14,
                       textValue: '${widget.code}',
                     ),
@@ -115,19 +132,11 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                       height: screenHeight * 0.04,
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal:
-                              screenWidth > 600 ? screenWidth * 0.2 : 4),
-                      padding: const EdgeInsets.all(16.0),
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.all(4.0),
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            const BoxShadow(
-                              color: Colors.grey,
-                              offset: Offset(0.0, 1.0),
-                              blurRadius: 2.0,
-                            ),
-                          ],
+                          color: ColorConstants.primaryLighterColor,
+
                           borderRadius: BorderRadius.circular(10.0)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,31 +145,137 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                           SizedBox(
                             height: screenHeight * 0.04,
                           ),
-                          Container(
-                            child: PinEntryTextField(
-                              showFieldAsBox: false,
-                              isTextObscure: true,
-                              fields: 6,
-                              onSubmit: (text) {
-                                smsOTP = text as String;
+                          Visibility(
+                            visible: !pageState,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Form(
+                                  key: formKey,
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0, horizontal: 10),
+                                      child: PinCodeTextField(
+                                        appContext: context,
+                                        pastedTextStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        length: 6,
+                                        obscureText: true,
+                                        animationType: AnimationType.fade,
+                                        validator: (v) {
+                                          if (v.length < 6) {
+                                            return "";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        pinTheme: PinTheme(
+                                          shape: PinCodeFieldShape.box,
+                                          fieldHeight: 50,
+                                          fieldWidth: 50,
+                                          activeFillColor:
+                                          hasError ? Colors.orange : Colors.white,
+                                        ),
+                                        cursorColor: Colors.white,
+                                        animationDuration: Duration(milliseconds: 300),
+                                        textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
+                                        backgroundColor: ColorConstants.transparent,
+                                        obscuringCharacter: '*',
+                                        enableActiveFill: false,
+                                        errorAnimationController: errorController,
+                                        controller: textEditingController,
+                                        keyboardType: TextInputType.number,
+                                        boxShadows: [
+                                          BoxShadow(
+                                            offset: Offset(0, 1),
+                                            color: Colors.black12,
+                                            blurRadius: 10,
+                                          )
+                                        ],
+                                        onCompleted: (v) {
+                                          print(v);
 
-                                sendPhone(text);
-                              },
+                                          formKey.currentState.validate();
+                                          // conditions for validating
+                                          if (currentText.length != 6) {
+
+                                          } else {
+                                            setState(() {
+                                              hasError = false;
+                                              textEditingController.text = '';
+                                              sendPhone(v);
+                                            });
+                                          }
+                                        },
+                                        onChanged: (value) {
+                                          print(value);
+                                          setState(() {
+                                            currentText = value;
+                                          });
+                                        },
+                                        beforeTextPaste: (text) {
+                                          print("Allowing to paste $text");
+                                          //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                          //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                          return true;
+                                        },
+                                      )),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                  child: Text(
+                                    hasError ? "*Please fill up all the cells properly" : "",
+                                    style: TextStyle(
+                                        color: ColorConstants.secondaryColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  height: Dims.sizedBoxHeight(height: 10.0),
+                                ),
+                                TextStyles.textHeadings(
+                                    textValue: 'RESEND CODE',
+                                    textSize: 14.0,
+                                    textColor: ColorConstants.whiteLighterColor
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(
                             height: screenHeight * 0.04,
                           ),
-                          CustomButton(
-                            onPressed: () {
-                              kbackBtn(context);
-                            },
-                            text: 'Resend code',
-                            disableButton: true,
+                          Visibility(
+                            visible: pageState,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 20),
+                                CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
+                                SizedBox(height: 20),
+                                Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: screenHeight * 0.04,
+                          ),
+                          Visibility(
+                            visible: false,
+                            child: CustomButton(
+                              onPressed: () {
+                                kbackBtn(context);
+                              },
+                              text: 'Resend code',
+                              disableButton: true,
+                            ),
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),

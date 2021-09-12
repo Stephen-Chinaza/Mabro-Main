@@ -108,152 +108,159 @@ class _BalanceCardState extends State<BalanceCard>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 155,
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+
+            child: Stack(
           children: [
-            Container(
-                child: Stack(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: TextStyle(
-                          fontStyle: FontStyle.normal,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: ColorConstants.secondaryColor),
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                      fontStyle: FontStyle.normal,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: ColorConstants.white),
+                ),
+                GestureDetector(
+                  onTap: widget.onTapped,
+                  child: Card(
+                    elevation: 2,
+                    color: ColorConstants.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
                     ),
-                    GestureDetector(
-                      onTap: widget.onTapped,
-                      child: Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50)),
-                              gradient: ColorConstants.primaryGradient),
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Center(
-                              child: Text(
-                                widget.onClickOpenPage,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(4.0)),
+                          gradient: ColorConstants.primaryGradient),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                          child: Text(
+                            widget.onClickOpenPage,
+                            style: TextStyle(
+                              color: ColorConstants.whiteLighterColor,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ],
-            )),
-            Divider(color: Colors.grey.withOpacity(0.2), height: 0.5),
-            Container(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          (showBalanceState) ? widget.amount : '******',
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          (showBalanceState)
-                              ? widget.nairaEquiv
-                              : (widget.nairaEquiv == '')
-                                  ? ''
-                                  : '******',
-                          style: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              if (showBalanceState) {
-                                showBalanceState = false;
-                                SharedPrefrences.addBoolToSP(
-                                    'showBalance', showBalanceState);
-                              } else {
-                                showBalanceState = true;
-                                SharedPrefrences.addBoolToSP(
-                                    'showBalance', showBalanceState);
-                              }
-                            });
-
-                            setState(() {});
-                          },
-                          child: (showBalanceState)
-                              ? Icon(FontAwesomeIcons.eye,
-                                  size: 16, color: Colors.black)
-                              : Icon(FontAwesomeIcons.eyeSlash,
-                                  size: 16, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 4),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'last refreshed @' +
-                              ' ' +
-                              getCurrentDate().toString(),
-                          style: TextStyle(
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              _reloadPage();
-                              _rotateChildContinuously();
-                            },
-                            child: RotateTrans(
-                                Image.asset(
-                                  'assets/images/refresh.png',
-                                  height: 35,
-                                  width: 35,
-                                ),
-                                buildAnimation())),
-                      ],
-                    ),
-                  ]),
-            ))
+            ),
           ],
-        ));
+        )),
+        Divider(color: Colors.grey.withOpacity(0.2), height: 0.5),
+        Container(
+            child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      (showBalanceState) ? widget.amount : '******',
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: ColorConstants.whiteLighterColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      (showBalanceState)
+                          ? widget.nairaEquiv
+                          : (widget.nairaEquiv == '')
+                              ? ''
+                              : '******',
+                      style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontSize: 14,
+                        color: ColorConstants.whiteLighterColor,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (showBalanceState) {
+                            showBalanceState = false;
+                            SharedPrefrences.addBoolToSP(
+                                'showBalance', showBalanceState);
+                          } else {
+                            showBalanceState = true;
+                            SharedPrefrences.addBoolToSP(
+                                'showBalance', showBalanceState);
+                          }
+                        });
+
+                        setState(() {});
+                      },
+                      child: (showBalanceState)
+                          ? Icon(FontAwesomeIcons.eye,
+                              size: 16,
+                        color: ColorConstants.whiteLighterColor,
+                      )
+                          : Icon(FontAwesomeIcons.eyeSlash,
+                              size: 16,
+                        color: ColorConstants.whiteLighterColor,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'last refreshed @' +
+                          ' ' +
+                          getCurrentDate().toString(),
+                      style: TextStyle(
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12,
+                        color: ColorConstants.whiteLighterColor,
+
+                      ),
+                    ),
+                    GestureDetector(
+                        onTap: () {
+                          _reloadPage();
+                          _rotateChildContinuously();
+                        },
+                        child: RotateTrans(
+                            Image.asset(
+                              'assets/images/refresh.png',
+                              height: 30,
+                              width: 30,
+                            ),
+                            buildAnimation())),
+                  ],
+                ),
+              ]),
+        ))
+      ],
+    );
   }
 
   _rotateChildContinuously() {
@@ -294,7 +301,7 @@ class _BalanceCardState extends State<BalanceCard>
           .post(HttpService.rootLogin, body: map)
           .timeout(const Duration(seconds: 15), onTimeout: () {
         ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           value: 'The connection has timed out, please try again!',
           context: context,
           scaffoldKey: _scaffoldKey,
@@ -333,7 +340,7 @@ class _BalanceCardState extends State<BalanceCard>
           });
         } else if (!status) {
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
+              bgColor: ColorConstants.secondaryColor,
               value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -341,7 +348,7 @@ class _BalanceCardState extends State<BalanceCard>
         }
       } else {
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
+            bgColor: ColorConstants.secondaryColor,
             value: 'network error',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -349,7 +356,7 @@ class _BalanceCardState extends State<BalanceCard>
       }
     } on SocketException {
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           value: 'check your internet connection',
           context: context,
           scaffoldKey: _scaffoldKey,

@@ -2,11 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/all_transactions_history.dart';
 import 'package:mabro/core/models/list_bank.dart';
-import 'package:mabro/core/models/posts.dart';
-import 'package:mabro/core/models/register_user.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'dart:io';

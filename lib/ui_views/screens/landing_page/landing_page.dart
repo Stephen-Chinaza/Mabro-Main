@@ -1,10 +1,10 @@
+import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/widgets/bottom_navigation_bar.dart/bottom_navigation_bar.dart';
 import 'package:mabro/ui_views/screens/landing_page_menu/all_transactions.dart';
 import 'package:mabro/ui_views/screens/landing_page_menu/home_page.dart';
 import 'package:mabro/ui_views/screens/landing_page_menu/profile_page.dart';
 import 'package:mabro/ui_views/screens/landing_page_menu/wallet_page.dart';
-import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +25,31 @@ class _LandingPageState extends State<LandingPage> {
   StreamController<int> indexcontroller = StreamController<int>.broadcast();
   int index = 0;
   String user;
+  String userPin = '';
+  bool pinState;
 
   Future<void> checkFirstScreen() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     user = (pref.getString('user') ?? '');
+    pinState = (pref.getBool('pinState') ?? false);
+    userPin = (pref.getString('lock_code') ?? '');
+
+    if(userPin != ''){
+      SharedPrefrences.addBoolToSP('pinState', true);
+    }else{
+      SharedPrefrences.addBoolToSP('pinState', false);
+    }
+
   }
 
   @override
   void initState() {
     super.initState();
     checkFirstScreen();
-
     print(user);
+    checkFirstScreen().whenComplete(() => {
+      setState(()=>{})
+    });
   }
 
   @override
@@ -64,7 +77,7 @@ class _LandingPageState extends State<LandingPage> {
             int cIndex = snapshot.data;
             return FancyBottomNavigation(
               currentIndex: cIndex,
-              activeColor: ColorConstants.primaryColor,
+              activeColor: ColorConstants.white,
               items: <FancyBottomNavigationItem>[
                 FancyBottomNavigationItem(
                   icon: Icon(

@@ -50,11 +50,13 @@ class _ConfirmTransferPageState extends State<ConfirmTransferPage> {
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: CustomText(
-                  color: Colors.black54,
-                  text: 'only click on continue after you have transfered airtime ' +
+                child: TextStyles.textDetails(
+                  textSize: 13,
+
+                  textColor: Colors.white,
+                  textValue: 'only click on continue after you have transfered airtime ' +
                       'to the above number within 6 mins otherwise click cancel',
-                  size: 13,
+
                 ),
               ),
             ],
@@ -142,10 +144,11 @@ class BottomBotton extends StatelessWidget {
                           ),
                         ],
                       ),
-                      CustomText(
-                          text: 'Please upload images that are less than 2MB',
-                          size: 12,
-                          color: Colors.red),
+                      TextStyles.textDetails(
+                          textSize: 14,
+                          textValue: 'Please upload images that are less than 2MB',
+
+                          textColor: ColorConstants.secondaryColor),
                       SizedBox(height: 20),
                       CustomButton(
                         text: 'Use Camera',
@@ -191,17 +194,17 @@ class TopInfoContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 10),
-            CustomText(
-                size: 14,
-                text:
+            TextStyles.textDetails(
+                textSize: 14,
+                textValue:
                     '* Transfer N2,000.00 worth of airtime to this phone number below'),
             SizedBox(height: 20),
             copyPhone('08108803488',
                 'please do not save or call this number we dont accept VTU or recharge pin'),
             SizedBox(height: 40),
-            CustomText(
-                size: 14,
-                text:
+            TextStyles.textDetails(
+                textSize: 14,
+                textValue:
                     'please use displayed phone number once, as a new number will be provided for every transaction so as to avoid loss of artime'),
           ],
         ),
@@ -219,7 +222,9 @@ class TopInfoContainer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomText(size: 26, text: number),
+                TextStyles.textDetails(
+                    textSize: 14,
+                    textValue: number),
                 SizedBox(width: 10),
                 GestureDetector(
                     onTap: () {
@@ -238,7 +243,9 @@ class TopInfoContainer extends StatelessWidget {
               ],
             ),
             SizedBox(height: 5),
-            CustomText(size: 14, text: phoneInfo),
+            TextStyles.textDetails(
+                textSize: 14,
+                textValue: phoneInfo),
           ],
         ),
       ),
@@ -404,9 +411,12 @@ class BottomInfoContainer extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            CustomText(
-              text: 'Your order details',
-              size: 14,
+
+        TextStyles.textDetails(
+        textSize: 14,
+          textValue:
+              'Your order details',
+
             ),
             SizedBox(height: 20),
             orderDetails('phone', '08108803488'),
@@ -426,13 +436,15 @@ class BottomInfoContainer extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CustomText(
-          text: tag,
-          size: 13,
+        TextStyles.textDetails(
+          textSize: 14,
+          textValue: tag,
+
         ),
-        CustomText(
-          text: value,
-          size: 13,
+        TextStyles.textDetails(
+          textSize: 14,
+          textValue: value,
+
         ),
       ],
     );

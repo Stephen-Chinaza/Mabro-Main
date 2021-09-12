@@ -5,6 +5,7 @@ import 'package:mabro/ui_views/commons/wallet_container.dart';
 import 'package:mabro/ui_views/screens/all_wallets_page/all_wallets_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mabro/ui_views/screens/landing_page_menu/wallet_page.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,17 +39,22 @@ class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 60),
-      height: 178,
+      margin: EdgeInsets.only(bottom: 0),
+      height: 160,
       width: double.infinity,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0),
+        color: ColorConstants.transparent,
+      ),
       child: Card(
-        elevation: 5,
+        elevation: 10,
+        color: ColorConstants.primaryLighterColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15.0)),
         ),
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Container(
+            color: ColorConstants.transparent,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: PageIndicatorContainer(
@@ -64,12 +70,12 @@ class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
                     BalanceCard(
                       bg: false,
                       image: 'assets/images/naira.jpg',
-                      title: 'Naira Wallet'.toUpperCase(),
+                      title: 'Naira Wallet',
                       amount: "NGN" + nairaBalance + ".00",
                       nairaEquiv: '',
                       onClickOpenPage: 'View wallets',
                       dateTime: getCurrentDate().toString(),
-                      onTapped: () => kopenPage(context, AllWalletPage()),
+                      onTapped: () => kopenPage(context, WalletPage()),
                     ),
                   ],
                 ),

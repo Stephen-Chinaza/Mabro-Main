@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mabro/res/colors.dart';
 
 @immutable
 class CircleUIConfig {
@@ -8,7 +9,7 @@ class CircleUIConfig {
   final double circleSize;
 
   const CircleUIConfig(
-      {this.borderColor = Colors.white, this.borderWidth = 1, this.fillColor = Colors.white, this.circleSize = 20});
+      {this.borderColor = ColorConstants.secondaryColor, this.borderWidth = 1, this.fillColor = Colors.white, this.circleSize = 20});
 }
 
 class Circle extends StatelessWidget {

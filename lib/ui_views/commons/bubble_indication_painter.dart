@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mabro/res/colors.dart';
 
 class TabIndicationPainter extends CustomPainter {
   Paint painter;
@@ -17,8 +18,8 @@ class TabIndicationPainter extends CustomPainter {
         this.radius = 21.0,
         this.dy = 25.0, this.pageController}) : super(repaint: pageController) {
     painter = new Paint()
-      ..color = Color(0xFFFFFFFF)
-      ..style = PaintingStyle.fill;
+      ..color = ColorConstants.primaryLighterColor;
+
   }
 
   @override
@@ -42,7 +43,7 @@ class TabIndicationPainter extends CustomPainter {
         new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-    canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
+    canvas.drawShadow(path, Colors.transparent, 3.0, true);
     canvas.drawPath(path, painter);
   }
 

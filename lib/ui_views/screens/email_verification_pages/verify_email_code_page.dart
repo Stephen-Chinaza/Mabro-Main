@@ -1,8 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/screens/password_setting/set_password_page.dart';
-import 'package:mabro/ui_views/screens/phone_number_verification_pages/enter_phone_digit_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
@@ -13,13 +13,13 @@ import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/models/email_verification_data.dart.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
-import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pin_entry_text_field/pin_entry_text_field.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
 
 class EmailVerificationPage extends StatefulWidget {
   final String emailAddress;
@@ -36,13 +36,34 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
   String smsOTP = '';
   int pinIndex = 0;
+  var onTapRecognizer;
+
+  TextEditingController textEditingController = TextEditingController();
+
+
+  StreamController<ErrorAnimationType> errorController;
+
+  bool hasError = false;
+  String currentText = "";
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     pageState = false;
+    onTapRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        Navigator.pop(context);
+      };
+    errorController = StreamController<ErrorAnimationType>();
   }
 
+  @override
+  void dispose() {
+    errorController.close();
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -50,21 +71,23 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         buildFirstContainer(),
         buildSecondContainer(),
         Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: ColorConstants.primaryColor,
           key: _scaffoldKey,
-          body: (pageState)
-              ? loadingPage(state: pageState)
-              : SingleChildScrollView(
+          body: SingleChildScrollView(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                       height: Dims.sizedBoxHeight(height: 60),
                     ),
-                    Container(
-                      child: Image(
-                        image: AssetImage('assets/images/email2.png'),
-                        width: 100,
-                        height: 100,
+                    Center(
+                      child: Container(
+                        child: Image(
+                          image: AssetImage('assets/images/email2.png'),
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -72,6 +95,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                     ),
                     TextStyles.textHeadings(
                       textValue: 'Check Your email',
+                      textColor: ColorConstants.whiteLighterColor
                     ),
                     SizedBox(
                       height: Dims.sizedBoxHeight(height: 10),
@@ -80,47 +104,144 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                       padding: const EdgeInsets.all(20.0),
                     ),
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           'Enter the 6-digit code we sent to',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16,
+                              color: ColorConstants.whiteLighterColor
+                          ),
                         ),
                         Text(
                           widget.emailAddress,
                           style: TextStyle(
-                              fontSize: 14, color: ColorConstants.primaryColor),
+                              fontSize: 14, color: ColorConstants.secondaryColor),
                         ),
                         Text(
                           'to continue',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16,
+                              color: ColorConstants.whiteLighterColor
+                          ),
                         ),
                       ],
                     ),
                     SizedBox(
                       height: Dims.sizedBoxHeight(),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                      child: PinEntryTextField(
-                        showFieldAsBox: false,
-                        isTextObscure: true,
-                        fieldWidth: 30.0,
-                        fontSize: 30.0,
-                        fields: 6,
-                        onSubmit: (text) {
-                          smsOTP = text as String;
+                    Visibility(
+                      visible: !pageState,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Form(
+                            key: formKey,
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4.0, horizontal: 10),
+                                child: PinCodeTextField(
+                                  appContext: context,
+                                  pastedTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  length: 6,
+                                  obscureText: true,
+                                  animationType: AnimationType.fade,
+                                  validator: (v) {
+                                    if (v.length < 6) {
+                                      return "";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  pinTheme: PinTheme(
+                                    shape: PinCodeFieldShape.box,
+                                    fieldHeight: 50,
+                                    fieldWidth: 50,
+                                    activeFillColor:
+                                    hasError ? Colors.orange : Colors.white,
+                                  ),
+                                  cursorColor: Colors.white,
+                                  animationDuration: Duration(milliseconds: 300),
+                                  textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
+                                  backgroundColor: ColorConstants.primaryColor,
+                                  obscuringCharacter: '*',
+                                  enableActiveFill: false,
+                                  errorAnimationController: errorController,
+                                  controller: textEditingController,
+                                  keyboardType: TextInputType.number,
+                                  boxShadows: [
+                                    BoxShadow(
+                                      offset: Offset(0, 1),
+                                      color: Colors.black12,
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                  onCompleted: (v) {
+                                    print(v);
 
-                          sendOtp(smsOTP, widget.emailAddress);
-                        },
+                                    formKey.currentState.validate();
+                                    // conditions for validating
+                                    if (currentText.length != 6) {
+
+                                    } else {
+                                      setState(() {
+                                        hasError = false;
+                                        textEditingController.text = '';
+                                        sendOtp(v, widget.emailAddress);
+                                      });
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    print(value);
+                                    setState(() {
+                                      currentText = value;
+                                    });
+                                  },
+                                  beforeTextPaste: (text) {
+                                    print("Allowing to paste $text");
+                                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                    return true;
+                                  },
+                                )),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                            child: Text(
+                              hasError ? "*Please fill up all the cells properly" : "",
+                              style: TextStyle(
+                                  color: ColorConstants.secondaryColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+
+                          SizedBox(
+                            height: Dims.sizedBoxHeight(height: 30.0),
+                          ),
+                          TextStyles.textHeadings(
+                              textValue: 'RESEND VIA EMAIL',
+                              textSize: 14.0,
+                              textColor: ColorConstants.whiteLighterColor
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: Dims.sizedBoxHeight(height: 30.0),
+                    Visibility(
+                      visible: pageState,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 20),
+                          CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
+                          SizedBox(height: 20),
+                          Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
+                        ],
+                      ),
                     ),
-                    TextStyles.textHeadings(
-                      textValue: 'RESEND VIA EMAIL',
-                      textSize: 14.0,
-                    ),
+
                   ],
                 )),
         ),
@@ -239,13 +360,13 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5,
-              bgColor: Colors.green);
+              bgColor: ColorConstants.secondaryColor);
 
           _redirectuser();
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
+              bgColor: ColorConstants.secondaryColor,
               value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -254,7 +375,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       } else {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
+            bgColor: ColorConstants.secondaryColor,
             value: 'network error',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -263,7 +384,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     } on SocketException {
       cPageState(state: false);
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
+          bgColor: ColorConstants.secondaryColor,
           value: 'check your internet connection',
           context: context,
           scaffoldKey: _scaffoldKey,

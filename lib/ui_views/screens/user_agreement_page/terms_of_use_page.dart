@@ -2,20 +2,25 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mabro/res/colors.dart';
 
 class TermsOfUsePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorConstants.primaryColor,
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.white,
+        backgroundColor: ColorConstants.primaryColor,
         leading: IconButton(
-          icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back, color: Colors.black,),
+          icon: Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back, color: Colors.white,),
           onPressed: ()=>Navigator.of(context).pop(),
         ),
-        
+        title: Text("Users Terms and Conditions".toUpperCase(), style: TextStyle(
+            fontSize: 16.0,
+            color: ColorConstants.whiteColor,
+            fontWeight: FontWeight.w600
+        ),),
       ),
       body: Column(
         children: <Widget>[
@@ -23,46 +28,8 @@ class TermsOfUsePage extends StatelessWidget {
             child: ListView(
               padding: EdgeInsets.all(10.0),
               children: <Widget>[
-                Text("Users Terms and Conditions".toUpperCase(), style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w600
-                ),),
-                SizedBox(height: 16.0,),
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent lacinia, odio ut placerat finibus, ipsum risus consectetur ligula, non mattis mi neque ac mi."),
-                SizedBox(height: 20.0,),
-                Container(
-                  height: 30,
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.memory),
-                            SizedBox(width: 5.0,),
-                            Text("Policies")
-                          ],
-                        ),
-                      ),
-                      VerticalDivider(),
-                      Expanded(
-                        child: Text("Does and Donts",textAlign: TextAlign.center,),
-                      ),
-                      VerticalDivider(),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.timer),
-                            SizedBox(width: 5.0,),
-                            Text("How to use")
-                          ],
-                        ),
-                      ),
-                      
-                    ],
-                  ),
-                ),
+
+
                 SizedBox(height: 20.0,),
                 _buildStep(
                   leadingTitle: "01",
@@ -110,7 +77,7 @@ class TermsOfUsePage extends StatelessWidget {
       children: <Widget>[
         Material(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-          color: Colors.red,
+          color: ColorConstants.secondaryColor,
           child: Container(
             padding: EdgeInsets.all(5.0),
             child: Text(leadingTitle, style: TextStyle(
@@ -127,12 +94,14 @@ class TermsOfUsePage extends StatelessWidget {
             children: <Widget>[
               Text(title, style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 18.0
+                fontSize: 18.0,
+                  color: ColorConstants.whiteColor,
               )),
               SizedBox(height: 10.0,),
               Text(content, style: TextStyle(
-                
-                fontSize: 14.0
+                  color: ColorConstants.whiteLighterColor,
+
+                  fontSize: 14.0
               )),
             ],
           ),

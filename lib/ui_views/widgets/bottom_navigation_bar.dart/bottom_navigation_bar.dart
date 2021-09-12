@@ -15,9 +15,9 @@ class FancyBottomNavigation extends StatefulWidget {
       {Key key,
       this.currentIndex = 0,
       this.iconSize = 24,
-      this.activeColor,
-      this.inactiveColor,
-      this.backgroundColor,
+      this.activeColor = ColorConstants.whiteColor,
+      this.inactiveColor = ColorConstants.whiteLighterColor,
+      this.backgroundColor = ColorConstants.primaryColor,
       @required this.items,
       @required this.onItemSelected}) {
     assert(items != null);
@@ -50,8 +50,8 @@ class _FancyBottomNavigationState extends State<FancyBottomNavigation> {
   _FancyBottomNavigationState(
       {@required this.items,
       this.currentIndex,
-      this.activeColor,
-      this.inactiveColor = Colors.black54,
+      this.activeColor = ColorConstants.whiteColor,
+      this.inactiveColor = ColorConstants.whiteLighterColor,
       this.backgroundColor,
       this.iconSize,
       @required this.onItemSelected}) {
@@ -68,7 +68,9 @@ class _FancyBottomNavigationState extends State<FancyBottomNavigation> {
           ? null
           : BoxDecoration(
               gradient: ColorConstants.primaryGradient,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
+              borderRadius: BorderRadius.all(Radius.circular(50),
+              ),
+          border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)
             ),
       child: ListView(
         shrinkWrap: true,
@@ -85,13 +87,13 @@ class _FancyBottomNavigationState extends State<FancyBottomNavigation> {
                 child: IconTheme(
                   data: IconThemeData(
                       size: iconSize,
-                      color: isSelected ? backgroundColor : inactiveColor),
+                      color: isSelected ? activeColor : inactiveColor),
                   child: item.icon,
                 ),
               ),
               isSelected
                   ? DefaultTextStyle.merge(
-                      style: TextStyle(color: backgroundColor),
+                      style: TextStyle(color: activeColor),
                       child: item.title,
                     )
                   : SizedBox.shrink()

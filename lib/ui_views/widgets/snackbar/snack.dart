@@ -13,16 +13,17 @@ class ShowSnackBar {
       BuildContext context,
       GlobalKey<ScaffoldState> scaffoldKey}) {
     Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       child: Card(
         child: Flushbar(
-          padding: const EdgeInsets.all(30.0),
+          flushbarPosition: FlushbarPosition.BOTTOM,
+          padding: const EdgeInsets.all(25.0),
           margin: const EdgeInsets.all(8.0),
           message: value,
           reverseAnimationCurve: Curves.easeOut,
           forwardAnimationCurve: Curves.easeIn,
           backgroundColor: bgColor,
-          borderRadius: 20,
+          borderRadius: 15,
           dismissDirection: FlushbarDismissDirection.HORIZONTAL,
           icon: Icon(
             iconData,

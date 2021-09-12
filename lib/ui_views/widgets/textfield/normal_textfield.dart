@@ -29,36 +29,42 @@ class NormalFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 4.0),
-        child: TextField(
-          maxLength: maxLength,
-          maxLines: 1,
-          cursorColor: ColorConstants.secondaryColor,
-          enabled: isEditable,
-          onTap: onTap,
-          controller: controller,
-          onChanged: onChanged,
-          keyboardType: textInputType ?? TextInputType.text,
-          style: TextStyle(
-              fontStyle: FontStyle.normal,
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w400),
-          decoration: InputDecoration(
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: ColorConstants.lighterSecondaryColor.withOpacity(0.3)),
+      height: 50,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          border:
+              Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)),
+      child: TextField(
+        onChanged: onChanged,
+        controller: controller,
+        focusNode: myFocusNode,
+        keyboardType: textInputType ?? TextInputType.text,
+        cursorColor: ColorConstants.secondaryColor,
+        style: TextStyle(color: ColorConstants.white),
+        decoration: InputDecoration(
+            filled: true,
+            fillColor: ColorConstants.primaryColor,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: const BorderSide(
+                  color: ColorConstants.whiteColor, width: 0.2),
             ),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: ColorConstants.secondaryColor),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: ColorConstants.transparent, width: 0.0),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ColorConstants.transparent),
+              borderRadius: BorderRadius.circular(4.0),
             ),
             hintText: hintText,
-            counterText: "",
-            hintStyle: TextStyle(color: Colors.black38, fontSize: 16.0),
-          ),
-        ),
+            hintStyle: TextStyle(
+                fontStyle: FontStyle.normal,
+                color: ColorConstants.whiteLighterColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w300),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13)),
       ),
     );
   }

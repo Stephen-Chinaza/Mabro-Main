@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/screens/authentication_pages/sign_up_page.dart';
+import 'package:mabro/ui_views/screens/lock_screen_page/main_lock_screen.dart';
 import 'package:mabro/ui_views/screens/onboard_pages/onboard_landing_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,7 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
         Duration(seconds: 5),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (BuildContext context) => (pageState)
-                  ? SignUpPage(
+                  ?
+              SignUpPage(
                       userPin: pinState,
                     )
                   : OnBoardingPage(),
@@ -43,9 +46,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorConstants.primaryColor,
       body: Center(
-        child: Image.asset('assets/images/mabrologo.jpg'),
+        child: Image.asset('assets/images/mabrologo.png'),
       ),
     );
   }

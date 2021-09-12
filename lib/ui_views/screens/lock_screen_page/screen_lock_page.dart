@@ -7,6 +7,7 @@ import 'package:local_auth/local_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mabro/res/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'circle.dart';
 import 'keyboard.dart';
@@ -75,15 +76,10 @@ class _PasscodeScreenState extends State<PasscodeScreen>
 
   Future<void> checkFirstScreen() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    fingerPrintState = (pref.getBool('setup_touch') ?? false);
+    fingerPrintState = (pref.getBool('setup_touch') ?? true);
 
     setState(() {
-      if (_canCheckBiometrics && fingerPrintState) {
-        isPrint = true;
-        _authenticate();
-      } else {
-        isPrint = false;
-      }
+
     });
   }
 
@@ -97,6 +93,16 @@ class _PasscodeScreenState extends State<PasscodeScreen>
 
     setState(() {
       _canCheckBiometrics = canCheckBiometrics;
+      print(_canCheckBiometrics);
+      print(fingerPrintState);
+      print(isPrint);
+
+      if(_canCheckBiometrics == fingerPrintState){
+        isPrint = true;
+        _authenticate();
+      }else{
+        isPrint = false;
+      }
     });
   }
 
@@ -121,7 +127,7 @@ class _PasscodeScreenState extends State<PasscodeScreen>
         _isAuthenticating = true;
         _authorized = 'Authenticating';
       });
-      authenticated = await auth.authenticateWithBiometrics(
+      authenticated = await auth.authenticate(
           localizedReason:
               "Use biometrics or tap 'Cancel' to enter your Mabro Pin",
           useErrorDialogs: true,
@@ -172,15 +178,15 @@ class _PasscodeScreenState extends State<PasscodeScreen>
         setState(() {});
       });
     fingerPrintState = true;
-    isPrint = true;
-
+    isPrint = false;
+    //
     checkFirstScreen();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.backgroundColor ?? Colors.black.withOpacity(0.8),
+      backgroundColor: widget.backgroundColor ?? ColorConstants.primaryColor,
       body: SafeArea(
         child: OrientationBuilder(
           builder: (context, orientation) {
@@ -196,7 +202,7 @@ class _PasscodeScreenState extends State<PasscodeScreen>
   _buildPortraitPasscodeScreen() => Stack(
         children: [
           Positioned(
-            top: 100,
+            top: 70,
             left: 8,
             right: 10,
             child: Column(
@@ -217,12 +223,11 @@ class _PasscodeScreenState extends State<PasscodeScreen>
                     : GestureDetector(
                         onTap: () {
                           _authenticate();
-                          print(isPrint);
                         },
                         child: Visibility(
                           visible: isPrint,
                           child: Icon(Icons.fingerprint_sharp,
-                              size: 60, color: Colors.white),
+                              size: 50, color: Colors.white),
                         ))
               ],
             ),

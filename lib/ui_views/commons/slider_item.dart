@@ -22,7 +22,7 @@ class SlideItem extends StatelessWidget {
             sliderArrayList[index].sliderHeading,
             style: TextStyle(
                 fontStyle: FontStyle.normal,
-                color: Colors.red[800],
+                color: ColorConstants.secondaryColor,
                 fontSize: 20,
                 fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
@@ -39,6 +39,7 @@ class SlideItem extends StatelessWidget {
               style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontSize: 14,
+                  color: ColorConstants.whiteColor,
                   fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),

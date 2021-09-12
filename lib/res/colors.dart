@@ -1,35 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-extension ColorExtension on String {
-  toColor() {
-    var hexColor = this.replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    if (hexColor.length == 8) {
-      return Color(int.parse("0x$hexColor"));
-    }
-  }
-}
+
 
 class ColorConstants {
   const ColorConstants();
 
-  Color _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    if (hexColor.length == 8) {
-      return Color(int.parse("0x$hexColor"));
-    }
-  }
 
-  static const Color secondaryColor = Color(0xFF27133a);
-  static const Color primaryColor = Color(0xFF27133a);
-  //static const Color primaryColor = Color(0xFFfa1e0e);
-  static const Color scaffoldBackgroundColor = Colors.white;
+  static const Color secondaryColor = Color(0xFFFF4961);
+  static const Color primaryColor = Color(0xFF05031A);
+  static const Color primaryLighterColor = Color(0xFF14112E);
+  static const Color whiteLighterColor = Color(0xFF7E7E7E);
+  static const Color whiteColor = Color(0xFFFAFAFB);
+  static const Color orangeColor = Color(0xFFAC4CBC);
+
+  static const Color scaffoldBackgroundColor = Color(0xFF05031A);
   static const Color white = Colors.white;
   static const Color grey = Color(0xFF8c8c8c);
   static const Color lightSecondaryColor = Color(0xFFF2f1c41);
@@ -49,7 +34,7 @@ class ColorConstants {
   );
 
   static const disabledGradient = const LinearGradient(
-    colors: const [grey, grey],
+    colors: const [whiteLighterColor, whiteLighterColor],
     begin: const FractionalOffset(0.2, 0.2),
     end: const FractionalOffset(1.0, 1.0),
     stops: [0.0, 0.5],

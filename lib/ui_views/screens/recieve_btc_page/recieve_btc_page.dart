@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,7 @@ import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/screens/qr_scan_code_page.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
+import 'package:mabro/ui_views/widgets/textfield/rounded_textfield.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
@@ -30,6 +33,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
+  BuildContext dialogContext;
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
@@ -48,12 +52,13 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
   TextEditingController btcAddressController = TextEditingController();
 
   PageController _pageController;
-  Color left = Colors.black;
-  Color right = Colors.white;
+  Color left = ColorConstants.whiteLighterColor;
+  Color right = ColorConstants.whiteColor;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String title;
   String walletAddress, user;
   bool hideScanner;
+  final dialogContextCompleter = Completer<BuildContext>();
 
   @override
   void dispose() {
@@ -98,6 +103,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
       },
       child: Scaffold(
         key: _scaffoldKey,
+        backgroundColor: ColorConstants.primaryColor,
         appBar: TopBar(
           backgroundColorStart: ColorConstants.primaryColor,
           backgroundColorEnd: ColorConstants.secondaryColor,
@@ -132,15 +138,15 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                         if (i == 0) {
                           setState(() {
                             right = Colors.white;
-                            left = Colors.black;
-                            title = 'receive';
+                            left = Colors.white;
+                            title = 'Receive';
                           });
                           hideScanner = false;
                         } else if (i == 1) {
                           setState(() {
-                            right = Colors.black;
+                            right = Colors.white;
                             left = Colors.white;
-                            title = 'transfer';
+                            title = 'Transfer';
                           });
                         }
                       },
@@ -150,7 +156,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                           child: _buildReceiveBtc(context, walletAddress),
                         ),
                         new ConstrainedBox(
-                          constraints: const BoxConstraints.expand(),
+                          constraints: const BoxConstraints(),
                           child: _buildTransferBtc(context),
                         ),
                       ],
@@ -170,7 +176,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
       width: 300.0,
       height: 50.0,
       decoration: BoxDecoration(
-        gradient: ColorConstants.primaryGradient,
+        color: ColorConstants.secondaryColor,
         borderRadius: BorderRadius.all(Radius.circular(25.0)),
       ),
       child: CustomPaint(
@@ -187,7 +193,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                   "Receive",
                   style: TextStyle(
                     color: left,
-                    fontSize: 14.0,
+                    fontSize: 13.0,
                   ),
                 ),
               ),
@@ -201,7 +207,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                   "Transfer",
                   style: TextStyle(
                     color: right,
-                    fontSize: 16.0,
+                    fontSize: 13.0,
                   ),
                 ),
               ),
@@ -222,103 +228,14 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
         duration: Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 
-  void showInfoDialog(double height, Widget Widgets, {String title = 'Info'}) {
+
+  void showInfDialog(double height, Widget widgets, {String title = 'Info'}) {
     showDialog(
         context: context,
-        builder: (context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            child: Stack(
-              children: [
-                Container(
-                  height: height,
-                  child: Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient),
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  title,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Widgets,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Center(
-                          child: CustomButton(
-                              margin: 0,
-                              width: 130,
-                              disableButton: true,
-                              onPressed: () {
-                                //Navigator.of(context).pop();
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          dialogContext = context;
 
-                                if (emailController.text == '') {
-                                  ShowSnackBar.showInSnackBar(
-                                      value: 'Please enter mail to continue',
-                                      iconData: Icons.check_circle,
-                                      context: context,
-                                      scaffoldKey: _scaffoldKey,
-                                      timer: 5,
-                                      bgColor: Colors.green);
-                                } else if (RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(emailController.text)) {
-                                  launch('mailto:' + emailController.text);
-                                } else {
-                                  ShowSnackBar.showInSnackBar(
-                                      value: 'invalid email address',
-                                      iconData: Icons.check_circle,
-                                      context: context,
-                                      scaffoldKey: _scaffoldKey,
-                                      timer: 5,
-                                      bgColor: Colors.green);
-                                }
-                              },
-                              text: 'Proceed'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
-  }
-
-  void showInfDialog(double height, Widget Widgets, {String title = 'Info'}) {
-    showDialog(
-        context: context,
-        builder: (context) {
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)), //this right here
@@ -327,79 +244,8 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                 Container(
                   height: height,
                   child: Padding(
-                    padding: const EdgeInsets.all(0.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient),
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  title,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Icon(
-                                      Icons.close,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Widgets,
-                        ),
-                        Center(
-                          child: CustomButton(
-                              margin: 0,
-                              width: 130,
-                              disableButton: true,
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                if (phoneController.text == '') {
-                                  ShowSnackBar.showInSnackBar(
-                                      value:
-                                          'Please enter phone number to continue',
-                                      iconData: Icons.check_circle,
-                                      context: context,
-                                      scaffoldKey: _scaffoldKey,
-                                      timer: 5,
-                                      bgColor: Colors.red);
-                                } else {
-                                  if (Platform.isAndroid) {
-                                    //FOR Android
-
-                                    launch('sms:' +
-                                        phoneController.text +
-                                        '?body=' +
-                                        walletAddress);
-                                  } else if (Platform.isIOS) {
-                                    //FOR IOS
-                                    launch('sms:' +
-                                        phoneController.text +
-                                        '&body=' +
-                                        walletAddress);
-                                  }
-                                }
-                              },
-                              text: 'Proceed'),
-                        ),
-                      ],
-                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: widgets,
                   ),
                 ),
               ],
@@ -409,106 +255,134 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
   }
 
   _buildTransferBtc(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 30),
-                Text('Recipient Address',
-                    style: TextStyle(
-                        color: ColorConstants.secondaryColor, fontSize: 14)),
-                SizedBox(height: 5),
-                NormalFields(
-                  width: MediaQuery.of(context).size.width,
-                  hintText: 'Input BTC address',
-                  labelText: '',
-                  maxLength: 2,
-                  onChanged: (name) {},
-                  controller: btcAddressController,
-                ),
-                SizedBox(height: 20),
-                Row(
+    return Container(
+      height: 150,
+      margin: EdgeInsets.only(top: 20),
+      child: Card(
+        color: ColorConstants.primaryLighterColor,
+        child: Stack(
+          children: [
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: CustomButton(
-                        disableButton: true,
-                        text: 'Scan QR',
-                        onPressed: () {
-                          //kopenPage(context, QRViewExample());
-                          setState(() {
-                            hideScanner = true;
-                          });
-                        },
+                    SizedBox(height: 10),
+                    Text('Recipient Address',
+                        style: TextStyle(
+                            color: ColorConstants.whiteColor, fontSize: 14)),
+                    SizedBox(height: 5),
+                    NormalFields(
+                      hintText: 'Input BTC address',
+                      labelText: 'Input BTC address',
+                      controller: btcAddressController,
+                      textInputType: TextInputType.emailAddress,
+                      onChanged: (email) {},
+                    ),
+                    SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap:(){
+                              setState(() {
+                                hideScanner = true;
+                              });
+
+                            },
+                            child: Text(
+                              "Scan QR",
+                              style: TextStyle(
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 13.0,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              getClipBoardData().then((value) =>
+                              {btcAddressController.text = value});
+                            },
+                            child: Text(
+                              "Paste address",
+                              style: TextStyle(
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 13.0,
+                              ),
+                            ),
+                          ),
+
+                        ],
                       ),
                     ),
-                    Flexible(
-                      child: CustomButton(
-                        disableButton: true,
-                        text: 'Paste Address',
-                        onPressed: () {
-                          getClipBoardData().then(
-                              (value) => {btcAddressController.text = value});
-                        },
-                      ),
+                    SizedBox(height: 20),
+                    NormalFields(
+                      hintText: 'BTC amount',
+                      labelText: '',
+                      controller: TextEditingController(text: ''),
+                      onChanged: (name) {},
+                    ),
+                    SizedBox(height: 30),
+                    CustomButton(
+                      margin: 0,
+                      disableButton: true,
+                      text: 'Continue',
+                      onPressed: () {
+
+                      },
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
-                NormalFields(
-                  hintText: 'BTC amount',
-                  labelText: '',
-                  controller: TextEditingController(text: ''),
-                  onChanged: (name) {},
-                ),
-                SizedBox(height: 30),
-                CustomButton(
-                  margin: 0,
-                  disableButton: true,
-                  text: 'Continue',
-                  onPressed: () {},
-                ),
-              ],
+              ),
             ),
-          ),
-        ),
-        Visibility(
-          visible: hideScanner,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                flex: 5,
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
+            Visibility(
+              visible: hideScanner,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                height: 400,
+                child: Card(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: QRView(
+                            key: qrKey,
+                            onQRViewCreated: _onQRViewCreated,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: (result != null)
+                              ? Text(
+                                  'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}', textAlign: TextAlign.center,)
+                              : Text('Scan a code'),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: (result != null)
-                      ? Text(
-                          'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}')
-                      : Text('Scan a code'),
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
+      setState(()  {
         result = scanData;
         btcAddressController.text = result.code;
         hideScanner = false;
@@ -529,10 +403,10 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
             children: [
               Text('BTC balance:',
                   style: TextStyle(
-                      color: ColorConstants.secondaryColor, fontSize: 16)),
+                      color: ColorConstants.whiteColor, fontSize: 13)),
               Text('0.002',
                   style: TextStyle(
-                      color: ColorConstants.secondaryColor, fontSize: 16)),
+                      color: ColorConstants.whiteLighterColor, fontSize: 12)),
             ],
           ),
         ),
@@ -544,15 +418,16 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
             children: [
               Text('To:',
                   style: TextStyle(
-                      color: ColorConstants.secondaryColor, fontSize: 16)),
+                      color: ColorConstants.whiteColor, fontSize: 13)),
               Text('My BTC Wallet',
                   style: TextStyle(
-                      color: ColorConstants.secondaryColor, fontSize: 16)),
+                      color: ColorConstants.whiteLighterColor, fontSize: 12)),
             ],
           ),
         ),
         SizedBox(height: 20),
         Card(
+          color: ColorConstants.whiteLighterColor,
           child: QrImage(
             data: walletAd,
             version: QrVersions.auto,
@@ -566,15 +441,16 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
         ),
         SizedBox(height: 10),
         Text('Waiting for payment...',
-            style:
-                TextStyle(color: ColorConstants.secondaryColor, fontSize: 14)),
+            style: TextStyle(
+                color: ColorConstants.whiteLighterColor, fontSize: 14)),
         SizedBox(height: 10),
         Card(
+          color: ColorConstants.primaryLighterColor,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(walletAd,
                 style: TextStyle(
-                    color: ColorConstants.secondaryColor, fontSize: 14)),
+                    color: ColorConstants.whiteLighterColor, fontSize: 14)),
           ),
         ),
         SizedBox(
@@ -592,7 +468,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                          color: ColorConstants.secondaryColor,
+                          color: ColorConstants.primaryLighterColor,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(4),
                               bottomLeft: Radius.circular(4))),
@@ -623,7 +499,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(
-                        color: ColorConstants.secondaryColor,
+                        color: ColorConstants.primaryLighterColor,
                         borderRadius: BorderRadius.only(
                             topRight: Radius.circular(4),
                             bottomRight: Radius.circular(4))),

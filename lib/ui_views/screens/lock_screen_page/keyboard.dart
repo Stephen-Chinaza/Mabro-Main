@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mabro/res/colors.dart';
 
 typedef KeyboardTapCallback = void Function(String text);
 
@@ -20,7 +21,7 @@ class KeyboardUIConfig {
     this.digitBorderWidth = 1,
     this.keyboardRowMargin = const EdgeInsets.only(top: 15, left: 4, right: 4),
     this.digitInnerMargin = const EdgeInsets.all(24),
-    this.primaryColor = Colors.white,
+    this.primaryColor = ColorConstants.secondaryColor,
     this.digitFillColor = Colors.transparent,
     this.digitTextStyle = const TextStyle(fontSize: 30, color: Colors.white),
     this.deleteButtonTextStyle = const TextStyle(fontSize: 16, color: Colors.white),

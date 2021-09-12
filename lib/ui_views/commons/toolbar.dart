@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;
-  final IconData icon;
+  IconData icon;
   final Color backgroundColorStart, backgroundColorEnd, textColor, iconColor;
   final Function onPressed;
   final double height;
@@ -33,41 +33,44 @@ class TopBar extends StatefulWidget implements PreferredSizeWidget {
 class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: Dims.screenWidth(context),
-      height: 75,
-      decoration: BoxDecoration(
-        gradient: ColorConstants.primaryGradient,
-      ),
-      child: SafeArea(
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          GestureDetector(
-              onTap: () => kbackBtn(context),
-              child: Container(
-                height: Dims.sizedBoxHeight(
-                    height: Dims.screenHeight(context) * 0.10),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: Icon(
-                    widget.icon,
-                    color: widget.iconColor,
-                    size: 25,
-                  ),
-                ),
-              )),
-          // (widget.icon == null) ? SizedBox(width: 100) : SizedBox(width: 80),
-          TextStyles.textHeadings(
-              textSize: 16,
-              textColor: widget.textColor,
-              textValue: widget.title.toUpperCase()),
-
-          Icon(
-            widget.icon,
-            color: Colors.transparent,
-            size: 30,
-          ),
-        ]),
+    return Material(
+      elevation: 30,
+      child: Container(
+        width: Dims.screenWidth(context),
+        height: 75,
+        decoration: BoxDecoration(
+          color: ColorConstants.primaryLighterColor,
+        ),
+        child: SafeArea(
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            (widget.icon != null)
+                ? GestureDetector(
+                    onTap: () => kbackBtn(context),
+                    child: Container(
+                      height: Dims.sizedBoxHeight(
+                          height: Dims.screenHeight(context) * 0.10),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Icon(
+                          widget.icon,
+                          color: ColorConstants.whiteLighterColor,
+                          size: 20,
+                        ),
+                      ),
+                    ))
+                : SizedBox.shrink(),
+            SizedBox(width: 10),
+            TextStyles.textDetails(
+                textSize: 15,
+                textColor: ColorConstants.whiteLighterColor,
+                textValue: widget.title),
+            Icon(
+              widget.icon,
+              color: Colors.transparent,
+              size: 30,
+            ),
+          ]),
+        ),
       ),
     );
   }
