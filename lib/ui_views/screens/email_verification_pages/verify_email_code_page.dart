@@ -23,8 +23,10 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 class EmailVerificationPage extends StatefulWidget {
   final String emailAddress;
+  final String userId;
+  String otp;
 
-  EmailVerificationPage({Key key, this.emailAddress}) : super(key: key);
+  EmailVerificationPage({Key key, this.emailAddress, this.userId, this.otp}) : super(key: key);
   @override
   _EmailVerificationPageState createState() => _EmailVerificationPageState();
 }
@@ -94,8 +96,8 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                       height: Dims.sizedBoxHeight(height: 2.0),
                     ),
                     TextStyles.textHeadings(
-                      textValue: 'Check Your email',
-                      textColor: ColorConstants.whiteLighterColor
+                      textValue: 'Check Your Email',
+                      textColor: ColorConstants.whiteColor
                     ),
                     SizedBox(
                       height: Dims.sizedBoxHeight(height: 10),
@@ -148,7 +150,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                                   ),
                                   length: 6,
                                   obscureText: true,
-                                  animationType: AnimationType.fade,
                                   validator: (v) {
                                     if (v.length < 6) {
                                       return "";
@@ -169,7 +170,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                                   backgroundColor: ColorConstants.primaryColor,
                                   obscuringCharacter: '*',
                                   enableActiveFill: false,
-                                  errorAnimationController: errorController,
                                   controller: textEditingController,
                                   keyboardType: TextInputType.number,
                                   boxShadows: [
@@ -190,7 +190,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                                       setState(() {
                                         hasError = false;
                                         textEditingController.text = '';
-                                        sendOtp(v, widget.emailAddress);
+                                        sendOtp(otp: v, user: widget.userId);
                                       });
                                     }
                                   },
@@ -202,8 +202,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                                   },
                                   beforeTextPaste: (text) {
                                     print("Allowing to paste $text");
-                                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
                                     return true;
                                   },
                                 )),
@@ -222,11 +220,16 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                           SizedBox(
                             height: Dims.sizedBoxHeight(height: 30.0),
                           ),
-                          TextStyles.textHeadings(
+                          GestureDetector(onTap: (){
+                              reSendOtp(user: widget.userId);
+                          },
+                          child: TextStyles.textDetails(
                               textValue: 'RESEND VIA EMAIL',
-                              textSize: 14.0,
+                              textSize: 16.0,
                               textColor: ColorConstants.whiteLighterColor
                           ),
+                          ),
+
                         ],
                       ),
                     ),
@@ -249,19 +252,20 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
     );
   }
 
-  void sendOtp(String code, String email) async {
+  void sendOtp({String otp, String user}) async {
     cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
-      map['email_address'] = email;
-      map['code'] = code;
+      map['userId'] = user;
+      map['otp'] = otp;
 
       var response = await http
-          .post(HttpService.rootVerifyEmail, body: map)
+          .post(HttpService.rootVerifyEmail, body: map,headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
             value: 'The connection has timed out, please try again!',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -282,77 +286,80 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
           //user data info
           String id = verifyUser.data.id.toString();
-          //String user = verifyUser.data.user.toString();
+          String userId = verifyUser.data.userId.toString();
+          String firstName = verifyUser.data.firstName.toString();
+          String surName = verifyUser.data.surname.toString();
           String emailAddress = verifyUser.data.emailAddress.toString();
-          String nairaBalance = verifyUser.data.nariaBalance.toString();
-          String bitcoinBalance = verifyUser.data.bitcoinBalance.toString();
-          String bitcoinAddress = verifyUser.data.bitcoinAddress.toString();
+          String nairaBalance = verifyUser.data.nairaBalance.toString();
           String verifiedEmail = verifyUser.data.verifiedEmail.toString();
+          String verifiedPhone = verifyUser.data.verifiedPhone.toString();
 
           //saving user data to sharedprefs
+          SharedPrefrences.addStringToSP("userId", userId);
           SharedPrefrences.addStringToSP("id", id);
           SharedPrefrences.addStringToSP("email_address", emailAddress);
-          SharedPrefrences.addStringToSP("naria_balance", nairaBalance);
-          SharedPrefrences.addStringToSP("bitcoin_balance", bitcoinBalance);
-          SharedPrefrences.addStringToSP("bitcoin_address", bitcoinAddress);
+          SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
+          SharedPrefrences.addStringToSP("first_name", firstName);
+          SharedPrefrences.addStringToSP("surname", surName);
           SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
+          SharedPrefrences.addStringToSP("verified_phone", verifiedPhone);
 
           //user user settings info
-          String user = verifyUser.data.settings.user.toString();
-          String defaultAccount =
-              verifyUser.data.settings.defaultAccount.toString();
-          String addFundPhoneAlert =
-              verifyUser.data.settings.addFundPhoneAlert.toString();
-          String withdrawFundPhoneAlert =
-              verifyUser.data.settings.withdrawFundPhoneAlert.toString();
-          String addFundEmailAlert =
-              verifyUser.data.settings.addFundEmailAlert.toString();
-          String withdrawFundEmailAlert =
-              verifyUser.data.settings.withdrawFundEmailAlert.toString();
-          String buyAssetPhoneAlert =
-              verifyUser.data.settings.buyAssetPhoneAlert.toString();
-          String buyAssetEmailAlert =
-              verifyUser.data.settings.buyAssetEmailAlert.toString();
-          String sellAssetPhoneAlert =
-              verifyUser.data.settings.sellAssetPhoneAlert.toString();
-          String sellAssetEmailAlert =
-              verifyUser.data.settings.sellAssetEmailAlert.toString();
-          String loginEmailAlert =
-              verifyUser.data.settings.loginEmailAlert.toString();
-          String newsletterPhoneAlert =
-              verifyUser.data.settings.newsletterPhoneAlert.toString();
-          String newsletterEmailAlert =
-              verifyUser.data.settings.newsletterEmailAlert.toString();
-          String smsAlert = verifyUser.data.settings.smsAlert.toString();
-          String twoFactorAuth =
-              verifyUser.data.settings.twoFactorAuth.toString();
+          // String user = verifyUser.data.settings.user.toString();
+          // String defaultAccount =
+          //     verifyUser.data.settings.defaultAccount.toString();
+          // String addFundPhoneAlert =
+          //     verifyUser.data.settings.addFundPhoneAlert.toString();
+          // String withdrawFundPhoneAlert =
+          //     verifyUser.data.settings.withdrawFundPhoneAlert.toString();
+          // String addFundEmailAlert =
+          //     verifyUser.data.settings.addFundEmailAlert.toString();
+          // String withdrawFundEmailAlert =
+          //     verifyUser.data.settings.withdrawFundEmailAlert.toString();
+          // String buyAssetPhoneAlert =
+          //     verifyUser.data.settings.buyAssetPhoneAlert.toString();
+          // String buyAssetEmailAlert =
+          //     verifyUser.data.settings.buyAssetEmailAlert.toString();
+          // String sellAssetPhoneAlert =
+          //     verifyUser.data.settings.sellAssetPhoneAlert.toString();
+          // String sellAssetEmailAlert =
+          //     verifyUser.data.settings.sellAssetEmailAlert.toString();
+          // String loginEmailAlert =
+          //     verifyUser.data.settings.loginEmailAlert.toString();
+          // String newsletterPhoneAlert =
+          //     verifyUser.data.settings.newsletterPhoneAlert.toString();
+          // String newsletterEmailAlert =
+          //     verifyUser.data.settings.newsletterEmailAlert.toString();
+          // String smsAlert = verifyUser.data.settings.smsAlert.toString();
+          // String twoFactorAuth =
+          //     verifyUser.data.settings.twoFactorAuth.toString();
 
           //saving user data to sharedprefs
-          SharedPrefrences.addStringToSP("user", user);
-          SharedPrefrences.addStringToSP("default_account", defaultAccount);
-          SharedPrefrences.addStringToSP(
-              "add_fund_phone_alert", addFundPhoneAlert);
-          SharedPrefrences.addStringToSP(
-              "withdraw_fund_phone_alert", withdrawFundPhoneAlert);
-          SharedPrefrences.addStringToSP(
-              "add_fund_email_alert", addFundEmailAlert);
-          SharedPrefrences.addStringToSP(
-              "withdraw_fund_email_alert", withdrawFundEmailAlert);
-          SharedPrefrences.addStringToSP(
-              "buy_asset_phone_alert", buyAssetPhoneAlert);
-          SharedPrefrences.addStringToSP(
-              "sell_asset_phone_alert", sellAssetPhoneAlert);
-          SharedPrefrences.addStringToSP(
-              "buy_asset_email_alert", buyAssetEmailAlert);
-          SharedPrefrences.addStringToSP(
-              "sell_asset_email_alert", sellAssetEmailAlert);
-          SharedPrefrences.addStringToSP("login_email_alert", loginEmailAlert);
-          SharedPrefrences.addStringToSP(
-              "newsletter_phone_alert", newsletterPhoneAlert);
-          SharedPrefrences.addStringToSP(
-              "newsletter_email_alert", newsletterEmailAlert);
-          SharedPrefrences.addStringToSP("sms_alert", smsAlert);
-          SharedPrefrences.addStringToSP("two_factor_auth", twoFactorAuth);
+          // SharedPrefrences.addStringToSP("user", user);
+          // SharedPrefrences.addStringToSP("default_account", defaultAccount);
+          // SharedPrefrences.addStringToSP(
+          //     "add_fund_phone_alert", addFundPhoneAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "withdraw_fund_phone_alert", withdrawFundPhoneAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "add_fund_email_alert", addFundEmailAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "withdraw_fund_email_alert", withdrawFundEmailAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "buy_asset_phone_alert", buyAssetPhoneAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "sell_asset_phone_alert", sellAssetPhoneAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "buy_asset_email_alert", buyAssetEmailAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "sell_asset_email_alert", sellAssetEmailAlert);
+          // SharedPrefrences.addStringToSP("login_email_alert", loginEmailAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "newsletter_phone_alert", newsletterPhoneAlert);
+          // SharedPrefrences.addStringToSP(
+          //     "newsletter_email_alert", newsletterEmailAlert);
+          // SharedPrefrences.addStringToSP("sms_alert", smsAlert);
+          // SharedPrefrences.addStringToSP("two_factor_auth", twoFactorAuth);
 
           ShowSnackBar.showInSnackBar(
               value: message,
@@ -363,6 +370,75 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
               bgColor: ColorConstants.secondaryColor);
 
           _redirectuser();
+        } else if (!status) {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.secondaryColor,
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            bgColor: ColorConstants.secondaryColor,
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      cPageState(state: false);
+      ShowSnackBar.showInSnackBar(
+          bgColor: ColorConstants.secondaryColor,
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+  }
+
+  void reSendOtp({String user}) async {
+    cPageState(state: true);
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = user;
+
+      var response = await http
+          .post(HttpService.rootResendEmail, body: map,headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        EmailVerificationData verifyUser = EmailVerificationData.fromJson(body);
+
+        bool status = verifyUser.status;
+        String message = verifyUser.message;
+        if (status) {
+          cPageState(state: false);
+
+
+          // ShowSnackBar.showInSnackBar(
+          //     value: message,
+          //     iconData: Icons.check_circle,
+          //     context: context,
+          //     scaffoldKey: _scaffoldKey,
+          //     timer: 5,
+          //     bgColor: ColorConstants.secondaryColor);
+
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(

@@ -34,7 +34,7 @@ class CustomButton extends StatelessWidget {
           gradient: (!disableButton)
               ? ColorConstants.disabledGradient
               : ColorConstants.primaryGradient,
-            border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)
+            border: Border.all(color: ColorConstants.transparent, width: 0.2)
 
         ),
         alignment: Alignment.center,

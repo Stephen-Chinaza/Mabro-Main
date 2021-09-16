@@ -133,12 +133,12 @@ class _BalanceCardState extends State<BalanceCard>
                     elevation: 2,
                     color: ColorConstants.primaryColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(0.0)),
                     ),
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius:
-                              BorderRadius.all(Radius.circular(4.0)),
+                              BorderRadius.all(Radius.circular(0.0)),
                           gradient: ColorConstants.primaryGradient),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -146,7 +146,7 @@ class _BalanceCardState extends State<BalanceCard>
                           child: Text(
                             widget.onClickOpenPage,
                             style: TextStyle(
-                              color: ColorConstants.whiteLighterColor,
+                              color: ColorConstants.white,
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
@@ -325,14 +325,12 @@ class _BalanceCardState extends State<BalanceCard>
             String id = loginUser.data.id.toString();
             String email = loginUser.data.emailAddress;
             String lockCode = loginUser.data.lockCode;
-            String nairaBalance = loginUser.data.nariaBalance;
-            String bitcoinBalance = loginUser.data.bitcoinBalance;
-            String bitcoinAddress = loginUser.data.bitcoinAddress;
+            String nairaBalance = loginUser.data.nairaBalance;
+
             getCurrentDate().toString();
             SharedPrefrences.addStringToSP("lock_code", lockCode);
-            SharedPrefrences.addStringToSP("bitcoin_balance", bitcoinBalance);
-            SharedPrefrences.addStringToSP("bitcoin_address", bitcoinAddress);
-            SharedPrefrences.addStringToSP("naria_balance", nairaBalance);
+
+            SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
             SharedPrefrences.addStringToSP("first_name", firstName);
             SharedPrefrences.addStringToSP("phone_number", phone);
             SharedPrefrences.addStringToSP("id", id);

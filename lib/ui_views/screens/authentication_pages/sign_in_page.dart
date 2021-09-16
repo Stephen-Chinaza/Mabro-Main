@@ -71,22 +71,7 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                     children: <Widget>[
-                      SizedBox(
-                        height: Dims.screenHeight(context) * 0.08,
-                      ),
-                      Text(
-                        'Sign in'.toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: ColorConstants.secondaryColor,
-                            fontWeight: FontWeight.bold),
-
-                      )
-                      ,Divider(
-                        color:  ColorConstants.whiteLighterColor,
-                      ),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(
-                            height: Dims.screenHeight(context) * 0.04),
-                      ),
+                      SafeArea(child: SizedBox(height: 5)),
                       _buildSignUpForm(context),
                     ]),
               ),
@@ -96,20 +81,27 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _buildSignUpForm(BuildContext context) {
     return Container(
-      height: 320,
+      height: 430,
       child: Card(
         color: ColorConstants.primaryLighterColor,
         child:
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 30),
           child: Form(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                height: 10,
+              Center(child: Image.asset('assets/images/mabrologo.png')),
+              SizedBox(height: 15),
+              Center(
+                child: Text(
+                  'Login to your account'.toUpperCase(),
+                  style: TextStyle(fontSize: 16, color: ColorConstants.white,
+                  ),
+                ),
               ),
+              SizedBox(height: 20),
               RoundedTextfield(
                 icon: Icons.email_outlined,
-                hintText: 'Enter Email',
+                hintText: 'Email address',
                 labelText: '',
                 controller: signinEmailController,
                 myFocusNode: myFocusNodeEmail,
@@ -143,7 +135,7 @@ class _SignInPageState extends State<SignInPage> {
                   child: TextStyles.textDetails(
                       textValue: 'Forgot Password?'.toUpperCase(),
                       textSize: 14,
-                      textColor: ColorConstants.secondaryColor),
+                      textColor: ColorConstants.whiteLighterColor),
                 ),
               ),
               SizedBox(
@@ -173,11 +165,11 @@ class _SignInPageState extends State<SignInPage> {
                         children: [
                           TextStyles.textDetails(
                               textValue: "Don't have an account?",
-                              textSize: 16),
+                              textSize: 14),
                           SizedBox(width: 10),
                           TextStyles.textDetails(
                               textValue: 'Sign Up'.toUpperCase(),
-                              textSize: 16,
+                              textSize: 14,
                               textColor: ColorConstants.secondaryColor),
                         ],
                       ),
@@ -264,27 +256,30 @@ class _SignInPageState extends State<SignInPage> {
                       timer: 5);
                 } else {
                   String firstName = loginUser.data.firstName;
-                  //String surName = loginUser.data.surName;
+                  String surName = loginUser.data.surname;
                   String phone = loginUser.data.phoneNumber;
                   String id = loginUser.data.id.toString();
+                  String userId = loginUser.data.userId.toString();
                   String email = loginUser.data.emailAddress;
                   String lockCode = loginUser.data.lockCode;
-                  String nairaBalance = loginUser.data.nariaBalance;
-                  String bitcoinBalance = loginUser.data.bitcoinBalance;
-                  String bitcoinAddress = loginUser.data.bitcoinAddress;
+                  String nairaBalance = loginUser.data.nairaBalance;
+                  String verifiedEmail = loginUser.data.verifiedEmail.toString();
+                  String verifiedPhone = loginUser.data.verifiedPhone.toString();
+
 
                   SharedPrefrences.addStringToSP("lock_code", lockCode);
-                  SharedPrefrences.addStringToSP(
-                      "bitcoin_balance", bitcoinBalance);
-                  SharedPrefrences.addStringToSP(
-                      "bitcoin_address", bitcoinAddress);
-                  SharedPrefrences.addStringToSP("naria_balance", nairaBalance);
+                  SharedPrefrences.addStringToSP("surname", surName);
+                  SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
 
                   SharedPrefrences.addStringToSP("first_name", firstName);
                   SharedPrefrences.addStringToSP("phone_number", phone);
                   SharedPrefrences.addStringToSP("id", id);
+                  SharedPrefrences.addStringToSP("userId", userId);
                   SharedPrefrences.addStringToSP("email_address", email);
                   SharedPrefrences.addStringToSP("blocked", blocked);
+                  SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
+                  SharedPrefrences.addStringToSP("verified_phone", verifiedPhone);
+
 
                   ShowSnackBar.showInSnackBar(
                     value: message,

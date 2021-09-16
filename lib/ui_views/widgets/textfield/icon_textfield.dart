@@ -32,52 +32,42 @@ class IconFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 40,
+      height: 45,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(4),
-          topLeft: Radius.circular(4),
-        ),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+          border:  Border.all(color: ColorConstants.whiteLighterColor, width: 0.6)
       ),
-      child: Row(
-        children: [
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: TextField(
-                cursorColor: ColorConstants.secondaryColor,
-                enabled: isEditable,
-                onTap: onTap,
-                controller: controller,
-                onChanged: onChanged,
-                keyboardType: textInputType ?? TextInputType.text,
-                style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400),
-                decoration: InputDecoration(
-                  hintText: hintText,
-                  hintStyle: TextStyle(color: Colors.black38, fontSize: 16.0),
-                  suffixIcon: Icon(
-                    Icons.arrow_drop_down_sharp,
-                    color: ColorConstants.secondaryColor,
-                    size: 30,
-                  ),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(
-                        color: ColorConstants.lighterSecondaryColor
-                            .withOpacity(0.3)),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: ColorConstants.secondaryColor),
-                  ),
-                ),
-              ),
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child:
+        TextField(
+          cursorColor: ColorConstants.secondaryColor,
+          enabled: isEditable,
+          onTap: onTap,
+          controller: controller,
+          onChanged: onChanged,
+          keyboardType: textInputType ?? TextInputType.text,
+          style: TextStyle(
+              fontStyle: FontStyle.normal,
+              color: ColorConstants.whiteLighterColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w300),
+          decoration: InputDecoration(
+            filled: true,
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+            fillColor: ColorConstants.primaryColor.withOpacity(0.3),
+            hintText: hintText,
+            hintStyle: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 16.0),
+            suffixIcon: Icon(
+              Icons.arrow_drop_down_sharp,
+              color: ColorConstants.whiteLighterColor,
+              size: 30,
             ),
-          )
-        ],
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+          ),
+        ),
       ),
     );
   }

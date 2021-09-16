@@ -314,14 +314,6 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
         if (status) {
           cPageState(state: false);
 
-          String blocked = verifyUser.data.blocked.toString();
-          String phoneNumber = verifyUser.data.phoneNumber.toString();
-          String phoneVerification = verifyUser.data.verifiedPhone.toString();
-
-          SharedPrefrences.addStringToSP(
-              "phone_verification", phoneVerification);
-          SharedPrefrences.addStringToSP("phone_number", phoneNumber);
-          SharedPrefrences.addStringToSP("blocked", blocked);
 
           ShowSnackBar.showInSnackBar(
               value: message,

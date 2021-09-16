@@ -4,6 +4,21 @@ import 'package:typicons_flutter/typicons_flutter.dart';
 
 class DemoData {
   static List<HomeMenu> get menu => [
+    HomeMenu(
+      title: "Airtime To Cash",
+      icon: Typicons.device_phone,
+    ),
+    HomeMenu(
+      title: "Buy Data",
+      icon: Typicons.credit_card,
+    ),
+    HomeMenu(
+      title: "Buy Airtime",
+      icon: Typicons.device_phone,
+    ),
+    HomeMenu(title: "Tv Subscription", icon: Typicons.social_youtube),
+    HomeMenu(title: "Electricity", icon: Typicons.export_outline),
+    HomeMenu(title: "Education", icon: Typicons.social_github),
         HomeMenu(
           title: "P2P \n Exchange",
           icon: Typicons.chart_line,
@@ -24,21 +39,7 @@ class DemoData {
           title: "Buy Social Media Likes",
           icon: Typicons.social_facebook,
         ),
-        HomeMenu(
-          title: "Airtime To Cash",
-          icon: Typicons.device_phone,
-        ),
-        HomeMenu(
-          title: "Buy Data",
-          icon: Typicons.credit_card,
-        ),
-        HomeMenu(
-          title: "Buy Airtime",
-          icon: Typicons.device_phone,
-        ),
-        HomeMenu(title: "Tv Subscription", icon: Typicons.social_youtube),
-        HomeMenu(title: "Electricity", icon: Typicons.export_outline),
-        HomeMenu(title: "Education", icon: Typicons.social_github),
+
         HomeMenu(
           title: "Updates",
           icon: Icons.info,

@@ -32,15 +32,16 @@ class _AllTransactionsState extends State<AllTransactions>
         buildFirstContainer(),
         buildSecondContainer(),
         Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: ColorConstants.primaryColor,
           appBar: new AppBar(
             flexibleSpace: Container(
               decoration: BoxDecoration(
-                gradient: ColorConstants.primaryGradient,
+                color: ColorConstants.primaryLighterColor,
               ),
             ),
+            centerTitle: false,
             title: new Text("Transactions History",
-                style: TextStyle(fontSize: 18)),
+                style: TextStyle(fontSize: 14, color: ColorConstants.whiteLighterColor,)),
             automaticallyImplyLeading: false,
             bottom: TabBar(
               isScrollable: true,
@@ -57,27 +58,34 @@ class _AllTransactionsState extends State<AllTransactions>
                 ),
               ],
               controller: _tabController,
-              unselectedLabelColor: Colors.white,
-              unselectedLabelStyle: TextStyle(fontSize: 16),
-              labelStyle: TextStyle(fontSize: 16),
+              unselectedLabelColor: ColorConstants.whiteLighterColor,
+              unselectedLabelStyle: TextStyle(fontSize: 14),
+              labelStyle: TextStyle(fontSize: 14),
               labelColor: Colors.white,
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorColor: Colors.white,
             ),
             bottomOpacity: 1,
           ),
-          body: TabBarView(
-            children: [
-              buildTransactionHistory(
-                  context, 'https://iceztech.com/mabro/account/transactions'),
-              buildTransactionHistory(context,
-                  'https://iceztech.com/mabro/account/transactions/success'),
-              buildTransactionHistory(context,
-                  'https://iceztech.com/mabro/account/transactions/pending'),
-              buildTransactionHistory(context,
-                  'https://iceztech.com/mabro/account/transactions/declined'),
-            ],
-            controller: _tabController,
+          body: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Card(
+              color: ColorConstants.primaryLighterColor,
+              child:
+              TabBarView(
+                children: [
+                  buildTransactionHistory(
+                      context, 'https://iceztech.com/mabro/account/transactions'),
+                  buildTransactionHistory(context,
+                      'https://iceztech.com/mabro/account/transactions/success'),
+                  buildTransactionHistory(context,
+                      'https://iceztech.com/mabro/account/transactions/pending'),
+                  buildTransactionHistory(context,
+                      'https://iceztech.com/mabro/account/transactions/declined'),
+                ],
+                controller: _tabController,
+              ),
+            ),
           ),
         ),
       ],
@@ -130,7 +138,7 @@ class _AllTransactionsState extends State<AllTransactions>
                   Text(
                     'Error in network',
                     style: TextStyle(
-                        fontSize: 16, color: ColorConstants.secondaryColor),
+                        fontSize: 16, color: ColorConstants.whiteLighterColor),
                   ),
                   Icon(
                     Icons.refresh,
@@ -154,6 +162,7 @@ class _AllTransactionsState extends State<AllTransactions>
   Widget transactionList({
     String amount,
     IconData iconData,
+    Color colorData,
     String transactionTitle,
     String createdDate,
     String transactionDetails,
@@ -166,15 +175,16 @@ class _AllTransactionsState extends State<AllTransactions>
           child: Container(
               child: Dash(
             direction: Axis.vertical,
-            length: 130,
+            length: 100,
             dashThickness: 2.0,
             dashLength: 10,
-            dashColor: Colors.black,
+            dashColor: ColorConstants.whiteLighterColor,
           )),
         ),
         TransactionContainer(
             amount: '$currency $amount',
-            icon: Icons.g_translate_sharp,
+            icon: iconData,
+            color: colorData,
             transactionName: transactionTitle,
             date: createdDate,
             transactionDetails: transactionDetails),

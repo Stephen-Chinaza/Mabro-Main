@@ -234,13 +234,13 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
         if (status) {
           cPageState(state: false);
 
-          String code = verifyPhone.data.code;
+          //String code = verifyPhone.data.code;
           ShowSnackBar.showInSnackBar(
               value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
-          _redirectuser(code: code);
+          //_redirectuser(code: code);
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(

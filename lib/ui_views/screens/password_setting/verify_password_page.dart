@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
+import 'package:mabro/core/models/email_verification_data.dart.dart';
 import 'package:mabro/core/models/register_user.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -120,7 +121,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                               ),
                                               length: 6,
                                               obscureText: true,
-                                              animationType: AnimationType.fade,
+
                                               validator: (v) {
                                                 if (v.length < 6) {
                                                   return "";
@@ -141,16 +142,10 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                               backgroundColor: ColorConstants.transparent,
                                               obscuringCharacter: '*',
                                               enableActiveFill: false,
-                                              errorAnimationController: errorController,
+
                                               controller: textEditingController,
                                               keyboardType: TextInputType.number,
-                                              boxShadows: [
-                                                BoxShadow(
-                                                  offset: Offset(0, 1),
-                                                  color: Colors.black12,
-                                                  blurRadius: 10,
-                                                )
-                                              ],
+
                                               onCompleted: (v) {
                                                 print(v);
 
@@ -260,16 +255,18 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
     );
   }
 
-  void _setPin(String code) async {
+  void _setPin(String lockCode) async {
     //kopenPage(context, LandingPage());
     cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
       map['user'] = user;
-      map['lock_code'] = code;
+      map['lock_code'] = lockCode;
 
       var response = await http
-          .post(HttpService.rootUserPin, body: map)
+          .post(HttpService.rootUserPin, body: map,headers: {
+      'Authorization': 'Bearer '+HttpService.token,
+      })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
@@ -284,12 +281,32 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
 
-        RegisterUser regUser = RegisterUser.fromJson(body);
+        EmailVerificationData regUser = EmailVerificationData.fromJson(body);
 
         bool status = regUser.status;
         String message = regUser.message;
         if (status) {
           cPageState(state: false);
+
+          String id = regUser.data.id.toString();
+          String userId = regUser.data.userId.toString();
+          String firstName = regUser.data.firstName.toString();
+          String surName = regUser.data.surname.toString();
+          String emailAddress = regUser.data.emailAddress.toString();
+          String nairaBalance = regUser.data.nairaBalance.toString();
+
+
+
+          String verifiedEmail = regUser.data.verifiedEmail.toString();
+
+          //saving user data to sharedprefs
+          SharedPrefrences.addStringToSP("userId", userId);
+          SharedPrefrences.addStringToSP("email_address", emailAddress);
+          SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
+          SharedPrefrences.addStringToSP("first_name", firstName);
+          SharedPrefrences.addStringToSP("surname", surName);
+          SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
+
 
           SharedPrefrences.addStringToSP("lock_code", widget.textPin);
 
@@ -308,7 +325,6 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
               value: message,
               context: context,
               bgColor: ColorConstants.secondaryColor,
-
               scaffoldKey: _scaffoldKey,
               timer: 5);
         }

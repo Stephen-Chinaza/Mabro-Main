@@ -46,7 +46,7 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     checkFirstScreen();
-    print(user);
+
     checkFirstScreen().whenComplete(() => {
       setState(()=>{})
     });

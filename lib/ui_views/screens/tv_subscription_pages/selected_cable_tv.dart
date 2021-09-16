@@ -64,7 +64,7 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
       'Nnamdi Kanu',
       'Chinwetalu Okolie'
     ];
-    checkState = false;
+    checkState = true;
     _selectedIndex = 0;
   }
 
@@ -87,7 +87,7 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
         buildFirstContainer(),
         buildSecondContainer(),
         Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: ColorConstants.primaryColor,
           appBar: TopBar(
             backgroundColorStart: ColorConstants.primaryColor,
             backgroundColorEnd: ColorConstants.secondaryColor,
@@ -99,8 +99,9 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
           ),
           body: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: Card(
+              color: ColorConstants.primaryLighterColor,
               elevation: 3,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -123,12 +124,12 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                             height: 75,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(4),
+                                  Radius.circular(8),
                                 ),
                                 border: Border.all(
-                                    color: ColorConstants.lighterSecondaryColor
-                                        .withOpacity(0.3),
-                                    width: 0.5)),
+                                    color: ColorConstants.whiteLighterColor
+                                        ,
+                                    width: 0.4)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
@@ -138,20 +139,22 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                                   Row(
                                     children: [
                                       Image.asset(tvLogo,
-                                          height: 40, width: 40),
+                                          height: 100, width: 60),
                                       SizedBox(
                                         width: 12,
                                       ),
                                       Text(tvName,
                                           style: TextStyle(
                                               color:
-                                                  ColorConstants.secondaryColor,
+                                                  ColorConstants.whiteColor,
                                               fontSize: 14)),
                                     ],
                                   ),
                                   Icon(
                                     Icons.arrow_forward_ios,
                                     size: 13,
+                                    color:
+                                    ColorConstants.whiteLighterColor,
                                   )
                                 ],
                               ),
@@ -188,35 +191,13 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                         controller: TextEditingController(text: ''),
                       ),
                       SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 8,
-                            child: NormalFields(
-                              width: MediaQuery.of(context).size.width,
-                              hintText: 'Phone number',
-                              labelText: '',
-                              onChanged: (name) {},
-                              textInputType: TextInputType.number,
-                              controller: _phoneController,
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () {
-                                kopenPage(context, ContactsPage());
-                              },
-                              child: Container(
-                                child: Icon(
-                                  Icons.contact_phone,
-                                  size: 32,
-                                  color: Colors.orange,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                      NormalFields(
+                        width: MediaQuery.of(context).size.width,
+                        hintText: 'Phone number',
+                        labelText: '',
+                        onChanged: (name) {},
+                        textInputType: TextInputType.number,
+                        controller: _phoneController,
                       ),
                       SizedBox(height: 20),
                       Builder(builder: (context) {
@@ -239,7 +220,7 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                       }),
                       SizedBox(height: 5),
                       Text('Balance: NGN $nairaBalance',
-                          style: TextStyle(color: Colors.orange, fontSize: 14)),
+                          style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 12)),
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -265,16 +246,15 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                             child: Text('Save Beneficiary',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w800,
-                                    color: ColorConstants.secondaryColor,
+                                    color: ColorConstants.whiteLighterColor,
                                     fontSize: 14)),
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       Divider(
-                          color: ColorConstants.lighterSecondaryColor
-                              .withOpacity(0.3)),
-                      SizedBox(height: 20),
+                          color: ColorConstants.whiteLighterColor),
+                      SizedBox(height: 10),
                       PasswordTextField(
                         icon: Icons.lock_open,
                         textHint: 'Enter pin',

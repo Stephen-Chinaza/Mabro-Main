@@ -8,6 +8,7 @@ import 'package:mabro/ui_views/commons/home_wallet.dart';
 import 'package:mabro/ui_views/screens/airtime_page/selected_mobile_carrier.dart';
 import 'package:mabro/ui_views/screens/airtime_to_cash_pages/airtime_to_cash_page.dart';
 import 'package:mabro/ui_views/screens/btc_p2p_pages/p2p_buy_sell_page.dart';
+import 'package:mabro/ui_views/screens/education_page/selected_education_sub.dart';
 import 'package:mabro/ui_views/screens/lock_screen_page/main_lock_screen.dart';
 import 'package:mabro/ui_views/screens/recieve_btc_page/recieve_btc_page.dart';
 import 'package:mabro/ui_views/screens/contact_us_page/contact_us_page.dart';
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       if (bankState) {
-        showInfoDialog(320, _buildBody(), title: 'Account setup');
+        showInfoDialog(310, _buildBody(), title: 'Account setup');
       } else {}
     });
   }
@@ -215,17 +216,17 @@ class _HomePageState extends State<HomePage> {
     int checkedItem = 0;
 
     List<Widget> menuScreens = [
-      BtcP2PBuySell(),
-      BuySellGiftcardTran(),
-      DepositWithdrawPage(),
-      ReceiveBtcPage(),
-      SelectedMobileCarrierPage(),
       AirtimeToCashPage(),
       SelectedDataRechargePage(),
       SelectedMobileCarrierPage(),
       SelectedCableTvPage(),
       SelectedElectricitySubPage(),
-      SelectedElectricitySubPage(),
+      SelectedEducationSubPage(),
+      BtcP2PBuySell(),
+      BuySellGiftcardTran(),
+      DepositWithdrawPage(),
+      ReceiveBtcPage(),
+      SelectedMobileCarrierPage(),
       NewsUpdatePage(),
     ];
 
@@ -237,25 +238,43 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 1) {
+              if (checkedItem == 6) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
                     scaffoldKey: _scaffoldKey,
                     timer: 5);
-              } else if (checkedItem == 4) {
+              } else if (checkedItem == 7) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
                     scaffoldKey: _scaffoldKey,
                     timer: 5);
-              } else if (checkedItem == 10) {
+              } else if (checkedItem == 8) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
                     scaffoldKey: _scaffoldKey,
                     timer: 5);
-              } else {
+              } else if (checkedItem == 9) {
+                ShowSnackBar.showInSnackBar(
+                    value: 'feature coming up soon!!!',
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5);
+              }else if (checkedItem == 10) {
+                ShowSnackBar.showInSnackBar(
+                    value: 'feature coming up soon!!!',
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5);
+              }else if (checkedItem == 11) {
+                ShowSnackBar.showInSnackBar(
+                    value: 'feature coming up soon!!!',
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5);
+              }   else {
                 kopenPage(context, menuScreens[checkedItem]);
               }
             },
@@ -264,16 +283,15 @@ class _HomePageState extends State<HomePage> {
               color: ColorConstants.primaryLighterColor,
               shape: RoundedRectangleBorder(side: new BorderSide(color: ColorConstants.whiteLighterColor,
                   width: 0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-
                     Icon(
                       subList[index].icon,
-                      size: 20,
+                      size: 22,
                       color: ColorConstants.yellow,
                       // color: Colors
                       //     .primaries[Random().nextInt(Colors.primaries.length)],
@@ -753,6 +771,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                   height: height,
+                  color: ColorConstants.primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Column(
@@ -761,7 +780,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient),
+                              color: ColorConstants.primaryLighterColor),
                           width: MediaQuery.of(context).size.width,
                           height: 50,
                           child: Padding(
@@ -774,7 +793,7 @@ class _HomePageState extends State<HomePage> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                      ),
                                 ),
                                 GestureDetector(
                                     onTap: () {
@@ -786,7 +805,7 @@ class _HomePageState extends State<HomePage> {
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
-                                        size: 30,
+                                        size: 25,
                                       ),
                                     ))
                               ],
@@ -831,7 +850,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Please to continue enjoying your smooth transactions with MABRO add your account details.',
-            style: TextStyle(fontSize: 16),
+            style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
           ),
         ),
       ],

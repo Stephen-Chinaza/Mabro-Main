@@ -11,9 +11,11 @@ import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/textfield/icon_textfield.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
 import 'package:mabro/ui_views/widgets/textfield/password_textfield.dart';
+import 'package:mabro/ui_views/commons/show_phone_contact/contacts_page.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class SelectedEducationSubPage extends StatefulWidget {
@@ -26,23 +28,53 @@ class SelectedEducationSubPage extends StatefulWidget {
       _SelectedEducationSubPageState();
 }
 
-class _SelectedEducationSubPageState extends State<SelectedEducationSubPage> {
+class _SelectedEducationSubPageState
+    extends State<SelectedEducationSubPage> {
   List<ImageList> providerImages;
   List<AirtimeList> rechargeAmount;
   bool checkState;
+  List<String> beneficiaries;
+  String electName, electLogo;
 
-  TextEditingController rechargeAmountController = new TextEditingController();
+  String user, nairaBalance;
+
+  TextEditingController _beneficiaryController = new TextEditingController();
+  TextEditingController _searchQueryController = new TextEditingController();
+  TextEditingController _phoneController = new TextEditingController();
+
+  Future<void> getData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    user = (pref.getString('user') ?? '');
+    nairaBalance = (pref.getString('naria_balance') ?? '');
+
+    setState(() {});
+  }
+
+  int _selectedIndex;
 
   @override
   void initState() {
     super.initState();
-    providerImages = DemoData.images;
+    getData();
+    providerImages = DemoData.electricityImages;
     rechargeAmount = DemoData.airtime;
-    checkState = false;
+
+    electName = 'Eko Electricity Distribution Company';
+    electLogo = 'assets/images/ekoelect.jpg';
+
+    beneficiaries = [
+      'Emeka Ofor',
+      'Okezie Ikeazu',
+      'Nnamdi Kanu',
+      'Chinwetalu Okolie'
+    ];
+    checkState = true;
+    _selectedIndex = 0;
   }
 
   void dispose() {
-    rechargeAmountController.dispose();
+    _beneficiaryController.dispose();
+    _searchQueryController.dispose();
     super.dispose();
   }
 
@@ -53,7 +85,7 @@ class _SelectedEducationSubPageState extends State<SelectedEducationSubPage> {
         buildFirstContainer(),
         buildSecondContainer(),
         Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: ColorConstants.primaryColor,
           appBar: TopBar(
             backgroundColorStart: ColorConstants.primaryColor,
             backgroundColorEnd: ColorConstants.secondaryColor,
@@ -65,142 +97,207 @@ class _SelectedEducationSubPageState extends State<SelectedEducationSubPage> {
           ),
           body: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Align(
-                  alignment: Alignment.center,
-                  child:  Container(
-                  width: 90,
-                  height: 90,
-                  child: Card(
-                      elevation: 3,
-                      shape: BeveledRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: Image.asset(widget.image, width: 50, height: 50),
-                      )),
-                ),),
-              SizedBox(height: 30),
-              TextStyles.textSubHeadings(
-                  textColor: Colors.black54,
-                  textSize: 13,
-                  textValue: 'Selected Pin Type *'),
-              SizedBox(height: 10),
-              Builder(builder: (context) {
-                return GestureDetector(
-                  onTap: () {
-                    buildShowBottomSheet(
-                      context: context,
-                      bottomsheetContent: _bottomSheetContentMobileCarrier(
-                          context, widget.title, widget.image),
-                    );
-                  },
-                  child: IconFields(
-                    hintText: widget.title,
-                    isEditable: false,
-                    labelText: widget.title,
-                  ),
-                );
-              }),
-              SizedBox(height: 20),
-              Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12)),
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 3,
+                  color: ColorConstants.primaryLighterColor,
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: Row(children: [
-                      Icon(Icons.star),
-                      SizedBox(width: 15),
-                      TextStyles.textSubHeadings(
-                          textColor: Colors.black54,
-                          textSize: 11,
-                          textValue: 'No Beneficiary available'),
-                    ]),
-                  )),
-              SizedBox(height: 20),
-              TextStyles.textSubHeadings(
-                  textColor: Colors.black54,
-                  textSize: 13,
-                  textValue: 'Phone *'),
-              SizedBox(height: 10),
-              NormalFields(
-                width: MediaQuery.of(context).size.width,
-                hintText: 'Enter Phone Number',
-                labelText: '',
-                onChanged: (name) {},
-                controller: TextEditingController(text: ''),
-              ),
-              SizedBox(height: 5),
-              TextStyles.textSubHeadings(
-                  textColor: Colors.black54,
-                  textSize: 10,
-                  textValue: '20,220NGN available'),
-              SizedBox(height: 20),
-              Row(
-                children: [
-                  Checkbox(
-                      value: checkState,
-                      onChanged: (state) {
-                        setState(() {
-                          checkState = state;
-                        });
-                      }),
-                  Flexible(
-                    child: TextStyles.textSubHeadings(
-                        textColor: Colors.black54,
-                        textSize: 11,
-                        textValue: 'Save Beneficiary'),
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Builder(builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                buildShowBottomSheet(
+                                  context: context,
+                                  bottomsheetContent:
+                                  _bottomSheetContentSubscriptionTypes(
+                                    context,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: 75,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                    border: Border.all(
+                                        color: ColorConstants.whiteLighterColor,
+                                        width: 0.5)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Image.asset(electLogo,
+                                              height: 40, width: 40),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Text(electName,
+                                              style: TextStyle(
+                                                  color:
+                                                  ColorConstants.whiteColor,
+                                                  fontSize: 12)),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 14,
+                                        color: ColorConstants.whiteLighterColor,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 35),
+                          Builder(builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                buildShowBottomSheet(
+                                  context: context,
+                                  bottomsheetContent:
+                                  _bottomSheetContentMobileCarrier(
+                                    context,
+                                  ),
+                                );
+                              },
+                              child: IconFields(
+                                hintText: 'Select Beneficiary',
+                                isEditable: false,
+                                labelText: widget.title,
+                                controller: _beneficiaryController,
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 20),
+                          Builder(builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                buildShowBottomSheet(
+                                  context: context,
+                                  bottomsheetContent:
+                                  _bottomSheetContentMobileCarrier(
+                                    context,
+                                  ),
+                                );
+                              },
+                              child: IconFields(
+                                hintText: 'Select meter type',
+                                isEditable: false,
+                                labelText: widget.title,
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 20),
+                          NormalFields(
+                            width: MediaQuery.of(context).size.width,
+                            hintText: 'Meter number',
+                            labelText: '',
+                            onChanged: (name) {},
+                            controller: TextEditingController(text: ''),
+                          ),
+                          SizedBox(height: 20),
+                          NormalFields(
+                            width: MediaQuery.of(context).size.width,
+                            hintText: 'Phone number',
+                            labelText: '',
+                            onChanged: (name) {},
+                            textInputType: TextInputType.number,
+                            controller: _phoneController,
+                          ),
+                          SizedBox(height: 20),
+                          NormalFields(
+                            width: MediaQuery.of(context).size.width,
+                            hintText: 'Enter Amount',
+                            labelText: '',
+                            onChanged: (name) {},
+                            controller: TextEditingController(text: ''),
+                          ),
+                          SizedBox(height: 5),
+                          Text('Balance: NGN $nairaBalance',
+                              style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 12)),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: Checkbox(
+                                    value: checkState,
+                                    checkColor: ColorConstants.white,
+                                    focusColor: ColorConstants.secondaryColor,
+                                    activeColor: ColorConstants.secondaryColor,
+                                    onChanged: (state) {
+                                      setState(() {
+                                        checkState = state;
+                                      });
+                                    }),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: Text('Save Beneficiary',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        color: ColorConstants.whiteLighterColor,
+                                        fontSize: 14)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Divider(
+                              color: ColorConstants.whiteLighterColor),
+                          SizedBox(height: 10),
+                          PasswordTextField(
+                            icon: Icons.lock_open,
+                            textHint: 'Enter pin',
+                            controller: TextEditingController(text: ''),
+                            labelText: 'Enter pin',
+                            onChanged: (password) {},
+                          ),
+                          SizedBox(height: 5),
+                          Text('Enter transaction pin for authorization',
+                              style: TextStyle(
+                                  color: ColorConstants.secondaryColor,
+                                  fontSize: 12)),
+                          SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: CustomButton(
+                                margin: 0,
+                                height: 40,
+                                disableButton: true,
+                                onPressed: () {},
+                                text: 'Pay subscription now'),
+                          ),
+                          SizedBox(height: 30),
+                        ]),
                   ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Divider(
-                color: Colors.grey.withOpacity(0.7),
-                height: 0.5,
-              ),
-              SizedBox(height: 20),
-              TextStyles.textSubHeadings(
-                  textColor: Colors.black54, textSize: 13, textValue: 'Pin *'),
-               
-              SizedBox(height: 10),
-              PasswordTextField(
-              padding: 0,
-              radius: 4.0,
-              elevation: 1.0,
-              textHint: 'Enter Your Pin',
-              labelText: 'Enter Your Pin',
-              onChanged: (name) {},
-              controller: TextEditingController(text: ''),
-            ),
-              SizedBox(height: 5),
-              TextStyles.textSubHeadings(
-                  textColor: Colors.black54,
-                  textSize: 10,
-                  textValue: 'enter transaction pin for authorization'),
-              SizedBox(height: 20),
-              CustomButton(
-                margin: 0,
-                  disableButton: true, onPressed: () {}, text: 'Verify'),
-            ]),
-          )),
+                ),
+              )),
         ),
       ],
     );
   }
 
   Widget _bottomSheetContentMobileCarrier(
-    BuildContext context,
-    String title,
-    String image,
-  ) {
+      BuildContext context,
+      ) {
     return Column(
       children: [
         BottomSheetHeader(
-          buttomSheetTitle: 'Select Mobile Carrier',
+          buttomSheetTitle: 'Select Beneficiary',
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: 6),
@@ -212,39 +309,18 @@ class _SelectedEducationSubPageState extends State<SelectedEducationSubPage> {
     );
   }
 
-  Widget _bottomSheetContentAirtimeAmount(
-    BuildContext context,
-  ) {
-    return Column(
-      children: [
-        BottomSheetHeader(
-          buttomSheetTitle: 'Select Airtime Amount',
-        ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(height: 6),
-          _buildAirtimeList(
-            context,
-          ),
-        ]),
-      ],
-    );
-  }
-
   Widget _buildCarrierList(BuildContext context) {
     return Container(
-      height: 500,
       child: ListView.builder(
           itemCount: providerImages.length,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (context, i) {
             return buildListTile(
-                image: providerImages[i].image,
-                title: providerImages[i].title,
+                title: beneficiaries[i],
                 onTapped: () {
                   setState(() {
-                    widget.title = providerImages[i].title;
-                    widget.image = providerImages[i].image;
+                    _beneficiaryController.text = beneficiaries[i];
                     kbackBtn(context);
                   });
                 });
@@ -252,69 +328,29 @@ class _SelectedEducationSubPageState extends State<SelectedEducationSubPage> {
     );
   }
 
-  Widget _buildAirtimeList(BuildContext context) {
-    return Container(
-      height: 500,
-      child: ListView.builder(
-          itemCount: rechargeAmount.length,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (context, i) {
-            return buildList(
-                title: rechargeAmount[i].amount,
-                onTapped: () {
-                  setState(() {
-                    rechargeAmountController.text = rechargeAmount[i].amount;
-                    kbackBtn(context);
-                  });
-                });
-          }),
-    );
-  }
-
-  Widget buildListTile({String title, String image, Function onTapped}) {
+  Widget buildListTile({String title, Function onTapped}) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () {
             onTapped();
           },
           child: Container(
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 1.0,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(width: 10),
-                Image.asset(image, width: 40, height: 40),
-                SizedBox(width: 40),
-                TextStyles.textSubHeadings(
-                  textSize: 12,
-                  textColor: Colors.black87,
-                  textValue: title,
-                ),
-              ],
-            ),
+            margin: EdgeInsets.all(8),
+            child: Text(title,
+                style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: ColorConstants.secondaryColor,
+                    fontSize: 14)),
           ),
         ),
-        Divider(
-          color: Colors.grey.withOpacity(0.7),
-          height: 0.5,
-        ),
+        Divider(color: ColorConstants.lighterSecondaryColor),
       ],
     );
   }
 
-  Widget buildList({String title, String image, Function onTapped}) {
+  Widget buildList({String title, Function onTapped}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -347,9 +383,83 @@ class _SelectedEducationSubPageState extends State<SelectedEducationSubPage> {
             ),
           ),
         ),
+        Divider(color: ColorConstants.lighterSecondaryColor),
+      ],
+    );
+  }
+
+  Widget _bottomSheetContentSubscriptionTypes(
+      BuildContext context,
+      ) {
+    return Column(
+      children: [
+        BottomSheetHeader(
+          buttomSheetTitle: 'Select Beneficiary',
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          SizedBox(height: 6),
+          _buildSubscriptionTypes(
+            context,
+          ),
+        ]),
+      ],
+    );
+  }
+
+  Widget _buildSubscriptionTypes(BuildContext context) {
+    return Container(
+      child: ListView.builder(
+          itemCount: providerImages.length,
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemBuilder: (context, i) {
+            return buildSubscriptionTypes(
+                title: providerImages[i].title,
+                image: providerImages[i].image,
+                onTapped: () {
+                  setState(() {
+                    electName = providerImages[i].title;
+                    electLogo = providerImages[i].image;
+                    kbackBtn(context);
+                  });
+                });
+          }),
+    );
+  }
+
+  Widget buildSubscriptionTypes(
+      {String title, String image, Function onTapped}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            onTapped();
+          },
+          child: Container(
+            margin: EdgeInsets.all(8),
+            child: Row(
+              children: [
+                Image.asset(
+                  image,
+                  height: 40,
+                  width: 40,
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Text(title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        color: ColorConstants.secondaryColor,
+                        fontSize: 10)),
+              ],
+            ),
+          ),
+        ),
         Divider(
-          color: Colors.grey.withOpacity(0.7),
-          height: 0.5,
+          color: ColorConstants.lighterSecondaryColor,
+          height: 0,
         ),
       ],
     );

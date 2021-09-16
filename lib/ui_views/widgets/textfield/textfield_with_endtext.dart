@@ -34,14 +34,16 @@ class TextFieldWithEndText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 40,
+      height: 50,
       decoration: BoxDecoration(
+        color: ColorConstants.primaryColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(4),
           topLeft: Radius.circular(4),
         ),
       ),
       child: Material(
+        color: ColorConstants.primaryColor,
         elevation: 3,
         borderRadius: BorderRadius.all(Radius.circular(4)),
         child: Row(
@@ -51,25 +53,27 @@ class TextFieldWithEndText extends StatelessWidget {
             Expanded(
               flex: 4,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: TextField(
-                    cursorColor: ColorConstants.primaryColor,
+                    cursorColor: ColorConstants.secondaryColor,
                     enabled: isEditable,
                     onTap: onTap,
                     controller: controller,
                     onChanged: onChanged,
                     keyboardType: textInputType ?? TextInputType.text,
-                    style: GoogleFonts.workSans(
+                    style: TextStyle(
                         fontStyle: FontStyle.normal,
-                        color: Colors.black,
-                        fontSize: 16,
+                        color: ColorConstants.whiteLighterColor,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400),
                     decoration: InputDecoration(
+                      filled: true,
+                      fillColor: ColorConstants.primaryColor,
                       border: InputBorder.none,
                       hintText: hintText,
-                      hintStyle: TextStyle(color: Colors.black38, fontSize: 16.0,),
+                      hintStyle: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 16.0,),
                     ),
                   ),
                 ),
@@ -81,7 +85,7 @@ class TextFieldWithEndText extends StatelessWidget {
                   inputCurrencyType ?? '',
                   style: TextStyle(
                     color: ColorConstants
-                        .lighterSecondaryColor,
+                        .whiteLighterColor,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   )),

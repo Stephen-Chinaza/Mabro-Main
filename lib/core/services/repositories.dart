@@ -11,14 +11,24 @@ import 'package:http/http.dart' as http;
 
 class HttpService {
   static final String https = 'https://iceztech.com/mabro/';
+  static final String token = 'kOoT3jVQAK73GAsRrftjnnXzXS6o7lfLi9iMENmJOx1nYbDPgaiqk7vs5lEpfXg4LMF+wFZWWommwTf1CrqTU1ZZz/my4WZxuReq/uDdBIs=';
 
-  static var rootReg = Uri.parse('https://iceztech.com/mabro/account/create-m');
+
+  static var rootReg = Uri.parse('https://mabro.ng/dev/register/create');
   static var rootLogin =
-      Uri.parse('https://iceztech.com/mabro/account/login-m');
+      Uri.parse('https://mabro.ng/dev/login/authentication');
+  static var rootForgotPassword =
+  Uri.parse('https://mabro.ng/dev/login/send-OTP');
+  static var rootSendEmailOtp =
+      Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
   static var rootVerifyEmail =
-      Uri.parse('https://iceztech.com/mabro/account/verify-email-code-m');
+  Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
+  static var rootResetPassword =
+  Uri.parse('https://mabro.ng/dev/register/create-password');
+  static var rootResendEmail =
+  Uri.parse('https://mabro.ng/dev/register/send-email-OTP');
   static var rootUserPin =
-      Uri.parse('https://iceztech.com/mabro/settings/create-lock-code-m');
+      Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
   static var rootVerifyPhone =
       Uri.parse('https://iceztech.com/mabro/account/verifyPhoneCodeM');
   static var rootSendPhone =
@@ -126,21 +136,18 @@ class HttpService {
           return allTransactionHistory;
         } else if (!status) {
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
               value: message,
               context: context,
               timer: 5);
         }
       } else {
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
             value: 'network error',
             context: context,
             timer: 5);
       }
     } on SocketException {
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
           value: 'check your internet connection',
           context: context,
           timer: 5);

@@ -64,20 +64,21 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
         textColor: Colors.white,
         iconColor: Colors.white,
       ),
+      backgroundColor: ColorConstants.primaryColor,
       body: SingleChildScrollView(
         child: Container(
             color: ColorConstants.primaryColor,
             child: Column(
               children: [
                 SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
                 Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Container(
                           height: 70,
                           width: size.width,
@@ -96,7 +97,9 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   SizedBox(width: 20),
                                   Text(defaultCoinTitle,
                                       style: TextStyle(
-                                          color: ColorConstants.whiteLighterColor, fontSize: 16)),
+                                          color:
+                                              ColorConstants.whiteLighterColor,
+                                          fontSize: 16)),
                                 ],
                               ),
                               Builder(builder: (context) {
@@ -110,8 +113,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   },
                                   child: Container(
                                     child: Card(
-                                        color: ColorConstants
-                                            .secondaryColor,
+                                        color: ColorConstants.primaryColor,
                                         child: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Text(
@@ -129,7 +131,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Row(
                         children: [
@@ -160,7 +162,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             ),
                                             Text('Selling price:',
                                                 style: TextStyle(
-                                                    color: ColorConstants.whiteLighterColor)),
+                                                    color: ColorConstants
+                                                        .whiteLighterColor)),
                                           ],
                                         ),
                                         Divider(
@@ -174,7 +177,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                         SizedBox(height: 5),
                                         Text('NGN',
                                             style: TextStyle(
-                                                color: ColorConstants.whiteLighterColor,
+                                                color: ColorConstants
+                                                    .whiteLighterColor,
                                                 fontWeight: FontWeight.bold)),
                                         SizedBox(height: 15),
                                         CustomButton(
@@ -229,12 +233,14 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             ),
                                             Text('Buying price:',
                                                 style: TextStyle(
-                                                    color: ColorConstants.whiteLighterColor)),
+                                                    color: ColorConstants
+                                                        .whiteLighterColor),
+                                            ),
                                           ],
                                         ),
                                         Divider(
                                             color: ColorConstants
-                                                .lighterSecondaryColor),
+                                                .whiteLighterColor),
                                         SizedBox(height: 5),
                                         Text('19,780,824.14',
                                             style: TextStyle(
@@ -243,7 +249,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                         SizedBox(height: 5),
                                         Text('NGN',
                                             style: TextStyle(
-                                                color: ColorConstants.whiteLighterColor,
+                                                color: ColorConstants
+                                                    .whiteLighterColor,
                                                 fontWeight: FontWeight.bold)),
                                         SizedBox(height: 15),
                                         CustomButton(
@@ -598,18 +605,20 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                             Expanded(
                                 child: Text(
                                     'Receive Bitcoin within 15 minutes or be refunded.',
-                                    style: TextStyle(color: Colors.white))),
+                                    style: TextStyle(
+                                        color:
+                                            ColorConstants.whiteLighterColor))),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 8,
                       ),
                       Container(
-                        color: Colors.white,
+                        color: ColorConstants.primaryColor,
                         width: size.width,
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
                               Row(
@@ -624,7 +633,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   Text('You want to buy Bitcoin?',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: ColorConstants.secondaryColor,
+                                          color:
+                                              ColorConstants.whiteLighterColor,
                                           fontSize: 18)),
                                 ],
                               ),
@@ -655,7 +665,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   width: size.width,
                                   height: 120,
                                   child: Card(
-                                    color: Colors.green[900],
+                                    color: ColorConstants.primaryLighterColor,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
@@ -664,7 +674,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                         children: [
                                           Text('Want better price?',
                                               style: TextStyle(
-                                                  color: ColorConstants.white,
+                                                  color: ColorConstants
+                                                      .whiteLighterColor,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16)),
                                           Spacer(),
@@ -703,7 +714,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   Text('You want to Sell Bitcoin?',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: ColorConstants.secondaryColor,
+                                          color:
+                                              ColorConstants.whiteLighterColor,
                                           fontSize: 18)),
                                 ],
                               ),
@@ -734,7 +746,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                   width: size.width,
                                   height: 120,
                                   child: Card(
-                                    color: Colors.red[900],
+                                    color: ColorConstants.primaryLighterColor,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
@@ -743,7 +755,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                         children: [
                                           Text('Want better price?',
                                               style: TextStyle(
-                                                  color: ColorConstants.white,
+                                                  color: ColorConstants
+                                                      .whiteLighterColor,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16)),
                                           Spacer(),
@@ -839,9 +852,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
           },
           child: Container(
             height: 60,
-            decoration: BoxDecoration(
-
-            ),
+            decoration: BoxDecoration(),
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -912,6 +923,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
       },
       child: Container(
         child: Card(
+          color: ColorConstants.primaryLighterColor,
           elevation: 5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -944,14 +956,14 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                       Text(' NGN/BTC',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: ColorConstants.secondaryColor,
+                              color: ColorConstants.whiteLighterColor,
                               fontSize: 16)),
                     ],
                   ),
                   SizedBox(height: 5),
                   Text('Maximum: 0.00025181 BTC',
                       style: TextStyle(
-                          color: ColorConstants.lightSecondaryColor,
+                          color: ColorConstants.whiteLighterColor,
                           fontSize: 16)),
                   SizedBox(height: 5),
                   Row(
@@ -967,19 +979,19 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                       GestureDetector(
                         onTap: () {
                           showInfoDialog(
-                              390.0,
+                              360.0,
                               Text(
                                   "The seller will receive NGN in their Mabro wallet. If you already have the required NGN in Mabro, the trade is instant. \n\nIf not, the trade will be completed instantly when your NGN deposit is verified by Mabro automatic system, you don't need to wait for confirmation from seller. " +
                                       "\n\nMabro can receive your NGN deposit from all banks.",
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
-                                    color: ColorConstants.secondaryColor,
+                                    color: ColorConstants.whiteLighterColor,
                                     fontSize: 16,
                                   )));
                         },
                         child: Icon(
                           Icons.info,
-                          color: ColorConstants.lighterSecondaryColor,
+                          color: ColorConstants.whiteLighterColor,
                           size: 25,
                         ),
                       ),
@@ -988,12 +1000,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                   SizedBox(height: 5),
                   Text('Completion time: ~0s',
                       style: TextStyle(
-                          color: ColorConstants.lightSecondaryColor,
+                          color: ColorConstants.whiteLighterColor,
                           fontSize: 16)),
                   SizedBox(height: 5),
                   Text('chievu',
                       style: TextStyle(
-                          color: ColorConstants.lightSecondaryColor,
+                          color: ColorConstants.whiteLighterColor,
                           fontSize: 16)),
                 ],
               ),
@@ -1014,6 +1026,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
             child: Stack(
               children: [
                 Container(
+                  color: ColorConstants.primaryColor,
                   height: height,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
@@ -1022,8 +1035,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient),
+                          decoration:
+                              BoxDecoration(color: ColorConstants.primaryLighterColor),
                           width: MediaQuery.of(context).size.width,
                           height: 50,
                           child: Padding(
@@ -1048,7 +1061,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
-                                        size: 30,
+                                        size: 25,
                                       ),
                                     ))
                               ],

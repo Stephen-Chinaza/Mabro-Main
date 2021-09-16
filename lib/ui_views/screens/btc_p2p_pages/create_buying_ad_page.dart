@@ -72,6 +72,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
         .of(context)
         .size;
     return Scaffold(
+      backgroundColor: ColorConstants.primaryColor,
       appBar: TopBar(
         backgroundColorStart: ColorConstants.primaryColor,
         backgroundColorEnd: ColorConstants.secondaryColor,
@@ -83,6 +84,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
       ),
       body: SingleChildScrollView(
         child: Container(
+          color: ColorConstants.primaryLighterColor,
           height: size.height,
           child: Column(
             children: [
@@ -98,8 +100,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                   ),
                   Text('You want to buy Bitcoin: ',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: ColorConstants.secondaryColor,
+                          color: ColorConstants.whiteLighterColor,
                           fontSize: 16)),
                   Expanded(
                     flex: 2,
@@ -109,14 +110,12 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                         TextSpan(
                             text: '18,616,170.26 ',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: ColorConstants.primaryColor,
+                                color: ColorConstants.whiteLighterColor,
                                 fontSize: 14)),
                         TextSpan(
                             text: 'NGN',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: ColorConstants.secondaryColor,
+                                color: ColorConstants.whiteLighterColor,
                                 fontSize: 14)),
                       ]),
                     ),
@@ -133,8 +132,6 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                         height: 36,
                         decoration: activeTabIndex == 0
                             ? BoxDecoration(
-                          border: Border.all(
-                              color: ColorConstants.white, width: 2),
                           gradient: ColorConstants.primaryGradient,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         )
@@ -144,7 +141,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                           child: Center(child: Text("Fixed Price",
                               style: TextStyle(color: (activeTabIndex == 0)
                                   ? ColorConstants.white
-                                  : ColorConstants.secondaryColor,
+                                  : ColorConstants.whiteLighterColor,
                                   fontSize: 12))),
                         )),
                   ),
@@ -154,8 +151,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                         height: 36,
                         decoration: activeTabIndex == 1
                             ? BoxDecoration(
-                          border: Border.all(
-                              color: ColorConstants.white, width: 2),
+
                           gradient: ColorConstants.primaryGradient,
                           borderRadius: BorderRadius.all(Radius.circular(8)),
                         )
@@ -165,7 +161,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                           child: Center(child: Text("Dynamic Price",
                               style: TextStyle(color: (activeTabIndex == 1)
                                   ? ColorConstants.white
-                                  : ColorConstants.secondaryColor,
+                                  : ColorConstants.whiteLighterColor,
                                   fontSize: 12))),
                         )),
                   ),
@@ -175,6 +171,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
 
               Expanded(
                 child: Container(
+
                   child: TabBarView(
                     controller: _tabController,
                     children: <Widget>[
@@ -197,33 +194,34 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
       shrinkWrap: true,
       children: [
         Container(
+          color: ColorConstants.primaryLighterColor,
             child: Card(
+              color: ColorConstants.primaryLighterColor,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                         'Price',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 16)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 18)),
                     SizedBox(height: 20),
                     Text(
                         'Fixed Price',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
-                    SizedBox(height: 10),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
+                    SizedBox(height: 5),
                     TextFieldWithEndText(inputCurrencyType: 'NGN',),
                     SizedBox(height: 20),
                     Row(
                       children: [
                         Text(
                             widget.coinSign + ' price that sellers see: ',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
@@ -232,18 +230,18 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                             showInfoDialog(
                                  120.0, Text(
                                 'The price has been accounted with trading fee (seller pay the fee).',
-                                style: TextStyle(color: ColorConstants.secondaryColor,
-                                    fontSize: 12)));
+                                style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                    fontSize: 14)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     TextFieldWithEndText(
                       inputCurrencyType: 'NGN|' + widget.coinSign,
                       controller: TextEditingController(text: '0'),),
@@ -252,8 +250,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                       children: [
                         Text(
                             widget.coinSign + ' price that you pay: ',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
@@ -264,62 +262,61 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                                 widget.coinSign +
                                 ' rate (37951.09). The price will fluctuate when CoinBase ' +
                                 widget.coinSign + ' rate changes.',
-                                style: TextStyle(color: ColorConstants.secondaryColor,
-                                  fontSize: 12,)));
+                                style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                  fontSize: 14,)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     TextFieldWithEndText(
                       inputCurrencyType: 'NGN|' + widget.coinSign,
                       controller: TextEditingController(text: '0'),),
                     SizedBox(height: 20),
                     Divider(
                         color: ColorConstants
-                            .lighterSecondaryColor),
+                            .whiteLighterColor),
                     SizedBox(height: 20),
                     Text(
                         'Amount',
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: ColorConstants.secondaryColor,
+                            color: ColorConstants.whiteLighterColor,
                             fontSize: 16)),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
                     Text(
                         'Amount of ' + widget.coinSign,
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
+                            color: ColorConstants.whiteLighterColor,
                             fontSize: 12)),
                     SizedBox(height: 10),
                     TextFieldWithEndText(inputCurrencyType: widget.coinSign,
                         controller: TextEditingController(text: '20')),
                     SizedBox(height: 20),
-
                     Row(
                       children: [
                         Text(
                             'Maximum ' + widget.coinSign + ' amount',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
                         GestureDetector(
                           onTap: () {
                             showInfoDialog(120.0, Text('Maximum ' + widget.coinSign + ' amount in one trade',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12,)));
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14,)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
@@ -337,15 +334,14 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                     Text(
                         'Payment details',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: ColorConstants.secondaryColor,
+                            color: ColorConstants.whiteLighterColor,
                             fontSize: 16)),
                     SizedBox(height: 20),
                     Text(
                         'Payment method:',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
                     SizedBox(height: 10),
                     Builder(builder: (context) {
                       return GestureDetector(
@@ -371,8 +367,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                           Text(
                               'Bank name',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
-                                  fontSize: 12)),
+                                  color: ColorConstants.whiteLighterColor,
+                                  fontSize: 14)),
                           SizedBox(height: 10),
                           Builder(builder: (context) {
                             return GestureDetector(
@@ -396,8 +392,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                     Text(
                         'Payment window:',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
                     SizedBox(height: 10),
                     Builder(builder: (context) {
                       return GestureDetector(
@@ -413,32 +409,32 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                         ),
                       );
                     }),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     Divider(
                         color: ColorConstants
                             .lighterSecondaryColor),
-                    SizedBox(height: 20),
-                    Row(children: [
-                      Icon(FontAwesomeIcons.eye, size: 16, color: ColorConstants.secondaryColor,),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap:(){
-                          showInfoDialog(
-                              220.0, _UserAdsContainer(idColor: Colors.green[900]), title: 'Preview');
-                        },
-                        child: Text(
+                    SizedBox(height: 10),
+                    GestureDetector(
+                      onTap:(){
+                        showInfoDialog(
+                            220.0, _UserAdsContainer(idColor: Colors.green[900]), title: 'Preview');
+                      },
+                      child: Row(children: [
+                        Icon(FontAwesomeIcons.eye, size: 16, color: ColorConstants.secondaryColor,),
+                        SizedBox(width: 10),
+                        Text(
                             'Preview',
                             style: TextStyle(
-                                color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                          'your ad',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12)),
-                    ],),
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 16)),
+                        SizedBox(width: 5),
+                        Text(
+                            'your ad',
+                            style: TextStyle(
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 16)),
+                      ],),
+                    ),
                     SizedBox(height: 20),
                     Row(children: [
                       Expanded(
@@ -447,7 +443,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                           padding: const EdgeInsets.only(right: 2.0),
                           child: CustomButton(
                               margin: 0,
-                              height: 30,
+                              height: 45,
                               width: 160,
                               disableButton: true,
                               onPressed: (){
@@ -461,7 +457,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                           padding: const EdgeInsets.only(left: 2.0),
                           child: CustomButton(
                               margin: 0,
-                              height: 30,
+                              height: 45,
                               width: 160,
                               disableButton: true,
                               onPressed: () {
@@ -495,6 +491,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
 
   Widget _buildPaymentList() {
     return Container(
+      color: ColorConstants.primaryLighterColor,
       child: ListView.builder(
           itemCount: paymentDetails.length,
           scrollDirection: Axis.vertical,
@@ -527,24 +524,17 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
             onTapped();
           },
           child: Container(
-            height: 40,
+            height: 50,
             decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 1.0,
-                ),
-              ],
+              color: ColorConstants.primaryColor,
             ),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(title),
-                  Icon(Icons.arrow_forward_ios, size: 16,),
+                  Text(title, style: TextStyle(color: ColorConstants.whiteLighterColor)),
+                  Icon(Icons.arrow_forward_ios, size: 16,color: ColorConstants.whiteLighterColor),
                 ],
               ),
             ),
@@ -565,25 +555,26 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
       shrinkWrap: true,
       children: [
         Container(
+            color: ColorConstants.primaryLighterColor,
             child: Card(
+              color: ColorConstants.primaryLighterColor,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                         'Price',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 16)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 18)),
                     SizedBox(height: 20),
                     Row(
                       children: [
                         Text(
-                             'bitUSD Price: ',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                             'bitUSD price: ',
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
@@ -592,18 +583,18 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                             showInfoDialog(
                                 120.0, Text(
                                 'Equivalent to 18,941,249.59 NGN/'+widget.coinSign,
-                                style: TextStyle(color: ColorConstants.secondaryColor,
-                                    fontSize: 12)));
+                                style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                    fontSize: 14)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     TextFieldWithEndText(
                       inputCurrencyType: 'NGN|' + widget.usdRate,
                       controller: TextEditingController(text: '497.4145'),),
@@ -612,8 +603,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                       children: [
                         Text(
                             widget.coinSign + ' price that sellers see: ',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
@@ -622,18 +613,18 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                             showInfoDialog(
                                 120.0, Text(
                                 'The price has been accounted with trading fee (buyer pay the fee).',
-                                style: TextStyle(color: ColorConstants.secondaryColor,
-                                    fontSize: 12)));
+                                style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                    fontSize: 14)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 5),
                     TextFieldWithEndText(
                       inputCurrencyType: 'NGN|' + widget.coinSign,
                       controller: TextEditingController(text: '19,130,662.08'),),
@@ -641,9 +632,9 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                     Text(
                         'Maximum ' + widget.coinSign + ' price:',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
-                    SizedBox(height: 10),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
+                    SizedBox(height: 5),
                     TextFieldWithEndText(inputCurrencyType: 'NGN',
                         controller: TextEditingController(text: '')),
                     SizedBox(height: 20),
@@ -651,8 +642,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                       children: [
                         Text(
                             widget.coinSign + ' price that you receive: ',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
@@ -663,13 +654,13 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                                 widget.coinSign +
                                 ' rate (37951.09). The price will fluctuate when CoinBase ' +
                                 widget.coinSign + ' rate changes.',
-                                style: TextStyle(color: ColorConstants.secondaryColor,
-                                  fontSize: 12,)));
+                                style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                  fontSize: 14,)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
@@ -679,12 +670,11 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                       inputCurrencyType: 'NGN|' + widget.coinSign,
                       controller: TextEditingController(text: '18,941,249.59'),),
                     SizedBox(height: 20),
-                    SizedBox(height: 20),
                     Text(
                         'Reference Exchange:',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
                     SizedBox(height: 10),
                     TextFieldWithEndText(inputCurrencyType: widget.coinSign,
                         isEditable: false,
@@ -698,15 +688,14 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                     Text(
                         'Amount',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: ColorConstants.secondaryColor,
+                            color: ColorConstants.whiteLighterColor,
                             fontSize: 16)),
                     SizedBox(height: 20),
                     Text(
                         'Amount of ' + widget.coinSign,
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
                     SizedBox(height: 10),
                     TextFieldWithEndText(inputCurrencyType: widget.coinSign,
                         controller: TextEditingController(text: '20')),
@@ -716,21 +705,21 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                       children: [
                         Text(
                             'Maximum ' + widget.coinSign + ' amount',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
+                            style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
                         SizedBox(
                           width: 1,
                         ),
                         GestureDetector(
                           onTap: () {
                             showInfoDialog(120.0, Text('Maximum ' + widget.coinSign + ' amount in one trade',
-                                style: TextStyle(color: ColorConstants.secondaryColor,
-                                  fontSize: 12,)));
+                                style: TextStyle(color: ColorConstants.whiteLighterColor,
+                                  fontSize: 14,)));
                           },
                           child: Icon(
                             Icons.info,
-                            color: ColorConstants.lighterSecondaryColor,
-                            size: 14,
+                            color: ColorConstants.whiteLighterColor,
+                            size: 22,
                           ),
                         ),
                       ],
@@ -748,15 +737,15 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                     Text(
                         'Payment details',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: ColorConstants.secondaryColor,
+
+                            color: ColorConstants.whiteLighterColor,
                             fontSize: 16)),
                     SizedBox(height: 20),
                     Text(
                         'Payment method:',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
                     SizedBox(height: 10),
                     Builder(builder: (context) {
                       return GestureDetector(
@@ -783,8 +772,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                               'Bank name',
                               style: TextStyle(
                                   color: ColorConstants.secondaryColor,
-                                  fontSize: 12)),
-                          SizedBox(height: 10),
+                                  fontSize: 14)),
+                          SizedBox(height: 5),
                           Builder(builder: (context) {
                             return GestureDetector(
                               onTap: () {
@@ -807,9 +796,9 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                     Text(
                         'Payment window:',
                         style: TextStyle(
-                            color: ColorConstants.secondaryColor,
-                            fontSize: 12)),
-                    SizedBox(height: 10),
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14)),
+                    SizedBox(height: 5),
                     Builder(builder: (context) {
                       return GestureDetector(
                         onTap: () {
@@ -829,27 +818,27 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                         color: ColorConstants
                             .lighterSecondaryColor),
                     SizedBox(height: 20),
-                    Row(children: [
-                      Icon(FontAwesomeIcons.eye, size: 16, color: ColorConstants.secondaryColor,),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap:(){
-                          showInfoDialog(
-                              220.0, _UserAdsContainer(idColor: Colors.green[900]), title: 'Preview');
-                        },
-                        child: Text(
+                    GestureDetector(
+                      onTap:(){
+                        showInfoDialog(
+                            220.0, _UserAdsContainer(idColor: Colors.green[900]), title: 'Preview');
+                      },
+                      child: Row(children: [
+                        Icon(FontAwesomeIcons.eye, size: 22, color: ColorConstants.secondaryColor,),
+                        SizedBox(width: 10),
+                        Text(
                             'Preview',
                             style: TextStyle(
-                                color: ColorConstants.secondaryColor,
-                                fontSize: 12)),
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                          'your ad',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 12)),
-                    ],),
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 16)),
+                        SizedBox(width: 5),
+                        Text(
+                            'your ad',
+                            style: TextStyle(
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 16)),
+                      ],),
+                    ),
                     SizedBox(height: 20),
                     Row(children: [
                       Expanded(
@@ -858,7 +847,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                             padding: const EdgeInsets.only(right: 2.0),
                             child: CustomButton(
                                 margin: 0,
-                                height: 30,
+                                height: 45,
                                 width: 160,
                                 disableButton: true,
                                 onPressed: (){
@@ -872,7 +861,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                           padding: const EdgeInsets.only(left: 2.0),
                           child: CustomButton(
                               margin: 0,
-                              height: 30,
+                              height: 45,
                               width: 160,
                               disableButton: true,
                               onPressed: () {
@@ -902,6 +891,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
               children: [
                 Container(
                   height: height,
+                  color: ColorConstants.primaryColor,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
                     child: Column(
@@ -910,7 +900,7 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient),
+                              color: ColorConstants.primaryLighterColor),
                           width: MediaQuery
                               .of(context)
                               .size
@@ -923,7 +913,8 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(title,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
+
                                 ),
                                 GestureDetector(
                                     onTap: () {
@@ -955,7 +946,9 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
     Color idColor,
   }) {
     return Container(
+      color: ColorConstants.transparent,
       child: Card(
+        color: ColorConstants.primaryLighterColor,
         elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -982,12 +975,10 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                   children: [
                     Text('20,000,00.00',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             color: idColor,
                             fontSize: 16)),
                     Text(' NGN/BTC',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             color: ColorConstants.secondaryColor,
                             fontSize: 16)),
                   ],
@@ -995,23 +986,22 @@ class _CreateBuyingAdsPageState extends State<CreateBuyingAdsPage>  with SingleT
                 SizedBox(height: 5),
                 Text('Maximum: 0.00025181 BTC',
                     style: TextStyle(
-                        color: ColorConstants.lightSecondaryColor,
+                        color: ColorConstants.whiteLighterColor,
                         fontSize: 16)),
                 SizedBox(height: 5),
                 Text('Mabro Wallet',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: ColorConstants.secondaryColor,
+                        color: ColorConstants.whiteLighterColor,
                         fontSize: 16)),
                 SizedBox(height: 5),
                 Text('Completion time: ~0s',
                     style: TextStyle(
-                        color: ColorConstants.lightSecondaryColor,
+                        color: ColorConstants.whiteLighterColor,
                         fontSize: 16)),
                 SizedBox(height: 5),
                 Text('chievu',
                     style: TextStyle(
-                        color: ColorConstants.lightSecondaryColor,
+                        color: ColorConstants.whiteLighterColor,
                         fontSize: 16)),
               ],
             ),

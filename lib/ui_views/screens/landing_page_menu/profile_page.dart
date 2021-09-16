@@ -1,14 +1,8 @@
 import 'package:mabro/constants/navigator/navigation_constant.dart';
-import 'package:mabro/core/helpers/sharedprefrences.dart';
-import 'package:mabro/core/models/Settings.dart';
-import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/screens/menu_option_pages/account_page.dart';
-
 import 'package:mabro/ui_views/screens/phone_number_verification_pages/enter_phone_digit_page.dart';
-import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:async';
@@ -76,20 +70,10 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
-        extendBodyBehindAppBar: true,
-        extendBody: true,
+        backgroundColor: ColorConstants.primaryColor,
+
         body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              ProfileHeader(
-                title: "",
-                actions: <Widget>[],
-              ),
-              const SizedBox(height: 10.0),
-              _buildUserInfo(),
-            ],
-          ),
+          child: _buildUserInfo(),
         ));
   }
 
@@ -98,20 +82,9 @@ class _MenuPageState extends State<MenuPage> {
       padding: const EdgeInsets.all(4),
       child: Column(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
-            alignment: Alignment.topLeft,
-            child: Text(
-              "User Information",
-              style: TextStyle(
-                  fontStyle: FontStyle.normal,
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
-              textAlign: TextAlign.left,
-            ),
-          ),
+
           Card(
+            color: ColorConstants.primaryLighterColor,
             child: Container(
               alignment: Alignment.topLeft,
               padding: EdgeInsets.all(4),
@@ -119,11 +92,17 @@ class _MenuPageState extends State<MenuPage> {
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      ...ListTile.divideTiles(
-                        color: Colors.grey,
-                        tiles: [
+                      ProfileHeader(
+                        title: "",
+                        actions: <Widget>[],
+                      ),
+                      SizedBox(height: 20),
+                      Divider(color: ColorConstants.whiteLighterColor,),
+                      SizedBox(height: 20),
+                      Column(
+                        children: [
                           buildListTile(
-                              title: 'First Name',
+                              title: 'First name',
                               subTitle: surname,
                               icon: Icons.person,
                               hideEdit: accountState,
@@ -131,7 +110,7 @@ class _MenuPageState extends State<MenuPage> {
                                 openAccountPage();
                               }),
                           buildListTile(
-                              title: 'Last Name',
+                              title: 'Last name',
                               subTitle: firstname,
                               icon: Icons.person,
                               hideEdit: accountState,
@@ -188,7 +167,7 @@ class _MenuPageState extends State<MenuPage> {
     kopenPage(context, AccountPage());
   }
 
-  ListTile buildListTile(
+  Widget buildListTile(
       {String title,
       String subTitle,
       IconData icon,
@@ -201,7 +180,6 @@ class _MenuPageState extends State<MenuPage> {
           width: 50,
           child: Card(
             elevation: 3,
-            color: Colors.transparent,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(50.0)),
             ),
@@ -226,14 +204,16 @@ class _MenuPageState extends State<MenuPage> {
           style: TextStyle(
               fontStyle: FontStyle.normal,
               fontSize: 16,
-              fontWeight: FontWeight.w600),
+              color: ColorConstants.whiteLighterColor,
+              ),
         ),
         subtitle: Text(
           subTitle.toLowerCase(),
           style: TextStyle(
               fontStyle: FontStyle.normal,
+              color: ColorConstants.whiteLighterColor,
               fontSize: 14,
-              fontWeight: FontWeight.w600),
+              ),
         ),
         trailing: (hideEdit)
             ? SizedBox.shrink()
@@ -244,24 +224,16 @@ class _MenuPageState extends State<MenuPage> {
                 child: Container(
                   height: 40,
                   width: 40,
-                  child: Card(
-                    elevation: 3,
-                    color: Colors.transparent,
-                    shape: RoundedRectangleBorder(
+                  child: Container(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(50.0)),
                     ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: ColorConstants.primaryGradient,
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.edit,
-                          size: 22,
-                          color: ColorConstants.white,
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Icon(
+                        Icons.edit,
+                        size: 22,
+                        color: ColorConstants.white,
                       ),
                     ),
                   ),
@@ -289,59 +261,19 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Ink(
-          height: 150,
-          decoration: BoxDecoration(
-            gradient: ColorConstants.primaryGradient,
-          ),
-        ),
-        Ink(
-          height: 150,
-          decoration: BoxDecoration(
-            color: Colors.black38,
-          ),
-        ),
-        if (actions != null)
-          Container(
+        SafeArea(
+          child: Container(
             width: double.infinity,
-            height: 150,
-            padding: const EdgeInsets.only(bottom: 0.0, right: 0.0),
-            alignment: Alignment.bottomRight,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: actions,
+            margin: const EdgeInsets.only(top: 20),
+            child: Avatar(
+              image: AssetImage(
+                'assets/images/mbl1.png',
+              ),
+              radius: 40,
+              backgroundColor: Colors.white,
+              borderColor: Colors.grey.shade300,
+              borderWidth: 4.0,
             ),
-          ),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.only(top: 110),
-          child: Column(
-            children: <Widget>[
-              Avatar(
-                image: AssetImage(
-                  'assets/images/mbl1.png',
-                ),
-                radius: 40,
-                backgroundColor: Colors.white,
-                borderColor: Colors.grey.shade300,
-                borderWidth: 4.0,
-              ),
-              Text(
-                title,
-                style: TextStyle(
-                    fontStyle: FontStyle.normal,
-                    fontSize: 20,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              if (subtitle != null) ...[
-                const SizedBox(height: 5.0),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.subtitle,
-                ),
-              ]
-            ],
           ),
         )
       ],
@@ -359,7 +291,7 @@ class Avatar extends StatelessWidget {
   const Avatar(
       {Key key,
       @required this.image,
-      this.borderColor = Colors.grey,
+      this.borderColor = ColorConstants.primaryColor,
       this.backgroundColor = ColorConstants.primaryColor,
       this.radius = 30,
       this.borderWidth = 5})
@@ -369,15 +301,14 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius + borderWidth,
-      backgroundColor: borderColor,
+      backgroundColor: ColorConstants.secondaryColor,
       child: CircleAvatar(
         radius: radius,
         backgroundColor: backgroundColor != null
-            ? backgroundColor
+            ? ColorConstants.primaryColor
             : ColorConstants.primaryColor,
-        child: CircleAvatar(
-          radius: radius - borderWidth,
-          backgroundImage: image,
+        child: Container(
+          child: Icon(Icons.person, color: ColorConstants.white, size: 40)
         ),
       ),
     );

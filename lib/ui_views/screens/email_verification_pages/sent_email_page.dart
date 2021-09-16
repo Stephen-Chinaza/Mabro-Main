@@ -17,9 +17,10 @@ import 'verify_email_code_page.dart';
 class SentEmailPage extends StatelessWidget {
   final String emailAddress;
   final String code;
+  final String userId;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  SentEmailPage({Key key, this.emailAddress , this.code}) : super(key: key);
+  SentEmailPage({Key key, this.emailAddress , this.code, this.userId}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -82,7 +83,7 @@ class SentEmailPage extends StatelessWidget {
                       onPressed: () {
                         pushPage(
                           context,
-                          EmailVerificationPage(emailAddress: emailAddress),
+                          EmailVerificationPage(emailAddress: emailAddress,userId: userId,otp: code,),
                         );
                       },
                       text: 'Continue'.toUpperCase()),

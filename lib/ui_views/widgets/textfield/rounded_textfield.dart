@@ -35,51 +35,53 @@ class RoundedTextfield extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      height: 45,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
           border:
-              Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)),
-      child: TextField(
-        onChanged: onChanged,
-        controller: controller,
-        focusNode: myFocusNode,
-        keyboardType: textInputType ?? TextInputType.text,
-        cursorColor: ColorConstants.secondaryColor,
-        style: TextStyle(color: ColorConstants.white),
-        decoration: InputDecoration(
-            filled: true,
-            fillColor: ColorConstants.primaryColor,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4.0),
-              borderSide: const BorderSide(
-                  color: ColorConstants.whiteColor, width: 0.2),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: ColorConstants.whiteColor, width: 0.2),
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: ColorConstants.transparent),
-              borderRadius: BorderRadius.circular(4.0),
-            ),
-            hintText: hintText,
-            hintStyle: TextStyle(
-                fontStyle: FontStyle.normal,
-                color: ColorConstants.whiteLighterColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w300),
-            prefixIcon: (icon == null)
-                ? SizedBox.shrink()
-                : Icon(
-                    icon,
-                    color: (iconColor == null)
-                        ? ColorConstants.whiteLighterColor
-                        : iconColor,
-                    size: 22,
-                  ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 13)),
+              Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)),
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: TextField(
+          onChanged: onChanged,
+          controller: controller,
+          focusNode: myFocusNode,
+          enabled: isEditable,
+          keyboardType: textInputType ?? TextInputType.text,
+          cursorColor: ColorConstants.secondaryColor,
+          style: TextStyle(color: ColorConstants.white),
+          decoration: InputDecoration(
+              filled: true,
+              fillColor: ColorConstants.primaryColor.withOpacity(0.6),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                    BorderSide(color: ColorConstants.transparent, width: 0.2),
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorConstants.transparent),
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              hintText: hintText,
+              hintStyle: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  color: ColorConstants.whiteLighterColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300),
+              prefixIcon: (icon == null)
+                  ? SizedBox.shrink()
+                  : Icon(
+                      icon,
+                      color: (iconColor == null)
+                          ? ColorConstants.whiteLighterColor
+                          : iconColor,
+                      size: 22,
+                    ),
+              contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 13)),
+        ),
       ),
     );
   }

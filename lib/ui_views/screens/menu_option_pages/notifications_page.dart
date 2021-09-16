@@ -49,7 +49,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       nea,
       smsalert;
 
-  bool updateState;
+  bool updateStatePN, updateStateE;
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -166,13 +166,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
     smsAlertState = false;
 
-    updateState = false;
+    updateStatePN = false;
+    updateStateE = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorConstants.primaryColor,
       key: _scaffoldKey,
       appBar: TopBar(
         backgroundColorStart: ColorConstants.primaryColor,
@@ -192,45 +193,56 @@ class _NotificationsPageState extends State<NotificationsPage> {
       child: Column(
         children: <Widget>[
           Card(
+            color: ColorConstants.primaryLighterColor,
             elevation: 3,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Visibility(
-                  visible: updateState,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'updating...',
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        alignment: Alignment.topLeft,
+                        padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+                        child: Text(
+                          "Push Notifications",
                           style: TextStyle(
-                              fontSize: 16, color: ColorConstants.primaryColor),
+                              fontStyle: FontStyle.normal,
+                              fontSize: 16,
+                              color: ColorConstants.whiteColor,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.left,
+
+                        )),
+                    Visibility(
+                      visible: updateStatePN,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'updating...',
+                              style: TextStyle(
+                                  fontSize: 16, color: ColorConstants.secondaryColor),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-                    child: Text(
-                      "Push Notifications",
-                      style: GoogleFonts.openSans(
-                          fontStyle: FontStyle.normal,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.left,
-                    )),
                 Column(
                   children: <Widget>[
-                    ...ListTile.divideTiles(
-                      color: Colors.grey,
-                      tiles: [
+
                         buildListTile(
                             title: "Add fund",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: pAddFundState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -238,11 +250,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (pAddFundState) {
                                     updateSettings(
                                         key: 'add_fund_phone_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 1);
                                   } else {
                                     updateSettings(
                                         key: 'add_fund_phone_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 1);
                                   }
                                 });
                               },
@@ -251,16 +265,22 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Sms alert",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: smsAlertState,
                               onChanged: (bool value) {
                                 setState(() {
                                   smsAlertState = value;
                                   if (smsAlertState) {
                                     updateSettings(
-                                        key: 'sms_alert', value: '1');
+                                        key: 'sms_alert', value: '1',
+                                        num: 1);
                                   } else {
                                     updateSettings(
-                                        key: 'sms_alert', value: null);
+                                        key: 'sms_alert', value: null,
+                                        num: 1);
                                   }
                                 });
                               },
@@ -269,6 +289,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Withdraw fund",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: pWithdrawFundState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -277,11 +301,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (pWithdrawFundState) {
                                     updateSettings(
                                         key: 'withdraw_fund_phone_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 1);
                                   } else {
                                     updateSettings(
                                         key: 'withdraw_fund_phone_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 1);
                                   }
                                 });
                               },
@@ -290,6 +316,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Buy asset",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: pBuyFundState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -298,11 +328,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (pBuyFundState) {
                                     updateSettings(
                                         key: 'buy_asset_phone_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 1);
                                   } else {
                                     updateSettings(
                                         key: 'buy_asset_phone_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 1);
                                   }
                                 });
                               },
@@ -311,6 +343,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Sell asset",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: pSellAsset,
                               onChanged: (bool value) {
                                 setState(() {
@@ -318,11 +354,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (pSellAsset) {
                                     updateSettings(
                                         key: 'sell_asset_phone_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 1);
                                   } else {
                                     updateSettings(
                                         key: 'sell_asset_phone_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 1);
                                   }
                                 });
                               },
@@ -331,6 +369,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "News letter",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: pNewsLetter,
                               onChanged: (bool value) {
                                 setState(() {
@@ -338,18 +380,19 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (pNewsLetter) {
                                     updateSettings(
                                         key: 'newsletter_phone_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 1);
                                   } else {
                                     updateSettings(
                                         key: 'newsletter_phone_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 1);
                                   }
                                 });
                               },
                             ),
                             onTapped: () {}),
-                      ],
-                    ),
+
                   ],
                 ),
               ],
@@ -363,28 +406,53 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ),
           Card(
             elevation: 3,
+            color: ColorConstants.primaryLighterColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                    alignment: Alignment.topLeft,
-                    padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-                    child: Text(
-                      "Email notifications",
-                      style: GoogleFonts.openSans(
-                          fontStyle: FontStyle.normal,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600),
-                      textAlign: TextAlign.left,
-                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        alignment: Alignment.topLeft,
+                        padding: EdgeInsets.only(top: 15, left: 15, right: 15),
+                        child: Text(
+                          "Email notifications",
+                          style: TextStyle(
+                              fontStyle: FontStyle.normal,
+                              fontSize: 16,
+                              color: ColorConstants.white,
+                              fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.left,
+                        )),
+                    Visibility(
+                      visible: updateStateE,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'updating...',
+                              style: TextStyle(
+                                  fontSize: 16, color: ColorConstants.secondaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Column(
                   children: <Widget>[
-                    ...ListTile.divideTiles(
-                      color: Colors.grey,
-                      tiles: [
+
                         buildListTile(
                             title: "Login notification",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: loginState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -392,10 +460,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                                   if (loginState) {
                                     updateSettings(
-                                        key: 'login_email_alert', value: '1');
+                                        key: 'login_email_alert', value: '1',
+                                        num: 2);
                                   } else {
                                     updateSettings(
-                                        key: 'login_email_alert', value: null);
+                                        key: 'login_email_alert', value: null,
+                                        num: 2);
                                   }
                                 });
                               },
@@ -404,6 +474,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Add fund",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: eAddFundState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -412,11 +486,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (eAddFundState) {
                                     updateSettings(
                                         key: 'add_fund_email_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 2);
                                   } else {
                                     updateSettings(
                                         key: 'add_fund_email_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 2);
                                   }
                                 });
                               },
@@ -425,6 +501,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Withdraw fund",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: eWithdrawFundState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -433,11 +513,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (eWithdrawFundState) {
                                     updateSettings(
                                         key: 'withdraw_fund_email_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 2);
                                   } else {
                                     updateSettings(
                                         key: 'withdraw_fund_email_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 2);
                                   }
                                 });
                               },
@@ -446,6 +528,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Buy asset",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: eBuyFundState,
                               onChanged: (bool value) {
                                 setState(() {
@@ -458,7 +544,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   } else {
                                     updateSettings(
                                         key: 'buy_asset_email_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 2);
                                   }
                                 });
                               },
@@ -467,6 +554,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "Sell asset",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: eSellAsset,
                               onChanged: (bool value) {
                                 setState(() {
@@ -475,11 +566,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (eSellAsset) {
                                     updateSettings(
                                         key: 'sell_asset_email_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 2);
                                   } else {
                                     updateSettings(
                                         key: 'sell_asset_email_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 2);
                                   }
                                 });
                               },
@@ -488,6 +581,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         buildListTile(
                             title: "News letter",
                             widget: Switch(
+                              activeColor: ColorConstants.secondaryColor,
+                              activeTrackColor: ColorConstants.whiteColor,
+                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                              inactiveThumbColor: ColorConstants.whiteLighterColor,
                               value: eNewsLetter,
                               onChanged: (bool value) {
                                 setState(() {
@@ -496,40 +593,36 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                   if (eNewsLetter) {
                                     updateSettings(
                                         key: 'newsletter_email_alert',
-                                        value: '1');
+                                        value: '1',
+                                        num: 2
+                                    );
                                   } else {
                                     updateSettings(
                                         key: 'newsletter_email_alert',
-                                        value: null);
+                                        value: null,
+                                        num: 2);
                                   }
                                 });
                               },
                             ),
                             onTapped: () {}),
-                      ],
-                    ),
+
                   ],
                 ),
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Divider(
-              color: Colors.grey.withOpacity(0.7),
-              height: 1,
-            ),
-          ),
+
         ],
       ),
     );
   }
 
   ListTile buildListTile(
-      {String title, IconData icon, Function onTapped, Widget widget}) {
+      {String title, IconData icon, Function onTapped, Widget widget, int num}) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-      title: Text(title),
+      title: Text(title, style: TextStyle(color: ColorConstants.whiteLighterColor)),
       trailing: (widget == null)
           ? Icon(Icons.arrow_forward_ios_sharp, size: 13)
           : widget,
@@ -537,8 +630,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  void updateSettings({String key, String value}) async {
-    _updateState(true);
+  void updateSettings({String key, String value, int num}) async {
+    _updateState(true, num);
 
     try {
       var map = Map<String, dynamic>();
@@ -548,7 +641,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       var response = await http
           .post(HttpService.rootUpdateSettings, body: map)
           .timeout(const Duration(seconds: 15), onTimeout: () {
-        _updateState(false);
+        _updateState(false, num);
 
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -566,7 +659,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         bool status = regUser.status;
         String message = regUser.message;
         if (status) {
-          _updateState(false);
+          _updateState(false,num);
 
           //String code = regUser.data.code;
 
@@ -581,7 +674,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             SharedPrefrences.addStringToSP(key, value);
           });
         } else if (!status) {
-          _updateState(false);
+          _updateState(false, num);
 
           ShowSnackBar.showInSnackBar(
               bgColor: ColorConstants.primaryColor,
@@ -591,7 +684,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               timer: 5);
         }
       } else {
-        _updateState(false);
+        _updateState(false, num);
 
         ShowSnackBar.showInSnackBar(
             bgColor: ColorConstants.primaryColor,
@@ -601,7 +694,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             timer: 5);
       }
     } on SocketException {
-      _updateState(false);
+      _updateState(false, num);
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.primaryColor,
           value: 'check your internet connection',
@@ -611,9 +704,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
     }
   }
 
-  void _updateState(bool state) {
+  void _updateState(bool state, int num) {
     setState(() {
-      updateState = state;
+      if(num == 1){
+        updateStatePN = state;
+      }else if(num == 2){
+
+      updateStateE = state;}
     });
   }
 }

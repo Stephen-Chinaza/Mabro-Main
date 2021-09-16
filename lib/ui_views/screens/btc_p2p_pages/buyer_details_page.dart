@@ -47,7 +47,7 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorConstants.primaryColor,
       appBar: TopBar(
         backgroundColorStart: ColorConstants.primaryColor,
         backgroundColorEnd: ColorConstants.secondaryColor,
@@ -61,92 +61,105 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(height: 60, color:ColorConstants.secondaryColor,
+          Container(height: 60, color:ColorConstants.primaryColor,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text('Buy '+ widget.coinType + ' cheap using NGN via Mabro Wallet in Nigeria from '+ widget.sellersName,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 12)),
+                      color: ColorConstants.whiteLighterColor,
+                      fontSize: 14)),
               ),
             ),),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(4.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20,),
-                Text(
-                    'Amount of ' + widget.coinSign,
-                    style: TextStyle(
-                        color: ColorConstants.secondaryColor,
-                        fontSize: 12)),
-                SizedBox(height: 10),
-                TextFieldWithEndText(inputCurrencyType: widget.coinSign,
-                    controller: TextEditingController(text: '')),
-                SizedBox(height: 20),
-                Text(
-                    'Amount of NGN',
-                    style: TextStyle(
-                        color: ColorConstants.secondaryColor,
-                        fontSize: 12)),
-                SizedBox(height: 10),
-                TextFieldWithEndText(inputCurrencyType: 'NGN',
-                    controller: TextEditingController(text: '0.00')),
-                SizedBox(height: 30),
-                Builder(builder: (context) {
-                  return GestureDetector(
-                    onTap: () {
-                      buildShowBottomSheet(
-                        context: context,
-                        bottomsheetContent: _bottomSheetContent(context),
-                      );
-                    },
-                    child: IconFields(
-                      isEditable: false,
-                      hintText: '',
-                      controller: selectWalletController,
-                    ),
-                  );
-                }),
+                Card(
+                  color: ColorConstants.primaryLighterColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 20,),
+                        Text(
+                            'Amount of ' + widget.coinSign,
+                            style: TextStyle(
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 12)),
+                        SizedBox(height: 10),
+                        TextFieldWithEndText(inputCurrencyType: widget.coinSign,
+                            controller: TextEditingController(text: '')),
+                        SizedBox(height: 10),
+                        Text(
+                            'Amount of NGN',
+                            style: TextStyle(
+                                color: ColorConstants.whiteLighterColor,
+                                fontSize: 14)),
+                        SizedBox(height: 10),
+                        TextFieldWithEndText(inputCurrencyType: 'NGN',
+                            controller: TextEditingController(text: '0.00')),
+                        SizedBox(height: 18),
+                        Builder(builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              buildShowBottomSheet(
+                                context: context,
+                                bottomsheetContent: _bottomSheetContent(context),
+                              );
+                            },
+                            child: IconFields(
+                              isEditable: false,
+                              hintText: '',
+                              controller: selectWalletController,
+                            ),
+                          );
+                        }),
 
-                Visibility(
-                  visible: showBank,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 30),
-                      NormalFields(
-                        labelText: '',
-                            isEditable: false,
-                            hintText: 'Insert your '+ widget.coinSign + ' address here',
-                            controller: TextEditingController(text: ''),
+                        Visibility(
+                          visible: showBank,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 30),
+                              NormalFields(
+                                labelText: '',
+                                isEditable: false,
+                                hintText: 'Insert your '+ widget.coinSign + ' address here',
+                                controller: TextEditingController(text: ''),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                  'Amount Withdrawal fee ' + widget.coinSign+ '0.00005.00',
+                                  style: TextStyle(
+                                      color: Colors.orange,
+                                      fontSize: 11)),
+                            ],
                           ),
-                      SizedBox(height: 5),
-                      Text(
-                          'Amount Withdrawal fee ' + widget.coinSign+ '0.00005.00',
-                          style: TextStyle(
-                              color: Colors.orange,
-                              fontSize: 11)),
-                    ],
+                        ),
+                        SizedBox(height: 15),
+                      ],
+                    ),
                   ),
                 ),
+                
                 SizedBox(height: 20),
                 Divider(
                     color: ColorConstants
                         .lighterSecondaryColor),
                 SizedBox(height: 20),
                 Container(
-                  decoration: BoxDecoration(border: Border.all(color: ColorConstants.lighterSecondaryColor, width: 1)),
+                  decoration: BoxDecoration(border:
+                  Border.all(color: ColorConstants.lighterSecondaryColor, width: 1)),
                   child: Column(children: [
                     Container(child: Center(
                       child: Text(
                           'Advertisement details',
                           style: TextStyle(
-                              color: ColorConstants.white,
-                              fontSize: 12)),
+                              color: ColorConstants.primaryColor,
+                              fontSize: 16)),
                     ), color: ColorConstants.secondaryColor,height: 50),
                     SizedBox(height: 5),
                     Padding(
@@ -157,12 +170,12 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                           Text(
                               'Buying From:',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                           Text(
                               widget.sellersName,
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                         ],
                       ),
@@ -180,12 +193,12 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                           Text(
                               'Price:',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                           Text(
                               widget.btcPrice,
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                         ],
                       ),
@@ -203,12 +216,12 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                           Text(
                               'Amount limits:',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                           Text(
                               widget.btcPrice,
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                         ],
                       ),
@@ -226,12 +239,12 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                           Text(
                               'Payment method:',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                           Text(
                               widget.paymentMethod,
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                         ],
                       ),
@@ -249,12 +262,12 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                           Text(
                               'Location:',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                           Text(
                              'Nigeria',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                         ],
                       ),
@@ -272,12 +285,12 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                           Text(
                               'Payment window:',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                           Text(
                               '15 mins',
                               style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
+                                  color: ColorConstants.whiteLighterColor,
                                   fontSize: 12)),
                         ],
                       ),

@@ -40,7 +40,6 @@ class TextStyles {
     double textSize = 12,
     double lineSpacing = 1.1,
     Color textColor =  ColorConstants.whiteLighterColor,
-
     bool centerText = false,
   }) {
     return Text(

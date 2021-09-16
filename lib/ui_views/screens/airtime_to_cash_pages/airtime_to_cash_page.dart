@@ -8,7 +8,6 @@ import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_ba
 import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
-import 'package:mabro/ui_views/widgets/textfield/textfield_with_image.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,7 +63,7 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
         buildFirstContainer(),
         buildSecondContainer(),
         Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: ColorConstants.primaryColor,
           appBar: TopBar(
             backgroundColorStart: ColorConstants.primaryColor,
             backgroundColorEnd: ColorConstants.secondaryColor,
@@ -76,7 +75,7 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(4.0),
               child: GestureDetector(
                 onTap: () {},
                 child: Column(
@@ -85,17 +84,16 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                     SizedBox(height: 10),
                     TextStyles.textDetails(
                       textSize: 14,
-                      textColor: Colors.black,
+                      textColor: ColorConstants.white,
                       textValue: 'Select mobile carrier',
                     ),
                     SizedBox(height: 10),
                     Container(
-                      height: 100,
+                      height: 70,
                       width: MediaQuery.of(context).size.width,
                       child: ListView.builder(
                           itemCount: providerImages.length,
                           scrollDirection: Axis.horizontal,
-                          padding: EdgeInsets.all(8.0),
                           itemBuilder: (context, i) {
                             return GestureDetector(
                               onTap: () {
@@ -127,17 +125,19 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(4)),
                                         border: Border.all(
-                                          color: _selectedIndex != null &&
-                                                  _selectedIndex == i
+                                          color: _selectedIndex !=
+                                              null &&
+                                              _selectedIndex == i
                                               ? Colors.redAccent
                                               : Colors.transparent,
                                           width: 2,
                                         ),
                                       ),
-                                      height: 80,
-                                      width: 80,
+                                      height: 50,
+                                      width: 70,
                                       child: Padding(
-                                        padding: const EdgeInsets.all(12.0),
+                                        padding:
+                                        const EdgeInsets.all(8.0),
                                         child: Image.asset(
                                             providerImages[i].image),
                                       ))),

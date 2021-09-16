@@ -26,7 +26,7 @@ class ColorConstants {
   static Color yellow2 = Colors.white.withOpacity(0.2);
 
   static const primaryGradient = const LinearGradient(
-    colors: const [primaryColor, secondaryColor],
+    colors: const [secondaryColor, secondaryColor],
     begin: const FractionalOffset(0.2, 0.2),
     end: const FractionalOffset(1.0, 0.1),
     stops: [0.0, 1.0],
