@@ -1,0 +1,2042 @@
+<h1 style="display: inline-block; text-align:center; border:none;">
+  <a href="https://mabro.ng/dev">
+    <img src="public/admin/assets/images/logo-lg.png" style="width: 100px">
+  </a>
+<br>API Documentation</h2>
+
+<!-- # Mabro API Documentation -->
+
+## Table of Contents
+
+- [Base URL](#base-url)
+- [Endpoint Authorization](#endpoint-authorization)
+- [Account Registration](#account-registration)
+  - [Create new Account](#create-new-account)
+  - [Resend Email OTP](#resend-email-otp)
+  - [Verify Email OTP](#verify-email-otp)
+  - [Create Lock Code](#create-lock-code)
+- [Login](#login)
+- [Recover Password](#recover-password)
+  - [Verify Email Address](#verify-email-address)
+  - [Resend OTP](#resend-otp)
+  - [Verify OTP](#verify-otp)
+  - [Create new Password](#create-new-password)
+- [Manage Account](#manage-account)
+  - [Add Phone Number](#add-phone-number)
+  - [Resend Phone OTP](#resend-otp)
+  - [Verify Phone OTP](#verify-otp)
+  - [Update Phone number](#update-phone-number)
+  - [Resend Update Phone OTP](#resend-otp)
+  - [Verify Update Phone OTP](#verify-otp)
+  - [Add BVN](#add-bvn)
+  - [List of Banks](#list-of-banks)
+  - [Update Bank Account](#update-bank-account)
+  - [Account Details](#account-details)
+  - [Update Settings](#update-settings)
+  - [Change Password](#change-password)
+  - [Change Lock Code](#change-lock-code)
+- [Fund Naira Wallet](#fund-naira-wallet)
+  - [Fund with Card](#fund-with-card)
+  - [Verify Card OTP](#verify-card-otp)
+  - [Verify Fund Transaction](#verify-fund-transaction)
+- [Buy Airtime](#buy-airtime)
+- [Mobile Data](#mobile-data)
+  - [Mobile Data Plans](#mobile-data-plans)
+  - [Buy Mobile Data](#buy-mobile-data)
+- [Electricity](#electricity)
+  - [Fetch Distribution Companies](#fetch-distribution-companies)
+  - [Verify Electricity Meter Number](#verify-electricity-meter-number)
+  - [Pay Electricity Bill](#pay-electricity-bill)
+- [TV Subscription](#tv-subscription)
+  - [Fetch TV Packages](#fetch-tv-packages)
+  - [Verify Smart Card number](#verify-smart-card-number)
+  - [Pay TV Subscription](#pay-tv-subscription)
+- [Transaction History](#transaction-history)
+  - [All Transaction History](#all-transaction-history)
+  - [Transactions by Category](#transactions-by-category)
+  - [Transaction Details](#transaction-details)
+
+<!-- ABOUT THE PROJECT -->
+
+<br>
+<br>
+<br>
+
+# Base URL
+
+```
+https://mabro.ng/dev/
+```
+
+<br>
+<br>
+
+# Endpoint Authorization
+
+All endpoints are protected by OAuth 2.0 Authorization. The Bearer Token will be sent to your email
+
+```dart
+Authorization: Bearer eyJhbGci...
+```
+
+<br>
+<br>
+
+# Account Registration
+
+## Create new Account
+
+This is to create a new account for a user
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/register/create
+```
+
+### Form Data
+
+```dart
+String name; // The name is the full name of the user without any special character
+String email_address;
+String password;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "An email has been sent to you, follow the instruction in the email to verify your account",
+  "data": {
+    "OTP": "533198",
+    "userId": "MDAwODgyNjEzNjU2NDc5"
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "Notice an invalid input",
+  "causes": {
+    "email_address": "Enter a valid Email address"
+  }
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "An unknown error occur, please try again"
+}
+```
+
+<br>
+<br>
+
+## Resend Email OTP
+
+### Form Data
+
+```dart
+String userId; // The userId string contain in the create account success response
+```
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/register/send-email-OTP
+```
+
+### Success Response
+
+```json
+{
+  "status": true,
+  "message": "An email has been sent to you, follow the instruction in the email to verify your account",
+  "data": {
+    "OTP": "819884",
+    "userId": "MDAwODgyNjEzNjU2NDc5"
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+<br>
+<br>
+
+## Verify Email OTP
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/register/verify-email-OTP
+```
+
+### Form Data
+
+```dart
+String userId;
+String otp // The verification code sent to the user's email address
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your account has been verified successfully",
+  "data": {
+    "first_name": "Isaac",
+    "surname": "Eze",
+    "email_address": "zikzay@gmail.com",
+    "phone_number": "",
+    "lock_code": "$2y$10$r6CZ3Z0HddgpO7F6SmZJ2OeoNAHtHXFZrAxIo3cWurJbk73qTBG9i",
+    "password": "$2y$10$vGVNQN9.gLWUxRKHDJc/tO6xashbdrX4GlLnVPKGSqpvM2iAVzQoe",
+    "blocked": 0,
+    "verified_email": 1,
+    "verified_phone": 0,
+    "id": "MDAwODU3NDE5NDUwODM2",
+    "userId": "MDAwODU3NDE5NDUwODM2",
+    "nairaBalance": 0
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Your entered an invalid Verification code"
+}
+```
+
+<br>
+<br>
+
+## Create Lock Code
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/register/create-lock-code
+```
+
+```dart
+String userId;
+String lock_code
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Lock code was created successfully",
+  "data": {
+    "first_name": "Isaac",
+    "surname": "Eze",
+    "email_address": "zikzay@gmail.com",
+    "phone_number": "",
+    "lock_code": "$2y$10$r6CZ3Z0HddgpO7F6SmZJ2OeoNAHtHXFZrAxIo3cWurJbk73qTBG9i",
+    "password": "$2y$10$vGVNQN9.gLWUxRKHDJc/tO6xashbdrX4GlLnVPKGSqpvM2iAVzQoe",
+    "blocked": 0,
+    "verified_email": 1,
+    "verified_phone": 0,
+    "id": "MDAwODU3NDE5NDUwODM2",
+    "userId": "MDAwODU3NDE5NDUwODM2",
+    "nairaBalance": 0
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Lock code must be 4 digit number"
+}
+```
+
+<br>
+<br>
+
+# Login
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/login/authentication
+```
+
+```dart
+String email_address;
+String password
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Login successful",
+  "data": {
+    "first_name": "Isaac",
+    "surname": "Eze",
+    "email_address": "zikzay@gmail.com",
+    "phone_number": "",
+    "lock_code": "$2y$10$r6CZ3Z0HddgpO7F6SmZJ2OeoNAHtHXFZrAxIo3cWurJbk73qTBG9i",
+    "password": "$2y$10$vGVNQN9.gLWUxRKHDJc/tO6xashbdrX4GlLnVPKGSqpvM2iAVzQoe",
+    "blocked": 0,
+    "verified_email": 1,
+    "verified_phone": 0,
+    "id": "MDAwODU3NDE5NDUwODM2",
+    "created_at": "2021-09-16 03:28:59",
+    "updated_at": "2021-09-16 23:39:29",
+    "userId": "MDAwODU3NDE5NDUwODM2",
+    "nairaBalance": 0
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Invalid login combination"
+}
+```
+
+<br>
+<br>
+
+# Recover Password
+
+## Verify Email Address
+
+This is to create a new account for a user
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/login/send-OTP
+```
+
+### Form Data
+
+```dart
+String email_address;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "An email has been sent to you, follow the instruction in the email to recover your password",
+  "data": {
+    "OTP": "264258",
+    "userId": "MDAwODU3NDE5NDUwODM2"
+  }
+}
+```
+
+### Error Response sample
+
+```json
+{
+  "status": false,
+  "message": "You don't have an account with us or you entered an invalid email address"
+```
+
+<br>
+<br>
+
+## Resend OTP
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/login/send-OTP
+```
+
+### Form Data
+
+```dart
+String email_address; // The userId string contain in the create account success response
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "An email has been sent to you, follow the instruction in the email to recover your password",
+  "data": {
+    "OTP": "264258",
+    "userId": "MDAwODU3NDE5NDUwODM2"
+  }
+}
+```
+
+### Error Response sample
+
+```json
+{
+  "status": false,
+  "message": "You don't have an account with us or you entered an invalid email address"
+```
+
+<br>
+<br>
+
+## Verify OTP
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/register/verify-email-OTP
+```
+
+### Form Data
+
+```dart
+String email_address;
+String otp // The verification code sent to the user's email address
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your account has been verify, you can now create a new password",
+  "data": {
+    "userId": "MDAwODU3NDE5NDUwODM2"
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Your entered an invalid Verification code"
+}
+```
+
+<br>
+<br>
+
+## Create new Password
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/register/create-password
+```
+
+```dart
+String userId;
+String password;
+String repeat_password;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your password has been changed successfully"
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Password does not match"
+}
+```
+
+<br>
+<br>
+
+# Manage Account
+
+## Add Phone Number
+
+Add Phone number to a user account. An OTP will be sent to the user phone number to verify before phone number can be added to user's account
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/add-phone
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "A verification has been sent to your phone number",
+  "data": {
+    "OTP": "598004"
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "Notice an invalid input",
+  "causes": {
+    "phone_number": "Enter a valid Phone number"
+  }
+}
+```
+
+<br>
+<br>
+
+## Resend OTP
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/add-phone
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "A verification has been sent to your phone number",
+  "data": {
+    "OTP": "598004"
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "Notice an invalid input",
+  "causes": {
+    "phone_number": "Enter a valid Phone number"
+  }
+}
+```
+
+<br>
+<br>
+
+## Verify OTP
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/_app/verifty-phone-OTP
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+String otp // The verification code sent to the user's email address
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your phone number has been verified"
+}
+```
+
+### Error Response Sample 1
+
+```json
+{
+  "status": false,
+  "message": "No OTP has been generated for this your phone number"
+}
+```
+
+### Error Response Sample 2
+
+```json
+{
+  "status": false,
+  "message": "Your entered an invalid Verification code"
+}
+```
+
+<br>
+<br>
+
+## Update Phone Number
+
+Change user's phone number. An OTP will be sent to the user phone number to verify before phone number can be added to user's account
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/update-phone
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "A verification has been sent to your phone number",
+  "data": {
+    "OTP": "598004"
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "Notice an invalid input",
+  "causes": {
+    "phone_number": "Enter a valid Phone number"
+  }
+}
+```
+
+<br>
+<br>
+
+## Resend OTP
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/update-phone
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "A verification has been sent to your phone number",
+  "data": {
+    "OTP": "598004"
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "Notice an invalid input",
+  "causes": {
+    "phone_number": "Enter a valid Phone number"
+  }
+}
+```
+
+<br>
+<br>
+
+## Verify OTP
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/_app/verifty-phone-OTP
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+String otp // The verification code sent to the user's email address
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your phone number has been verified"
+}
+```
+
+### Error Response Sample 1
+
+```json
+{
+  "status": false,
+  "message": "No OTP has been generated for this your phone number"
+}
+```
+
+### Error Response Sample 2
+
+```json
+{
+  "status": false,
+  "message": "Your entered an invalid Verification code"
+}
+```
+
+<br>
+<br>
+
+## Add BVN
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/add-BVN
+```
+
+```dart
+String userId;
+String bvn;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your BVN has been added successfully",
+  "data": {
+    "first_name": "Francis",
+    "surname": "Chibuzor",
+    "dob": "12-10-1996",
+    "phone": "07038477383"
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Invalid BVN"
+}
+```
+
+<br>
+<br>
+
+## List of Banks
+
+The get the list of available banks
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/list-banks
+```
+
+### Form Data
+
+```dart
+Null
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": [
+    {
+      "name": "Access bank",
+      "code": "044",
+      "id": 1,
+      "created_at": "2021-03-04 12:31:37",
+      "updated_at": "2021-03-04 12:31:37"
+    },
+    {
+      "name": "Citibank Nigeria",
+      "code": "023",
+      "id": 2,
+      "created_at": "2021-03-04 12:31:37",
+      "updated_at": "2021-03-04 12:31:37"
+    },
+    {
+      "name": "Diamond bank",
+      "code": "063",
+      "id": 3,
+      "created_at": "2021-03-04 12:31:37",
+      "updated_at": "2021-03-04 12:31:37"
+    },
+    .
+    .
+    .
+  ]
+}
+```
+
+<br>
+<br>
+
+## Update Bank Account
+
+This end point handle to verify, add and update user's bank account
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/update-bank-account
+```
+
+```dart
+String userId;
+String account_number;
+String bank_code;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your account number has been updated",
+  "data": {
+    "accountName": "Francis Chibuzor"
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Account number is not valid"
+}
+```
+
+<br>
+<br>
+
+## Account Details
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/account-details
+```
+
+```dart
+String userId;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "bvns": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "bvn": "2181717938",
+      "first_name": "Chisom",
+      "surname": "Ebere",
+      "id": "MDAxMDcyNzE3NjUzMDQ1",
+      "created_at": "2021-09-18 15:17:17",
+      "updated_at": "2021-09-18 15:17:17"
+    },
+    "account": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "account_name": "Francis Chibuzor",
+      "account_number": "0029938484",
+      "bank_name": "",
+      "bank_code": "Fran",
+      "id": "MDAxMDgwODA4NTU4OTc2",
+      "created_at": "2021-09-18 17:32:08",
+      "updated_at": "2021-09-25 20:23:11"
+    },
+    "settings": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "sms_notification": 0,
+      "email_transaction_notification": 1,
+      "two_factor_authentication": 0,
+      "finger_print_login": 1,
+      "newsletter": 1,
+      "id": "MDAwODU4OTQ0OTM5NTIy",
+      "created_at": "2021-09-16 03:54:24",
+      "updated_at": "2021-09-19 13:45:48"
+    }
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+<br>
+<br>
+
+## Update Settings
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/update-settings
+```
+
+```dart
+String userId;
+String sms_notification; // ; // Value is either  0 or 1
+String email_transaction_notification; // Value is either  0 or 1
+String two_factor_authentication; // Value is either  0 or 1
+String finger_print_login; // Value is either  0 or 1
+String newsletter; // Value is either  0 or 1,
+//The Setting Items can be sent individually or together
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Settings updated successfully",
+  "data": {
+    "user": "MDAwODU3NDE5NDUwODM2",
+    "sms_notification": 0,
+    "email_transaction_notification": 1,
+    "two_factor_authentication": 0,
+    "finger_print_login": 1,
+    "newsletter": 1,
+    "id": "MDAwODU4OTQ0OTM5NTIy",
+    "created_at": "2021-09-16 03:54:24",
+    "updated_at": "2021-09-25 21:21:19"
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "User not define or invalid User's Id sent"
+}
+```
+
+<br>
+<br>
+
+## Change Password
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/change-password
+```
+
+```dart
+String userId;
+String old_password;
+String password; //New Password
+String repeat_password;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your password has been changed successfully"
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Your old password is not correct"
+}
+```
+
+<br>
+<br>
+
+## Change Lock Code
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/change-lock-code
+```
+
+```dart
+String userId;
+String password;
+String lock_code; //New Lock Code
+String repeat_lock_code;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your lock code has been changed successfully"
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "lock code must be 4 digit long"
+}
+```
+
+<br>
+<br>
+
+# Fund Naira Wallet
+
+## Fund with Card
+
+Fund request to fund user's account with Naira Debit Card
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/naira-wallet/fund
+```
+
+### Form Data
+
+```dart
+String userId
+String name;
+String email_address;
+int amount;
+int card_number;
+int cvv
+int exp_month;
+int exp_year;
+int pin;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com",
+  "data": {
+    "api_id": 2514007,
+    "api_reference": "FLW-MOCK-d37bfb1a4d4f117dcd7730a62e2bc1e4",
+    "reference": "MBF00187615363897",
+    "response_message": "Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com",
+    "redirect_url": "https://ravesandboxapi.flutterwave.com/mockvbvpage?ref=FLW-MOCK-d37bfb1a4d4f117dcd7730a62e2bc1e4&code=00&message=Approved. Successful&receiptno=RN1632778079219",
+    "auth_mode": "redirect"
+  }
+}
+```
+
+### Success Response sample 2
+
+```json
+{
+  "status": true,
+  "message": "Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com",
+  "data": {
+    "api_id": 2514712,
+    "api_reference": "FLW-MOCK-bdd29533cb5145401a72b9f74a68eadb",
+    "reference": "MBF00191062514847",
+    "response_message": "Please enter the OTP sent to your mobile number 080****** and email te**@rave**.com",
+    "auth_mode": "otp"
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "Invalid card details. Please confirm expiry year"
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "Invalid PIN. Please enter a 4-digit PIN, e.g 1111"
+}
+```
+
+<br>
+<br>
+
+## Verify Card OTP
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/naira-wallt/verify-OTP
+```
+
+### Form Data
+
+```dart
+String userId;
+String api_reference
+String api_id;
+String otp;
+String reference;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "successful",
+  "data": {
+    "amount": 2000,
+    "balance": 85321
+  }
+}
+```
+
+### Error Response sample
+
+```json
+{
+  "status": false,
+  "message": "Invalid transaction attempt. No REF Cache"
+}
+```
+
+<br>
+<br>
+
+## Verify Fund Transaction
+
+This endpoint is necessary if the mobile SDK is used.
+After receiving payment from a user with the mobile SDK, the response will contain the data that is required by this endpoint
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/naira-allet/verify-transaction
+```
+
+### Form Data
+
+```dart
+String userId
+String api_id;
+String reference // The verification code sent to the user's email address
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "successful",
+  "data": {
+    "amount": 2000,
+    "balance": 85321
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "No transaction was found for this id"
+}
+```
+
+<br>
+<br>
+
+# Buy Airtime
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/airtime/pay
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+int amount;
+String network; // Networks: mtn, airtel, glo, 9mobile
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your airtime purchase was successful"
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "status": false,
+  "message": "Fill in mandated fills"
+}
+```
+
+### Error Response sample 2
+
+```json
+{
+  "status": false,
+  "message": "Insufficient fund to process request"
+}
+```
+
+<br>
+<br>
+
+# Mobile Data
+
+## Mobile Data Plans
+
+Get list of available mobile data plans
+
+### Endpoints [POST]
+
+```
+https://mabro.ng/dev/_app/plans/all
+https://mabro.ng/dev/_app/plans/mtn
+https://mabro.ng/dev/_app/plans/glo
+https://mabro.ng/dev/_app/plans/airtel
+https://mabro.ng/dev/_app/plans/9mobile
+```
+
+### Form Data
+
+```dart
+Null
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "MTN Mobile plans",
+  "data": {
+    "mtn": [
+      {
+        "api_source": "VTPass",
+        "data_id": "mtn-10mb-100",
+        "network_id": 1,
+        "network": "mtn",
+        "data_name": "N100 100MB - 24 hrs",
+        "size": "100MB",
+        "bonus_size": "",
+        "duration": "24 hrs",
+        "api_price": 100,
+        "price": 100,
+        "api_active": 1,
+        "active": 1,
+        "id": "MDAxNTAyNjM0MDI1MTMy",
+        "created_at": "2021-09-23 14:42:34",
+        "updated_at": "2021-09-23 14:42:34"
+      },
+      {
+        "api_source": "VTPass",
+        "data_id": "mtn-50mb-200",
+        "network_id": 1,
+        "network": "mtn",
+        "data_name": "N200 200MB - 2 days",
+        "size": "200MB",
+        "bonus_size": "",
+        "duration": "2 days",
+        "api_price": 200,
+        "price": 200,
+        "api_active": 1,
+        "active": 1,
+        "id": "MDAxNTAyNjM0MzYyMTc0",
+        "created_at": "2021-09-23 14:42:34",
+        "updated_at": "2021-09-23 14:42:34"
+      },
+      .
+      .
+      .
+    ]
+  }
+}
+```
+
+### Error Response sample 1
+
+```json
+{
+  "message": "Specify Mobile network to fetch plans",
+  "status": false
+}
+```
+
+<br>
+<br>
+
+## Buy Mobile Data
+
+### Endpoint [POST]
+
+```
+http://mabro.ng/dev/_app/mobile-data/pay
+```
+
+### Form Data
+
+```dart
+String userId
+String phone_number;
+String data_id; // This is contain in the plan object fetched from [Fetch Mobile Plans]
+String network; // Networks: mtn, airtel, glo, 9mobile
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your mobile data purchase was successful"
+}
+```
+
+### Error Response Sample 1
+
+```json
+{
+  "status": false,
+  "message": "Data Id is required or data id sent is invalid"
+}
+```
+
+<br>
+<br>
+
+# Electricity
+
+## Fetch Distribution Companies
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/electricity/distribution-companies
+```
+
+```dart
+Null
+```
+
+### Success Response sample
+
+```json
+{
+  "message": "List of available electricity distribution companies",
+  "status": true,
+  "data": {
+    "electricity": [
+      {
+        "api_source": "VTPass",
+        "service_id": "abuja-electric",
+        "name": "Abuja Electricity Distribution Company- AEDC",
+        "min_amount": 500,
+        "max_amount": 500000,
+        "service_fee": 0,
+        "api_active": 1,
+        "active": 1,
+        "id": "MDAxNTAzNTE0MjYyMTM3",
+        "created_at": "2021-09-23 14:57:14",
+        "updated_at": "2021-09-25 05:42:45"
+      },
+      {
+        "api_source": "VTPass",
+        "service_id": "kano-electric",
+        "name": "KEDCO - Kano Electric",
+        "min_amount": 500,
+        "max_amount": 200000,
+        "service_fee": 0,
+        "api_active": 1,
+        "active": 1,
+        "id": "MDAxNTAzNTE0NzE5NjEz",
+        "created_at": "2021-09-23 14:57:14",
+        "updated_at": "2021-09-23 14:57:14"
+      },
+      .
+      .
+      .
+    ]
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "An error occurred"
+}
+```
+
+<br>
+<br>
+
+## Verify Electricity Meter Number
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/electricity/verify-meter-number
+```
+
+### Form Data
+
+```dart
+String service_id;
+String meter_number;
+String meter_type;
+```
+
+### Success Response sample
+
+```json
+{
+  "message": "Your meter number has been verified and is valid",
+  "status": true,
+  "data": {
+    "customer_name": "OLADIPO OLUWAFEMI",
+    "customer_address": "NONE"
+  }
+}
+```
+
+### Error Response 1
+
+```json
+{
+  "message": "Enter your meter number and select a electricity service",
+  "status": false
+}
+```
+
+### Error Response 2
+
+```json
+{
+  "message": "Please Check your Meter Number and Try Again",
+  "status": false
+}
+```
+
+<br>
+<br>
+
+## Pay Electricity Bill
+
+This end point handle to verify, add and update user's bank account
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/electricity/pay-bill
+```
+
+```dart
+String userId;
+String service_id;
+String meter_number;
+String meter_type;
+String phone_number;
+int amount;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your purchase was successful",
+  "data": {
+    "token": "Token : 0948  8945  8115  3789  5170  "
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "BELOW MINIMUM AMOUNT ALLOWED"
+}
+```
+
+<br>
+<br>
+
+# TV Subscription
+
+## Fetch TV Packages
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/tv/packages/all
+https://mabro.ng/dev/_app/tv/packages/dstv
+https://mabro.ng/dev/_app/tv/packages/gotv
+https://mabro.ng/dev/_app/tv/packages/startimes
+```
+
+```dart
+Null
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "ALL Subscription packages",
+  "data": {
+    "dstv": [
+      {
+        "api_source": "VTPass",
+        "service_id": "dstv",
+        "name": "dstv",
+        "package": "DStv Padi ",
+        "package_id": "dstv-padi",
+        "api_price": 1850,
+        "price": 1850,
+        "api_active": 1,
+        "active": 1,
+        "id": "MDAxNTA1Mzk2NzM2NTY1",
+        "created_at": "2021-09-23 15:28:36",
+        "updated_at": "2021-09-23 15:28:36"
+      },
+      {
+        "api_source": "VTPass",
+        "service_id": "dstv",
+        "name": "dstv",
+        "package": "DStv Yanga ",
+        "package_id": "dstv-yanga",
+        "api_price": 2565,
+        "price": 2565,
+        "api_active": 1,
+        "active": 1,
+        "id": "MDAxNTA1Mzk2ODU1MTU3",
+        "created_at": "2021-09-23 15:28:36",
+        "updated_at": "2021-09-23 15:28:36"
+      },
+      .
+      .
+      .
+    ]
+  }
+}
+
+```
+
+### Error Response Sample
+
+```json
+{
+  "message": "Specify TV companies to fetch packages",
+  "status": false
+}
+```
+
+<br>
+<br>
+
+## Verify Smart Card number
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/update-settings
+```
+
+```dart
+String smart_card_number;
+String service_id; // dstv, gotv or startimes
+```
+
+### Success Response sample
+
+```json
+{
+  "message": "Smart card number is valid",
+  "status": true,
+  "data": {
+    "customer_name": "Mr  DsTEST"
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "message": "Invalid TV smart card number",
+  "status": false
+}
+```
+
+<br>
+<br>
+
+## Pay TV Subscription
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/change-password
+```
+
+```dart
+String userId;
+String smart_card_number;
+String service_id; //New Password
+String package_id;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "Your purchase was successful"
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "status": false,
+  "message": "Package Id is required or package id sent is invalid"
+}
+```
+
+<br>
+<br>
+
+<br>
+<br>
+
+# Transaction History
+
+## All Transaction History
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/tv/transactions/all
+```
+
+```dart
+String userId
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "All Transactions",
+  "data": {
+    "transactions": [
+      {
+        "user": "MDAwODU3NDE5NDUwODM2",
+        "activity": "Pay TV Subscription",
+        "description": "Your purchase was successful",
+        "amount": 0,
+        "status": "COMPLETED",
+        "reference": "MBT00193189863223",
+        "id": "MDAxOTMxODk5NjYxNDkw",
+        "created_at": "2021-09-28 13:56:59",
+        "updated_at": "2021-09-28 13:57:02"
+      },
+      {
+        "user": "MDAwODU3NDE5NDUwODM2",
+        "activity": "Pay TV Subscription",
+        "description": "Your purchase was successful",
+        "amount": 0,
+        "status": "COMPLETED",
+        "reference": "MBT00193162317251",
+        "id": "MDAxOTMxNjI3NDU5ODYx",
+        "created_at": "2021-09-28 13:52:27",
+        "updated_at": "2021-09-28 13:52:29"
+      },
+      .
+      .
+      .
+    ]
+  }
+}
+
+```
+
+### Error Response Sample
+
+```json
+{
+  "message": "",
+  "status": false
+}
+```
+
+<br>
+<br>
+
+## Transactions by Category
+
+### Endpoint [POST]
+
+```
+https://mabro.ng/dev/_app/transactions/pay-tv-subscription
+https://mabro.ng/dev/_app/transactions/pay-electricity-bill
+https://mabro.ng/dev/_app/transactions/buy-mobile-data
+https://mabro.ng/dev/_app/transactions/buy-airtime
+https://mabro.ng/dev/_app/transactions/fund-wallet
+```
+
+```dart
+String userId;
+```
+
+### Success Response sample
+
+```json
+{
+  "status": true,
+  "message": "All Transactions",
+  "data": {
+    "transactions": [
+      {
+        "user": "MDAwODU3NDE5NDUwODM2",
+        "activity": "Pay TV Subscription",
+        "description": "Your purchase was successful",
+        "amount": 0,
+        "status": "COMPLETED",
+        "reference": "MBT00193189863223",
+        "id": "MDAxOTMxODk5NjYxNDkw",
+        "created_at": "2021-09-28 13:56:59",
+        "updated_at": "2021-09-28 13:57:02"
+      },
+      {
+        "user": "MDAwODU3NDE5NDUwODM2",
+        "activity": "Pay TV Subscription",
+        "description": "Your purchase was successful",
+        "amount": 0,
+        "status": "COMPLETED",
+        "reference": "MBT00193162317251",
+        "id": "MDAxOTMxNjI3NDU5ODYx",
+        "created_at": "2021-09-28 13:52:27",
+        "updated_at": "2021-09-28 13:52:29"
+      },
+      .
+      .
+      .
+    ]
+  }
+}
+```
+
+### Error Response Sample
+
+```json
+{
+  "message": "",
+  "status": false
+}
+```
+
+<br>
+<br>
+
+## Transaction Details
+
+### Endpoints [POST]
+
+```
+https://mabro.ng/dev/_app/transactions/pay-tv-subscription
+https://mabro.ng/dev/_app/transactions/pay-electricity-bill
+https://mabro.ng/dev/_app/transactions/buy-mobile-data
+https://mabro.ng/dev/_app/transactions/buy-airtime
+https://mabro.ng/dev/_app/transactions/fund-wallet
+```
+
+```dart
+String userId;
+String reference
+```
+
+### Success Response sample [BUY AIRTIME]
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "transaction": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "phone_number": "08011111111",
+      "network": "mtn",
+      "amount": 100,
+      "status": "COMPLETED",
+      "reference": "MBA00191981239813",
+      "api_reference": "163282173859",
+      "api_source": "VTPass",
+      "id": "MDAxOTE5ODEyNTAyNjE1",
+      "created_at": "2021-09-28 10:35:32",
+      "updated_at": "2021-09-28 10:35:34"
+    }
+  }
+}
+```
+
+### Success Response Sample [BUY MOBILE DATA]
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "transaction": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "phone_number": "08011111111",
+      "network": "9mobile",
+      "data_plan": "9mobile Data - 100 Naira - 100MB",
+      "data_id": "eti-100",
+      "amount": 100,
+      "data_size": "100MB",
+      "data_duration": "1 day",
+      "status": "COMPLETED",
+      "reference": "MBD00192024921585",
+      "api_reference": "1632822175993",
+      "api_source": "VTPass",
+      "id": "MDAxOTIwMjQ5MjcwMzMz",
+      "created_at": "2021-09-28 10:42:49",
+      "updated_at": "2021-09-28 10:42:51"
+    }
+  }
+}
+```
+
+### Success Response Sample [PAY TV SUBSCRIPTION]
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "transaction": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "tv_service": "DSTV",
+      "service_id": "dstv",
+      "smart_card_number": "1212121212",
+      "customer_name": "Mr  DsTEST",
+      "amount": 0,
+      "package": "DSTV YANGA ",
+      "package_id": "dstv-yanga",
+      "status": "COMPLETED",
+      "reference": "MBT00193189863223",
+      "api_reference": "1632833825334",
+      "api_source": "VTPass",
+      "id": "MDAxOTMxODk5NTc3Nzg5",
+      "created_at": "2021-09-28 13:56:59",
+      "updated_at": "2021-09-28 13:57:02"
+    }
+  }
+}
+```
+
+### Success Response Sample [PAY ELECTRICITY BILL]
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "transaction": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "service": "",
+      "service_id": "ibadan-electric",
+      "meter_number": "1111111111111",
+      "meter_type": "prepaid",
+      "customer_name": "OLADIPO OLUWAFEMI",
+      "customer_address": "NONE",
+      "phone_number": "08022222222",
+      "amount": 10,
+      "token": "",
+      "units": 0,
+      "status": "FAILED",
+      "reference": "MBE00192885609346",
+      "api_reference": "",
+      "api_source": "VTPass",
+      "id": "MDAxOTI4ODU3MTc4NDEw",
+      "created_at": "2021-09-28 13:06:17",
+      "updated_at": "2021-09-28 13:06:18"
+    }
+  }
+}
+```
+
+### Success Response Sample [FUND WALLET]
+
+```json
+{
+  "status": true,
+  "message": "Success",
+  "data": {
+    "transaction": {
+      "user": "MDAwODU3NDE5NDUwODM2",
+      "amount": 2000,
+      "api_fee": 28,
+      "status": "COMPLETED",
+      "currency": "NGN",
+      "method": "CARD",
+      "reference": "MBF00191062514847",
+      "api_source": "FLUTTER WAVE",
+      "api_id": "2514712",
+      "api_reference": "FLW-MOCK-bdd29533cb5145401a72b9f74a68eadb",
+      "id": "MDAxOTEwNjI3MjUyNDU0",
+      "created_at": "2021-09-28 08:02:27",
+      "updated_at": "2021-09-28 08:05:12"
+    }
+  }
+}
+```
+
+<br>
+<br>
+
+<br>
+<br>
