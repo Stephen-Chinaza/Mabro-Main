@@ -63,7 +63,6 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: ColorConstants.primaryColor,
-
       body: (pageState)
           ? loadingPage(state: pageState)
           : SingleChildScrollView(
@@ -207,7 +206,9 @@ class _SignInPageState extends State<SignInPage> {
         map['password'] = _password;
 
         var response = await http
-            .post(HttpService.rootLogin, body: map)
+            .post(HttpService.rootLogin, body: map,headers: {
+          'Authorization': 'Bearer '+HttpService.token,
+        })
             .timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(

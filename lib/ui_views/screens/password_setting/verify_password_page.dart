@@ -36,7 +36,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   String confirmText;
 
   bool pageState, checkState;
-  String user;
+  String userId;
 
 
   var onTapRecognizer;
@@ -51,7 +51,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   final formKey = GlobalKey<FormState>();
   Future<void> checkFirstScreen() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    user = (pref.getString('user') ?? '');
+    userId = (pref.getString('userId') ?? '');
   }
 
   @override
@@ -90,7 +90,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                           height: Dims.sizedBoxHeight(height: 50),
                         ),
                         Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            padding: EdgeInsets.symmetric(horizontal: 0.0),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -112,18 +112,18 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                         key: formKey,
                                         child: Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0, horizontal: 10),
+                                                vertical: 4.0, horizontal: 40),
                                             child: PinCodeTextField(
                                               appContext: context,
                                               pastedTextStyle: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
                                               ),
-                                              length: 6,
+                                              length: 4,
                                               obscureText: true,
 
                                               validator: (v) {
-                                                if (v.length < 6) {
+                                                if (v.length < 4) {
                                                   return "";
                                                 } else {
                                                   return null;
@@ -151,14 +151,30 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
 
                                                 formKey.currentState.validate();
                                                 // conditions for validating
-                                                if (currentText.length != 6) {
+                                                if (currentText.length != 4) {
 
                                                 } else {
-                                                  setState(() {
-                                                    hasError = false;
-                                                    textEditingController.text = '';
-                                                    _setPin(v);
-                                                  });
+                                                  if (v == widget.textPin) {
+                                                    setState(() {
+                                                      hasError = false;
+                                                      textEditingController
+                                                          .text = '';
+                                                      _setPin(v);
+                                                    });
+                                                  }else{
+                                                    ShowSnackBar.showInSnackBar(
+                                                        bgColor: ColorConstants.secondaryColor,
+                                                        value: 'Pin mismatch re-enter pin',
+                                                        context: context,
+                                                        scaffoldKey: _scaffoldKey,
+                                                        timer: 5);
+                                                    textEditingController
+                                                        .text = '';
+                                                    Future.delayed(Duration(seconds: 3), (){
+                                                      kbackBtn(context);
+
+                                                    });
+                                                  }
                                                 }
                                               },
                                               onChanged: (value) {
@@ -260,8 +276,10 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
     cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
-      map['user'] = user;
+      map['userId'] = userId;
       map['lock_code'] = lockCode;
+
+
 
       var response = await http
           .post(HttpService.rootUserPin, body: map,headers: {

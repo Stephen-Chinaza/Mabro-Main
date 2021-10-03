@@ -40,7 +40,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
   String smsOTP;
   String verificationId;
   String errorMessage = '';
-  String user;
+  String userId;
   bool pageState;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -58,7 +58,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
 
   Future<void> getUserData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    user = (pref.getString('user') ?? '');
+    userId = (pref.getString('userId') ?? '');
   }
 
   @override
@@ -238,11 +238,15 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                                 SizedBox(
                                   height: Dims.sizedBoxHeight(height: 10.0),
                                 ),
-                                TextStyles.textHeadings(
+
+                                GestureDetector(onTap: (){reSendPhone();},
+
+                                child: TextStyles.textHeadings(
                                     textValue: 'RESEND CODE',
                                     textSize: 14.0,
                                     textColor: ColorConstants.whiteLighterColor
-                                ),
+                                ),)
+
                               ],
                             ),
                           ),
@@ -263,16 +267,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                           SizedBox(
                             height: screenHeight * 0.04,
                           ),
-                          Visibility(
-                            visible: false,
-                            child: CustomButton(
-                              onPressed: () {
-                                kbackBtn(context);
-                              },
-                              text: 'Resend code',
-                              disableButton: true,
-                            ),
-                          ),
+
                         ],
                       ),
                     ),
@@ -287,12 +282,14 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
     cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
-      map['user'] = user;
-      map['code'] = text;
+      map['userId'] = userId;
       map['phone_number'] = widget.phone;
+      map['otp'] = text;
 
       var response = await http
-          .post(HttpService.rootVerifyPhone, body: map)
+          .post(HttpService.rootVerifyPhone, body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
@@ -348,6 +345,70 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
     }
   }
 
+  void reSendPhone() async {
+    cPageState(state: true);
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+      map['phone_number'] = widget.phone;
+
+
+      var response = await http
+          .post(HttpService.rootResendPhone, body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        RegisterUser verifyUser = RegisterUser.fromJson(body);
+
+        bool status = verifyUser.status;
+        String message = verifyUser.message;
+        if (status) {
+          cPageState(state: false);
+
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+
+        } else if (!status) {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      cPageState(state: false);
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+  }
   void _redirectuser() {
     Future.delayed(Duration(seconds: 2), () {
       //kbackBtn(context);

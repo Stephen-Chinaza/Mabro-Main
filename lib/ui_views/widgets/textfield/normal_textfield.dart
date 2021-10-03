@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class NormalFields extends StatelessWidget {
   final int maxLength;
   final String labelText;
+  final double hintSize;
   final String hintText;
   final Function onChanged;
   final double width;
@@ -18,6 +19,7 @@ class NormalFields extends StatelessWidget {
       {@required this.labelText,
       this.hintText,
       this.onChanged,
+      this.hintSize = 16,
       this.controller,
       this.onTap,
       this.textInputType,
@@ -39,21 +41,32 @@ class NormalFields extends StatelessWidget {
         child: TextField(
           onChanged: onChanged,
           controller: controller,
+          maxLength: maxLength,
           focusNode: myFocusNode,
           keyboardType: textInputType ?? TextInputType.text,
           cursorColor: ColorConstants.secondaryColor,
           style: TextStyle(color: ColorConstants.white),
           decoration: InputDecoration(
+              counterText: "",
               filled: true,
-              fillColor: ColorConstants.primaryColor.withOpacity(0.6),
+              fillColor: ColorConstants.primaryColor.withOpacity(0.3),
               border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide:
+                BorderSide(color: ColorConstants.transparent, width: 0.2),
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: ColorConstants.transparent),
                 borderRadius: BorderRadius.circular(4.0),
               ),
               hintText: hintText,
               hintStyle: TextStyle(
                   fontStyle: FontStyle.normal,
                   color: ColorConstants.whiteLighterColor,
-                  fontSize: 16,
+                  fontSize: hintSize,
                   fontWeight: FontWeight.w300),
               contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13)),
         ),

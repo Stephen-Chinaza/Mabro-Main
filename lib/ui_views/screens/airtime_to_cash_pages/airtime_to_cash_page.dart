@@ -75,237 +75,233 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(1.0),
               child: GestureDetector(
                 onTap: () {},
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 10),
-                    TextStyles.textDetails(
-                      textSize: 14,
-                      textColor: ColorConstants.white,
-                      textValue: 'Select mobile carrier',
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      height: 70,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                          itemCount: providerImages.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, i) {
-                            return GestureDetector(
-                              onTap: () {
-                                _onSelected(i);
-
-                                setState(() {
-                                  switch (i) {
-                                    case 0:
-                                      network = 'mtn';
-                                      break;
-                                    case 1:
-                                      network = 'glo';
-                                      break;
-                                    case 2:
-                                      network = 'airtel';
-                                      break;
-                                    case 3:
-                                      network = '9mobile';
-                                      break;
-                                    default:
-                                      network = 'mtn';
-                                  }
-                                });
-                              },
-                              child: Card(
-                                  elevation: 3,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(4)),
-                                        border: Border.all(
-                                          color: _selectedIndex !=
-                                              null &&
-                                              _selectedIndex == i
-                                              ? Colors.redAccent
-                                              : Colors.transparent,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      height: 50,
-                                      width: 70,
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.all(8.0),
-                                        child: Image.asset(
-                                            providerImages[i].image),
-                                      ))),
-                            );
-                          }),
-                    ),
-                    SizedBox(height: 20),
-                    TextStyles.textDetails(
-                      textSize: 14,
-                      textColor: Colors.black,
-                      textValue: 'You are transfering from?',
-                    ),
-                    SizedBox(height: 15),
-                    Row(
+                child: Card(
+                  color: ColorConstants.primaryLighterColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Flexible(
-                          flex: 8,
-                          child: NormalFields(
-                            width: MediaQuery.of(context).size.width,
-                            hintText: 'Phone number',
-                            labelText: '',
-                            onChanged: (name) {},
-                            textInputType: TextInputType.number,
-                            controller: phoneController,
-                          ),
+                        SizedBox(height: 10),
+                        Text('Select Network',
+                            style: TextStyle(
+                                color: ColorConstants.whiteColor, fontSize: 16)),
+                        SizedBox(height: 10),
+                        Container(
+                          height: 70,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            //padding: EdgeInsets.only(left: 20),
+                              itemCount: providerImages.length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, i) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    _onSelected(i);
+
+                                    setState(() {
+                                      switch (i) {
+                                        case 0:
+                                          network = 'mtn';
+                                          break;
+                                        case 1:
+                                          network = 'glo';
+                                          break;
+                                        case 2:
+                                          network = 'airtel';
+                                          break;
+                                        case 3:
+                                          network = '9mobile';
+                                          break;
+                                        default:
+                                          network = 'mtn';
+                                      }
+                                    });
+                                  },
+                                  child: Card(
+                                      elevation: 3,
+                                      color: providerImages[i].color,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(4)),
+                                            border: Border.all(
+                                              color: _selectedIndex !=
+                                                  null &&
+                                                  _selectedIndex == i
+                                                  ? ColorConstants.secondaryColor
+                                                  : Colors.transparent,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          height: 63,
+                                          width: 75,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.all(10.0),
+                                            child: Image.asset(
+                                                providerImages[i].image),
+                                          ))),
+                                );
+                              }),
                         ),
-                        Flexible(
-                          flex: 1,
-                          child: GestureDetector(
-                            onTap: () {
-                              kopenPage(context, ContactsPage());
-                            },
-                            child: Container(
-                              child: Icon(
-                                Icons.contact_phone,
-                                size: 32,
-                                color: Colors.orange,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 25),
-                    NormalFields(
-                      hintText: 'Enter amount',
-                      labelText: '',
-                      textInputType: TextInputType.number,
-                      controller: amountController,
-                      onChanged: (String text) {
-                        setState(() {
-                          if (int.parse(amountController.text) >= 2000 &&
-                              phoneController.text != '') {
-                            showTransactionInfo = true;
-                          } else {
-                            showTransactionInfo = false;
-                          }
-                        });
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Card(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextStyles.textDetails(
-                            textSize: 12,
-                            textColor: Colors.red,
-                            textValue: 'Side Note:',
-                          ),
-                          SizedBox(height: 10),
-                          TextStyles.textDetails(
-                              textSize: 12,
-                              textColor: Colors.red,
-                              textValue: '*Once airtime is sucessfully sent, ' +
-                                  'your wallet will be credited within 5 minutes, then you ' +
-                                  'can withdraw to your bank account,'),
-                          SizedBox(height: 10),
-                          TextStyles.textDetails(
-                            textColor: Colors.red,
-                            textSize: 12,
-                            textValue:
-                                '*do not transfer airtime less than NGN2000 ',
-                          ),
-                          SizedBox(height: 10),
-                          TextStyles.textDetails(
-                            textColor: Colors.red,
-                            textSize: 12,
-                            textValue: '*If you have multiple airtime to sell,' +
-                                'you are allowed to convert only 20,000 per day ',
-                          ),
-                        ],
-                      ),
-                    )),
-                    SizedBox(height: 20),
-                    Visibility(
-                      visible: showTransactionInfo,
-                      child: Card(
-                        child: Padding(
+                        SizedBox(height: 20),
+                        TextStyles.textDetails(
+                          textSize: 14,
+                          textColor: ColorConstants.whiteLighterColor,
+                          textValue: 'You are transferring from?',
+                        ),
+                        SizedBox(height: 15),
+                        NormalFields(
+                          width: MediaQuery.of(context).size.width,
+                          hintText: 'Phone number',
+                          labelText: '',
+                          maxLength: 11,
+                          onChanged: (name) {},
+                          textInputType: TextInputType.number,
+                          controller: phoneController,
+                        ),
+                        SizedBox(height: 15),
+                        NormalFields(
+                          hintText: 'Enter amount',
+                          labelText: '',
+                          textInputType: TextInputType.number,
+                          controller: amountController,
+                          onChanged: (String text) {
+                            setState(() {
+                              if (int.parse(amountController.text) >= 2000 &&
+                                  phoneController.text != '') {
+                                showTransactionInfo = true;
+                              } else {
+                                showTransactionInfo = false;
+                              }
+                            });
+                          },
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          elevation: 8,
+                          color: ColorConstants.primaryLighterColor,
+                            child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextStyles.textDetails(
                                 textSize: 12,
-                                textValue: 'Transaction Information',
+                                textColor: ColorConstants.secondaryColor,
+                                textValue: 'Side Note:',
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: Card(
-                                  elevation: 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(height: 20),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextStyles.textDetails(
-                                              textSize: 12,
-                                              textValue: 'Charges: ',
-                                            ),
-                                            TextStyles.textDetails(
-                                              textSize: 12,
-                                              textValue: '500NGN',
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 20),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            TextStyles.textDetails(
-                                              textSize: 12,
-                                              textColor: Colors.black,
-                                              textValue: 'You will Receive: ',
-                                            ),
-                                            TextStyles.textDetails(
-                                              textSize: 12,
-                                              textColor: Colors.black,
-                                              textValue: '1500NGN',
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              SizedBox(height: 10),
+                              TextStyles.textDetails(
+                                  textSize: 12,
+                                  textColor: ColorConstants.secondaryColor,
+                                  textValue: '*Once airtime is sucessfully sent, ' +
+                                      'your wallet will be credited within 5 minutes, then you ' +
+                                      'can withdraw to your bank account,'),
+                              SizedBox(height: 10),
+                              TextStyles.textDetails(
+                                textColor: ColorConstants.secondaryColor,
+                                textSize: 12,
+                                textValue:
+                                    '*do not transfer airtime less than NGN2000 ',
+                              ),
+                              SizedBox(height: 10),
+                              TextStyles.textDetails(
+                                textColor: ColorConstants.secondaryColor,
+                                textSize: 12,
+                                textValue: '*If you have multiple airtime to sell,' +
+                                    'you are allowed to convert only 20,000 per day ',
                               ),
                             ],
                           ),
+                        )),
+                        SizedBox(height: 20),
+                        Visibility(
+                          visible: showTransactionInfo,
+                          child: Card(
+                            color: ColorConstants.primaryLighterColor,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextStyles.textDetails(
+                                    textSize: 12,
+                                    textValue: 'Transaction Information',
+                                    textColor: ColorConstants.white
+                                  ),
+                                  Container(
+                                    color: ColorConstants.primaryLighterColor,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Card(
+                                      color: ColorConstants.primaryLighterColor,
+                                      elevation: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                TextStyles.textDetails(
+                                                  textSize: 12,
+                                                  textValue: 'Charges: ',
+                                                  textColor:  ColorConstants.whiteLighterColor,
+                                                ),
+                                                TextStyles.textDetails(
+                                                  textSize: 12,
+                                                  textValue: '500NGN',
+                                                  textColor:  ColorConstants.whiteLighterColor,
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                TextStyles.textDetails(
+                                                  textSize: 12,
+                                                  textColor:  ColorConstants.whiteLighterColor,
+                                                  textValue: 'You will Receive: ',
+                                                ),
+                                                TextStyles.textDetails(
+                                                  textSize: 12,
+                                                  textColor:  ColorConstants.whiteLighterColor,
+                                                  textValue: '1500NGN',
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        CustomButton(
+                            disableButton: true,
+                            onPressed: () {
+                              kopenPage(context, ConfirmTransferPage());
+                            },
+                            text: 'Continue'),
+                      ],
                     ),
-                    CustomButton(
-                        disableButton: true,
-                        onPressed: () {
-                          kopenPage(context, ConfirmTransferPage());
-                        },
-                        text: 'Continue'),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -348,7 +344,7 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                                 SizedBox(height: 20),
                                 TextStyles.textDetails(
                                   textSize: 12,
-                                  textColor: Colors.black38,
+                                  textColor:  ColorConstants.white,
                                   textValue:
                                       'Add bank account information and Bvn',
                                 ),
@@ -402,7 +398,7 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                                 SizedBox(height: 20),
                                 TextStyles.textDetails(
                                   textSize: 12,
-                                  textColor: Colors.black38,
+                                  textColor:  ColorConstants.white,
                                   textValue:
                                       'We are a digital bank and just like your regular bank,we need your BVN to be able to process transactios. Dial *565*0# on your mobile phone to get your bvn.',
                                 ),

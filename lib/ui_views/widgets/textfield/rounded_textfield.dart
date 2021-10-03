@@ -52,7 +52,7 @@ class RoundedTextfield extends StatelessWidget {
           style: TextStyle(color: ColorConstants.white),
           decoration: InputDecoration(
               filled: true,
-              fillColor: ColorConstants.primaryColor.withOpacity(0.6),
+              fillColor: ColorConstants.primaryColor.withOpacity(0.3),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4.0),
               ),

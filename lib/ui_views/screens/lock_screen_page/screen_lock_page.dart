@@ -15,6 +15,7 @@ import 'shake_curve.dart';
 
 typedef PasswordEnteredCallback = void Function(String text);
 typedef IsValidCallback = void Function();
+typedef IsFingerValidCallback = void Function();
 typedef CancelCallback = void Function();
 
 class PasscodeScreen extends StatefulWidget {
@@ -25,6 +26,7 @@ class PasscodeScreen extends StatefulWidget {
 
   //isValidCallback will be invoked after passcode screen will pop.
   final IsValidCallback isValidCallback;
+  final IsFingerValidCallback isFingerValidCallback;
   final CancelCallback cancelCallback;
 
   // Cancel button and delete button will be switched based on the screen state
@@ -50,7 +52,7 @@ class PasscodeScreen extends StatefulWidget {
     this.bottomWidget,
     this.backgroundColor,
     this.cancelCallback,
-    this.digits,
+    this.digits, this.isFingerValidCallback,
   })  : circleUIConfig =
             circleUIConfig == null ? const CircleUIConfig() : circleUIConfig,
         keyboardUIConfig = keyboardUIConfig == null
@@ -134,7 +136,7 @@ class _PasscodeScreenState extends State<PasscodeScreen>
           stickyAuth: true);
       setState(() {
         if (authenticated) {
-          _validationCallback();
+          _fingerValidationCallback();
         }
         _isAuthenticating = false;
         _authorized = 'Authenticating';
@@ -376,6 +378,15 @@ class _PasscodeScreenState extends State<PasscodeScreen>
   _validationCallback() {
     if (widget.isValidCallback != null) {
       widget.isValidCallback();
+    } else {
+      print(
+          "You didn't implement validation callback. Please handle a state by yourself then.");
+    }
+  }
+
+  _fingerValidationCallback() {
+    if (widget.isFingerValidCallback != null) {
+      widget.isFingerValidCallback();
     } else {
       print(
           "You didn't implement validation callback. Please handle a state by yourself then.");

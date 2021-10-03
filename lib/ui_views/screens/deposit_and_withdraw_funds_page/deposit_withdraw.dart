@@ -76,9 +76,9 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     accountName = (pref.getString('account_name') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
     bankName = (pref.getString('bank_name') ?? '');
-    user = (pref.getString('user') ?? '');
+    user = (pref.getString('userId') ?? '');
     userPin = (pref.getString('lock_code') ?? '');
-    nairaBalance = (pref.getString('naria_balance') ?? '');
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
 
     accountNameController.text = accountName;
     accountNumberController.text = accountNumber;
@@ -100,107 +100,111 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     return (pageState)
         ? loadingPage(state: pageState)
         : Stack(
-            children: [
-              buildFirstContainer(),
-              buildSecondContainer(),
-              Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.white,
-                appBar: new AppBar(
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      gradient: ColorConstants.primaryGradient,
-                    ),
-                  ),
-                  title: new Text("", style: TextStyle(fontSize: 18)),
-                  leading: GestureDetector(
-                      onTap: () {
-                        kbackBtn(context);
-                      },
-                      child: Icon(
-                        Platform.isIOS
-                            ? Icons.arrow_back_ios
-                            : Icons.arrow_back,
-                        color: Colors.white,
-                        size: 27,
-                      )),
-                  bottom: TabBar(
-                    isScrollable: true,
-                    unselectedLabelColor: Colors.white,
-                    unselectedLabelStyle: TextStyle(fontSize: 14),
-                    labelStyle: TextStyle(fontSize: 14),
-                    labelColor: Colors.white,
-                    tabs: [
-                      new Tab(text: 'Deposit Funds'),
-                      new Tab(
-                        text: 'Withdraw Funds',
-                      ),
-                    ],
-                    controller: _tabController,
-                    indicatorColor: Colors.white,
-                    labelPadding: EdgeInsets.symmetric(horizontal: 50),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                  ),
-                  bottomOpacity: 1,
-                ),
-                body: TabBarView(
-                  children: [
-                    SingleChildScrollView(child: _depositeFund()),
-                    SingleChildScrollView(child: _withdrawFund()),
-                  ],
-                  controller: _tabController,
-                ),
+      children: [
+        buildFirstContainer(),
+        buildSecondContainer(),
+        Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: ColorConstants.primaryColor,
+          appBar: new AppBar(
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                color: ColorConstants.primaryLighterColor,
               ),
+            ),
+            title: new Text("", style: TextStyle(fontSize: 18)),
+            leading: GestureDetector(
+                onTap: () {
+                  kbackBtn(context);
+                },
+                child: Icon(
+                  Platform.isIOS
+                      ? Icons.arrow_back_ios
+                      : Icons.arrow_back,
+                  color: Colors.white,
+                  size: 27,
+                )),
+            bottom: TabBar(
+              isScrollable: true,
+              unselectedLabelColor: Colors.white,
+              unselectedLabelStyle: TextStyle(fontSize: 14),
+              labelStyle: TextStyle(fontSize: 14),
+              labelColor: Colors.white,
+              tabs: [
+                new Tab(text: 'Deposit Funds'),
+                new Tab(
+                  text: 'Withdraw Funds',
+                ),
+              ],
+              controller: _tabController,
+              indicatorColor: Colors.white,
+              labelPadding: EdgeInsets.symmetric(horizontal: 50),
+              indicatorSize: TabBarIndicatorSize.tab,
+            ),
+            bottomOpacity: 1,
+          ),
+          body: TabBarView(
+            children: [
+              SingleChildScrollView(child: _depositeFund()),
+              SingleChildScrollView(child: _withdrawFund()),
             ],
-          );
+            controller: _tabController,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _depositeFund() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(2.0),
       child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Text('How much do you want to deposit?',
-                  style: TextStyle(
-                      color: ColorConstants.secondaryColor, fontSize: 18)),
+        child: Card(
+          color: ColorConstants.primaryLighterColor,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('How much do you want to deposit?',
+                    style: TextStyle(
+                        color: ColorConstants.whiteColor, fontSize: 18)),
+                SizedBox(height: 20),
+                NormalFields(
+                  width: MediaQuery.of(context).size.width,
+                  hintText: 'NGN',
+                  labelText: '',
+                  textInputType: TextInputType.number,
+                  controller: amountController,
+                ),
+                SizedBox(height: 5),
+                Text('Balance: NGN$nairaBalance',
+                    style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 14)),
+                SizedBox(height: 30),
+                SizedBox(height: 20),
+                CustomButton(
+                    margin: 0,
+                    disableButton: true,
+                    onPressed: () {
+                      if (amountController.text.isEmpty) {
+                        ShowSnackBar.showInSnackBar(
+                            value: 'Please enter amount to continue',
+                            context: context,
+                            scaffoldKey: _scaffoldKey,
+                            timer: 5);
+                      } else {
+                        showInfoDialog(
+                          250,
+                          popUpBody(),
+                          title: 'Order Summary'.toUpperCase(),
+                        );
+                      }
+                    },
+                    text: 'Proceed with deposit'),
+                SizedBox(height: 20),
+              ],
             ),
-            SizedBox(height: 30),
-            NormalFields(
-              width: MediaQuery.of(context).size.width,
-              hintText: 'NGN',
-              labelText: '',
-              textInputType: TextInputType.number,
-              controller: amountController,
-            ),
-            SizedBox(height: 5),
-            Text('Balance: NGN$nairaBalance',
-                style: TextStyle(color: Colors.orange, fontSize: 17)),
-            SizedBox(height: 30),
-            SizedBox(height: 20),
-            CustomButton(
-                margin: 0,
-                disableButton: true,
-                onPressed: () {
-                  if (amountController.text.isEmpty) {
-                    ShowSnackBar.showInSnackBar(
-                        bgColor: ColorConstants.primaryColor,
-                        value: 'Please enter amount to continue',
-                        context: context,
-                        scaffoldKey: _scaffoldKey,
-                        timer: 5);
-                  } else {
-                    showInfoDialog(
-                      250,
-                      popUpBody(),
-                      title: 'Order Summary'.toUpperCase(),
-                    );
-                  }
-                },
-                text: 'Proceed with deposit'),
-          ],
+          ),
         ),
       ),
     );
@@ -214,14 +218,14 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
           children: [
             Text('Deposit Amount',
                 style: TextStyle(
-                    color: ColorConstants.secondaryColor,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold)),
+                    )),
             Text('NGN ' + amountController.text,
                 style: TextStyle(
-                    color: ColorConstants.secondaryColor,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold)),
+                    )),
           ],
         ),
         SizedBox(
@@ -232,14 +236,14 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
           children: [
             Text('Processing fee',
                 style: TextStyle(
-                    color: ColorConstants.secondaryColor,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold)),
+                    )),
             Text('NGN 0.00',
                 style: TextStyle(
-                    color: ColorConstants.secondaryColor,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold)),
+                    )),
           ],
         ),
         SizedBox(
@@ -247,7 +251,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
         ),
         Text('NGN ' + amountController.text,
             style: TextStyle(
-                color: ColorConstants.secondaryColor,
+                color: ColorConstants.whiteLighterColor,
                 fontSize: 18,
                 fontWeight: FontWeight.bold)),
         SizedBox(
@@ -259,105 +263,110 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
 
   Widget _withdrawFund() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(2.0),
       child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Text('Request a withdrawal',
-                  style: TextStyle(
-                      color: ColorConstants.secondaryColor, fontSize: 18)),
-            ),
-            SizedBox(height: 30),
-            Text(
-                'You can withdraw funds only to the card or wallet that was used to credit funds to your balance',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: ColorConstants.secondaryColor,
-                )),
-            SizedBox(height: 16),
-            NormalFields(
-              width: MediaQuery.of(context).size.width,
-              hintText: 'Amount',
-              labelText: '',
-              textInputType: TextInputType.number,
-              onChanged: (name) {},
-              controller: withdrawAmountController,
-            ),
-            SizedBox(height: 15),
-            Builder(builder: (context) {
-              return GestureDetector(
-                onTap: () {
-                  buildShowBottomSheet(
-                    context: context,
-                    bottomsheetContent: _bottomSheetContentMobileCarrier(
-                      context,
-                      'Bank Account',
-                    ),
-                  );
-                },
-                child: IconFields(
-                    hintText: 'Bank Account',
-                    isEditable: false,
-                    labelText: 'Bank Account ',
-                    controller: withdrawMethodController),
-              );
-            }),
-            SizedBox(height: 15),
-            NormalFields(
-                isEditable: false,
-                width: MediaQuery.of(context).size.width,
-                hintText: 'Bank name',
-                labelText: '',
-                onChanged: (name) {},
-                controller: bankNameController),
-            SizedBox(height: 15),
-            NormalFields(
-                isEditable: false,
-                width: MediaQuery.of(context).size.width,
-                hintText: 'Account name',
-                labelText: '',
-                onChanged: (name) {},
-                controller: accountNameController),
-            SizedBox(height: 15),
-            NormalFields(
-              isEditable: false,
-              width: MediaQuery.of(context).size.width,
-              hintText: 'Account number',
-              labelText: '',
-              controller: accountNumberController,
-            ),
-            SizedBox(height: 10),
-            GestureDetector(
-              onTap: () {
-                kopenPage(context, AccountPage());
-              },
-              child: Text('Edit account details',
-                  style: TextStyle(
+        child: Card(
+          color: ColorConstants.primaryLighterColor,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Request a withdrawal',
+                    style: TextStyle(
+                        color: ColorConstants.whiteColor, fontSize: 18)),
+                SizedBox(height: 20),
+                Text(
+                    'You can withdraw funds only to the card or wallet that was used to credit funds to your balance',
+                    style: TextStyle(
                       fontSize: 14,
-                      color: ColorConstants.primaryColor,
-                      fontWeight: FontWeight.bold)),
+                      color: ColorConstants.whiteLighterColor,
+                    )),
+                SizedBox(height: 16),
+                NormalFields(
+                  width: MediaQuery.of(context).size.width,
+                  hintText: 'Amount',
+                  labelText: '',
+                  textInputType: TextInputType.number,
+                  onChanged: (name) {},
+                  controller: withdrawAmountController,
+                ),
+                SizedBox(height: 15),
+                Builder(builder: (context) {
+                  return GestureDetector(
+                    onTap: () {
+                      buildShowBottomSheet(
+                        context: context,
+                        bottomsheetContent: _bottomSheetContentMobileCarrier(
+                          context,
+                          'Bank Account',
+                        ),
+                      );
+                    },
+                    child: IconFields(
+                        hintText: 'Bank Account',
+                        isEditable: false,
+                        labelText: 'Bank Account ',
+                        controller: withdrawMethodController),
+                  );
+                }),
+                SizedBox(height: 15),
+                NormalFields(
+                    isEditable: false,
+                    width: MediaQuery.of(context).size.width,
+                    hintText: 'Bank name',
+                    labelText: '',
+                    onChanged: (name) {},
+                    controller: bankNameController),
+                SizedBox(height: 15),
+                NormalFields(
+                    isEditable: false,
+                    width: MediaQuery.of(context).size.width,
+                    hintText: 'Account name',
+                    labelText: '',
+                    onChanged: (name) {},
+                    controller: accountNameController),
+                SizedBox(height: 15),
+                NormalFields(
+                  isEditable: false,
+                  width: MediaQuery.of(context).size.width,
+                  hintText: 'Account number',
+                  labelText: '',
+                  controller: accountNumberController,
+                ),
+                SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () {
+                    kopenPage(context, AccountPage());
+                  },
+                  child: Text('Edit account details',
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: ColorConstants.secondaryColor,
+                          fontWeight: FontWeight.bold)),
+                ),
+                SizedBox(height: 8),
+                Divider(color: ColorConstants.whiteLighterColor,height: 0),
+                SizedBox(height: 8),
+                PasswordTextField(
+                  icon: Icons.lock,
+                  textHint: 'Enter pin',
+                  controller: pinController,
+                  textInputType: TextInputType.number,
+                  labelText: '',
+                ),
+                SizedBox(height: 30),
+                CustomButton(
+                    disableButton: isAccountSet,
+                    onPressed: () {
+                      withdrawFund();
+                    },
+                    text: 'Withdraw fund',
+                    margin: 0),
+                SizedBox(height: 10),
+              ],
             ),
-            SizedBox(height: 30),
-            PasswordTextField(
-              icon: Icons.lock,
-              textHint: 'Enter pin',
-              controller: pinController,
-              textInputType: TextInputType.number,
-              labelText: '',
-            ),
-            SizedBox(height: 30),
-            CustomButton(
-                disableButton: isAccountSet,
-                onPressed: () {
-                  withdrawFund();
-                },
-                text: 'Withdraw fund',
-                margin: 0),
-            SizedBox(height: 10),
-          ],
+          ),
         ),
       ),
     );
@@ -373,6 +382,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
             child: Stack(
               children: [
                 Container(
+                  color: ColorConstants.primaryColor,
                   height: height,
                   child: Padding(
                     padding: const EdgeInsets.all(0.0),
@@ -382,7 +392,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient),
+                              color: ColorConstants.primaryLighterColor),
                           width: MediaQuery.of(context).size.width,
                           height: 50,
                           child: Padding(
@@ -395,7 +405,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                        ),
                                 ),
                                 GestureDetector(
                                     onTap: () {
@@ -403,7 +413,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                     },
                                     child: Padding(
                                       padding:
-                                          const EdgeInsets.only(right: 8.0),
+                                      const EdgeInsets.only(right: 8.0),
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
@@ -443,9 +453,9 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
   }
 
   Widget _bottomSheetContentMobileCarrier(
-    BuildContext context,
-    String title,
-  ) {
+      BuildContext context,
+      String title,
+      ) {
     return Column(
       children: [
         BottomSheetHeader(
@@ -582,7 +592,6 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
         } else {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
               value: 'network error',
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -591,7 +600,6 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
       } on SocketException {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
             value: 'check your internet connection',
             context: context,
             scaffoldKey: _scaffoldKey,

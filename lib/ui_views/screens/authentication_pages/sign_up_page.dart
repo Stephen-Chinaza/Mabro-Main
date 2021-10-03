@@ -28,7 +28,7 @@ import 'package:flutter/material.dart';
 class SignUpPage extends StatefulWidget {
   final String userPin;
 
-  const SignUpPage({Key key, this.userPin = ''}) : super(key: key);
+  const SignUpPage({Key key, this.userPin}) : super(key: key);
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -89,7 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
       key: _scaffoldKey,
       backgroundColor: ColorConstants.primaryColor,
       body: (isFirstScreen)
-          ? MainScreenLock()
+          ? MainScreenLock(userPin: widget.userPin,)
           : (pageState)
               ? loadingPage(state: pageState)
               : SingleChildScrollView(

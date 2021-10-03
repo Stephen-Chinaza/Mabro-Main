@@ -1,8 +1,13 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/demo_data.dart';
+import 'package:mabro/core/models/userInfo.dart';
+import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/home_wallet.dart';
 import 'package:mabro/ui_views/screens/airtime_page/selected_mobile_carrier.dart';
@@ -37,7 +42,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String email, firstname, username;
+  String email, firstname, username, userId;
   var mail, mail2;
   bool bankState;
   String accountNumber;
@@ -52,6 +57,8 @@ class _HomePageState extends State<HomePage> {
     mail2 = '';
     bankState = false;
     getData();
+
+    getUserInfo();
   }
 
   String greetingMessage() {
@@ -70,6 +77,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+    userId = (pref.getString('userId') ?? '');
     email = (pref.getString('email') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
     firstname = (pref.getString('first_name') ?? 'stephen');
@@ -89,7 +97,9 @@ class _HomePageState extends State<HomePage> {
 
       if (bankState) {
         showInfoDialog(310, _buildBody(), title: 'Account setup');
-      } else {}
+      } else {
+
+      }
     });
   }
 
@@ -222,9 +232,9 @@ class _HomePageState extends State<HomePage> {
       SelectedCableTvPage(),
       SelectedElectricitySubPage(),
       SelectedEducationSubPage(),
+      DepositWithdrawPage(),
       BtcP2PBuySell(),
       BuySellGiftcardTran(),
-      DepositWithdrawPage(),
       ReceiveBtcPage(),
       SelectedMobileCarrierPage(),
       NewsUpdatePage(),
@@ -238,13 +248,7 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 6) {
-                ShowSnackBar.showInSnackBar(
-                    value: 'feature coming up soon!!!',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-              } else if (checkedItem == 7) {
+                if (checkedItem == 7) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
@@ -376,112 +380,68 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: active, fontSize: 16.0),
                 ),
                 SizedBox(height: 30.0),
-                _buildDivider(),
-                ListTileTheme(
-                  contentPadding: EdgeInsets.all(0),
-                  dense: true, //removes additional space vertically
-                  child: ExpansionTile(
-                    tilePadding: EdgeInsets.all(0),
-                    childrenPadding: EdgeInsets.only(left: 20),
-                    leading: Container(
-                      height: 43,
-                      width: 43,
-                      child: Card(
-                        elevation: 5,
-                        color: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          side: new BorderSide(color: ColorConstants.whiteLighterColor,
-                              width: 0.2),
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
 
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient:  ColorConstants.primaryGradient,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Icon(
-                              Typicons.chart_bar_outline,
-                              size: 18,
-                              color: ColorConstants.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Text('Bitcoin P2P Exchange',
-                        style: TextStyle(color: active, fontSize: 14)),
-                    children: <Widget>[
-                      _buildRow(
-                        Icons.arrow_forward,
-                        "BTC P2P Buy/Sell",
-                        showBadge: false,
-                        page: BtcP2PBuySell(),
-                      ),
-                      _buildRow(Icons.arrow_forward, "Transfer/Receive BTC",
-                          showBadge: false, page: ReceiveBtcPage()),
-                    ],
-                  ),
+                // ListTileTheme(
+                //   contentPadding: EdgeInsets.all(0),
+                //   dense: true, //removes additional space vertically
+                //   child: ExpansionTile(
+                //     tilePadding: EdgeInsets.all(0),
+                //     childrenPadding: EdgeInsets.only(left: 20),
+                //     leading: Container(
+                //       height: 43,
+                //       width: 43,
+                //       child: Card(
+                //         elevation: 5,
+                //         color: Colors.transparent,
+                //         shape: RoundedRectangleBorder(
+                //           side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                //               width: 0.2),
+                //           borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                //
+                //         ),
+                //         child: Container(
+                //           decoration: BoxDecoration(
+                //             gradient:  ColorConstants.primaryGradient,
+                //             borderRadius:
+                //                 BorderRadius.all(Radius.circular(50.0)),
+                //           ),
+                //           child: Padding(
+                //             padding: const EdgeInsets.all(6.0),
+                //             child: Icon(
+                //               Typicons.chart_bar_outline,
+                //               size: 18,
+                //               color: ColorConstants.white,
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     title: Text('Bitcoin P2P Exchange',
+                //         style: TextStyle(color: active, fontSize: 14)),
+                //     children: <Widget>[
+                //       _buildRow(
+                //         Icons.arrow_forward,
+                //         "BTC P2P Buy/Sell",
+                //         showBadge: false,
+                //         page: BtcP2PBuySell(),
+                //       ),
+                //       _buildRow(Icons.arrow_forward, "Transfer/Receive BTC",
+                //           showBadge: false, page: ReceiveBtcPage()),
+                //     ],
+                //   ),
+                // ),
+                // _buildDivider(),
+                _buildRow(
+                  "Airtime to Cash",
+                  icon: Icons.subscriptions,
+                  page: AirtimeToCashPage(),
                 ),
-                _buildDivider(),
-                ListTileTheme(
-                  contentPadding: EdgeInsets.all(0),
-                  dense: true,
-                  child: ExpansionTile(
-                    tilePadding: EdgeInsets.all(0),
-                    childrenPadding: EdgeInsets.only(left: 20),
-                    leading: Container(
-                      height: 45,
-                      width: 45,
-                      child: Card(
-                        elevation: 5,
-                        color: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          side: new BorderSide(color: ColorConstants.whiteLighterColor,
-                              width: 0.1),
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: ColorConstants.primaryGradient,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Icon(
-                              Typicons.spanner,
-                              size: 18,
-                              color: ColorConstants.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Text('Bill Payment',
-                        style: TextStyle(color: active, fontSize: 15)),
-                    children: <Widget>[
-                      _buildRow(
-                        Icons.arrow_forward,
-                        "Pay Electricity Bill",
-                        page: SelectedElectricitySubPage(),
-                      ),
-                      _buildRow(
-                        Icons.arrow_forward,
-                        "Pay Tv Subscription",
-                        page: SelectedCableTvPage(),
-                      ),
-                    ],
-                  ),
-                ),
-                _buildDivider(),
                 ListTileTheme(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
+                    iconColor: Colors.white,
                     child: ExpansionTile(
+                      iconColor: Colors.white,
                       tilePadding: EdgeInsets.all(0),
                       childrenPadding: EdgeInsets.only(left: 20),
                       leading: Container(
@@ -494,13 +454,13 @@ class _HomePageState extends State<HomePage> {
                             side: new BorderSide(color: ColorConstants.whiteLighterColor,
                                 width: 0.1),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(50.0)),
+                            BorderRadius.all(Radius.circular(50.0)),
                           ),
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: ColorConstants.primaryGradient,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0)),
+                              BorderRadius.all(Radius.circular(50.0)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
@@ -517,21 +477,76 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(color: active, fontSize: 15)),
                       children: <Widget>[
                         _buildRow(
-                          Icons.arrow_forward,
                           "Buy Airtime",
+                          showBadge: false,
+                          icon: Icons.send_to_mobile,
                           page: SelectedMobileCarrierPage(),
                         ),
                         _buildRow(
-                          Icons.arrow_forward,
                           "Buy Data",
+                          icon: Icons.system_update_alt,
+                          showBadge: false,
                           page: SelectedDataRechargePage(),
                         ),
                       ],
                     )),
-                _buildDivider(),
+                ListTileTheme(
+                  contentPadding: EdgeInsets.all(0),
+                  dense: true,
+                  iconColor: ColorConstants.white,
+                  child: ExpansionTile(
+                    tilePadding: EdgeInsets.all(0),
+                    childrenPadding: EdgeInsets.only(left: 20),
+                    leading: Container(
+                      height: 45,
+                      width: 45,
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                              width: 0.1),
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Icon(
+                              Typicons.lightbulb,
+                              size: 18,
+                              color: ColorConstants.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    title: Text('Bill Payment',
+                        style: TextStyle(color: active, fontSize: 15)),
+                    children: <Widget>[
+                      _buildRow(
+                        "Pay Electricity Bill",
+                        showBadge: false,
+                        icon: Icons.electrical_services,
+                        page: SelectedElectricitySubPage(),
+                      ),
+                      _buildRow(
+                        "Pay Tv Subscription",
+                        icon:Icons.tv,
+                        showBadge: false,
+                        page: SelectedCableTvPage(),
+                      ),
+                    ],
+                  ),
+                ),
+
                 ListTileTheme(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
+
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.only(left: 0),
                       childrenPadding: EdgeInsets.only(left: 20),
@@ -571,48 +586,41 @@ class _HomePageState extends State<HomePage> {
                           )),
                       children: <Widget>[
                         _buildRow(
-                          Icons.arrow_forward,
                           "Accounts",
+                          showBadge: false,
+                          icon: Icons.food_bank_outlined,
                           page: AccountPage(),
                         ),
                         _buildRow(
-                          Icons.arrow_forward,
                           "Security",
+                          showBadge: false,
+                          icon: Icons.security,
                           page: SecurityPage(),
                         ),
                       ],
                     )),
-                _buildDivider(),
+                // _buildRow(
+                //   "Sell / Buy GiftCards",
+                //   icon: Icons.card_giftcard,
+                //
+                //   openState: false,
+                // ),
                 _buildRow(
-                  Icons.card_giftcard,
-                  "Sell / Buy GiftCards",
-                  showBadge: false,
-                  openState: false,
-                ),
-                _buildDivider(),
-                _buildRow(
-                  Icons.dashboard_customize,
                   "Deposit / Withdrawal",
-                  showBadge: false,
+                  icon: Icons.dashboard_customize,
                   page: DepositWithdrawPage(),
                 ),
-                _buildDivider(),
-                _buildRow(
-                  Icons.money,
-                  "Buy Social Media Likes",
-                  openState: false,
-                ),
-                _buildDivider(),
-                _buildRow(
-                  Icons.subscriptions,
-                  "Airtime to Cash",
-                  page: AirtimeToCashPage(),
-                ),
-                _buildDivider(),
-                _buildRow(Icons.notifications, "Notifications",
-                    showBadge: true, page: NotificationsPage()),
-                _buildDivider(),
-                _buildRow(Icons.phone, "Contact us",
+                // _buildRow(
+                //   "Buy Social Media Likes",
+                //   icon: Icons.money,
+                //   showBadge: false,
+                //   openState: false,
+                // ),
+                // _buildDivider(),
+
+                _buildRow("Notifications",icon: Icons.notifications,
+                    page: NotificationsPage()),
+                _buildRow("Contact us",icon: Icons.phone,
                     page: ContactUs(
                         cardColor: Colors.white,
                         textColor: ColorConstants.secondaryColor,
@@ -630,9 +638,7 @@ class _HomePageState extends State<HomePage> {
                         twitterHandle: 'AbhishekDoshi26',
                         instagram: '_abhishek_doshi',
                         facebookHandle: '_abhishek_doshi')),
-                _buildDivider(),
-                _buildRow(Icons.info_outline, "FAQ", page: FAQPage()),
-                _buildDivider(),
+                _buildRow( "FAQ",icon: Icons.info_outline, page: FAQPage()),
                 SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
@@ -670,8 +676,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRow(IconData icon, String title,
-      {Widget page, bool showBadge = false, bool openState = true}) {
+  Widget _buildRow( String title,
+      {IconData icon,Widget page, bool showBadge = true, bool openState = true}) {
     final TextStyle tStyle =
         TextStyle(color: active, fontSize: 14, fontWeight: FontWeight.normal);
     return GestureDetector(
@@ -686,35 +692,26 @@ class _HomePageState extends State<HomePage> {
                 timer: 5)
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
         decoration: BoxDecoration(
           color: ColorConstants.primaryColor,
         ),
         child: ListTile(
           contentPadding: EdgeInsets.all(0),
-          leading: Container(
-            height: 45,
-            width: 45,
-            child: Card(
-              elevation: 5,
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                side: new BorderSide(color: ColorConstants.whiteLighterColor,
-                    width: 0.1),
+          leading:  Container(
+            height: 37,
+            width: 37,
+            child: Container(
+              decoration: BoxDecoration(
+                color: (showBadge) ? ColorConstants.secondaryColor : ColorConstants.transparent,
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: ColorConstants.primaryGradient,
-                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Icon(
-                    icon,
-                    size: 18,
-                    color: ColorConstants.white,
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Icon(
+                  icon,
+                  size: 18,
+                  color: ColorConstants.white,
                 ),
               ),
             ),
@@ -855,5 +852,111 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  void _userInfo() async {
+    String message;
+      try {
+        var map = Map<String, dynamic>();
+        map['userId'] = userId;
+
+        var response = await http
+            .post(HttpService.rootUserInfo, body: map, headers: {
+          'Authorization': 'Bearer '+HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
+
+          ShowSnackBar.showInSnackBar(
+              value: 'The connection has timed out, please try again!',
+              bgColor: ColorConstants.secondaryColor,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+          return null;
+        });
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+
+          UserInfo userInfo = UserInfo.fromJson(body);
+
+          bool status = userInfo.status;
+          message = userInfo.message;
+
+
+          if (status) {
+
+            //String otp = userInfo.data.oTP;
+            userId = userInfo.data.bvns.user;
+
+            String accountName = userInfo.data.account.accountName.toString();
+            String accountNumber = userInfo.data.account.accountNumber.toString();
+            String bankName = userInfo.data.account.bankName.toString();
+            String firstName = userInfo.data.bvns.firstName.toString();
+            String surName = userInfo.data.bvns.surname.toString();
+            String bvn = userInfo.data.bvns.bvn.toString();
+
+            String emailTransactionNotification = userInfo.data.settings.emailTransactionNotification.toString();
+            String smsNotification = userInfo.data.settings.smsNotification.toString();
+            String twoFactorAuthentication = userInfo.data.settings.twoFactorAuthentication.toString();
+            String fingerPrintLogin = userInfo.data.settings.fingerPrintLogin.toString();
+            String newsletter = userInfo.data.settings.newsletter.toString();
+
+
+            SharedPrefrences.addStringToSP("userId", userId);
+
+            SharedPrefrences.addStringToSP("account_name", accountName);
+            SharedPrefrences.addStringToSP("account_number", accountNumber);
+            SharedPrefrences.addStringToSP("bank_name", bankName);
+            SharedPrefrences.addStringToSP("bvn", bvn);
+            SharedPrefrences.addStringToSP("first_name", firstName);
+            SharedPrefrences.addStringToSP("surname", surName);
+
+
+            SharedPrefrences.addStringToSP("sms_notification", smsNotification);
+            SharedPrefrences.addStringToSP("email_transaction_notification", emailTransactionNotification);
+            SharedPrefrences.addStringToSP("two_factor_authentication", twoFactorAuthentication);
+            SharedPrefrences.addStringToSP("finger_print_login", fingerPrintLogin);
+            SharedPrefrences.addStringToSP("newsletter", newsletter);
+
+
+
+            // ShowSnackBar.showInSnackBar(
+            //     iconData: Icons.check_circle,
+            //     value: message,
+            //     context: context,
+            //     scaffoldKey: _scaffoldKey,
+            //     timer: 5);
+
+
+          } else if (!status) {
+
+            ShowSnackBar.showInSnackBar(
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+
+          }
+        } else {
+
+          ShowSnackBar.showInSnackBar(
+              value: 'network error',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } on SocketException {
+
+        ShowSnackBar.showInSnackBar(
+            value: 'check your internet connection',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+  }
+
+  void getUserInfo(){
+    Future.delayed(Duration(seconds: 5), () {
+      _userInfo();
+    });
   }
 }

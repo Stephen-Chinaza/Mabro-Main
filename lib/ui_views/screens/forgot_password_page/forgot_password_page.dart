@@ -138,12 +138,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }  else {
       cPageState(state: true);
       String message;
-      String cause;
       String userId;
       try {
         var map = Map<String, dynamic>();
         map['email_address'] = signinEmailController.text;
-
 
         var response = await http
             .post(HttpService.rootForgotPassword, body: map, headers: {
@@ -165,13 +163,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           RegisterUser regUser = RegisterUser.fromJson(body);
 
           bool status = regUser.status;
-
+          message = regUser.message;
 
           if (status) {
             cPageState(state: false);
             String otp = regUser.data.oTP;
             userId = regUser.data.userId;
-            message = regUser.message;
+
 
             ShowSnackBar.showInSnackBar(
                 iconData: Icons.check_circle,

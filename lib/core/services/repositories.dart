@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mabro/core/models/all_transactions_history.dart';
+import 'package:mabro/core/models/buy_data_bundle.dart';
+import 'package:mabro/core/models/electricity_data_companies.dart';
 import 'package:mabro/core/models/list_bank.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
@@ -15,12 +17,13 @@ class HttpService {
 
 
   static var rootReg = Uri.parse('https://mabro.ng/dev/register/create');
+  static var rootUserInfo = Uri.parse('https://mabro.ng/dev/_app/account-details');
   static var rootLogin =
-      Uri.parse('https://mabro.ng/dev/login/authentication');
+  Uri.parse('https://mabro.ng/dev/login/authenticate');
   static var rootForgotPassword =
   Uri.parse('https://mabro.ng/dev/login/send-OTP');
   static var rootSendEmailOtp =
-      Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
+  Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
   static var rootVerifyEmail =
   Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
   static var rootResetPassword =
@@ -28,39 +31,59 @@ class HttpService {
   static var rootResendEmail =
   Uri.parse('https://mabro.ng/dev/register/send-email-OTP');
   static var rootUserPin =
-      Uri.parse('https://mabro.ng/dev/register/verify-email-OTP');
+  Uri.parse('https://mabro.ng/dev/register/create-lock-code');
   static var rootVerifyPhone =
-      Uri.parse('https://iceztech.com/mabro/account/verifyPhoneCodeM');
+  Uri.parse('https://mabro.ng/dev/_app/verifty-phone-OTP');
+  static var rootResendPhone =
+  Uri.parse('https://mabro.ng/dev/_app/update-phone');
   static var rootSendPhone =
-      Uri.parse('https://iceztech.com/mabro/account/sendPhoneCodeM');
+  Uri.parse('https://mabro.ng/dev/_app/add-phone');
   static var rootSettingsInfo =
-      Uri.parse('https://iceztech.com/mabro/settings/index/');
+  Uri.parse('https://iceztech.com/mabro/settings/index/');
   static var rootUpdateUsersData =
-      Uri.parse('https://iceztech.com/mabro/settings/update-profile');
+  Uri.parse('https://iceztech.com/mabro/settings/update-profile');
   static var rootWithdrawFund =
-      Uri.parse('https://iceztech.com/mabro/fund-account/withdraw');
+  Uri.parse('https://iceztech.com/mabro/fund-account/withdraw');
   static var rootUpdateSettings =
-      Uri.parse('https://iceztech.com/mabro/settings/update-settings');
+  Uri.parse('https://mabro.ng/dev/_app/update-settings');
   static var rootUpdateUserPassword =
-      Uri.parse('https://iceztech.com/mabro/settings/update-password');
+  Uri.parse('https://mabro.ng/dev/_app/change-password');
   static var rootUpdateUserPin =
-      Uri.parse('https://iceztech.com/mabro/settings/change-lock-code');
+  Uri.parse('https://mabro.ng/dev/_app/change-lock-code');
   static var rootVerifyAccountNumber =
-      Uri.parse('https://iceztech.com/mabro/settings/verify-account-number');
+  Uri.parse('https://iceztech.com/mabro/settings/verify-account-number');
   static var rootVerifyBvn =
-      Uri.parse('https://iceztech.com/mabro/settings/verify-bvn');
+  Uri.parse('https://mabro.ng/dev/_app/add-BVN');
   static var rootUpdateAccount =
-      Uri.parse('https://iceztech.com/mabro/settings/add-account-number');
+  Uri.parse('https://mabro.ng/dev/_app/update-bank-account');
   static var rootBuyAirtime =
-      Uri.parse('https://iceztech.com/mabro/airtime/buy');
+  Uri.parse('https://mabro.ng/dev/_app/airtime/pay');
+  static var rootBuyData =
+  Uri.parse('https://mabro.ng/dev/_app/mobile-data/pay');
+  static var rootVerifyMeterNumber =
+  Uri.parse('https://mabro.ng/dev/_app/electricity/verify-meter-number');
+  static var rootPayElectricityBill =
+  Uri.parse('https://mabro.ng/dev/_app/electricity/pay-bill');
+  static var rootElectricityCompanyList =
+  'https://mabro.ng/dev/_app/electricity/distribution-companies';
+  static var rootPayTvBill =
+  Uri.parse('https://mabro.ng/dev/_app/tv/pay-subscription');
+  static var rootTvSubscriptionList =
+  'https://mabro.ng/dev/_app/electricity/distribution-companies';
+  static var rootTvPlanList =
+  'https://mabro.ng/dev/_app/electricity/distribution-companies';
+static var rootVerifySmartCard =
+Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
+
+
 
   static Future<ListBanks> getBankLists(BuildContext context) async {
     try {
       var map = Map<String, dynamic>();
 
       var response = await http
-          .post(Uri.parse('https://iceztech.com/mabro/settings/banks'),
-              body: map)
+          .post(Uri.parse('https://mabro.ng/dev/_app/list-banks'),
+          body: map)
           .timeout(const Duration(seconds: 15), onTimeout: () {
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -108,11 +131,109 @@ class HttpService {
     }
   }
 
+  static Future<dataMtnList> dataMtnPlanList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        dataMtnList data =
+        dataMtnList.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          return data ;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+
+  static Future<ElectricityCompanyList> electricityCompanyList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        ElectricityCompanyList data =
+        ElectricityCompanyList.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          return data ;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+
   static Future<AllTransactionHistory> transactionHistory(
       BuildContext context, String user, String url) async {
     try {
       var map = Map<String, dynamic>();
-      map['user'] = user;
+      map['userId'] = user;
 
       var response = await http
           .post(Uri.parse(url), body: map)
@@ -128,7 +249,7 @@ class HttpService {
         var body = jsonDecode(response.body);
 
         AllTransactionHistory allTransactionHistory =
-            AllTransactionHistory.fromJson(body);
+        AllTransactionHistory.fromJson(body);
 
         bool status = allTransactionHistory.status;
         String message = allTransactionHistory.message;
@@ -154,3 +275,4 @@ class HttpService {
     }
   }
 }
+

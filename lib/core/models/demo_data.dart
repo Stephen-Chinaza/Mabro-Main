@@ -19,6 +19,10 @@ class DemoData {
     HomeMenu(title: "Tv Subscription", icon: Typicons.social_youtube),
     HomeMenu(title: "Electricity", icon: Typicons.export_outline),
     HomeMenu(title: "Education", icon: Typicons.social_github),
+    HomeMenu(
+      title: "Deposit/Withdraw",
+      icon: Typicons.device_laptop,
+    ),
         HomeMenu(
           title: "P2P \n Exchange",
           icon: Typicons.chart_line,
@@ -27,10 +31,7 @@ class DemoData {
           title: "Giftcard",
           icon: Typicons.gift,
         ),
-        HomeMenu(
-          title: "Deposit/Withdraw",
-          icon: Typicons.device_laptop,
-        ),
+
         HomeMenu(
           title: "Receive/Transfer BTC",
           icon: Typicons.globe,
@@ -70,10 +71,10 @@ class DemoData {
       ];
 
   static List<ImageList> get images => [
-        ImageList(image: 'assets/images/mtn.png', title: 'MTN'),
-        ImageList(image: 'assets/images/glo.png', title: 'GLO'),
-        ImageList(image: 'assets/images/airtel.png', title: 'AIRTEL'),
-        ImageList(image: 'assets/images/9mobile.png', title: '9MOBILE'),
+        ImageList(image: 'assets/images/mtn.png', title: 'MTN', color: Colors.yellow),
+        ImageList(image: 'assets/images/glo.png', title: 'GLO',color: Colors.green[600]),
+        ImageList(image: 'assets/images/airtel.jpg', title: 'AIRTEL',color: Colors.white),
+        ImageList(image: 'assets/images/9mobile.png', title: '9MOBILE',color: Colors.black12),
       ];
 
   static List<ImageList> get subImages => [
@@ -157,8 +158,9 @@ class HomeMenu {
 class ImageList {
   final String image;
   final String title;
+  final Color  color;
 
-  ImageList({this.title, this.image});
+  ImageList({this.title, this.image, this.color});
 }
 
 class AirtimeList {

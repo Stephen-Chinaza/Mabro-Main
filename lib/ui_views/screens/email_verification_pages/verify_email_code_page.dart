@@ -430,14 +430,13 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
         if (status) {
           cPageState(state: false);
 
-
-          // ShowSnackBar.showInSnackBar(
-          //     value: message,
-          //     iconData: Icons.check_circle,
-          //     context: context,
-          //     scaffoldKey: _scaffoldKey,
-          //     timer: 5,
-          //     bgColor: ColorConstants.secondaryColor);
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              iconData: Icons.check_circle,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5,
+              bgColor: ColorConstants.secondaryColor);
 
         } else if (!status) {
           cPageState(state: false);
@@ -469,7 +468,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   }
 
   void _redirectuser() {
-    pushPage(context, SetPinPage());
+    Future.delayed(Duration(seconds: 3), (){
+      pushPage(context, SetPinPage());
+
+    });
   }
 
   void cPageState({bool state = false}) {

@@ -29,13 +29,13 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
 
   final _contactEditingController = TextEditingController();
   var _dialCode = '';
-  String id;
+  String userId;
   bool pageState;
   int inputNum;
 
   Future<void> getUserData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    id = (pref.getString('id') ?? '');
+    userId = (pref.getString('userId') ?? '');
   }
 
   @override
@@ -204,14 +204,16 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
     cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
-      map['id'] = id;
+      map['userId'] = userId;
       map['phone_number'] = '0' + _contactEditingController.text;
 
-      print(id);
+
       print('0' + _contactEditingController.text);
 
       var response = await http
-          .post(HttpService.rootSendPhone, body: map)
+          .post(HttpService.rootSendPhone, body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
@@ -234,13 +236,13 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
         if (status) {
           cPageState(state: false);
 
-          //String code = verifyPhone.data.code;
+          String otp = verifyPhone.data.oTP;
           ShowSnackBar.showInSnackBar(
               value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
-          //_redirectuser(code: code);
+          _redirectuser(code: otp);
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(

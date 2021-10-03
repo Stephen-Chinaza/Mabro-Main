@@ -19,8 +19,6 @@ import 'package:mabro/ui_views/widgets/textfield/password_textfield.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:mabro/ui_views/commons/show_phone_contact/contacts_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
@@ -55,13 +53,13 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
 
   String nairaBalance = '';
   String userPin = '';
-  String user;
+  String userId;
   String network;
 
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    nairaBalance = (pref.getString('naria_balance') ?? '');
-    user = (pref.getString('user') ?? '');
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
+    userId = (pref.getString('userId') ?? '');
     userPin = (pref.getString('lock_code') ?? '');
 
     setState(() {});
@@ -70,7 +68,7 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
   @override
   void initState() {
     super.initState();
-    user = '';
+    userId = '';
     network = 'mtn';
     getBalance();
     pageState = false;
@@ -117,7 +115,7 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                   backgroundColorEnd: ColorConstants.secondaryColor,
                   icon:
                   Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-                  title: 'Purchase Airtime',
+                  title: 'Buy Airtime',
                   onPressed: null,
                   textColor: Colors.white,
                   iconColor: Colors.white,
@@ -129,31 +127,31 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                         elevation: 3,
                         color: ColorConstants.primaryLighterColor,
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: 20),
-                                Builder(builder: (context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      buildShowBottomSheet(
-                                        context: context,
-                                        bottomsheetContent:
-                                        _bottomSheetContentMobileCarrier(
-                                          context,
-                                        ),
-                                      );
-                                    },
-                                    child: IconFields(
-                                      hintText: 'Select Beneficiary',
-                                      isEditable: false,
-                                      labelText: widget.title,
-                                      controller: _beneficiaryController,
-                                    ),
-                                  );
-                                }),
-                                SizedBox(height: 20),
+                                // Builder(builder: (context) {
+                                //   return GestureDetector(
+                                //     onTap: () {
+                                //       buildShowBottomSheet(
+                                //         context: context,
+                                //         bottomsheetContent:
+                                //         _bottomSheetContentMobileCarrier(
+                                //           context,
+                                //         ),
+                                //       );
+                                //     },
+                                //     child: IconFields(
+                                //       hintText: 'Select Beneficiary',
+                                //       isEditable: false,
+                                //       labelText: widget.title,
+                                //       controller: _beneficiaryController,
+                                //     ),
+                                //   );
+                                // }),
+                                // SizedBox(height: 20),
                                 Row(
                                   children: [
                                     Flexible(
@@ -185,10 +183,16 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                                   ],
                                 ),
                                 SizedBox(height: 20),
+                                Text('Select Network',
+                                    style: TextStyle(
+                                        color: ColorConstants.whiteLighterColor, fontSize: 16)),
+                                SizedBox(height: 10),
+
                                 Container(
                                   height: 70,
                                   width: MediaQuery.of(context).size.width,
                                   child: ListView.builder(
+                                    //padding: EdgeInsets.only(left: 20),
                                       itemCount: providerImages.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, i) {
@@ -217,6 +221,10 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                                           },
                                           child: Card(
                                               elevation: 3,
+                                              color: providerImages[i].color,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(4),
+                                              ),
                                               child: Container(
                                                   decoration: BoxDecoration(
                                                     borderRadius: BorderRadius.all(
@@ -225,16 +233,16 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                                                       color: _selectedIndex !=
                                                           null &&
                                                           _selectedIndex == i
-                                                          ? Colors.redAccent
+                                                          ? ColorConstants.secondaryColor
                                                           : Colors.transparent,
                                                       width: 2,
                                                     ),
                                                   ),
-                                                  height: 50,
-                                                  width: 70,
+                                                  height: 63,
+                                                  width: 75,
                                                   child: Padding(
                                                     padding:
-                                                    const EdgeInsets.all(8.0),
+                                                    const EdgeInsets.all(10.0),
                                                     child: Image.asset(
                                                         providerImages[i].image),
                                                   ))),
@@ -242,59 +250,49 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                                       }),
                                 ),
                                 SizedBox(height: 20),
-                                Builder(builder: (context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      buildShowBottomSheet(
-                                        context: context,
-                                        bottomsheetContent:
-                                        _bottomSheetContentMobileCarrier(
-                                          context,
-                                        ),
-                                      );
-                                    },
-                                    child: IconFields(
-                                      hintText: 'Select data bundle',
-                                      isEditable: false,
-                                      labelText: widget.title,
-                                    ),
-                                  );
-                                }),
+                                NormalFields(
+                                  width: MediaQuery.of(context).size.width,
+                                  hintText: 'Enter amount',
+                                  labelText: '',
+                                  onChanged: (name) {},
+                                  textInputType: TextInputType.number,
+                                  controller: _amountController,
+                                ),
                                 SizedBox(height: 5),
-                                Text('Balance: NGN 0',
+                                Text('balance: '+nairaBalance+ 'NGN' ?? '',
                                     style: TextStyle(
                                         color: ColorConstants.whiteLighterColor, fontSize: 12)),
-                                SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Checkbox(
-                                          value: checkState,
-                                          checkColor: ColorConstants.white,
-                                          focusColor: ColorConstants.secondaryColor,
-                                          activeColor:
-                                          ColorConstants.secondaryColor,
-                                          onChanged: (state) {
-                                            setState(() {
-                                              checkState = state;
-                                            });
-                                          }),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Flexible(
-                                      child: Text('Save Beneficiary',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w800,
-                                              color: ColorConstants.whiteLighterColor,
-                                              fontSize: 14)),
-                                    ),
-                                  ],
-                                ),
+                                // SizedBox(height: 20),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.start,
+                                //   children: [
+                                //     SizedBox(
+                                //       height: 20,
+                                //       width: 20,
+                                //       child: Checkbox(
+                                //           value: checkState,
+                                //           checkColor: ColorConstants.white,
+                                //           focusColor: ColorConstants.secondaryColor,
+                                //           activeColor:
+                                //           ColorConstants.secondaryColor,
+                                //           onChanged: (state) {
+                                //             setState(() {
+                                //               checkState = state;
+                                //             });
+                                //           }),
+                                //     ),
+                                //     SizedBox(
+                                //       width: 10,
+                                //     ),
+                                //     Flexible(
+                                //       child: Text('Save Beneficiary',
+                                //           style: TextStyle(
+                                //               fontWeight: FontWeight.w800,
+                                //               color: ColorConstants.whiteLighterColor,
+                                //               fontSize: 14)),
+                                //     ),
+                                //   ],
+                                // ),
                                 SizedBox(height: 10),
                                 Divider(
                                     color: ColorConstants.whiteLighterColor
@@ -460,13 +458,15 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
-        map['user'] = user;
+        map['userId'] = userId;
         map['network'] = network;
         map['phone_number'] = _phoneController.text;
-        map['amount'] = _amountController.text;
+        map['amount'] = int.parse(_amountController.text);
 
         var response = await http
-            .post(HttpService.rootBuyAirtime, body: map)
+            .post(HttpService.rootBuyAirtime, body: map, headers: {
+          'Authorization': 'Bearer '+HttpService.token,
+        })
             .timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
 

@@ -23,6 +23,7 @@ class _ConfirmTransferPageState extends State<ConfirmTransferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: ColorConstants.primaryColor,
       appBar: TopBar(
         backgroundColorStart: ColorConstants.primaryColor,
         backgroundColorEnd: ColorConstants.secondaryColor,
@@ -47,13 +48,11 @@ class _ConfirmTransferPageState extends State<ConfirmTransferPage> {
                   text2: 'Continue',
                   icon1: Icons.close,
                   icon2: Icons.keyboard_arrow_right),
-              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextStyles.textDetails(
                   textSize: 13,
-
-                  textColor: Colors.white,
+                  textColor: ColorConstants.whiteLighterColor,
                   textValue: 'only click on continue after you have transfered airtime ' +
                       'to the above number within 6 mins otherwise click cancel',
 
@@ -85,22 +84,18 @@ class BottomBotton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CustomButton(
-            disableButton: true,
-            text: text1,
-            width: 140,
-            icon: icon1,
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
+          TextButton(onPressed: (){},
+              //style: ,
+              child: Text('Cancel', style: TextStyle(color: ColorConstants.white),
+
+              )),
           CustomButton(
             disableButton: true,
             text: text2,
+            margin: 0,
             width: 140,
-            icon: icon2,
             onPressed: () {
-              showCustomDialog(context, title: 'Upload Screenshoot');
+              showCustomDialog(context, title: 'Upload Screenshot');
             },
           ),
         ],
@@ -188,6 +183,7 @@ class TopInfoContainer extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Card(
+          color: ColorConstants.primaryLighterColor,
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
         child: Column(
@@ -196,14 +192,16 @@ class TopInfoContainer extends StatelessWidget {
             SizedBox(height: 10),
             TextStyles.textDetails(
                 textSize: 14,
+                textColor: ColorConstants.whiteLighterColor,
                 textValue:
                     '* Transfer N2,000.00 worth of airtime to this phone number below'),
             SizedBox(height: 20),
             copyPhone('08108803488',
-                'please do not save or call this number we dont accept VTU or recharge pin'),
+                "please do not save or call this number we don't accept VTU or recharge pin"),
             SizedBox(height: 40),
             TextStyles.textDetails(
                 textSize: 14,
+                textColor: ColorConstants.whiteLighterColor,
                 textValue:
                     'please use displayed phone number once, as a new number will be provided for every transaction so as to avoid loss of artime'),
           ],
@@ -215,7 +213,7 @@ class TopInfoContainer extends StatelessWidget {
   Center copyPhone(String number, String phoneInfo) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -224,6 +222,7 @@ class TopInfoContainer extends StatelessWidget {
               children: [
                 TextStyles.textDetails(
                     textSize: 14,
+                    textColor: ColorConstants.whiteLighterColor,
                     textValue: number),
                 SizedBox(width: 10),
                 GestureDetector(
@@ -239,7 +238,7 @@ class TopInfoContainer extends StatelessWidget {
                     child: new Tooltip(
                         preferBelow: false,
                         message: "Copy",
-                        child: Icon(Icons.copy_outlined))),
+                        child: Icon(Icons.copy_outlined, color: ColorConstants.secondaryColor))),
               ],
             ),
             SizedBox(height: 5),
@@ -272,17 +271,20 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
+        color: ColorConstants.primaryLighterColor,
         child: Column(
           children: <Widget>[
             ListTile(
               leading: Icon(
                 Icons.info_outlined,
-                color: Colors.red,
+                color: ColorConstants.secondaryColor,
               ),
-              title: Text("How to tranfer mtn airtime"),
+              title: Text("How to transfer mtn airtime",
+                style: TextStyle(color: ColorConstants.whiteLighterColor,),
+              ),
               trailing: Icon((showTransfer)
                   ? Icons.keyboard_arrow_down
-                  : Icons.keyboard_arrow_right),
+                  : Icons.keyboard_arrow_right,color: ColorConstants.whiteLighterColor,),
               onTap: () {
                 setState(() {
                   if (showTransfer) {
@@ -299,14 +301,16 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
                 children: [
                   TextStyles.textDetails(
                     textSize: 14,
+                    textColor: ColorConstants.whiteLighterColor,
                     textValue: 'Using USSD',
                   ),
                   SizedBox(height: 10),
                   TextStyles.textDetails(
                       textSize: 14,
+                      textColor: ColorConstants.whiteLighterColor,
                       textValue: '*600*Phone Number*Amount*PIN# \n\n'),
                   TextStyles.textDetails(
-                    textColor: Colors.red,
+                    textColor:  ColorConstants.whiteLighterColor,
                     textSize: 14,
                     textValue: 'Example: *600*08108803488*2000*0000#',
                   ),
@@ -320,12 +324,12 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
             ListTile(
               leading: Icon(
                 Icons.info_outlined,
-                color: Colors.red,
+                color: ColorConstants.secondaryColor,
               ),
-              title: Text("How to set your pin"),
+              title: Text("How to set your pin", style: TextStyle(color: ColorConstants.whiteLighterColor,)),
               trailing: Icon((showPin)
                   ? Icons.keyboard_arrow_down
-                  : Icons.keyboard_arrow_right),
+                  : Icons.keyboard_arrow_right,color: ColorConstants.whiteLighterColor,),
               onTap: () {
                 setState(() {
                   if (showPin) {
@@ -343,21 +347,23 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
                 children: [
                   TextStyles.textDetails(
                     textSize: 14,
-                    textColor: Colors.red,
+                    textColor:  ColorConstants.secondaryColor,
                     textValue: 'Your default PIN is 0000 \n\n',
                   ),
                   TextStyles.textDetails(
                       textSize: 14,
+                      textColor: ColorConstants.whiteLighterColor,
                       textValue: 'You are advised to change your default pin'),
                   SizedBox(
                     height: 10,
                   ),
                   TextStyles.textDetails(
                     textSize: 14,
+                    textColor: ColorConstants.whiteLighterColor,
                     textValue: 'To change your pin.\n\n',
                   ),
                   TextStyles.textDetails(
-                    textColor: Colors.red,
+                    textColor: ColorConstants.whiteLighterColor,
                     textSize: 14,
                     textValue: 'Dial: *600*Default PIN*New PIN*New PIN#',
                   ),
@@ -393,7 +399,7 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
       ),
       width: double.infinity,
       height: 1.0,
-      color: Colors.grey.shade400,
+      color: ColorConstants.whiteLighterColor,
     );
   }
 }
@@ -407,13 +413,14 @@ class BottomInfoContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
+        color: ColorConstants.primaryLighterColor,
           child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
 
         TextStyles.textDetails(
-        textSize: 14,
+        textSize: 16,
           textValue:
               'Your order details',
 
@@ -438,11 +445,13 @@ class BottomInfoContainer extends StatelessWidget {
       children: [
         TextStyles.textDetails(
           textSize: 14,
+          textColor: ColorConstants.whiteLighterColor,
           textValue: tag,
 
         ),
         TextStyles.textDetails(
           textSize: 14,
+          textColor: ColorConstants.whiteLighterColor,
           textValue: value,
 
         ),

@@ -5,6 +5,7 @@ import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/models/register_user.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
+import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/screens/authentication_pages/sign_in_page.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
@@ -67,7 +68,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.primaryColor,
-      body: SingleChildScrollView(
+      body: (pageState)
+          ? loadingPage(state: pageState)
+          :SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -128,7 +131,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           icon: Icons.lock_open,
                           textHint: 'Password',
                           controller: signinPasswordController,
-                          myFocusNode: myFocusNodePassword,
                           labelText: '',
                           onChanged: (password) {},
                         ),
@@ -139,7 +141,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           icon: Icons.lock_open,
                           textHint: 'Password Again',
                           controller: signinCPasswordController,
-                          myFocusNode: myFocusNodePassword,
                           labelText: '',
                           onChanged: (password) {},
                         ),
@@ -237,12 +238,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           RegisterUser regUser = RegisterUser.fromJson(body);
 
           bool status = regUser.status;
-
+          message = regUser.message;
           if (status) {
             cPageState(state: false);
             String otp = regUser.data.oTP;
             userId = regUser.data.userId;
-            message = regUser.message;
+
 
             ShowSnackBar.showInSnackBar(
                 iconData: Icons.check_circle,
@@ -260,7 +261,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
-          }
+           }
         } else {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(

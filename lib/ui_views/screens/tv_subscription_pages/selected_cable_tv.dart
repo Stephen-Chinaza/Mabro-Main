@@ -1,18 +1,24 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/models/demo_data.dart';
+import 'package:mabro/core/models/electricity_data_companies.dart';
+import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
+import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/widgets/bottomsheets/bottomsheet.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
+import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/icon_textfield.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
 import 'package:mabro/ui_views/widgets/textfield/password_textfield.dart';
-import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
-import 'package:mabro/ui_views/commons/show_phone_contact/contacts_page.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,21 +39,28 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
   bool checkState;
   List<String> beneficiaries;
   String tvName, tvLogo;
-  String user, nairaBalance;
+  String userPin,serviceId,meterInitData;
+
+  String userId, nairaBalance;
 
   TextEditingController _beneficiaryController = new TextEditingController();
-  TextEditingController _searchQueryController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
+  TextEditingController _pinController = new TextEditingController();
+  TextEditingController _tvSubscriptionplanController = new TextEditingController();
+  TextEditingController _smartCardController = new TextEditingController();
+  TextEditingController _amountController = new TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    user = (pref.getString('user') ?? '');
-    nairaBalance = (pref.getString('naria_balance') ?? '');
+    userId = (pref.getString('userId') ?? '');
+    userPin = (pref.getString('lock_code') ?? '');
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
 
     setState(() {});
   }
 
-  int _selectedIndex;
+  bool pageState;
 
   @override
   void initState() {
@@ -57,7 +70,7 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
     getData();
     tvName = 'Dstv';
     tvLogo = 'assets/images/dstv.jpg';
-
+    serviceId = 'dstv';
     beneficiaries = [
       'Emeka Ofor',
       'Okezie Ikeazu',
@@ -65,24 +78,22 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
       'Chinwetalu Okolie'
     ];
     checkState = true;
-    _selectedIndex = 0;
+    pageState = false;
+
   }
 
-  _onSelected(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   void dispose() {
     _beneficiaryController.dispose();
-    _searchQueryController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return (pageState)
+        ? loadingPage(state: pageState)
+        :Stack(
       children: [
         buildFirstContainer(),
         buildSecondContainer(),
@@ -99,12 +110,12 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
           ),
           body: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(1.0),
             child: Card(
               color: ColorConstants.primaryLighterColor,
               elevation: 3,
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -115,7 +126,7 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                             buildShowBottomSheet(
                               context: context,
                               bottomsheetContent:
-                                  _bottomSheetContentSubscriptionTypes(
+                              _bottomSheetContentTvPlan(
                                 context,
                               ),
                             );
@@ -151,8 +162,8 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                                     ],
                                   ),
                                   Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 13,
+                                    Icons.arrow_drop_down_sharp,
+                                    size: 30,
                                     color:
                                     ColorConstants.whiteLighterColor,
                                   )
@@ -162,35 +173,55 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                           ),
                         );
                       }),
-                      SizedBox(height: 30),
+                      SizedBox(height: 15),
                       Builder(builder: (context) {
                         return GestureDetector(
                           onTap: () {
-                            buildShowBottomSheet(
-                              context: context,
-                              bottomsheetContent:
-                                  _bottomSheetContentMobileCarrier(
-                                context,
-                              ),
-                            );
+                            // buildShowBottomSheet(
+                            //   context: context,
+                            //   bottomsheetContent:
+                            //   _bottomSheetContentTvSubPlan(
+                            //     context,
+                            //   ),
+                            // );
                           },
                           child: IconFields(
-                            hintText: 'Select Beneficiary',
+                            hintText: 'Select subscription plan',
                             isEditable: false,
                             labelText: widget.title,
-                            controller: _beneficiaryController,
+                            controller: _tvSubscriptionplanController,
                           ),
                         );
                       }),
-                      SizedBox(height: 20),
+                      SizedBox(height: 15),
+                      // Builder(builder: (context) {
+                      //   return GestureDetector(
+                      //     onTap: () {
+                      //       buildShowBottomSheet(
+                      //         context: context,
+                      //         bottomsheetContent:
+                      //             _bottomSheetContentMobileCarrier(
+                      //           context,
+                      //         ),
+                      //       );
+                      //     },
+                      //     child: IconFields(
+                      //       hintText: 'Select Beneficiary',
+                      //       isEditable: false,
+                      //       labelText: widget.title,
+                      //       controller: _beneficiaryController,
+                      //     ),
+                      //   );
+                      // }),
+                      // SizedBox(height: 15),
                       NormalFields(
                         width: MediaQuery.of(context).size.width,
                         hintText: 'Smart card number',
                         labelText: '',
                         onChanged: (name) {},
-                        controller: TextEditingController(text: ''),
+                        controller: _smartCardController,
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 15),
                       NormalFields(
                         width: MediaQuery.of(context).size.width,
                         hintText: 'Phone number',
@@ -199,66 +230,48 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                         textInputType: TextInputType.number,
                         controller: _phoneController,
                       ),
-                      SizedBox(height: 20),
-                      Builder(builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            buildShowBottomSheet(
-                              context: context,
-                              bottomsheetContent:
-                                  _bottomSheetContentMobileCarrier(
-                                context,
-                              ),
-                            );
-                          },
-                          child: IconFields(
-                            hintText: 'Select subscription plan',
-                            isEditable: false,
-                            labelText: widget.title,
-                          ),
-                        );
-                      }),
+
                       SizedBox(height: 5),
                       Text('Balance: NGN $nairaBalance',
                           style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 12)),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: Checkbox(
-                                value: checkState,
-                                checkColor: ColorConstants.white,
-                                focusColor: ColorConstants.secondaryColor,
-                                activeColor: ColorConstants.secondaryColor,
-                                onChanged: (state) {
-                                  setState(() {
-                                    checkState = state;
-                                  });
-                                }),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: Text('Save Beneficiary',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                    color: ColorConstants.whiteLighterColor,
-                                    fontSize: 14)),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 15),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     SizedBox(
+                      //       height: 20,
+                      //       width: 20,
+                      //       child: Checkbox(
+                      //           value: checkState,
+                      //           checkColor: ColorConstants.white,
+                      //           focusColor: ColorConstants.secondaryColor,
+                      //           activeColor: ColorConstants.secondaryColor,
+                      //           onChanged: (state) {
+                      //             setState(() {
+                      //               checkState = state;
+                      //             });
+                      //           }),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 10,
+                      //     ),
+                      //     Flexible(
+                      //       child: Text('Save Beneficiary',
+                      //           style: TextStyle(
+                      //               fontWeight: FontWeight.w800,
+                      //               color: ColorConstants.whiteLighterColor,
+                      //               fontSize: 14)),
+                      //     ),
+                      //   ],
+                      // ),
+                      //SizedBox(height: 10),
                       Divider(
                           color: ColorConstants.whiteLighterColor),
                       SizedBox(height: 10),
                       PasswordTextField(
                         icon: Icons.lock_open,
                         textHint: 'Enter pin',
-                        controller: TextEditingController(text: ''),
+                        controller: _pinController,
                         labelText: 'Enter pin',
                         onChanged: (password) {},
                       ),
@@ -274,7 +287,9 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
                             margin: 0,
                             height: 40,
                             disableButton: true,
-                            onPressed: () {},
+                            onPressed: () {
+                              verifySmartCardNumber();
+                            },
                             text: 'Pay subscription now'),
                       ),
                       SizedBox(height: 30),
@@ -287,42 +302,42 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
     );
   }
 
-  Widget _bottomSheetContentMobileCarrier(
-    BuildContext context,
-  ) {
+  Widget _bottomSheetContentTvSubscriptionList(
+      BuildContext context,
+      ) {
     return Column(
       children: [
         BottomSheetHeader(
-          buttomSheetTitle: 'Select Beneficiary',
+          buttomSheetTitle: 'Select Tv Subscription',
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: 6),
-          _buildCarrierList(
-            context,
-          ),
+          // _buildTvSubList(
+          //   context,
+          // ),
         ]),
       ],
     );
   }
 
-  Widget _buildCarrierList(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-          itemCount: providerImages.length,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (context, i) {
-            return buildListTile(
-                title: beneficiaries[i],
-                onTapped: () {
-                  setState(() {
-                    _beneficiaryController.text = beneficiaries[i];
-                    kbackBtn(context);
-                  });
-                });
-          }),
-    );
-  }
+  // Widget _bottomSheetContentTvSubPlan(BuildContext context) {
+  //   return Container(
+  //     child: ListView.builder(
+  //         itemCount: providerImages.length,
+  //         scrollDirection: Axis.vertical,
+  //         shrinkWrap: true,
+  //         itemBuilder: (context, i) {
+  //           return buildListTile(
+  //               title: meterType[i],
+  //               onTapped: () {
+  //                 setState(() {
+  //                   _meterTypeController.text = meterType[i];
+  //                   kbackBtn(context);
+  //                 });
+  //               });
+  //         }),
+  //   );
+  // }
 
   Widget buildListTile({String title, Function onTapped}) {
     return Column(
@@ -336,95 +351,39 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
             margin: EdgeInsets.all(8),
             child: Text(title,
                 style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w400,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: 14)),
           ),
         ),
-        Divider(color: ColorConstants.lighterSecondaryColor),
+        Divider(color: ColorConstants.whiteLighterColor),
       ],
     );
   }
 
-  Widget buildList({String title, Function onTapped}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          onTap: () {
-            onTapped();
-          },
-          child: Container(
-            height: 60,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 1.0,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: TextStyles.textSubHeadings(
-                  textSize: 14,
-                  textColor: Colors.black54,
-                  textValue: title,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Divider(color: ColorConstants.lighterSecondaryColor),
-      ],
-    );
-  }
 
-  Widget _bottomSheetContentSubscriptionTypes(
-    BuildContext context,
-  ) {
+
+  Widget _bottomSheetContentTvPlan(
+      BuildContext context,
+      ) {
     return Column(
       children: [
         BottomSheetHeader(
-          buttomSheetTitle: 'Select Beneficiary',
+          buttomSheetTitle: 'Tv subscription plan',
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: 6),
-          _buildSubscriptionTypes(
+          buildTvSubscription(
             context,
+            HttpService.rootTvSubscriptionList,
+
           ),
         ]),
       ],
     );
   }
 
-  Widget _buildSubscriptionTypes(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-          itemCount: providerImages.length,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (context, i) {
-            return buildSubscriptionTypes(
-                title: providerImages[i].title,
-                image: providerImages[i].image,
-                onTapped: () {
-                  setState(() {
-                    tvName = providerImages[i].title;
-                    tvLogo = providerImages[i].image;
-                    kbackBtn(context);
-                  });
-                });
-          }),
-    );
-  }
-
-  Widget buildSubscriptionTypes(
+  Widget buildElectricityCompanyDetails(
       {String title, String image, Function onTapped}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -434,9 +393,7 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
             onTapped();
           },
           child: Container(
-            color: Colors.transparent,
-            margin: EdgeInsets.all(2),
-            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.all(8),
             child: Row(
               children: [
                 Image.asset(
@@ -461,6 +418,291 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
           height: 0,
         ),
       ],
+    );
+  }
+
+  void verifySmartCardNumber() async {
+    if (_tvSubscriptionplanController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Select subscription plan',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+    else if (_smartCardController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter smart card number',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+    else if (_phoneController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter phone number',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    } else if (_pinController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter transaction pin',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (userPin != _pinController.text) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Invalid pin entered',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else {
+      cPageState(state: true);
+      try {
+        var map = Map<String, dynamic>();
+        map['service_id'] = serviceId;
+        map['smart_card_number'] = _smartCardController;
+
+        var response = await http
+            .post(HttpService.rootVerifySmartCard, body: map, headers: {
+          'Authorization': 'Bearer '+HttpService.token,
+        })
+            .timeout(const Duration(seconds: 15), onTimeout: () {
+          cPageState(state: false);
+
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.primaryColor,
+              value: 'The connection has timed out, please try again!',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+          return null;
+        });
+
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+
+          //BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
+
+          bool status = true;
+          String message = 'regUser.message';
+          if (status) {
+            cPageState(state: false);
+            payTvSubBill();
+            // ShowSnackBar.showInSnackBar(
+            //     iconData: Icons.check_circle,
+            //     value: message,
+            //     context: context,
+            //     scaffoldKey: _scaffoldKey,
+            //     timer: 5);
+          } else if (!status) {
+            cPageState(state: false);
+
+            ShowSnackBar.showInSnackBar(
+                bgColor: ColorConstants.primaryColor,
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+          }
+        } else {
+          cPageState(state: false);
+
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.primaryColor,
+              value: 'network error',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } on SocketException {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            bgColor: ColorConstants.primaryColor,
+            value: 'check your internet connection',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    }
+  }
+
+  void payTvSubBill() async {
+    if (_tvSubscriptionplanController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Select subscription plan',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+    else if (_smartCardController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter smart card number',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+    else if (_phoneController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter phone number',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    } else if (_pinController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter transaction pin',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (userPin != _pinController.text) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Invalid pin entered',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else {
+      cPageState(state: true);
+      try {
+        var map = Map<String, dynamic>();
+        map['userId'] = userId;
+        map['service_id'] = serviceId;
+        map['smart_card_number'] = _smartCardController;
+        map['package_id'] = '';
+
+
+        var response = await http
+            .post(HttpService.rootPayTvBill, body: map, headers: {
+          'Authorization': 'Bearer '+HttpService.token,
+        })
+            .timeout(const Duration(seconds: 15), onTimeout: () {
+          cPageState(state: false);
+
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.primaryColor,
+              value: 'The connection has timed out, please try again!',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+          return null;
+        });
+
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+
+          //BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
+
+          bool status = true;
+          String message = 'regUser.message';
+          if (status) {
+            cPageState(state: false);
+
+            ShowSnackBar.showInSnackBar(
+                iconData: Icons.check_circle,
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+          } else if (!status) {
+            cPageState(state: false);
+
+            ShowSnackBar.showInSnackBar(
+                bgColor: ColorConstants.primaryColor,
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+          }
+        } else {
+          cPageState(state: false);
+
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.primaryColor,
+              value: 'network error',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } on SocketException {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            bgColor: ColorConstants.primaryColor,
+            value: 'check your internet connection',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    }
+  }
+
+
+  void cPageState({bool state = false}) {
+    setState(() {
+      pageState = state;
+    });
+  }
+
+  Widget buildTvSubscription(
+      BuildContext context, String url) {
+    return FutureBuilder(
+      future: HttpService.electricityCompanyList(context, userId, url),
+      builder: (BuildContext context,
+          AsyncSnapshot<ElectricityCompanyList> snapshot) {
+        ElectricityCompanyList electricityCompanyList = snapshot.data;
+
+        if (snapshot.hasData) {
+          if (electricityCompanyList.data.electricity.length == 0) {
+            return Center(
+              child: Text(
+                'No data found',
+                style: TextStyle(
+                    fontSize: 16, color: ColorConstants.secondaryColor),
+              ),
+            );
+          } else {
+            return Container(
+              child: ListView.builder(
+                  itemCount: electricityCompanyList.data.electricity.length,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, i) {
+                    return buildElectricityCompanyDetails(
+                        title: electricityCompanyList.data.electricity[i].name,
+                        image: providerImages[i].image,
+                        onTapped: () {
+                          setState(() {
+                            tvName = electricityCompanyList.data.electricity[i].name;
+                            tvLogo = providerImages[i].image;
+                            serviceId = electricityCompanyList.data.electricity[i].serviceId;
+                            kbackBtn(context);
+                          });
+                        });
+                  }),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Center(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {});
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Error in network',
+                    style: TextStyle(
+                        fontSize: 16, color: ColorConstants.whiteLighterColor),
+                  ),
+                  Icon(
+                    Icons.refresh,
+                    size: 25,
+                  )
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Center(
+              child: CircularProgressIndicator(
+                valueColor:
+                AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
+              ));
+        }
+      },
     );
   }
 }

@@ -83,18 +83,19 @@ class _PinScreenState extends State<PinScreen> {
                       key: formKey,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 4.0, horizontal: 10),
+                              vertical: 4.0, horizontal: 40),
                           child: PinCodeTextField(
+
                             appContext: context,
                             pastedTextStyle: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
-                            length: 6,
+                            length: 4,
                             obscureText: true,
                             animationType: AnimationType.fade,
                             validator: (v) {
-                              if (v.length < 6) {
+                              if (v.length < 4) {
                                 return "";
                               } else {
                                 return null;
@@ -128,7 +129,7 @@ class _PinScreenState extends State<PinScreen> {
 
                               formKey.currentState.validate();
                               // conditions for validating
-                              if (currentText.length != 6) {
+                              if (currentText.length != 4) {
 
                               } else {
                                 setState(() {
@@ -181,7 +182,7 @@ class _PinScreenState extends State<PinScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: const EdgeInsets.all(12.0),
           child: Text(
             'Please remember this pin. It will be used to keep your account secured.',
             style: TextStyle(fontSize: 18, color: ColorConstants.whiteLighterColor),

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class IconFields extends StatelessWidget {
   final String labelText;
+  final int maxLength;
   final String hintText;
   final Function onChanged;
   final double width;
@@ -19,6 +20,7 @@ class IconFields extends StatelessWidget {
       {Key key,
       this.labelText,
       this.hintText,
+      this.maxLength = 200,
       this.onChanged,
       this.width,
       this.onTap,
@@ -44,6 +46,7 @@ class IconFields extends StatelessWidget {
           cursorColor: ColorConstants.secondaryColor,
           enabled: isEditable,
           onTap: onTap,
+          maxLength: maxLength,
           controller: controller,
           onChanged: onChanged,
           keyboardType: textInputType ?? TextInputType.text,
@@ -54,6 +57,7 @@ class IconFields extends StatelessWidget {
               fontWeight: FontWeight.w300),
           decoration: InputDecoration(
             filled: true,
+            counterText: "",
             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
             fillColor: ColorConstants.primaryColor.withOpacity(0.3),
             hintText: hintText,
@@ -66,7 +70,17 @@ class IconFields extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
             ),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+              BorderSide(color: ColorConstants.transparent, width: 0.2),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ColorConstants.transparent),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
           ),
+
         ),
       ),
     );

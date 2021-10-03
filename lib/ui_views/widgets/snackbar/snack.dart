@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ShowSnackBar {
   static void showInSnackBar(
-      {String value,
+      {String value = '',
       Color bgColor = ColorConstants.secondaryColor,
       Color leftBarColor = Colors.green,
       int timer = 3,
@@ -19,7 +19,7 @@ class ShowSnackBar {
           flushbarPosition: FlushbarPosition.BOTTOM,
           padding: const EdgeInsets.all(25.0),
           margin: const EdgeInsets.all(8.0),
-          message: value,
+          message: value ?? '',
           reverseAnimationCurve: Curves.easeOut,
           forwardAnimationCurve: Curves.easeIn,
           backgroundColor: bgColor,
