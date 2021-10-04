@@ -43,7 +43,7 @@ class _ConfirmTransferPageState extends State<ConfirmTransferPage> {
               SizedBox(height: 10),
               BottomInfoContainer(),
               SizedBox(height: 10),
-              BottomBotton(
+              BottomButton(
                   text1: 'Cancel',
                   text2: 'Continue',
                   icon1: Icons.close,
@@ -66,10 +66,10 @@ class _ConfirmTransferPageState extends State<ConfirmTransferPage> {
   }
 }
 
-class BottomBotton extends StatelessWidget {
+class BottomButton extends StatelessWidget {
   final String text1, text2;
   final IconData icon1, icon2;
-  const BottomBotton({
+  const BottomButton({
     Key key,
     this.text1,
     this.text2,
@@ -84,20 +84,36 @@ class BottomBotton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton(onPressed: (){},
-              //style: ,
-              child: Text('Cancel', style: TextStyle(color: ColorConstants.white),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(right:6.0),
+              child: TextButton(onPressed: (){},
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(15.0),
+                    primary: Colors.white,
+                    textStyle: const TextStyle(fontSize: 14),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                    side: BorderSide(color: ColorConstants.secondaryColor, width: 2)
+                  ),
+                  child: Text('Cancel', style: TextStyle(color: ColorConstants.white),
 
-              )),
-          CustomButton(
-            disableButton: true,
-            text: text2,
-            margin: 0,
-            width: 140,
-            onPressed: () {
-              showCustomDialog(context, title: 'Upload Screenshot');
-            },
+                  )),
+            ),
           ),
+          Expanded(child: Padding(
+            padding: const EdgeInsets.only(left:6.0),
+            child: CustomButton(
+              disableButton: true,
+              text: text2,
+              margin: 0,
+              width: 140,
+              onPressed: () {
+                showCustomDialog(context, title: 'Upload Screenshot');
+              },
+            ),
+          ),)
+
         ],
       ),
     );

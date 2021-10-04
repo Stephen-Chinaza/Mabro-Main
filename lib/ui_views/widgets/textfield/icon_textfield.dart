@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 class IconFields extends StatelessWidget {
   final String labelText;
   final int maxLength;
+  final int maxLines;
   final String hintText;
   final Function onChanged;
   final double width;
@@ -18,23 +19,24 @@ class IconFields extends StatelessWidget {
 
   const IconFields(
       {Key key,
-      this.labelText,
-      this.hintText,
-      this.maxLength = 200,
-      this.onChanged,
-      this.width,
-      this.onTap,
-      this.textInputType,
-      this.controller,
-      this.bgColor,
-      this.isEditable,
-      this.onIconTap})
+        this.labelText,
+        this.hintText,
+        this.maxLength = 200,
+        this.maxLines = 1,
+        this.onChanged,
+        this.width,
+        this.onTap,
+        this.textInputType,
+        this.controller,
+        this.bgColor,
+        this.isEditable,
+        this.onIconTap})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 45,
+      height: (maxLines == 1) ? 45 : 65,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           border:  Border.all(color: ColorConstants.whiteLighterColor, width: 0.6)
@@ -46,20 +48,21 @@ class IconFields extends StatelessWidget {
           cursorColor: ColorConstants.secondaryColor,
           enabled: isEditable,
           onTap: onTap,
+          maxLines: maxLines,
           maxLength: maxLength,
           controller: controller,
           onChanged: onChanged,
           keyboardType: textInputType ?? TextInputType.text,
           style: TextStyle(
               fontStyle: FontStyle.normal,
-              color: ColorConstants.whiteLighterColor,
+              color: ColorConstants.whiteColor,
               fontSize: 16,
               fontWeight: FontWeight.w300),
           decoration: InputDecoration(
             filled: true,
             counterText: "",
             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-            fillColor: ColorConstants.primaryColor.withOpacity(0.3),
+            fillColor: ColorConstants.primaryColor.withOpacity(0.4),
             hintText: hintText,
             hintStyle: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 16.0),
             suffixIcon: Icon(

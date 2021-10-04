@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/core/models/buy_9mobile_bundle.dart';
+import 'package:mabro/core/models/buy_airtel_bundle.dart';
 import 'package:mabro/core/models/buy_airtime_bundle.dart';
-import 'package:mabro/core/models/buy_data_bundle.dart';
+import 'package:mabro/core/models/buy_glo_bundle.dart';
+import 'package:mabro/core/models/buy_mtn_bundle.dart';
 import 'package:mabro/core/models/demo_data.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -54,6 +57,7 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
   int _selectedIndex;
   String network;
   String userId;
+  int maxLines = 1;
 
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -123,222 +127,229 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
           body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Card(
-                  elevation: 3,
-                  color: ColorConstants.primaryLighterColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20),
-                          // Builder(builder: (context) {
-                          //   return GestureDetector(
-                          //     onTap: () {
-                          //       buildShowBottomSheet(
-                          //         context: context,
-                          //         bottomsheetContent:
-                          //             _bottomSheetContentMobileCarrier(
-                          //           context,
-                          //         ),
-                          //       );
-                          //     },
-                          //     child: IconFields(
-                          //       hintText: 'Select Beneficiary',
-                          //       isEditable: false,
-                          //       labelText: widget.title,
-                          //       controller: _beneficiaryController,
-                          //     ),
-                          //   );
-                          // }),
-                          // SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 8,
-                                child: NormalFields(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
-                                  hintText: 'Phone number',
-                                  labelText: '',
-                                  onChanged: (name) {},
-                                  textInputType: TextInputType.number,
-                                  controller: _phoneController,
-                                ),
-                              ),
-                              // Flexible(
-                              //   flex: 1,
-                              //   child: GestureDetector(
-                              //     onTap: () {
-                              //       kopenPage(context, ContactsPage());
-                              //     },
-                              //     child: Container(
-                              //       child: Icon(
-                              //         Icons.contact_phone,
-                              //         size: 32,
-                              //         color: Colors.orange,
-                              //       ),
-                              //     ),
-                              //   ),
-                              // )
-                            ],
-                          ),
-                          SizedBox(height: 20),
-                          Text('Select Network',
-                              style: TextStyle(
-                                  color: ColorConstants.whiteLighterColor, fontSize: 16)),
-                          SizedBox(height: 10),
-
-                          Container(
-                            height: 70,
-                            width: MediaQuery.of(context).size.width,
-                            child: ListView.builder(
-                              //padding: EdgeInsets.only(left: 20),
-                                itemCount: providerImages.length,
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, i) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      _onSelected(i);
-
-                                      setState(() {
-                                        switch (i) {
-                                          case 0:
-                                            network = 'mtn';
-                                            break;
-                                          case 1:
-                                            network = 'glo';
-                                            break;
-                                          case 2:
-                                            network = 'airtel';
-                                            break;
-                                          case 3:
-                                            network = '9mobile';
-                                            break;
-                                          default:
-                                            network = 'mtn';
-                                        }
-                                      });
-                                    },
-                                    child: Card(
-                                        elevation: 3,
-                                        color: providerImages[i].color,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(4)),
-                                              border: Border.all(
-                                                color: _selectedIndex !=
-                                                    null &&
-                                                    _selectedIndex == i
-                                                    ? ColorConstants.secondaryColor
-                                                    : Colors.transparent,
-                                                width: 2,
-                                              ),
-                                            ),
-                                            height: 63,
-                                            width: 75,
-                                            child: Padding(
-                                              padding:
-                                              const EdgeInsets.all(10.0),
-                                              child: Image.asset(
-                                                  providerImages[i].image),
-                                            ))),
-                                  );
-                                }),
-                          ),
-                          SizedBox(height: 20),
-                          Builder(builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                buildShowBottomSheet(
-                                  context: context,
-                                  bottomsheetContent:
-                                  _bottomSheetContentData(
-                                    context,
+                child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: Card(
+                    elevation: 3,
+                    color: ColorConstants.primaryLighterColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20),
+                            // Builder(builder: (context) {
+                            //   return GestureDetector(
+                            //     onTap: () {
+                            //       buildShowBottomSheet(
+                            //         context: context,
+                            //         bottomsheetContent:
+                            //             _bottomSheetContentMobileCarrier(
+                            //           context,
+                            //         ),
+                            //       );
+                            //     },
+                            //     child: IconFields(
+                            //       hintText: 'Select Beneficiary',
+                            //       isEditable: false,
+                            //       labelText: widget.title,
+                            //       controller: _beneficiaryController,
+                            //     ),
+                            //   );
+                            // }),
+                            // SizedBox(height: 20),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 8,
+                                  child: NormalFields(
+                                    width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width,
+                                    hintText: 'Phone number',
+                                    labelText: '',
+                                    onChanged: (name) {},
+                                    textInputType: TextInputType.number,
+                                    controller: _phoneController,
                                   ),
-                                );
+                                ),
+                                // Flexible(
+                                //   flex: 1,
+                                //   child: GestureDetector(
+                                //     onTap: () {
+                                //       kopenPage(context, ContactsPage());
+                                //     },
+                                //     child: Container(
+                                //       child: Icon(
+                                //         Icons.contact_phone,
+                                //         size: 32,
+                                //         color: Colors.orange,
+                                //       ),
+                                //     ),
+                                //   ),
+                                // )
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            Text('Select Network',
+                                style: TextStyle(
+                                    color: ColorConstants.whiteLighterColor, fontSize: 16)),
+                            SizedBox(height: 10),
+
+                            Container(
+                              height: 70,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                  itemCount: providerImages.length,
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, i) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _onSelected(i);
+                                        setState(() {
+                                          switch (i) {
+                                            case 0:
+                                              network = 'mtn';
+                                              break;
+                                            case 1:
+                                              network = 'glo';
+                                              break;
+                                            case 2:
+                                              network = 'airtel';
+                                              break;
+                                            case 3:
+                                              network = '9mobile';
+                                              break;
+                                            default:
+                                              network = 'mtn';
+                                          }
+                                        });
+                                      },
+                                      child: Card(
+                                          elevation: 3,
+                                          color: providerImages[i].color,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(4)),
+                                                border: Border.all(
+                                                  color: _selectedIndex !=
+                                                      null &&
+                                                      _selectedIndex == i
+                                                      ? ColorConstants.lighterSecondaryColor
+                                                      : Colors.transparent,
+                                                  width: 2,
+                                                ),
+                                              ),
+                                              height: 63,
+                                              width: 75,
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.all(10.0),
+                                                child: Image.asset(
+                                                    providerImages[i].image),
+                                              ))),
+                                    );
+                                  }),
+                            ),
+                            SizedBox(height: 20),
+                            Builder(builder: (context) {
+                              return GestureDetector(
+                                onTap: () {
+                                  buildShowBottomSheet(
+                                    context: context,
+                                    bottomsheetContent:
+                                    _bottomSheetContentData(
+                                      context,
+                                    ),
+                                  );
+                                },
+                                child: IconFields(
+                                  hintText: 'Select data bundle',
+                                  isEditable: false,
+                                  maxLines: maxLines,
+                                  labelText: widget.title,
+                                   controller: _bundleController,
+                                  onChanged: (String i){
+                                    if(i.length >= 1){
+                                      maxLines = 2;
+                                    }
+                                  },
+                                ),
+                              );
+                            }),
+                            SizedBox(height: 5),
+                            Text('balance: ' + nairaBalance + 'NGN' ?? '',
+                                style: TextStyle(
+                                    color: ColorConstants.whiteLighterColor,
+                                    fontSize: 12)),
+                            // SizedBox(height: 20),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   children: [
+                            //     SizedBox(
+                            //       height: 20,
+                            //       width: 20,
+                            //       child: Checkbox(
+                            //           value: checkState,
+                            //           checkColor: ColorConstants.white,
+                            //           focusColor: ColorConstants.secondaryColor,
+                            //           activeColor:
+                            //               ColorConstants.secondaryColor,
+                            //           onChanged: (state) {
+                            //             setState(() {
+                            //               checkState = state;
+                            //             });
+                            //           }),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Flexible(
+                            //       child: Text('Save Beneficiary',
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.w800,
+                            //               color: ColorConstants.whiteLighterColor,
+                            //               fontSize: 14)),
+                            //     ),
+                            //   ],
+                            // ),
+                            SizedBox(height: 10),
+                            Divider(
+                                color: ColorConstants.whiteLighterColor
+                            ),
+                            SizedBox(height: 10),
+                            PasswordTextField(
+                              icon: Icons.lock_open,
+                              textHint: 'Enter pin',
+                              controller: _pinController,
+                              labelText: 'Enter pin',
+                              onChanged: (password) {
+                                _password = password;
                               },
-                              child: IconFields(
-                                hintText: 'Select data bundle',
-                                isEditable: false,
-                                labelText: widget.title,
-                                 controller: _bundleController
-                              ),
-                            );
-                          }),
-                          SizedBox(height: 5),
-                          Text('balance: ' + nairaBalance + 'NGN' ?? '',
-                              style: TextStyle(
-                                  color: ColorConstants.whiteLighterColor,
-                                  fontSize: 12)),
-                          // SizedBox(height: 20),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.start,
-                          //   children: [
-                          //     SizedBox(
-                          //       height: 20,
-                          //       width: 20,
-                          //       child: Checkbox(
-                          //           value: checkState,
-                          //           checkColor: ColorConstants.white,
-                          //           focusColor: ColorConstants.secondaryColor,
-                          //           activeColor:
-                          //               ColorConstants.secondaryColor,
-                          //           onChanged: (state) {
-                          //             setState(() {
-                          //               checkState = state;
-                          //             });
-                          //           }),
-                          //     ),
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Flexible(
-                          //       child: Text('Save Beneficiary',
-                          //           style: TextStyle(
-                          //               fontWeight: FontWeight.w800,
-                          //               color: ColorConstants.whiteLighterColor,
-                          //               fontSize: 14)),
-                          //     ),
-                          //   ],
-                          // ),
-                          SizedBox(height: 10),
-                          Divider(
-                              color: ColorConstants.whiteLighterColor
-                          ),
-                          SizedBox(height: 10),
-                          PasswordTextField(
-                            icon: Icons.lock_open,
-                            textHint: 'Enter pin',
-                            controller: _pinController,
-                            labelText: 'Enter pin',
-                            onChanged: (password) {
-                              _password = password;
-                            },
-                          ),
-                          SizedBox(height: 5),
-                          Text('Enter transaction pin for authorization',
-                              style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
-                                  fontSize: 12)),
-                          SizedBox(height: 20),
-                          Align(
-                            alignment: Alignment.center,
-                            child: CustomButton(
-                                margin: 0,
-                                height: 40,
-                                disableButton: true,
-                                onPressed: () {},
-                                text: 'Buy data now'),
-                          ),
-                          SizedBox(height: 30),
-                        ]),
+                            ),
+                            SizedBox(height: 5),
+                            Text('Enter transaction pin for authorization',
+                                style: TextStyle(
+                                    color: ColorConstants.secondaryColor,
+                                    fontSize: 12)),
+                            SizedBox(height: 20),
+                            Align(
+                              alignment: Alignment.center,
+                              child: CustomButton(
+                                  margin: 0,
+                                  height: 40,
+                                  disableButton: true,
+                                  onPressed: () {},
+                                  text: 'Buy data now'),
+                            ),
+                            SizedBox(height: 30),
+                          ]),
+                    ),
                   ),
                 ),
               )),
@@ -348,86 +359,22 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
   }
 
   Widget _bottomSheetContentData(BuildContext context,) {
-    return Column(
-      children: [
-        BottomSheetHeader(
-          buttomSheetTitle: 'Select Data Plan',
-        ),
-        SizedBox(height: 6),
-        buildDataPlan(),
-      ],
-    );
+     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      BottomSheetHeader(
+        buttomSheetTitle: 'Select Data Plan'.toUpperCase(),
+      ),
+      SizedBox(height: 6),
+      Expanded(child: _buildDataPlan()),
+    ]);
   }
 
-  Widget buildDataPlan() {
-    setState(() {
+  Widget _buildDataPlan() {
       if (network == 'mtn') {
-          return FutureBuilder(
-            future: HttpService.dataMtnPlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/mtn'),
-            builder: (context, snapshot) {
-              dataMtnList mtnData = snapshot.data;
-              print(snapshot.data);
-              print('nothing');
-              if (snapshot.hasData) {
-                if (mtnData.data.mtn.length == 0) {
-                  return Container();
-                } else {
-                  return Container(
-                    child: ListView.builder(
-                        itemCount: mtnData.data.mtn.length,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemBuilder: (context, i) {
-                          return buildListTile(
-                              title: mtnData.data.mtn[i].dataName,
-                              onTapped: () {
-                                setState(() {
-                                  _bundleController.text = mtnData.data.mtn[i].dataName;
-                                  kbackBtn(context);
-                                });
-                              });
-                        }),
-                  );
-                }
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {});
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Error in network',
-                          style: TextStyle(
-                              fontSize: 16, color: ColorConstants.whiteLighterColor),
-                        ),
-                        Icon(
-                          Icons.refresh,
-                          size: 25,
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              } else {
-                return Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                      AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
-                    ));
-              }
-            },
-          );
-
-      } else if (network == 'airtel') {
         return FutureBuilder(
-          future: HttpService.dataMtnPlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/airtel'),
+          future: HttpService.dataMtnPlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/mtn'),
           builder: (BuildContext context,
               AsyncSnapshot<dataMtnList> snapshot) {
             dataMtnList mtnData = snapshot.data;
-
             if (snapshot.hasData) {
               if (mtnData.data.mtn.length == 0) {
                 return Container();
@@ -442,7 +389,8 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
                             title: mtnData.data.mtn[i].dataName,
                             onTapped: () {
                               setState(() {
-                                _beneficiaryController.text = beneficiaries[i];
+                                _bundleController.text = mtnData.data.mtn[i].dataName;
+
                                 kbackBtn(context);
                               });
                             });
@@ -459,14 +407,68 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Error in network',
+                        'Failed to load',
                         style: TextStyle(
                             fontSize: 16, color: ColorConstants.whiteLighterColor),
                       ),
-                      Icon(
-                        Icons.refresh,
-                        size: 25,
-                      )
+
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return Center(
+                  child: CircularProgressIndicator(
+                    valueColor:
+                    AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
+                  ));
+            }
+          },
+        );
+
+      } else if (network == 'airtel') {
+        return FutureBuilder(
+          future: HttpService.dataAirtelPlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/airtel'),
+          builder: (BuildContext context,
+              AsyncSnapshot<dataAirtelList> snapshot) {
+            dataAirtelList mtnData = snapshot.data;
+
+            if (snapshot.hasData) {
+              if (mtnData.data.airtel.length == 0) {
+                return Container();
+              } else {
+                return Container(
+                  child: ListView.builder(
+                      itemCount: mtnData.data.airtel.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, i) {
+                        return buildListTile(
+                            title: mtnData.data.airtel[i].dataName,
+                            onTapped: () {
+                              setState(() {
+                                _bundleController.text = mtnData.data.airtel[i].dataName;
+                                kbackBtn(context);
+                              });
+                            });
+                      }),
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Center(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {});
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Failed to load',
+                        style: TextStyle(
+                            fontSize: 16, color: ColorConstants.whiteLighterColor),
+                      ),
+
                     ],
                   ),
                 ),
@@ -483,26 +485,26 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
 
       } else if (network == 'glo') {
         return FutureBuilder(
-          future: HttpService.dataMtnPlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/glo'),
+          future: HttpService.dataGloPlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/glo'),
           builder: (BuildContext context,
-              AsyncSnapshot<dataMtnList> snapshot) {
-            dataMtnList mtnData = snapshot.data;
+              AsyncSnapshot<dataGloList> snapshot) {
+            dataGloList mtnData = snapshot.data;
 
             if (snapshot.hasData) {
-              if (mtnData.data.mtn.length == 0) {
+              if (mtnData.data.glo.length == 0) {
                 return Container();
               } else {
                 return Container(
                   child: ListView.builder(
-                      itemCount: mtnData.data.mtn.length,
+                      itemCount: mtnData.data.glo.length,
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       itemBuilder: (context, i) {
                         return buildListTile(
-                            title: mtnData.data.mtn[i].dataName,
+                            title: mtnData.data.glo[i].dataName,
                             onTapped: () {
                               setState(() {
-                                _beneficiaryController.text = beneficiaries[i];
+                                _bundleController.text = mtnData.data.glo[i].dataName;
                                 kbackBtn(context);
                               });
                             });
@@ -519,14 +521,11 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Error in network',
+                        'Failed to load',
                         style: TextStyle(
                             fontSize: 16, color: ColorConstants.whiteLighterColor),
                       ),
-                      Icon(
-                        Icons.refresh,
-                        size: 25,
-                      )
+
                     ],
                   ),
                 ),
@@ -541,15 +540,64 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
           },
         );
       } else if (network == '9mobile') {
+        return FutureBuilder(
+          future: HttpService.data9mobilePlanList(context, userId, 'https://mabro.ng/dev/_app/mobile-data/plans/9mobile'),
+          builder: (BuildContext context,
+              AsyncSnapshot<data9mobileList> snapshot) {
+            data9mobileList mobileData = snapshot.data;
 
+            if (snapshot.hasData) {
+              if (mobileData.data.mobile.length == 0) {
+                return Container();
+              } else {
+                return Container(
+                  child: ListView.builder(
+                      itemCount: mobileData.data.mobile.length,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemBuilder: (context, i) {
+                        return buildListTile(
+                            title: mobileData.data.mobile[i].dataName,
+                            onTapped: () {
+                              setState(() {
+                                _bundleController.text = mobileData.data.mobile[i].dataName;
+                                kbackBtn(context);
+                              });
+                            });
+                      }),
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Center(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {});
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Failed to load',
+                        style: TextStyle(
+                            fontSize: 16, color: ColorConstants.whiteLighterColor),
+                      ),
+
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return Center(
+                  child: CircularProgressIndicator(
+                    valueColor:
+                    AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
+                  ));
+            }
+          },
+        );
       }
-    });
+
   }
-
-
-
-
-
 
   Widget buildListTile({String title, Function onTapped}) {
     return Column(
@@ -563,8 +611,8 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
             margin: EdgeInsets.all(8),
             child: Text(title,
                 style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w400,
+                    color: ColorConstants.whiteLighterColor,
                     fontSize: 14)),
           ),
         ),

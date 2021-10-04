@@ -110,193 +110,193 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
           ),
           body: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Card(
-              color: ColorConstants.primaryLighterColor,
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      Builder(builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            buildShowBottomSheet(
-                              context: context,
-                              bottomsheetContent:
-                              _bottomSheetContentTvPlan(
-                                context,
-                              ),
-                            );
-                          },
-                          child: Container(
-                            height: 75,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
-                                ),
-                                border: Border.all(
-                                    color: ColorConstants.whiteLighterColor
+                padding: const EdgeInsets.all(1.0),
+                child: Card(
+                  color: ColorConstants.primaryLighterColor,
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 20),
+                          Builder(builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                buildShowBottomSheet(
+                                  context: context,
+                                  bottomsheetContent:
+                                  _bottomSheetContentTvPlan(
+                                    context,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: 75,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                    border: Border.all(
+                                        color: ColorConstants.whiteLighterColor
                                         ,
-                                    width: 0.4)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
+                                        width: 0.4)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
                                     children: [
-                                      Image.asset(tvLogo,
-                                          height: 100, width: 60),
-                                      SizedBox(
-                                        width: 12,
-                                      ),
-                                      Text(tvName,
-                                          style: TextStyle(
-                                              color:
+                                      Row(
+                                        children: [
+                                          Image.asset(tvLogo,
+                                              height: 100, width: 60),
+                                          SizedBox(
+                                            width: 12,
+                                          ),
+                                          Text(tvName,
+                                              style: TextStyle(
+                                                  color:
                                                   ColorConstants.whiteColor,
-                                              fontSize: 14)),
+                                                  fontSize: 14)),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.arrow_drop_down_sharp,
+                                        size: 30,
+                                        color:
+                                        ColorConstants.whiteLighterColor,
+                                      )
                                     ],
                                   ),
-                                  Icon(
-                                    Icons.arrow_drop_down_sharp,
-                                    size: 30,
-                                    color:
-                                    ColorConstants.whiteLighterColor,
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
+                            );
+                          }),
+                          SizedBox(height: 15),
+                          Builder(builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                // buildShowBottomSheet(
+                                //   context: context,
+                                //   bottomsheetContent:
+                                //   _bottomSheetContentTvSubPlan(
+                                //     context,
+                                //   ),
+                                // );
+                              },
+                              child: IconFields(
+                                hintText: 'Select subscription plan',
+                                isEditable: false,
+                                labelText: widget.title,
+                                controller: _tvSubscriptionplanController,
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 15),
+                          // Builder(builder: (context) {
+                          //   return GestureDetector(
+                          //     onTap: () {
+                          //       buildShowBottomSheet(
+                          //         context: context,
+                          //         bottomsheetContent:
+                          //             _bottomSheetContentMobileCarrier(
+                          //           context,
+                          //         ),
+                          //       );
+                          //     },
+                          //     child: IconFields(
+                          //       hintText: 'Select Beneficiary',
+                          //       isEditable: false,
+                          //       labelText: widget.title,
+                          //       controller: _beneficiaryController,
+                          //     ),
+                          //   );
+                          // }),
+                          // SizedBox(height: 15),
+                          NormalFields(
+                            width: MediaQuery.of(context).size.width,
+                            hintText: 'Smart card number',
+                            labelText: '',
+                            onChanged: (name) {},
+                            controller: _smartCardController,
                           ),
-                        );
-                      }),
-                      SizedBox(height: 15),
-                      Builder(builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            // buildShowBottomSheet(
-                            //   context: context,
-                            //   bottomsheetContent:
-                            //   _bottomSheetContentTvSubPlan(
-                            //     context,
-                            //   ),
-                            // );
-                          },
-                          child: IconFields(
-                            hintText: 'Select subscription plan',
-                            isEditable: false,
-                            labelText: widget.title,
-                            controller: _tvSubscriptionplanController,
+                          SizedBox(height: 15),
+                          NormalFields(
+                            width: MediaQuery.of(context).size.width,
+                            hintText: 'Phone number',
+                            labelText: '',
+                            onChanged: (name) {},
+                            textInputType: TextInputType.number,
+                            controller: _phoneController,
                           ),
-                        );
-                      }),
-                      SizedBox(height: 15),
-                      // Builder(builder: (context) {
-                      //   return GestureDetector(
-                      //     onTap: () {
-                      //       buildShowBottomSheet(
-                      //         context: context,
-                      //         bottomsheetContent:
-                      //             _bottomSheetContentMobileCarrier(
-                      //           context,
-                      //         ),
-                      //       );
-                      //     },
-                      //     child: IconFields(
-                      //       hintText: 'Select Beneficiary',
-                      //       isEditable: false,
-                      //       labelText: widget.title,
-                      //       controller: _beneficiaryController,
-                      //     ),
-                      //   );
-                      // }),
-                      // SizedBox(height: 15),
-                      NormalFields(
-                        width: MediaQuery.of(context).size.width,
-                        hintText: 'Smart card number',
-                        labelText: '',
-                        onChanged: (name) {},
-                        controller: _smartCardController,
-                      ),
-                      SizedBox(height: 15),
-                      NormalFields(
-                        width: MediaQuery.of(context).size.width,
-                        hintText: 'Phone number',
-                        labelText: '',
-                        onChanged: (name) {},
-                        textInputType: TextInputType.number,
-                        controller: _phoneController,
-                      ),
 
-                      SizedBox(height: 5),
-                      Text('Balance: NGN $nairaBalance',
-                          style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 12)),
-                      SizedBox(height: 15),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: [
-                      //     SizedBox(
-                      //       height: 20,
-                      //       width: 20,
-                      //       child: Checkbox(
-                      //           value: checkState,
-                      //           checkColor: ColorConstants.white,
-                      //           focusColor: ColorConstants.secondaryColor,
-                      //           activeColor: ColorConstants.secondaryColor,
-                      //           onChanged: (state) {
-                      //             setState(() {
-                      //               checkState = state;
-                      //             });
-                      //           }),
-                      //     ),
-                      //     SizedBox(
-                      //       width: 10,
-                      //     ),
-                      //     Flexible(
-                      //       child: Text('Save Beneficiary',
-                      //           style: TextStyle(
-                      //               fontWeight: FontWeight.w800,
-                      //               color: ColorConstants.whiteLighterColor,
-                      //               fontSize: 14)),
-                      //     ),
-                      //   ],
-                      // ),
-                      //SizedBox(height: 10),
-                      Divider(
-                          color: ColorConstants.whiteLighterColor),
-                      SizedBox(height: 10),
-                      PasswordTextField(
-                        icon: Icons.lock_open,
-                        textHint: 'Enter pin',
-                        controller: _pinController,
-                        labelText: 'Enter pin',
-                        onChanged: (password) {},
-                      ),
-                      SizedBox(height: 5),
-                      Text('Enter transaction pin for authorization',
-                          style: TextStyle(
-                              color: ColorConstants.secondaryColor,
-                              fontSize: 12)),
-                      SizedBox(height: 20),
-                      Align(
-                        alignment: Alignment.center,
-                        child: CustomButton(
-                            margin: 0,
-                            height: 40,
-                            disableButton: true,
-                            onPressed: () {
-                              verifySmartCardNumber();
-                            },
-                            text: 'Pay subscription now'),
-                      ),
-                      SizedBox(height: 30),
-                    ]),
-              ),
-            ),
-          )),
+                          SizedBox(height: 5),
+                          Text('Balance: NGN $nairaBalance',
+                              style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 12)),
+                          SizedBox(height: 15),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.start,
+                          //   children: [
+                          //     SizedBox(
+                          //       height: 20,
+                          //       width: 20,
+                          //       child: Checkbox(
+                          //           value: checkState,
+                          //           checkColor: ColorConstants.white,
+                          //           focusColor: ColorConstants.secondaryColor,
+                          //           activeColor: ColorConstants.secondaryColor,
+                          //           onChanged: (state) {
+                          //             setState(() {
+                          //               checkState = state;
+                          //             });
+                          //           }),
+                          //     ),
+                          //     SizedBox(
+                          //       width: 10,
+                          //     ),
+                          //     Flexible(
+                          //       child: Text('Save Beneficiary',
+                          //           style: TextStyle(
+                          //               fontWeight: FontWeight.w800,
+                          //               color: ColorConstants.whiteLighterColor,
+                          //               fontSize: 14)),
+                          //     ),
+                          //   ],
+                          // ),
+                          //SizedBox(height: 10),
+                          Divider(
+                              color: ColorConstants.whiteLighterColor),
+                          SizedBox(height: 10),
+                          PasswordTextField(
+                            icon: Icons.lock_open,
+                            textHint: 'Enter pin',
+                            controller: _pinController,
+                            labelText: 'Enter pin',
+                            onChanged: (password) {},
+                          ),
+                          SizedBox(height: 5),
+                          Text('Enter transaction pin for authorization',
+                              style: TextStyle(
+                                  color: ColorConstants.secondaryColor,
+                                  fontSize: 12)),
+                          SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: CustomButton(
+                                margin: 0,
+                                height: 40,
+                                disableButton: true,
+                                onPressed: () {
+                                  verifySmartCardNumber();
+                                },
+                                text: 'Pay subscription now'),
+                          ),
+                          SizedBox(height: 30),
+                        ]),
+                  ),
+                ),
+              )),
         ),
       ],
     );

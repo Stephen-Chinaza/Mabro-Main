@@ -33,8 +33,8 @@ class SelectDepositPaymentTypePage extends StatefulWidget {
 
 class _SelectDepositPaymentTypePageState
     extends State<SelectDepositPaymentTypePage> {
-  bool _hasTransactionStarted = false;
-  String email, user;
+
+  String email, userId;
   bool pageState;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -42,7 +42,7 @@ class _SelectDepositPaymentTypePageState
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     email = (pref.getString('email_address') ?? '');
-    user = (pref.getString('user') ?? '');
+    userId = (pref.getString('userId') ?? '');
   }
 
   var publicKey = 'pk_test_9a1befcef6741639660d3028bb8414b2216c8f04';
@@ -51,101 +51,15 @@ class _SelectDepositPaymentTypePageState
   @override
   void initState() {
     super.initState();
-    //initializing Monnify Api
-    initializeSdk();
-    //initializing Paystack Api
-    plugin.initialize(publicKey: publicKey);
+
     getData();
     pageState = false;
     print(widget.amount);
   }
 
-  //Monnify Functions
-  Future<void> initializeSdk() async {
-    try {
-      if (await a.MonnifyFlutterSdk.initialize(
-          'MK_TEST_R4AA65S34T', '4473431289', a.ApplicationMode.TEST)) {
-        //_showToast("SDK initialized!");
-      }
-    } on PlatformException catch (e, s) {}
-  } //
 
-  Future<void> initPayment() async {
-    a.TransactionResponse transactionResponse;
 
-    try {
-      transactionResponse =
-          await a.MonnifyFlutterSdk.initializePayment(a.Transaction(
-        double.tryParse(widget.amount),
-        "NGN",
-        "Customer Name",
-        email,
-        getRandomString(15),
-        "Cash Deposit to Mabro wallet",
-        metaData: {"ip": "196.168.45.22", "device": "mobile"},
-        paymentMethods: [
-          a.PaymentMethod.CARD,
-          a.PaymentMethod.ACCOUNT_TRANSFER
-        ],
-      ));
-      if (transactionResponse.transactionStatus.toLowerCase() == 'paid') {
-        verifyPayment(
-            transactionResponse.transactionReference,
-            Uri.parse(
-                'https://iceztech.com/mabro/fund-account/verify-monnify'));
-      } else {
-        ShowSnackBar.showInSnackBar(
-            value: 'Transaction failed',
-            context: context,
-            scaffoldKey: _scaffoldKey,
-            timer: 5);
-      }
-    } on PlatformException catch (e, s) {
-      print("Error initializing payment");
-      print(e);
-      print(s);
-    }
-  }
 
-  String getRandomString(int length) {
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    Random _rnd = Random();
-
-    return String.fromCharCodes(Iterable.generate(
-        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-  }
-
-  //Functions for Paystack
-  _startCharge() async {
-    setState(() {
-      _hasTransactionStarted = !_hasTransactionStarted;
-    });
-    var values = await APIService.initTransaction(
-        'sk_test_5031aae886b430022c410efb43b64b6f3f1a764d',
-        widget.amount + '00',
-        'agbo.raph123@gmail.com');
-
-    Charge _charge = Charge()
-      ..email = 'agbo.raph123@gmail.com'
-      ..amount = int.tryParse(widget.amount + '00')
-      ..accessCode = values['data']['access_code'];
-
-    CheckoutResponse _checkoutResponse = await plugin.checkout(
-      context,
-      charge: _charge,
-      method: CheckoutMethod.selectable,
-    );
-
-    if (_checkoutResponse.status == true) {
-      print(_checkoutResponse.reference);
-      verifyPayment(_checkoutResponse.reference,
-          Uri.parse('https://iceztech.com/mabro/fund-account/verify-paystack'));
-    } else {}
-    setState(() {
-      _hasTransactionStarted = !_hasTransactionStarted;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,133 +72,131 @@ class _SelectDepositPaymentTypePageState
             key: _scaffoldKey,
             body: (pageState)
                 ? loadingPage(state: pageState)
-                : (!_hasTransactionStarted)
-                    ? Padding(
+                : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    kbackBtn(context);
+                                  },
+                                  child: Icon(
+                                    Platform.isIOS
+                                        ? Icons.arrow_back_ios
+                                        : Icons.arrow_back,
+                                    size: 30,
+                                    color: Colors.black,
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            'How would you like to add money to your Mabro wallet?',
+                            style: TextStyle(
+                                color: Colors.black, fontSize: 20)),
+                      ),
+                      SizedBox(height: 40),
+                      GestureDetector(
+                        onTap: () {
+                        },
                         child: Container(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SafeArea(
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                        onTap: () {
-                                          kbackBtn(context);
-                                        },
-                                        child: Icon(
-                                          Platform.isIOS
-                                              ? Icons.arrow_back_ios
-                                              : Icons.arrow_back,
-                                          size: 30,
-                                          color: Colors.black,
-                                        )),
-                                  ],
-                                ),
+                            height: 70,
+                            color: Colors.white,
+                            child: Card(
+                              elevation: 3,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      'assets/images/monnify.png',
+                                      height: 30,
+                                      width: 30,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    color: ColorConstants
+                                        .lighterSecondaryColor
+                                        .withOpacity(0.3),
+                                    height: 70,
+                                    width: 0.5,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                        'Instant payment with Monnify',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14)),
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                  'How would you like to add money to your Mabro wallet?',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 20)),
-                            ),
-                            SizedBox(height: 40),
-                            GestureDetector(
-                              onTap: () {
-                                initPayment();
-                              },
-                              child: Container(
-                                  height: 70,
-                                  color: Colors.white,
-                                  child: Card(
-                                    elevation: 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.asset(
-                                            'assets/images/monnify.png',
-                                            height: 30,
-                                            width: 30,
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Container(
-                                          color: ColorConstants
-                                              .lighterSecondaryColor
-                                              .withOpacity(0.3),
-                                          height: 70,
-                                          width: 0.5,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              'Instant payment with Monnify',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14)),
-                                        ),
-                                      ],
+                            )),
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () async {
+
+                        },
+                        child: Container(
+                            height: 70,
+                            child: Card(
+                              elevation: 3,
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      'assets/images/paystack.png',
+                                      height: 30,
+                                      width: 30,
+                                      fit: BoxFit.contain,
                                     ),
-                                  )),
-                            ),
-                            SizedBox(height: 10),
-                            GestureDetector(
-                              onTap: () async {
-                                _startCharge();
-                              },
-                              child: Container(
-                                  height: 70,
-                                  child: Card(
-                                    elevation: 3,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.asset(
-                                            'assets/images/paystack.png',
-                                            height: 30,
-                                            width: 30,
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                        SizedBox(width: 10),
-                                        Container(
-                                          color: ColorConstants
-                                              .lighterSecondaryColor
-                                              .withOpacity(0.3),
-                                          height: 70,
-                                          width: 0.5,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              'Instant payment with Paystack',
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14)),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          ],
-                        )),
-                      )
-                    : loadingPage(state: _hasTransactionStarted)),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Container(
+                                    color: ColorConstants
+                                        .lighterSecondaryColor
+                                        .withOpacity(0.3),
+                                    height: 70,
+                                    width: 0.5,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                        'Instant payment with Paystack',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14)),
+                                  ),
+                                ],
+                              ),
+                            )),
+                      ),
+                    ],
+                  )),
+            )
+                : loadingPage(state: _hasTransactionStarted)),
       ],
     );
   }
@@ -293,7 +205,7 @@ class _SelectDepositPaymentTypePageState
     cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
-      map['user'] = user;
+      map['user'] = userId;
       map['amount'] = widget.amount;
       map['source_reference'] = paymentReference;
 

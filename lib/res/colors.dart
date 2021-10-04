@@ -17,7 +17,7 @@ class ColorConstants {
   static const Color scaffoldBackgroundColor = Color(0xFF05031A);
   static const Color white = Colors.white;
   static const Color grey = Color(0xFF8c8c8c);
-  static const Color lightSecondaryColor = Color(0xFFF2f1c41);
+  static const Color lightSecondaryColor = Color(0xFF26143A);
   static const Color lighterSecondaryColor = Color(0xFFF3f2d4f);
   static Color transparent = Colors.transparent;
   static Color lightBlue2 = Colors.white.withOpacity(0.4);

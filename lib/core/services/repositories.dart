@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mabro/core/models/all_transactions_history.dart';
-import 'package:mabro/core/models/buy_data_bundle.dart';
+import 'package:mabro/core/models/buy_9mobile_bundle.dart';
+import 'package:mabro/core/models/buy_airtel_bundle.dart';
+import 'package:mabro/core/models/buy_glo_bundle.dart';
+import 'package:mabro/core/models/buy_mtn_bundle.dart';
 import 'package:mabro/core/models/electricity_data_companies.dart';
 import 'package:mabro/core/models/list_bank.dart';
 import 'package:mabro/res/colors.dart';
@@ -77,13 +80,16 @@ Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
 
 
 
-  static Future<ListBanks> getBankLists(BuildContext context) async {
+  static Future<ListBanks> getBankLists(BuildContext context, userId) async {
     try {
       var map = Map<String, dynamic>();
+      map['userId'] = userId;
 
       var response = await http
           .post(Uri.parse('https://mabro.ng/dev/_app/list-banks'),
-          body: map)
+          body: map, headers: {
+            'Authorization': 'Bearer '+HttpService.token,
+          })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -158,7 +164,158 @@ Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
         bool status = data.status;
         String message = data.message;
         if (status) {
-          return data ;
+          print(data);
+          return data;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+
+  static Future<dataAirtelList> dataAirtelPlanList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        dataAirtelList data =
+        dataAirtelList.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          print(data);
+          return data;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+
+  static Future<dataGloList> dataGloPlanList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        dataGloList data =
+        dataGloList.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          print(data);
+          return data;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+
+  static Future<data9mobileList> data9mobilePlanList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        data9mobileList data =
+        data9mobileList.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          print(data);
+          return data;
 
         } else if (!status) {
           ShowSnackBar.showInSnackBar(

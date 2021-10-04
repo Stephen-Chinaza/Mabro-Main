@@ -249,7 +249,7 @@ class _AccountPageState extends State<AccountPage> {
                 padding: const EdgeInsets.all(4.0),
                 child:
                     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   TextStyles.textDetails(
                     textSize: 16,
                     textColor: Colors.white,
@@ -372,7 +372,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _buildBankList() {
     return FutureBuilder(
-      future: HttpService.getBankLists(context),
+      future: HttpService.getBankLists(context, userId),
       builder: (BuildContext context, AsyncSnapshot<ListBanks> snapshot) {
         if (snapshot.hasData) {
           ListBanks banks = snapshot.data;
@@ -414,21 +414,16 @@ class _AccountPageState extends State<AccountPage> {
           child: Container(
             height: 60,
             decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                  offset: Offset(0.0, 1.0),
-                  blurRadius: 1.0,
-                ),
-              ],
+              color: ColorConstants.primaryColor,
+
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(width: 10),
-                TextStyles.textSubHeadings(
+                TextStyles.textDetails(
                   textSize: 14,
+                  textColor: ColorConstants.whiteLighterColor,
                   textValue: title,
                 ),
               ],
@@ -436,7 +431,7 @@ class _AccountPageState extends State<AccountPage> {
           ),
         ),
         Divider(
-          color: Colors.grey.withOpacity(0.7),
+          color: ColorConstants.whiteLighterColor,
           height: 0.5,
         ),
       ],
