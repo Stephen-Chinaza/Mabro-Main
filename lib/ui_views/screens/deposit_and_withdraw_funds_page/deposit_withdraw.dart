@@ -438,7 +438,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                 kopenPage(
                                     context,
                                     SelectDepositPaymentTypePage(
-                                        amount: amountController.text));
+                                        amount: int.parse(amountController.text)));
                               },
                               text: 'Proceed'),
                         ),

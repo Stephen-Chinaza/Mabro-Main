@@ -2,31 +2,56 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mabro/core/models/verify_smartcard.dart';
+import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
+import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mabro/ui_views/commons/loading_page.dart';
 
-import 'request_otp.dart';
-import 'request_pin.dart';
 
 class CardPayment extends StatefulWidget {
+  final int amount;
 
+  const CardPayment({Key key, this.amount}) : super(key: key);
 
   @override
   _CardPaymentState createState() => _CardPaymentState();
 }
 
 class _CardPaymentState extends State<CardPayment>
+
      {
   final _cardFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   BuildContext loadingDialogContext;
+  String userId, nairaBalance,email;
+  bool pageState;
 
+
+  Future<void> getData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userId = (pref.getString('userId') ?? '');
+    email = (pref.getString('email_address') ?? '');
+    //userPin = (pref.getString('lock_code') ?? '');
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
+
+  }
+
+  final TextEditingController _cardPinFieldController =
+  TextEditingController();
   final TextEditingController _cardNumberFieldController =
   TextEditingController();
-  final TextEditingController _amountController =
+  final TextEditingController _emailController =
+  TextEditingController();
+  final TextEditingController _cardOtpFieldController =
   TextEditingController();
   final TextEditingController _nameController =
   TextEditingController();
@@ -35,6 +60,20 @@ class _CardPaymentState extends State<CardPayment>
   final TextEditingController _cardYearFieldController =
   TextEditingController();
   final TextEditingController _cardCvvFieldController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    pageState = false;
+
+    getData().whenComplete(() => {
+    setState(() {}),
+      _emailController.text = email,
+    });
+
+
+  }
+
 
   @override
   void dispose() {
@@ -47,7 +86,9 @@ class _CardPaymentState extends State<CardPayment>
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return (pageState)
+    ? loadingPage(state: pageState)
+        : Scaffold(
         key: this._scaffoldKey,
         backgroundColor: ColorConstants.primaryColor,
         appBar: TopBar(
@@ -135,7 +176,7 @@ class _CardPaymentState extends State<CardPayment>
                             isEditable: false,
                             onChanged: (name) {},
                             textInputType: TextInputType.text,
-                            controller: _nameController,
+                            controller: _emailController,
                           ),
                           SizedBox(height: 20),
                           NormalFields(
@@ -147,8 +188,8 @@ class _CardPaymentState extends State<CardPayment>
                             labelText: '',
                             isEditable: false,
                             onChanged: (name) {},
-                            textInputType: TextInputType.text,
-                            controller: _nameController,
+                            textInputType: TextInputType.number,
+                            controller: _cardNumberFieldController,
                           ),
                           SizedBox(height: 20),
 
@@ -170,8 +211,8 @@ class _CardPaymentState extends State<CardPayment>
                                     labelText: '',
                                     isEditable: true,
                                     onChanged: (name) {},
-                                    textInputType: TextInputType.text,
-                                    controller: _nameController,
+                                    textInputType: TextInputType.number,
+                                    controller: _cardMonthFieldController,
                                   ),
                                 ),
                               ),
@@ -189,8 +230,8 @@ class _CardPaymentState extends State<CardPayment>
                                     labelText: '',
                                     isEditable: true,
                                     onChanged: (name) {},
-                                    textInputType: TextInputType.text,
-                                    controller: _nameController,
+                                    textInputType: TextInputType.number,
+                                    controller: _cardYearFieldController,
                                   ),
                                 ),
                               ),
@@ -206,8 +247,8 @@ class _CardPaymentState extends State<CardPayment>
                                   labelText: '',
                                   isEditable: true,
                                   onChanged: (name) {},
-                                  textInputType: TextInputType.text,
-                                  controller: _nameController,
+                                  textInputType: TextInputType.number,
+                                  controller: _cardCvvFieldController,
                                 ),
                               ),
                             ],
@@ -224,8 +265,10 @@ class _CardPaymentState extends State<CardPayment>
                                 margin: 0,
                                 height: 40,
                                 disableButton: true,
-                                onPressed: () {},
-                                text: 'pay'),
+                                onPressed: () {
+                                  showInfoDialog( height:250,Widgets: popUpPinBody(),call: 'vPayment', title: 'Enter card pin', );
+                                },
+                                text: 'pay'+ widget.amount.toString()),
                           ),
                           SizedBox(height: 30),
                         ],
@@ -252,24 +295,317 @@ class _CardPaymentState extends State<CardPayment>
 
 
   }
-
-  String _validateCardField(String value) {
-    return value != null && value.trim().isEmpty ? "Please fill this" : null;
-  }
-
+  
   void _hideKeyboard() {
     FocusScope.of(this.context).requestFocus(FocusNode());
   }
 
-  void _showSnackBar(String message) {
-    SnackBar snackBar = SnackBar(
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-      ),
-    );
-    this._scaffoldKey.currentState?.showSnackBar(snackBar);
+
+  void verifyPayment() async {
+      if (_nameController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter cardholders name',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (_emailController.text.isEmpty) {
+        ShowSnackBar.showInSnackBar(
+            value: 'email address',
+            context: context,
+            scaffoldKey: _scaffoldKey);
+      } else if (_cardNumberFieldController.text.isEmpty) {
+        ShowSnackBar.showInSnackBar(
+            value: 'Enter amount to withdraw',
+            context: context,
+            scaffoldKey: _scaffoldKey);
+
+    } else if (_cardMonthFieldController.text.isEmpty) {
+        ShowSnackBar.showInSnackBar(
+            value: 'Enter amount to withdraw',
+            context: context,
+            scaffoldKey: _scaffoldKey);
+
+      }else if (_cardYearFieldController.text.isEmpty) {
+        ShowSnackBar.showInSnackBar(
+            value: 'Enter amount to withdraw',
+            context: context,
+            scaffoldKey: _scaffoldKey);
+
+      }else if (_cardCvvFieldController.text.isEmpty) {
+        ShowSnackBar.showInSnackBar(
+            value: 'Enter amount to withdraw',
+            context: context,
+            scaffoldKey: _scaffoldKey);
+
+      }
+      else {
+      cPageState(state: true);
+      try {
+        var map = Map<String, dynamic>();
+        map['userId'] = userId;
+        map['name'] = _nameController.text;
+        map['email_address'] = email;
+        map['card_number'] = int.parse(_cardNumberFieldController.text);
+        map['cvv'] = int.parse(_cardCvvFieldController.text);
+        map['exp_month'] = int.parse(_cardMonthFieldController.text);
+        map['exp_year'] = int.parse(_cardYearFieldController.text);
+        map['pin'] = int.parse(_cardPinFieldController.text);
+        map['amount'] = widget.amount;
+
+        var response = await http
+            .post(HttpService.rootVerifySmartCard, body: map)
+            .timeout(const Duration(seconds: 15), onTimeout: () {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              value: 'The connection has timed out, please try again!',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+          return null;
+        });
+
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+
+          VerifySmartcard verifySmartcard = VerifySmartcard.fromJson(body);
+
+          bool status = verifySmartcard.status;
+          String message = verifySmartcard.message;
+          if (status) {
+            cPageState(state: false);
+
+            String authMode = verifySmartcard.data.authMode;
+
+            if(authMode == 'otp'){
+              showInfoDialog(height: 250,Widgets:  popUpOtpBody(),title: 'Enter OTP',call: 'otp',);
+
+            }else if (authMode == 'redirect'){
+
+            }
+            //redirectPage();
+          } else if (!status) {
+            cPageState(state: false);
+            ShowSnackBar.showInSnackBar(
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+          }
+        } else {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              value: 'network error',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } on SocketException {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'check your internet connection',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    }
   }
 
+  void verifyOtp() async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+      map['api_reference'] = _nameController.text;
+      map['api_id'] = email;
+      map['otp'] = int.parse(_cardNumberFieldController.text);
+      map['reference'] = int.parse(_cardCvvFieldController.text);
+
+
+      var response = await http
+          .post(HttpService.rootVerifySmartCard, body: map)
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        VerifySmartcard verifySmartcard = VerifySmartcard.fromJson(body);
+
+        bool status = verifySmartcard.status;
+        String message = verifySmartcard.message;
+        if (status) {
+          cPageState(state: false);
+
+          String authMode = verifySmartcard.data.authMode;
+
+          if(authMode == 'otp'){
+            showInfoDialog(height: 250,Widgets:  popUpPinBody(),title: 'Enter OTP',call: 'otp',);
+
+          }else if (authMode == 'redirect'){
+
+          }
+          //redirectPage();
+        } else if (!status) {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      cPageState(state: false);
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+
+  }
+
+
+  void showInfoDialog({double height, Widget Widgets, String call, String title = 'Info'}) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            child: Stack(
+              children: [
+                Container(
+                  color: ColorConstants.primaryColor,
+                  height: height,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: ColorConstants.primaryLighterColor),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Widgets,
+                        ),
+                        Center(
+                          child: CustomButton(
+                              margin: 0,
+                              width: 130,
+                              disableButton: true,
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                if(call == 'vPayment'){
+                                  verifyPayment();
+
+                                }else if(call == 'otp'){
+                                  verifyOtp();
+                                }
+                              },
+                              text: 'Continue'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget popUpPinBody() {
+    return Column(
+      children: [
+        NormalFields(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          hintSize: 13,
+          hintText: 'Enter card pin',
+          labelText: '',
+          isEditable: true,
+          onChanged: (name) {},
+          textInputType: TextInputType.text,
+          controller: _cardPinFieldController,
+        ),
+        SizedBox(height: 20,),
+      ],
+    );
+  }
+
+  Widget popUpOtpBody() {
+    return Column(
+      children: [
+        NormalFields(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
+          hintSize: 13,
+          hintText: 'Enter Otp',
+          labelText: '',
+          isEditable: true,
+          onChanged: (name) {},
+          textInputType: TextInputType.text,
+          controller: _cardOtpFieldController,
+        ),
+        SizedBox(height: 20,),
+      ],
+    );
+  }
+
+  void cPageState({bool state = false}) {
+    setState(() {
+      pageState = state;
+    });
+  }
 
 }
