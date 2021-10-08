@@ -27,7 +27,7 @@ class BottomSheetHeader extends StatelessWidget {
                   children: [
                     TextStyles.textDetails(
                       textSize: 16,
-                      textColor: Colors.white,
+                      textColor: ColorConstants.secondaryColor,
                       textValue: buttomSheetTitle.toUpperCase(),
                     ),
                     GestureDetector(

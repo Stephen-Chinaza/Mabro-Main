@@ -23,105 +23,105 @@ class DemoData {
       title: "Deposit/Withdraw",
       icon: Typicons.device_laptop,
     ),
-        HomeMenu(
-          title: "P2P \n Exchange",
-          icon: Typicons.chart_line,
-        ),
-        HomeMenu(
-          title: "Giftcard",
-          icon: Typicons.gift,
-        ),
+    HomeMenu(
+      title: "P2P \n Exchange",
+      icon: Typicons.chart_line,
+    ),
+    HomeMenu(
+      title: "Giftcard",
+      icon: Typicons.gift,
+    ),
 
-        HomeMenu(
-          title: "Receive/Transfer BTC",
-          icon: Typicons.globe,
-        ),
-        HomeMenu(
-          title: "Buy Social Media Likes",
-          icon: Typicons.social_facebook,
-        ),
+    HomeMenu(
+      title: "Receive/Transfer BTC",
+      icon: Typicons.globe,
+    ),
+    HomeMenu(
+      title: "Buy Social Media Likes",
+      icon: Typicons.social_facebook,
+    ),
 
-        HomeMenu(
-          title: "Updates",
-          icon: Icons.info,
-        ),
-      ];
+    HomeMenu(
+      title: "Updates",
+      icon: Icons.info,
+    ),
+  ];
 
   static List<HomeMenu> get subs => [
-        HomeMenu(
-          title: "Data Recharge",
-          icon: Icons.data_usage_sharp,
-        ),
-        HomeMenu(
-          title: "Quick Airtime",
-          icon: Icons.receipt_long_sharp,
-        ),
-        HomeMenu(
-          title: "Tv Subscription",
-          icon: Icons.tv,
-        ),
-        HomeMenu(
-          title: "Electricity",
-          icon: Icons.wifi_rounded,
-        ),
-        HomeMenu(
-          title: "Updates",
-          icon: Icons.info,
-        ),
-      ];
+    HomeMenu(
+      title: "Data Recharge",
+      icon: Icons.data_usage_sharp,
+    ),
+    HomeMenu(
+      title: "Quick Airtime",
+      icon: Icons.receipt_long_sharp,
+    ),
+    HomeMenu(
+      title: "Tv Subscription",
+      icon: Icons.tv,
+    ),
+    HomeMenu(
+      title: "Electricity",
+      icon: Icons.wifi_rounded,
+    ),
+    HomeMenu(
+      title: "Updates",
+      icon: Icons.info,
+    ),
+  ];
 
   static List<ImageList> get images => [
-        ImageList(image: 'assets/images/mtn.png', title: 'MTN', color: Colors.yellow),
-        ImageList(image: 'assets/images/glo.png', title: 'GLO',color: Colors.green[600]),
-        ImageList(image: 'assets/images/airtel.jpg', title: 'AIRTEL',color: Colors.white),
-        ImageList(image: 'assets/images/9mobile.png', title: '9MOBILE',color: Colors.black12),
-      ];
+    ImageList(image: 'assets/images/mtn.png', title: 'MTN', color: Colors.yellow),
+    ImageList(image: 'assets/images/glo.png', title: 'GLO',color: Colors.green[900]),
+    ImageList(image: 'assets/images/airtel.jpg', title: 'AIRTEL',color: Colors.white),
+    ImageList(image: 'assets/images/9mobile.png', title: '9MOBILE',color: Colors.black26),
+  ];
 
   static List<ImageList> get subImages => [
-        ImageList(image: 'assets/images/dstv.jpg', title: 'DSTV'),
-        ImageList(image: 'assets/images/gotv.png', title: 'GOTV'),
-        ImageList(image: 'assets/images/startimes.jpg', title: 'STARTIMES'),
-      ];
+    ImageList(image: 'assets/images/dstv.jpg', title: 'DSTV'),
+    ImageList(image: 'assets/images/gotv.jpg', title: 'GOTV'),
+    ImageList(image: 'assets/images/startimes.jpg', title: 'STARTIMES'),
+  ];
 
   static List<ImageList> get electricityImages => [
-        ImageList(
-            image: 'assets/images/ekoelect.jpg',
-            title: 'Eko Electricity Distribution Company'),
-        ImageList(
-            image: 'assets/images/ikejaelect.png',
-            title: 'Ikeja Electricity Distribution Company'),
-        ImageList(
-            image: 'assets/images/kanoelect.png',
-            title: 'Kano Electricity Distribution Company'),
-        ImageList(
-            image: 'assets/images/eedcelect.png',
-            title: 'Enugu Electricity Distribution Company'),
-      ];
+    ImageList(
+        image: 'assets/images/ekoelect.jpg',
+        title: 'Eko Electricity Distribution Company'),
+    ImageList(
+        image: 'assets/images/ikejaelect.png',
+        title: 'Ikeja Electricity Distribution Company'),
+    ImageList(
+        image: 'assets/images/kanoelect.png',
+        title: 'Kano Electricity Distribution Company'),
+    ImageList(
+        image: 'assets/images/eedcelect.png',
+        title: 'Enugu Electricity Distribution Company'),
+  ];
 
   static List<TextList> get text => [
-        TextList(text: 'Mabro NGN Wallet'),
-        TextList(text: 'Bank transfer'),
-      ];
+    TextList(text: 'Mabro NGN Wallet'),
+    TextList(text: 'Bank transfer'),
+  ];
 
   static List<CoinList> get coinlists => [
-        CoinList(
-            title: 'Bitcoin',
-            image: 'assets/images/btc.jpg',
-            subtitle: 'BTC',
-            rate: '19,780,207.92',
-            rise: '+ 1.50%',
-            usdRate: 'bitUSD'),
-      ];
+    CoinList(
+        title: 'Bitcoin',
+        image: 'assets/images/btc.jpg',
+        subtitle: 'BTC',
+        rate: '19,780,207.92',
+        rise: '+ 1.50%',
+        usdRate: 'bitUSD'),
+  ];
 
   static List<AirtimeList> get airtime => [
-        AirtimeList(amount: 'NGN100'),
-        AirtimeList(amount: 'NGN200'),
-        AirtimeList(amount: 'NGN300'),
-        AirtimeList(amount: 'NGN400'),
-        AirtimeList(amount: 'NGN500'),
-        AirtimeList(amount: 'NGN1000'),
-        AirtimeList(amount: 'NGN2000'),
-      ];
+    AirtimeList(amount: 'NGN100'),
+    AirtimeList(amount: 'NGN200'),
+    AirtimeList(amount: 'NGN300'),
+    AirtimeList(amount: 'NGN400'),
+    AirtimeList(amount: 'NGN500'),
+    AirtimeList(amount: 'NGN1000'),
+    AirtimeList(amount: 'NGN2000'),
+  ];
 
   static List<String> banks = [
     ' Access Bank Plc',

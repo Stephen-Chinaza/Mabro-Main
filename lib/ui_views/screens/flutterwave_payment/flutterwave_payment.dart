@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/opt_verification.dart';
 import 'package:mabro/core/models/verify_smartcard.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
@@ -437,6 +439,7 @@ class _CardPaymentState extends State<CardPayment>
   }
 
   void verifyOtp() async {
+    cPageState(state: false);
     try {
       var map = Map<String, dynamic>();
       map['userId'] = userId;
@@ -477,6 +480,7 @@ class _CardPaymentState extends State<CardPayment>
               scaffoldKey: _scaffoldKey,
               timer: 5);
 
+          kopenPage(context, LandingPage());
           SharedPrefrences.addStringToSP("nairaBalance", balance);
 
         } else if (!status) {

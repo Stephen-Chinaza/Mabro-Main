@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
     userId = (pref.getString('userId') ?? '');
     email = (pref.getString('email') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
-    firstname = (pref.getString('first_name') ?? 'stephen');
+    firstname = (pref.getString('first_name') ?? '');
 
     if (firstname == '') {
       username = '';

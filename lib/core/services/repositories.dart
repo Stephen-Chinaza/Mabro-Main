@@ -9,6 +9,8 @@ import 'package:mabro/core/models/buy_glo_bundle.dart';
 import 'package:mabro/core/models/buy_mtn_bundle.dart';
 import 'package:mabro/core/models/electricity_data_companies.dart';
 import 'package:mabro/core/models/list_bank.dart';
+import 'package:mabro/core/models/tv_data_companies/dstv.dart';
+import 'package:mabro/core/models/tv_data_companies/startimes_data.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'dart:io';
@@ -80,7 +82,7 @@ Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
   static var rootVerifyCardPayment =
   Uri.parse('https://mabro.ng/dev/_app/naira-wallet/fund');
   static var rootVerifyOtp =
-  Uri.parse('https://mabro.ng/dev/_app/naira-wallt/verify-OTP');
+  Uri.parse('https://mabro.ng/dev/_app/naira-wallet/verify-OTP');
 
 
 
@@ -159,6 +161,105 @@ Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
 
         dataMtnList data =
         dataMtnList.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          print(data);
+          return data;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+
+  static Future<DstvCompany> dstvPlanList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        DstvCompany data =
+        DstvCompany.fromJson(body);
+
+        bool status = data.status;
+        String message = data.message;
+        if (status) {
+          print(data);
+          return data;
+
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          timer: 5);
+    }
+  }
+  static Future<StartimesDataCompany> startimesPlanList(
+      BuildContext context, String userId, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response = await http
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        StartimesDataCompany data =
+        StartimesDataCompany.fromJson(body);
 
         bool status = data.status;
         String message = data.message;

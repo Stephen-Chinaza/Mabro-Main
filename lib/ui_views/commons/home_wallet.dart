@@ -20,7 +20,7 @@ class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
 
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    nairaBalance = (pref.getString('naria_balance') ?? '');
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
     btcBalance = (pref.getString('bitcoin_balance') ?? '');
 
     setState(() {});

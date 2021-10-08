@@ -387,7 +387,7 @@ class _SelectedElectricitySubPageState
           SizedBox(height: 6),
           buildElectricity(
             context,
-              HttpService.rootElectricityCompanyList,
+            HttpService.rootElectricityCompanyList,
 
           ),
         ]),

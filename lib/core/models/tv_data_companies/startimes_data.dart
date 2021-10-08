@@ -1,11 +1,11 @@
-class TvDataCompanies {
+class StartimesDataCompany {
   bool status;
   String message;
   Data data;
 
-  TvDataCompanies({this.status, this.message, this.data});
+  StartimesDataCompany({this.status, this.message, this.data});
 
-  TvDataCompanies.fromJson(Map<String, dynamic> json) {
+  StartimesDataCompany.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -23,30 +23,29 @@ class TvDataCompanies {
 }
 
 class Data {
-  List<Dstv> dstv;
+  List<Startimes> startimes;
 
-
-  Data({this.dstv,});
+  Data({this.startimes});
 
   Data.fromJson(Map<String, dynamic> json) {
-    if (json['dstv'] != null) {
-      dstv = new List<Dstv>();
-      json['dstv'].forEach((v) {
-        dstv.add(new Dstv.fromJson(v));
+    if (json['startimes'] != null) {
+      startimes = new List<Startimes>();
+      json['startimes'].forEach((v) {
+        startimes.add(new Startimes.fromJson(v));
       });
     }
-
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.dstv != null) {
-      data['dstv'] = this.dstv.map((v) => v.toJson()).toList();
+    if (this.startimes != null) {
+      data['startimes'] = this.startimes.map((v) => v.toJson()).toList();
     }
+    return data;
   }
 }
 
-class Dstv {
+class Startimes {
   String apiSource;
   String serviceId;
   String name;
@@ -60,7 +59,7 @@ class Dstv {
   String createdAt;
   String updatedAt;
 
-  Dstv(
+  Startimes(
       {this.apiSource,
         this.serviceId,
         this.name,
@@ -74,7 +73,7 @@ class Dstv {
         this.createdAt,
         this.updatedAt});
 
-  Dstv.fromJson(Map<String, dynamic> json) {
+  Startimes.fromJson(Map<String, dynamic> json) {
     apiSource = json['api_source'];
     serviceId = json['service_id'];
     name = json['name'];

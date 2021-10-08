@@ -175,7 +175,7 @@ class _BalanceCardState extends State<BalanceCard>
                     Text(
                       (showBalanceState) ? widget.amount : '******',
                       style: TextStyle(
-                        fontSize: 25,
+                        fontSize:20,
                         color: ColorConstants.whiteLighterColor,
                         fontWeight: FontWeight.w800,
                       ),
