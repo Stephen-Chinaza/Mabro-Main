@@ -24,13 +24,13 @@ class _LandingPageState extends State<LandingPage> {
 
   StreamController<int> indexcontroller = StreamController<int>.broadcast();
   int index = 0;
-  String user;
+  String userId;
   String userPin = '';
   bool pinState;
 
   Future<void> checkFirstScreen() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    user = (pref.getString('user') ?? '');
+    userId = (pref.getString('userId') ?? '');
     pinState = (pref.getBool('pinState') ?? false);
     userPin = (pref.getString('lock_code') ?? '');
 
@@ -65,7 +65,7 @@ class _LandingPageState extends State<LandingPage> {
           HomePage(),
           WalletPage(),
           AllTransactions(
-            user: user,
+            user: userId,
           ),
           MenuPage(),
         ],

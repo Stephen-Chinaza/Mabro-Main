@@ -885,14 +885,27 @@ class _HomePageState extends State<HomePage> {
           if (status) {
 
             //String otp = userInfo.data.oTP;
-            userId = userInfo.data.bvns.user;
+            userId = userInfo.data.settings.user;
 
-            String accountName = userInfo.data.account.accountName.toString();
-            String accountNumber = userInfo.data.account.accountNumber.toString();
-            String bankName = userInfo.data.account.bankName.toString();
-            String firstName = userInfo.data.bvns.firstName.toString();
-            String surName = userInfo.data.bvns.surname.toString();
-            String bvn = userInfo.data.bvns.bvn.toString();
+
+              String firstName = userInfo.data.bvns.firstName.toString();
+              String surName = userInfo.data.bvns.surname.toString();
+              String bvn = userInfo.data.bvns.bvn.toString();
+
+              SharedPrefrences.addStringToSP("bvn", bvn);
+              SharedPrefrences.addStringToSP("first_name", firstName);
+              SharedPrefrences.addStringToSP("surname", surName);
+
+
+
+
+              String accountName = userInfo.data.account.accountName.toString();
+              String accountNumber = userInfo.data.account.accountNumber.toString();
+              String bankName = userInfo.data.account.bankName.toString();
+              SharedPrefrences.addStringToSP("account_name", accountName);
+              SharedPrefrences.addStringToSP("bank_name", bankName);
+
+
 
             String emailTransactionNotification = userInfo.data.settings.emailTransactionNotification.toString();
             String smsNotification = userInfo.data.settings.smsNotification.toString();
@@ -902,14 +915,7 @@ class _HomePageState extends State<HomePage> {
 
 
             SharedPrefrences.addStringToSP("userId", userId);
-
-            SharedPrefrences.addStringToSP("account_name", accountName);
             SharedPrefrences.addStringToSP("account_number", accountNumber);
-            SharedPrefrences.addStringToSP("bank_name", bankName);
-            SharedPrefrences.addStringToSP("bvn", bvn);
-            SharedPrefrences.addStringToSP("first_name", firstName);
-            SharedPrefrences.addStringToSP("surname", surName);
-
 
             SharedPrefrences.addStringToSP("sms_notification", smsNotification);
             SharedPrefrences.addStringToSP("email_transaction_notification", emailTransactionNotification);

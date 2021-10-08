@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mabro/core/helpers/sharedprefrences.dart';
+import 'package:mabro/core/models/opt_verification.dart';
 import 'package:mabro/core/models/verify_smartcard.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -34,6 +36,7 @@ class _CardPaymentState extends State<CardPayment>
   BuildContext loadingDialogContext;
   String userId, nairaBalance,email;
   bool pageState;
+  String apiReference,apiId,reference;
 
 
   Future<void> getData() async {
@@ -106,33 +109,7 @@ class _CardPaymentState extends State<CardPayment>
             padding: const EdgeInsets.all(1.0),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(30.0),
-                          child: Container(
-                            color: ColorConstants.primaryLighterColor,
-                              height: 45,width: 45,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset('assets/images/flutterwave.png', height: 40,width: 40,),
-                              ))),
-                    Row(children: [
-                      Icon(Icons.lock, color: ColorConstants.whiteLighterColor, size: 18,),
-                      SizedBox(width: 5,),
-                      Text(
-                        "Secured by flutterwave.",
-                        style: TextStyle(
-                            color: Colors.yellow[700],
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],)
-                  ],),
-                ),
+
                 Container(
                   width: double.infinity,
                   child: Card(
@@ -142,6 +119,34 @@ class _CardPaymentState extends State<CardPayment>
                       child: Column(
                         children: [
                           SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ClipRRect(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    child: Container(
+                                        color: ColorConstants.primaryLighterColor,
+                                        height: 45,width: 45,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Image.asset('assets/images/flutterwave.png', height: 40,width: 40,),
+                                        ))),
+                                Row(children: [
+                                  Icon(Icons.lock, color: ColorConstants.whiteLighterColor, size: 18,),
+                                  SizedBox(width: 5,),
+                                  Text(
+                                    "Secured by flutterwave.",
+                                    style: TextStyle(
+                                        color: Colors.yellow[700],
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],)
+                              ],),
+                          ),
+                          SizedBox(height: 20),
                           Container(
                             width: double.infinity,
                             child: Text(
@@ -268,7 +273,7 @@ class _CardPaymentState extends State<CardPayment>
                                 onPressed: () {
                                   showInfoDialog( height:250,Widgets: popUpPinBody(),call: 'vPayment', title: 'Enter card pin', );
                                 },
-                                text: 'pay'+ widget.amount.toString()),
+                                text: 'Pay NGN'+ widget.amount.toString()),
                           ),
                           SizedBox(height: 30),
                         ],
@@ -352,7 +357,7 @@ class _CardPaymentState extends State<CardPayment>
         map['amount'] = widget.amount;
 
         var response = await http
-            .post(HttpService.rootVerifySmartCard, body: map)
+            .post(HttpService.rootVerifyCardPayment, body: map)
             .timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -374,6 +379,9 @@ class _CardPaymentState extends State<CardPayment>
             cPageState(state: false);
 
             String authMode = verifySmartcard.data.authMode;
+             apiReference = verifySmartcard.data.apiReference;
+            apiId = verifySmartcard.data.apiId.toString();
+            reference = verifySmartcard.data.reference;
 
             if(authMode == 'otp'){
               showInfoDialog(height: 250,Widgets:  popUpOtpBody(),title: 'Enter OTP',call: 'otp',);
@@ -413,10 +421,10 @@ class _CardPaymentState extends State<CardPayment>
     try {
       var map = Map<String, dynamic>();
       map['userId'] = userId;
-      map['api_reference'] = _nameController.text;
-      map['api_id'] = email;
-      map['otp'] = int.parse(_cardNumberFieldController.text);
-      map['reference'] = int.parse(_cardCvvFieldController.text);
+      map['api_reference'] = apiReference;
+      map['api_id'] = apiId;
+      map['otp'] = int.parse(_cardOtpFieldController.text);
+      map['reference'] = reference;
 
 
       var response = await http
@@ -434,22 +442,22 @@ class _CardPaymentState extends State<CardPayment>
       if (response.statusCode == 200) {
         var body = jsonDecode(response.body);
 
-        VerifySmartcard verifySmartcard = VerifySmartcard.fromJson(body);
+        OtpVerification otpVerification = OtpVerification.fromJson(body);
 
-        bool status = verifySmartcard.status;
-        String message = verifySmartcard.message;
+        bool status = otpVerification.status;
+        String message = otpVerification.message;
         if (status) {
           cPageState(state: false);
+          String balance = otpVerification.data.balance.toString();
 
-          String authMode = verifySmartcard.data.authMode;
+          ShowSnackBar.showInSnackBar(
+              value: message+ ' ' +otpVerification.data.amount.toString() + ' was added to your account',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
 
-          if(authMode == 'otp'){
-            showInfoDialog(height: 250,Widgets:  popUpPinBody(),title: 'Enter OTP',call: 'otp',);
+          SharedPrefrences.addStringToSP("nairaBalance", balance);
 
-          }else if (authMode == 'redirect'){
-
-          }
-          //redirectPage();
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -568,12 +576,12 @@ class _CardPaymentState extends State<CardPayment>
               .of(context)
               .size
               .width,
-          hintSize: 13,
+          hintSize: 16,
           hintText: 'Enter card pin',
           labelText: '',
           isEditable: true,
           onChanged: (name) {},
-          textInputType: TextInputType.text,
+          textInputType: TextInputType.number,
           controller: _cardPinFieldController,
         ),
         SizedBox(height: 20,),

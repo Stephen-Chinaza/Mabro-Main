@@ -19,10 +19,12 @@ class _AllTransactionsState extends State<AllTransactions>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
+
   @override
   void initState() {
-    _tabController = new TabController(length: 4, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this);
     super.initState();
+
   }
 
   @override
@@ -41,17 +43,15 @@ class _AllTransactionsState extends State<AllTransactions>
             ),
             centerTitle: false,
             title: new Text("Transactions History",
-                style: TextStyle(fontSize: 14, color: ColorConstants.whiteLighterColor,)),
+                style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor,)),
             automaticallyImplyLeading: false,
             bottom: TabBar(
-              isScrollable: true,
+
+              isScrollable: false,
               tabs: [
                 new Tab(text: 'All'),
                 new Tab(
                   text: 'Successful',
-                ),
-                new Tab(
-                  text: 'Declined',
                 ),
                 new Tab(
                   text: 'Pending',
@@ -75,13 +75,12 @@ class _AllTransactionsState extends State<AllTransactions>
               TabBarView(
                 children: [
                   buildTransactionHistory(
-                      context, 'https://iceztech.com/mabro/account/transactions'),
+                      context, 'https://mabro.ng/dev/_app/transactions/all'),
                   buildTransactionHistory(context,
-                      'https://iceztech.com/mabro/account/transactions/success'),
+                      'https://mabro.ng/dev/_app/transactions/all/completed'),
                   buildTransactionHistory(context,
-                      'https://iceztech.com/mabro/account/transactions/pending'),
-                  buildTransactionHistory(context,
-                      'https://iceztech.com/mabro/account/transactions/declined'),
+                      'https://mabro.ng/dev/_app/transactions/all/pending'),
+
                 ],
                 controller: _tabController,
               ),
@@ -101,28 +100,28 @@ class _AllTransactionsState extends State<AllTransactions>
         AllTransactionHistory allTransactionHistory = snapshot.data;
 
         if (snapshot.hasData) {
-          if (allTransactionHistory.data.length == 0) {
+          if (allTransactionHistory.data.transactions.length == 0) {
             return Center(
               child: Text(
                 'No Results for this transaction',
                 style: TextStyle(
-                    fontSize: 16, color: ColorConstants.secondaryColor),
+                    fontSize: 16, color: ColorConstants.secondaryColor, fontWeight: FontWeight.w200),
               ),
             );
           } else {
             return ListView.builder(
-              itemCount: allTransactionHistory.data.length,
+              itemCount: allTransactionHistory.data.transactions.length,
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, index) {
                 return Container(
                   child: transactionList(
-                      amount: allTransactionHistory.data[index].amount,
-                      createdDate: allTransactionHistory.data[index].createdAt,
-                      transactionTitle: allTransactionHistory.data[index].title,
+                      amount: allTransactionHistory.data.transactions[index].amount.toString(),
+                      createdDate: allTransactionHistory.data.transactions[index].createdAt,
+                      transactionTitle: allTransactionHistory.data.transactions[index].activity,
                       transactionDetails:
-                          allTransactionHistory.data[index].description,
-                      currency: allTransactionHistory.data[index].currency),
-                );
+                          allTransactionHistory.data.transactions[index].description,
+                      currency: 'NGN',
+                ));
               },
             );
           }
@@ -130,21 +129,14 @@ class _AllTransactionsState extends State<AllTransactions>
           return Center(
             child: GestureDetector(
               onTap: () {
-                setState(() {});
+                setState(() {
+
+                });
               },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Error in network',
-                    style: TextStyle(
-                        fontSize: 16, color: ColorConstants.whiteLighterColor),
-                  ),
-                  Icon(
-                    Icons.refresh,
-                    size: 25,
-                  )
-                ],
+              child: Text(
+                'Error in network',
+                style: TextStyle(
+                    fontSize: 16, color: ColorConstants.whiteLighterColor),
               ),
             ),
           );

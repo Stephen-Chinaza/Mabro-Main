@@ -128,7 +128,6 @@ class TransactionContainer extends StatelessWidget {
                 );
               });
 
-
         },
         child: Container(
           height: 90,

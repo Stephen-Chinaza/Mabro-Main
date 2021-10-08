@@ -36,7 +36,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
   BuildContext mcontext;
   bool showCharges, isAccountSet;
   int chargeAmount;
-  String userPin, user;
+  String userPin, userId;
   bool pageState;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -76,7 +76,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     accountName = (pref.getString('account_name') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
     bankName = (pref.getString('bank_name') ?? '');
-    user = (pref.getString('userId') ?? '');
+    userId = (pref.getString('userId') ?? '');
     userPin = (pref.getString('lock_code') ?? '');
     nairaBalance = (pref.getString('nairaBalance') ?? '');
 
@@ -159,6 +159,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
+        height: MediaQuery.of(context).size.height;
         child: Card(
           color: ColorConstants.primaryLighterColor,
           child: Padding(
@@ -168,7 +169,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
               children: [
                 Text('How much do you want to deposit?',
                     style: TextStyle(
-                        color: ColorConstants.whiteColor, fontSize: 18)),
+                        color: ColorConstants.secondaryColor, fontSize: 18)),
                 SizedBox(height: 20),
                 NormalFields(
                   width: MediaQuery.of(context).size.width,
@@ -219,12 +220,12 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
             Text('Deposit Amount',
                 style: TextStyle(
                     color: ColorConstants.whiteLighterColor,
-                    fontSize: 16,
+                    fontSize: 14,
                     )),
             Text('NGN ' + amountController.text,
                 style: TextStyle(
                     color: ColorConstants.whiteLighterColor,
-                    fontSize: 16,
+                    fontSize: 14,
                     )),
           ],
         ),
@@ -237,12 +238,12 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
             Text('Processing fee',
                 style: TextStyle(
                     color: ColorConstants.whiteLighterColor,
-                    fontSize: 16,
+                    fontSize: 14,
                     )),
             Text('NGN 0.00',
                 style: TextStyle(
                     color: ColorConstants.whiteLighterColor,
-                    fontSize: 16,
+                    fontSize: 14,
                     )),
           ],
         ),
@@ -252,7 +253,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
         Text('NGN ' + amountController.text,
             style: TextStyle(
                 color: ColorConstants.whiteLighterColor,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.bold)),
         SizedBox(
           height: 20,
@@ -265,6 +266,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
+        height: MediaQuery.of(context).size.height;
         child: Card(
           color: ColorConstants.primaryLighterColor,
           child: Padding(
@@ -274,7 +276,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
               children: [
                 Text('Request a withdrawal',
                     style: TextStyle(
-                        color: ColorConstants.whiteColor, fontSize: 18)),
+                        color: ColorConstants.secondaryColor, fontSize: 18)),
                 SizedBox(height: 20),
                 Text(
                     'You can withdraw funds only to the card or wallet that was used to credit funds to your balance',
@@ -417,7 +419,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
-                                        size: 30,
+                                        size: 28,
                                       ),
                                     ))
                               ],
@@ -549,7 +551,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
-        map['user'] = user;
+        map['userId'] = userId;
         map['amount'] = withdrawAmountController.text;
 
         var response = await http

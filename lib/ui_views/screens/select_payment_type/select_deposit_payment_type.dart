@@ -75,7 +75,7 @@ class _SelectDepositPaymentTypePageState
             body: (pageState)
                 ? loadingPage(state: pageState)
                 : Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(4.0),
               child: Container(
                   child: Card(
                     color: ColorConstants.primaryLighterColor,
@@ -89,9 +89,9 @@ class _SelectDepositPaymentTypePageState
                           child: Text(
                               'How would you like to add money to your Mabro wallet?',
                               style: TextStyle(
-                                  color: ColorConstants.whiteColor, fontSize: 20)),
+                                  color: ColorConstants.secondaryColor, fontSize: 20)),
                         ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 10),
                         // GestureDetector(
                         //   onTap: () {
                         //   },
@@ -135,12 +135,15 @@ class _SelectDepositPaymentTypePageState
                         //       )),
                         // ),
                         SizedBox(height: 10),
+
+                        Divider(                                color: ColorConstants.whiteLighterColor,
+                        ),
                         GestureDetector(
                           onTap: () async {
                             kopenPage(context, CardPayment(amount: widget.amount,));
                           },
                           child: Container(
-                              height: 70,
+                              height: 80,
                               child: Card(
                                 elevation: 3,
                                 child: Row(
@@ -170,7 +173,7 @@ class _SelectDepositPaymentTypePageState
                                       child: Text(
                                           'Instant payment with FlutterWave',
                                           style: TextStyle(
-                                              color: Colors.black,
+                                              color: ColorConstants.whiteLighterColor,
                                               fontSize: 14)),
                                     ),
                                   ],

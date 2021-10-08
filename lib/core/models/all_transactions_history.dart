@@ -1,64 +1,79 @@
 class AllTransactionHistory {
-  String message;
   bool status;
-  List<Data> data;
+  String message;
+  Data data;
 
-  AllTransactionHistory({this.message, this.status, this.data});
+  AllTransactionHistory({this.status, this.message, this.data});
 
   AllTransactionHistory.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
     status = json['status'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data.add(new Data.fromJson(v));
-      });
-    }
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
     data['status'] = this.status;
+    data['message'] = this.message;
     if (this.data != null) {
-      data['data'] = this.data.map((v) => v.toJson()).toList();
+      data['data'] = this.data.toJson();
     }
     return data;
   }
 }
 
 class Data {
+  List<Transactions> transactions;
+
+  Data({this.transactions});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['transactions'] != null) {
+      transactions = new List<Transactions>();
+      json['transactions'].forEach((v) {
+        transactions.add(new Transactions.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.transactions != null) {
+      data['transactions'] = this.transactions.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Transactions {
   String user;
-  String amount;
-  String currency;
-  String reference;
-  String title;
+  String activity;
   String description;
+  int amount;
   String status;
+  String reference;
   String id;
   String createdAt;
   String updatedAt;
 
-  Data(
+  Transactions(
       {this.user,
-      this.amount,
-      this.currency,
-      this.reference,
-      this.title,
-      this.description,
-      this.status,
-      this.id,
-      this.createdAt,
-      this.updatedAt});
+        this.activity,
+        this.description,
+        this.amount,
+        this.status,
+        this.reference,
+        this.id,
+        this.createdAt,
+        this.updatedAt});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Transactions.fromJson(Map<String, dynamic> json) {
     user = json['user'];
-    amount = json['amount'];
-    currency = json['currency'];
-    reference = json['reference'];
-    title = json['title'];
+    activity = json['activity'];
     description = json['description'];
+    amount = json['amount'];
     status = json['status'];
+    reference = json['reference'];
     id = json['id'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -67,12 +82,11 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['user'] = this.user;
-    data['amount'] = this.amount;
-    data['currency'] = this.currency;
-    data['reference'] = this.reference;
-    data['title'] = this.title;
+    data['activity'] = this.activity;
     data['description'] = this.description;
+    data['amount'] = this.amount;
     data['status'] = this.status;
+    data['reference'] = this.reference;
     data['id'] = this.id;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;

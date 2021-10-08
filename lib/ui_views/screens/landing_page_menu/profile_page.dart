@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/screens/menu_option_pages/account_page.dart';
@@ -14,7 +15,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String firstname, surname, user, email, phone, accountname, accountnumber;
+  String firstname, surname, userId, email, phone, accountname, accountnumber;
   bool pageState;
   bool accountState, phoneState;
 
@@ -44,7 +45,7 @@ class _MenuPageState extends State<MenuPage> {
     phone = (pref.getString('phone_number') ?? '');
     accountnumber = (pref.getString('account_number') ?? '');
     accountname = (pref.getString('account_name') ?? '');
-    user = (pref.getString('user') ?? '');
+    userId = (pref.getString('userId') ?? '');
 
     if (accountnumber == '') {
       accountState = false;
@@ -89,67 +90,64 @@ class _MenuPageState extends State<MenuPage> {
               alignment: Alignment.topLeft,
               padding: EdgeInsets.all(4),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  ProfileHeader(
+                    title: "MY PROFILE",
+                    actions: <Widget>[],
+                  ),
+                  SizedBox(height: 20),
+                  Divider(color: ColorConstants.whiteLighterColor,),
+                  SizedBox(height: 20),
                   Column(
-                    children: <Widget>[
-                      ProfileHeader(
-                        title: "",
-                        actions: <Widget>[],
-                      ),
-                      SizedBox(height: 20),
-                      Divider(color: ColorConstants.whiteLighterColor,),
-                      SizedBox(height: 20),
-                      Column(
-                        children: [
-                          buildListTile(
-                              title: 'First name',
-                              subTitle: surname,
-                              icon: Icons.person,
-                              hideEdit: accountState,
-                              onTap: () {
-                                openAccountPage();
-                              }),
-                          buildListTile(
-                              title: 'Last name',
-                              subTitle: firstname,
-                              icon: Icons.person,
-                              hideEdit: accountState,
-                              onTap: () {
-                                openAccountPage();
-                              }),
-                          buildListTile(
-                              title: 'Email',
-                              subTitle: email,
-                              icon: Icons.email,
-                              hideEdit: true),
-                          buildListTile(
-                              title: 'Phone',
-                              subTitle: phone,
-                              icon: Icons.phone,
-                              hideEdit: phoneState,
-                              onTap: () {
-                                openEditPhone();
-                              }),
-                          buildListTile(
-                              title: 'Account Name',
-                              subTitle: accountname,
-                              icon: Icons.comment_bank,
-                              hideEdit: accountState,
-                              onTap: () {
-                                openAccountPage();
-                              }),
-                          buildListTile(
-                              title: 'Account Number',
-                              subTitle: accountnumber,
-                              icon: Icons.cloud_done,
-                              hideEdit: accountState,
-                              onTap: () {
-                                openAccountPage();
-                              }),
-                        ],
-                      ),
+                    children: [
+                      buildListTile(
+                          title: 'First name',
+                          subTitle: surname,
+                          icon: Icons.person,
+                          hideEdit: accountState,
+                          onTap: () {
+                            openAccountPage();
+                          }),
+                      buildListTile(
+                          title: 'Last name',
+                          subTitle: firstname,
+                          icon: Icons.person,
+                          hideEdit: accountState,
+                          onTap: () {
+                            openAccountPage();
+                          }),
+                      buildListTile(
+                          title: 'Email',
+                          subTitle: email,
+                          icon: Icons.email,
+                          hideEdit: true),
+                      buildListTile(
+                          title: 'Phone',
+                          subTitle: phone,
+                          icon: Icons.phone,
+                          hideEdit: phoneState,
+                          onTap: () {
+                            openEditPhone();
+                          }),
+                      buildListTile(
+                          title: 'Account Name',
+                          subTitle: accountname,
+                          icon: Icons.comment_bank,
+                          hideEdit: accountState,
+                          onTap: () {
+                            openAccountPage();
+                          }),
+                      buildListTile(
+                          title: 'Account Number',
+                          subTitle: accountnumber,
+                          icon: Icons.cloud_done,
+                          hideEdit: accountState,
+                          onTap: () {
+                            openAccountPage();
+                          }),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -259,24 +257,49 @@ class ProfileHeader extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        SafeArea(
-          child: Container(
-            width: double.infinity,
+    return SafeArea(
+      child: Row(
+        children: [
+          Container(
             margin: const EdgeInsets.only(top: 20),
             child: Avatar(
               image: AssetImage(
                 'assets/images/mbl1.png',
               ),
-              radius: 40,
+              radius: 30,
               backgroundColor: Colors.white,
               borderColor: Colors.grey.shade300,
-              borderWidth: 4.0,
+              borderWidth: 2.0,
             ),
           ),
-        )
-      ],
+          SizedBox(width: 15,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height:20,),
+
+              Text(
+                title,
+                style: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  fontSize: 16,
+                  color: ColorConstants.whiteLighterColor,
+                ),
+              ),
+              SizedBox(height: 5,),
+              Text(
+                'Acct. No: 2014365453',
+                style: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  fontSize: 16,
+                  color: ColorConstants.whiteLighterColor,
+                ),
+              ),
+            ],
+          ),
+        ],
+
+      ),
     );
   }
 }

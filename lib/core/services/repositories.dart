@@ -77,6 +77,8 @@ class HttpService {
   'https://mabro.ng/dev/_app/electricity/distribution-companies';
 static var rootVerifySmartCard =
 Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
+  static var rootVerifyCardPayment =
+  Uri.parse('https://mabro.ng/dev/_app/naira-wallet/fund');
 
 
 
@@ -106,12 +108,7 @@ Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
         bool status = banks.status;
         String message = banks.message;
         if (status) {
-          // ShowSnackBar.showInSnackBar(
-          //     bgColor: Colors.green,
-          //     iconData: Icons.check_circle,
-          //     value: message,
-          //     context: context,
-          //     timer: 5);
+
 
           return banks;
         } else if (!status) {
@@ -393,7 +390,9 @@ Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
       map['userId'] = user;
 
       var response = await http
-          .post(Uri.parse(url), body: map)
+          .post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',

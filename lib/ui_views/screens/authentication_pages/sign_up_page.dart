@@ -41,12 +41,21 @@ class _SignUpPageState extends State<SignUpPage> {
   bool isUserActive = false;
   bool isFirstScreen;
 
+
+
   checkFirstScreen() {
-    if (widget.userPin != '') {
-      isFirstScreen = true;
+    if (widget.userPin == '') {
+      setState(() {
+        isFirstScreen = false;
+      });
+
     } else {
-      isFirstScreen = false;
+      setState(() {
+        isFirstScreen = true;
+
+      });
     }
+    print(isFirstScreen);
   }
 
 

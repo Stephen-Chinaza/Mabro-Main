@@ -10,7 +10,6 @@ import 'package:mabro/ui_views/screens/phone_number_verification_pages/phone_otp
 import 'package:mabro/ui_views/screens/splash_screen_page/splash_screen_page.dart';
 
 import 'ui_views/screens/email_verification_pages/sent_email_page.dart';
-import 'ui_views/screens/flutterwave_payment/flutterwave_payment.dart';
 import 'ui_views/screens/password_setting/verify_password_page.dart';
 
 void main() {
@@ -43,7 +42,7 @@ class _MyAppState extends State<MyApp> {
       statusBarColor: ColorConstants.primaryColor,
       statusBarIconBrightness: Brightness.light,
       statusBarBrightness:
-          Platform.isAndroid ? Brightness.dark : Brightness.light,
+      Platform.isAndroid ? Brightness.dark : Brightness.light,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.grey,
       systemNavigationBarIconBrightness: Brightness.dark,
