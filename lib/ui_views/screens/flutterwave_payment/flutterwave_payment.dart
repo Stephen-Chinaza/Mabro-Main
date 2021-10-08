@@ -74,6 +74,14 @@ class _CardPaymentState extends State<CardPayment>
       _emailController.text = email,
     });
 
+    _nameController.text = 'Raphito';
+    _cardNumberFieldController.text = '5531886652142950';
+    _cardMonthFieldController.text = '09';
+    _cardYearFieldController.text = '32';
+    _cardCvvFieldController.text = '564';
+    _cardPinFieldController.text = '3310';
+    _cardOtpFieldController.text = '12345';
+
 
   }
 
@@ -109,8 +117,8 @@ class _CardPaymentState extends State<CardPayment>
             padding: const EdgeInsets.all(1.0),
             child: Column(
               children: [
-
                 Container(
+                  height: MediaQuery.of(context).size.height,
                   width: double.infinity,
                   child: Card(
                     color: ColorConstants.primaryLighterColor,
@@ -120,7 +128,7 @@ class _CardPaymentState extends State<CardPayment>
                         children: [
                           SizedBox(height: 10),
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -146,7 +154,6 @@ class _CardPaymentState extends State<CardPayment>
                                 ],)
                               ],),
                           ),
-                          SizedBox(height: 20),
                           Container(
                             width: double.infinity,
                             child: Text(
@@ -314,30 +321,30 @@ class _CardPaymentState extends State<CardPayment>
           scaffoldKey: _scaffoldKey);
     } else if (_emailController.text.isEmpty) {
         ShowSnackBar.showInSnackBar(
-            value: 'email address',
+            value: 'Enter email address',
             context: context,
             scaffoldKey: _scaffoldKey);
       } else if (_cardNumberFieldController.text.isEmpty) {
         ShowSnackBar.showInSnackBar(
-            value: 'Enter amount to withdraw',
+            value: 'Enter card number',
             context: context,
             scaffoldKey: _scaffoldKey);
 
     } else if (_cardMonthFieldController.text.isEmpty) {
         ShowSnackBar.showInSnackBar(
-            value: 'Enter amount to withdraw',
+            value: 'Enter expiration month',
             context: context,
             scaffoldKey: _scaffoldKey);
 
       }else if (_cardYearFieldController.text.isEmpty) {
         ShowSnackBar.showInSnackBar(
-            value: 'Enter amount to withdraw',
+            value: 'Enter expiration year',
             context: context,
             scaffoldKey: _scaffoldKey);
 
       }else if (_cardCvvFieldController.text.isEmpty) {
         ShowSnackBar.showInSnackBar(
-            value: 'Enter amount to withdraw',
+            value: 'Enter card cvv number',
             context: context,
             scaffoldKey: _scaffoldKey);
 
@@ -349,16 +356,28 @@ class _CardPaymentState extends State<CardPayment>
         map['userId'] = userId;
         map['name'] = _nameController.text;
         map['email_address'] = email;
-        map['card_number'] = int.parse(_cardNumberFieldController.text);
-        map['cvv'] = int.parse(_cardCvvFieldController.text);
-        map['exp_month'] = int.parse(_cardMonthFieldController.text);
-        map['exp_year'] = int.parse(_cardYearFieldController.text);
-        map['pin'] = int.parse(_cardPinFieldController.text);
-        map['amount'] = widget.amount;
+        map['card_number'] = _cardNumberFieldController.text;
+        map['cvv'] = _cardCvvFieldController.text;
+        map['exp_month'] = _cardMonthFieldController.text;
+        map['exp_year'] = _cardYearFieldController.text;
+        map['pin'] = _cardPinFieldController.text;
+        map['amount'] = widget.amount.toString();
+
+        print(userId);
+        print(_nameController.text);
+        print(email);
+        print(_cardNumberFieldController.text);
+        print(_cardCvvFieldController.text);
+        print(_cardMonthFieldController.text);
+        print(_cardYearFieldController.text);
+        print(_cardPinFieldController.text);
+        print(widget.amount);
 
         var response = await http
-            .post(HttpService.rootVerifyCardPayment, body: map)
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+            .post(HttpService.rootVerifyCardPayment, body: map, headers: {
+          'Authorization': 'Bearer '+HttpService.token,
+        })
+            .timeout(const Duration(seconds: 30), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
@@ -423,12 +442,14 @@ class _CardPaymentState extends State<CardPayment>
       map['userId'] = userId;
       map['api_reference'] = apiReference;
       map['api_id'] = apiId;
-      map['otp'] = int.parse(_cardOtpFieldController.text);
+      map['otp'] = _cardOtpFieldController.text;
       map['reference'] = reference;
 
 
       var response = await http
-          .post(HttpService.rootVerifySmartCard, body: map)
+          .post(HttpService.rootVerifyOtp, body: map, headers: {
+        'Authorization': 'Bearer '+HttpService.token,
+      })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(

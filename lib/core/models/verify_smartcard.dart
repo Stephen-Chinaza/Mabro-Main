@@ -27,24 +27,24 @@ class Data {
   String apiReference;
   String reference;
   String responseMessage;
-  String redirectUrl;
   String authMode;
+  String redirectUrl;
 
   Data(
       {this.apiId,
         this.apiReference,
         this.reference,
         this.responseMessage,
-        this.redirectUrl,
-        this.authMode});
+        this.authMode,
+        this.redirectUrl});
 
   Data.fromJson(Map<String, dynamic> json) {
     apiId = json['api_id'];
     apiReference = json['api_reference'];
     reference = json['reference'];
     responseMessage = json['response_message'];
-    redirectUrl = json['redirect_url'];
     authMode = json['auth_mode'];
+    redirectUrl = json['redirect_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -53,8 +53,8 @@ class Data {
     data['api_reference'] = this.apiReference;
     data['reference'] = this.reference;
     data['response_message'] = this.responseMessage;
-    data['redirect_url'] = this.redirectUrl;
     data['auth_mode'] = this.authMode;
+    data['redirect_url'] = this.redirectUrl;
     return data;
   }
 }

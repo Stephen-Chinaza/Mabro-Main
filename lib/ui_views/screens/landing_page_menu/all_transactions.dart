@@ -43,7 +43,7 @@ class _AllTransactionsState extends State<AllTransactions>
             ),
             centerTitle: false,
             title: new Text("Transactions History",
-                style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor,)),
+                style: TextStyle(fontSize: 16, color: ColorConstants.secondaryColor,)),
             automaticallyImplyLeading: false,
             bottom: TabBar(
 
@@ -68,22 +68,18 @@ class _AllTransactionsState extends State<AllTransactions>
             bottomOpacity: 1,
           ),
           body: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Card(
-              color: ColorConstants.primaryLighterColor,
-              child:
-              TabBarView(
-                children: [
-                  buildTransactionHistory(
-                      context, 'https://mabro.ng/dev/_app/transactions/all'),
-                  buildTransactionHistory(context,
-                      'https://mabro.ng/dev/_app/transactions/all/completed'),
-                  buildTransactionHistory(context,
-                      'https://mabro.ng/dev/_app/transactions/all/pending'),
+            padding: const EdgeInsets.all(0.0),
+            child: TabBarView(
+              children: [
+                buildTransactionHistory(
+                    context, 'https://mabro.ng/dev/_app/transactions/all'),
+                buildTransactionHistory(context,
+                    'https://mabro.ng/dev/_app/transactions/all/complete'),
+                buildTransactionHistory(context,
+                    'https://mabro.ng/dev/_app/transactions/all/pending'),
 
-                ],
-                controller: _tabController,
-              ),
+              ],
+              controller: _tabController,
             ),
           ),
         ),
@@ -115,6 +111,7 @@ class _AllTransactionsState extends State<AllTransactions>
               itemBuilder: (BuildContext context, index) {
                 return Container(
                   child: transactionList(
+                    index: index,
                       amount: allTransactionHistory.data.transactions[index].amount.toString(),
                       createdDate: allTransactionHistory.data.transactions[index].createdAt,
                       transactionTitle: allTransactionHistory.data.transactions[index].activity,
@@ -152,6 +149,7 @@ class _AllTransactionsState extends State<AllTransactions>
   }
 
   Widget transactionList({
+    int index,
     String amount,
     IconData iconData,
     Color colorData,
@@ -162,18 +160,19 @@ class _AllTransactionsState extends State<AllTransactions>
   }) {
     return Stack(
       children: [
-        Positioned(
-          left: 20,
-          child: Container(
-              child: Dash(
-            direction: Axis.vertical,
-            length: 100,
-            dashThickness: 2.0,
-            dashLength: 10,
-            dashColor: ColorConstants.whiteLighterColor,
-          )),
-        ),
+        // Positioned(
+        //   left: 20,
+        //   child: Container(
+        //       child: Dash(
+        //     direction: Axis.vertical,
+        //     length: 100,
+        //     dashThickness: 2.0,
+        //     dashLength: 10,
+        //     dashColor: ColorConstants.whiteLighterColor,
+        //   )),
+        // ),
         TransactionContainer(
+          index: index,
             amount: '$currency $amount',
             icon: iconData,
             color: colorData,

@@ -79,6 +79,8 @@ static var rootVerifySmartCard =
 Uri.parse('https://mabro.ng/dev/_app/tv/verify-smart-card');
   static var rootVerifyCardPayment =
   Uri.parse('https://mabro.ng/dev/_app/naira-wallet/fund');
+  static var rootVerifyOtp =
+  Uri.parse('https://mabro.ng/dev/_app/naira-wallt/verify-OTP');
 
 
 

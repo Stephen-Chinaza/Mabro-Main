@@ -129,11 +129,11 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
               unselectedLabelColor: Colors.white,
               unselectedLabelStyle: TextStyle(fontSize: 14),
               labelStyle: TextStyle(fontSize: 14),
-              labelColor: Colors.white,
+              labelColor: ColorConstants.whiteLighterColor,
               tabs: [
-                new Tab(text: 'Deposit Funds'),
+                new Tab(text: 'Deposit funds'),
                 new Tab(
-                  text: 'Withdraw Funds',
+                  text: 'Withdraw funds',
                 ),
               ],
               controller: _tabController,
@@ -159,7 +159,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
-        height: MediaQuery.of(context).size.height;
+        height: MediaQuery.of(context).size.height,
         child: Card(
           color: ColorConstants.primaryLighterColor,
           child: Padding(
@@ -182,7 +182,6 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                 Text('Balance: NGN$nairaBalance',
                     style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 14)),
                 SizedBox(height: 30),
-                SizedBox(height: 20),
                 CustomButton(
                     margin: 0,
                     disableButton: true,
@@ -266,7 +265,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
-        height: MediaQuery.of(context).size.height;
+        height: MediaQuery.of(context).size.height,
         child: Card(
           color: ColorConstants.primaryLighterColor,
           child: Padding(
