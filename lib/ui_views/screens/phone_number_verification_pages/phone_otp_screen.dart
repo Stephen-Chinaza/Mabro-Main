@@ -3,7 +3,6 @@ import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/register_user.dart';
 import 'package:mabro/core/services/repositories.dart';
-import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -11,7 +10,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/res/colors.dart';
-import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -48,7 +45,6 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
   var onTapRecognizer;
 
   TextEditingController textEditingController = TextEditingController();
-
 
   StreamController<ErrorAnimationType> errorController;
 
@@ -82,199 +78,215 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
       key: _scaffoldKey,
       backgroundColor: ColorConstants.primaryColor,
       body: SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                width: double.infinity,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: Dims.screenHeight(context) * 0.11,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: TextStyles.textDetails(
+                      centerText: true,
+                      textSize: 20,
+                      textColor: ColorConstants.secondaryColor,
+                      textValue: 'Phone Number Verification',
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Image.asset(
+                'assets/images/registration.png',
+                height: 100,
+                width: 160,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: screenHeight * 0.01,
+              ),
+              TextStyles.textDetails(
+                centerText: true,
+                textColor: ColorConstants.whiteLighterColor,
+                textSize: 14,
+                textValue:
+                    'Enter A 6 digit number that was sent to ${widget.contact}',
+              ),
+              TextStyles.textSubHeadings(
+                textColor: ColorConstants.whiteLighterColor,
+                textSize: 14,
+                textValue: '${widget.code}',
+              ),
+              SizedBox(
+                height: screenHeight * 0.04,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(4.0),
+                decoration: BoxDecoration(
+                    color: ColorConstants.primaryLighterColor,
+                    borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: Dims.screenHeight(context) * 0.11,
+                      height: screenHeight * 0.04,
                     ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: TextStyles.textDetails(
-                          centerText: true,
-                          textSize: 20,
-                          textColor: ColorConstants.secondaryColor,
-                          textValue:
-                          'Phone Number Verification',
-                        ),),
+                    Visibility(
+                      visible: !pageState,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Form(
+                            key: formKey,
+                            child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4.0, horizontal: 10),
+                                child: PinCodeTextField(
+                                  appContext: context,
+                                  pastedTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  length: 6,
+                                  obscureText: true,
+                                  animationType: AnimationType.fade,
+                                  validator: (v) {
+                                    if (v.length < 6) {
+                                      return "";
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  pinTheme: PinTheme(
+                                    shape: PinCodeFieldShape.box,
+                                    fieldHeight: 50,
+                                    fieldWidth: 50,
+                                    activeFillColor:
+                                        hasError ? Colors.orange : Colors.white,
+                                  ),
+                                  cursorColor: Colors.white,
+                                  animationDuration:
+                                      Duration(milliseconds: 300),
+                                  textStyle: TextStyle(
+                                      fontSize: 26,
+                                      height: 1.6,
+                                      color: ColorConstants.white),
+                                  backgroundColor: ColorConstants.transparent,
+                                  obscuringCharacter: '*',
+                                  enableActiveFill: false,
+                                  errorAnimationController: errorController,
+                                  controller: textEditingController,
+                                  keyboardType: TextInputType.number,
+                                  boxShadows: [
+                                    BoxShadow(
+                                      offset: Offset(0, 1),
+                                      color: Colors.black12,
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                  onCompleted: (v) {
+                                    print(v);
 
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Image.asset('assets/images/registration.png', height: 100,width: 160,),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.01,
-                    ),
-                    TextStyles.textDetails(
-                      centerText: true,
-                      textColor: ColorConstants.whiteLighterColor,
-                      textSize: 14,
-                      textValue:
-                          'Enter A 6 digit number that was sent to ${widget.contact}',
-                    ),
-                    TextStyles.textSubHeadings(
-                      textColor: ColorConstants.whiteLighterColor,
-                      textSize: 14,
-                      textValue: '${widget.code}',
+                                    formKey.currentState.validate();
+                                    // conditions for validating
+                                    if (currentText.length != 6) {
+                                    } else {
+                                      setState(() {
+                                        hasError = false;
+                                        textEditingController.text = '';
+                                        sendPhone(v);
+                                      });
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    print(value);
+                                    setState(() {
+                                      currentText = value;
+                                    });
+                                  },
+                                  beforeTextPaste: (text) {
+                                    print("Allowing to paste $text");
+                                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                    return true;
+                                  },
+                                )),
+                          ),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 30.0),
+                            child: Text(
+                              hasError
+                                  ? "*Please fill up all the cells properly"
+                                  : "",
+                              style: TextStyle(
+                                  color: ColorConstants.secondaryColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          SizedBox(
+                            height: Dims.sizedBoxHeight(height: 10.0),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              reSendPhone();
+                            },
+                            child: TextStyles.textHeadings(
+                                textValue: 'RESEND CODE',
+                                textSize: 14.0,
+                                textColor: ColorConstants.whiteLighterColor),
+                          )
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: screenHeight * 0.04,
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                          color: ColorConstants.primaryLighterColor,
-
-                          borderRadius: BorderRadius.circular(10.0)),
+                    Visibility(
+                      visible: pageState,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(
-                            height: screenHeight * 0.04,
+                          SizedBox(height: 20),
+                          CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
-                          Visibility(
-                            visible: !pageState,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Form(
-                                  key: formKey,
-                                  child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4.0, horizontal: 10),
-                                      child: PinCodeTextField(
-                                        appContext: context,
-                                        pastedTextStyle: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        length: 6,
-                                        obscureText: true,
-                                        animationType: AnimationType.fade,
-                                        validator: (v) {
-                                          if (v.length < 6) {
-                                            return "";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        pinTheme: PinTheme(
-                                          shape: PinCodeFieldShape.box,
-                                          fieldHeight: 50,
-                                          fieldWidth: 50,
-                                          activeFillColor:
-                                          hasError ? Colors.orange : Colors.white,
-                                        ),
-                                        cursorColor: Colors.white,
-                                        animationDuration: Duration(milliseconds: 300),
-                                        textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
-                                        backgroundColor: ColorConstants.transparent,
-                                        obscuringCharacter: '*',
-                                        enableActiveFill: false,
-                                        errorAnimationController: errorController,
-                                        controller: textEditingController,
-                                        keyboardType: TextInputType.number,
-                                        boxShadows: [
-                                          BoxShadow(
-                                            offset: Offset(0, 1),
-                                            color: Colors.black12,
-                                            blurRadius: 10,
-                                          )
-                                        ],
-                                        onCompleted: (v) {
-                                          print(v);
-
-                                          formKey.currentState.validate();
-                                          // conditions for validating
-                                          if (currentText.length != 6) {
-
-                                          } else {
-                                            setState(() {
-                                              hasError = false;
-                                              textEditingController.text = '';
-                                              sendPhone(v);
-                                            });
-                                          }
-                                        },
-                                        onChanged: (value) {
-                                          print(value);
-                                          setState(() {
-                                            currentText = value;
-                                          });
-                                        },
-                                        beforeTextPaste: (text) {
-                                          print("Allowing to paste $text");
-                                          //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                          //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                          return true;
-                                        },
-                                      )),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                  child: Text(
-                                    hasError ? "*Please fill up all the cells properly" : "",
-                                    style: TextStyle(
-                                        color: ColorConstants.secondaryColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-
-                                SizedBox(
-                                  height: Dims.sizedBoxHeight(height: 10.0),
-                                ),
-
-                                GestureDetector(onTap: (){reSendPhone();},
-
-                                child: TextStyles.textHeadings(
-                                    textValue: 'RESEND CODE',
-                                    textSize: 14.0,
-                                    textColor: ColorConstants.whiteLighterColor
-                                ),)
-
-                              ],
-                            ),
+                          SizedBox(height: 20),
+                          Text(
+                            'verifying code...',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic),
                           ),
-                          SizedBox(
-                            height: screenHeight * 0.04,
-                          ),
-                          Visibility(
-                            visible: pageState,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 20),
-                                CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
-                                SizedBox(height: 20),
-                                Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: screenHeight * 0.04,
-                          ),
-
                         ],
                       ),
+                    ),
+                    SizedBox(
+                      height: screenHeight * 0.04,
                     ),
                   ],
                 ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -286,11 +298,10 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
       map['phone_number'] = widget.phone;
       map['otp'] = text;
 
-      var response = await http
-          .post(HttpService.rootVerifyPhone, body: map, headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootVerifyPhone, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -309,14 +320,15 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
         bool status = verifyUser.status;
         String message = verifyUser.message;
         if (status) {
-          cPageState(state: false);
-
+          //cPageState(state: false);
 
           ShowSnackBar.showInSnackBar(
               value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
+
+          SharedPrefrences.addStringToSP("phone_number", widget.phone);
 
           _redirectuser();
         } else if (!status) {
@@ -352,12 +364,10 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
       map['userId'] = userId;
       map['phone_number'] = widget.phone;
 
-
-      var response = await http
-          .post(HttpService.rootResendPhone, body: map, headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootResendPhone, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -383,7 +393,6 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
-
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -409,6 +418,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
           timer: 5);
     }
   }
+
   void _redirectuser() {
     Future.delayed(Duration(seconds: 2), () {
       //kbackBtn(context);

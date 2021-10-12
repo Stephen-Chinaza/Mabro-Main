@@ -24,15 +24,15 @@ class UserInfo {
 
 class Data {
   Bvns bvns;
-  Account account;
-  Settings settings;
+  var account;
+  var settings;
 
   Data({this.bvns, this.account, this.settings});
 
   Data.fromJson(Map<String, dynamic> json) {
     bvns = json['bvns'] != null ? new Bvns.fromJson(json['bvns']) : null;
     account =
-    json['account'] != null ? new Account.fromJson(json['account']) : null;
+        json['account'] != null ? new Account.fromJson(json['account']) : null;
     settings = json['settings'] != null
         ? new Settings.fromJson(json['settings'])
         : null;
@@ -64,12 +64,12 @@ class Bvns {
 
   Bvns(
       {this.user,
-        this.bvn,
-        this.firstName,
-        this.surname,
-        this.id,
-        this.createdAt,
-        this.updatedAt});
+      this.bvn,
+      this.firstName,
+      this.surname,
+      this.id,
+      this.createdAt,
+      this.updatedAt});
 
   Bvns.fromJson(Map<String, dynamic> json) {
     user = json['user'];
@@ -106,13 +106,13 @@ class Account {
 
   Account(
       {this.user,
-        this.accountName,
-        this.accountNumber,
-        this.bankName,
-        this.bankCode,
-        this.id,
-        this.createdAt,
-        this.updatedAt});
+      this.accountName,
+      this.accountNumber,
+      this.bankName,
+      this.bankCode,
+      this.id,
+      this.createdAt,
+      this.updatedAt});
 
   Account.fromJson(Map<String, dynamic> json) {
     user = json['user'];
@@ -152,14 +152,14 @@ class Settings {
 
   Settings(
       {this.user,
-        this.smsNotification,
-        this.emailTransactionNotification,
-        this.twoFactorAuthentication,
-        this.fingerPrintLogin,
-        this.newsletter,
-        this.id,
-        this.createdAt,
-        this.updatedAt});
+      this.smsNotification,
+      this.emailTransactionNotification,
+      this.twoFactorAuthentication,
+      this.fingerPrintLogin,
+      this.newsletter,
+      this.id,
+      this.createdAt,
+      this.updatedAt});
 
   Settings.fromJson(Map<String, dynamic> json) {
     user = json['user'];

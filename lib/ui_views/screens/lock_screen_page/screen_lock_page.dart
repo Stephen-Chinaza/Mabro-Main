@@ -52,7 +52,8 @@ class PasscodeScreen extends StatefulWidget {
     this.bottomWidget,
     this.backgroundColor,
     this.cancelCallback,
-    this.digits, this.isFingerValidCallback,
+    this.digits,
+    this.isFingerValidCallback,
   })  : circleUIConfig =
             circleUIConfig == null ? const CircleUIConfig() : circleUIConfig,
         keyboardUIConfig = keyboardUIConfig == null
@@ -80,9 +81,7 @@ class _PasscodeScreenState extends State<PasscodeScreen>
     SharedPreferences pref = await SharedPreferences.getInstance();
     fingerPrintState = (pref.getBool('setup_touch') ?? true);
 
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   Future<void> _checkBiometric() async {
@@ -95,14 +94,14 @@ class _PasscodeScreenState extends State<PasscodeScreen>
 
     setState(() {
       _canCheckBiometrics = canCheckBiometrics;
-      print(_canCheckBiometrics);
-      print(fingerPrintState);
-      print(isPrint);
+      // print(_canCheckBiometrics);
+      // print(fingerPrintState);
+      // print(isPrint);
 
-      if(_canCheckBiometrics == fingerPrintState){
+      if (_canCheckBiometrics == fingerPrintState) {
         isPrint = true;
-        _authenticate();
-      }else{
+        // _authenticate();
+      } else {
         isPrint = false;
       }
     });

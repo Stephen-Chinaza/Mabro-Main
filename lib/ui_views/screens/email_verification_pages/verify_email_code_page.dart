@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
-import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/screens/password_setting/set_password_page.dart';
 import 'package:http/http.dart' as http;
@@ -20,13 +19,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-
 class EmailVerificationPage extends StatefulWidget {
   final String emailAddress;
   final String userId;
   String otp;
 
-  EmailVerificationPage({Key key, this.emailAddress, this.userId, this.otp}) : super(key: key);
+  EmailVerificationPage({Key key, this.emailAddress, this.userId, this.otp})
+      : super(key: key);
   @override
   _EmailVerificationPageState createState() => _EmailVerificationPageState();
 }
@@ -41,7 +40,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   var onTapRecognizer;
 
   TextEditingController textEditingController = TextEditingController();
-
 
   StreamController<ErrorAnimationType> errorController;
 
@@ -62,10 +60,11 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
 
   @override
   void dispose() {
-    errorController.close();
+    //errorController.close();
 
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -76,177 +75,181 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
           backgroundColor: ColorConstants.primaryColor,
           key: _scaffoldKey,
           body: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: Dims.sizedBoxHeight(height: 60),
+              ),
+              Center(
+                child: Container(
+                  child: Image(
+                    image: AssetImage('assets/images/email2.png'),
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: Dims.sizedBoxHeight(height: 2.0),
+              ),
+              TextStyles.textHeadings(
+                  textValue: 'Check Your Email',
+                  textColor: ColorConstants.whiteColor),
+              SizedBox(
+                height: Dims.sizedBoxHeight(height: 10),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Enter the 6-digit code we sent to',
+                    style: TextStyle(
+                        fontSize: 16, color: ColorConstants.whiteLighterColor),
+                  ),
+                  Text(
+                    widget.emailAddress,
+                    style: TextStyle(
+                        fontSize: 14, color: ColorConstants.secondaryColor),
+                  ),
+                  Text(
+                    'to continue',
+                    style: TextStyle(
+                        fontSize: 16, color: ColorConstants.whiteLighterColor),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: Dims.sizedBoxHeight(),
+              ),
+              Visibility(
+                visible: !pageState,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
-                      height: Dims.sizedBoxHeight(height: 60),
-                    ),
-                    Center(
-                      child: Container(
-                        child: Image(
-                          image: AssetImage('assets/images/email2.png'),
-                          width: 100,
-                          height: 100,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: Dims.sizedBoxHeight(height: 2.0),
-                    ),
-                    TextStyles.textHeadings(
-                      textValue: 'Check Your Email',
-                      textColor: ColorConstants.whiteColor
-                    ),
-                    SizedBox(
-                      height: Dims.sizedBoxHeight(height: 10),
+                    Form(
+                      key: formKey,
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4.0, horizontal: 10),
+                          child: PinCodeTextField(
+                            appContext: context,
+                            pastedTextStyle: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            length: 6,
+                            obscureText: true,
+                            validator: (v) {
+                              if (v.length < 6) {
+                                return "";
+                              } else {
+                                return null;
+                              }
+                            },
+                            pinTheme: PinTheme(
+                              shape: PinCodeFieldShape.box,
+                              fieldHeight: 50,
+                              fieldWidth: 50,
+                              activeFillColor:
+                                  hasError ? Colors.orange : Colors.white,
+                            ),
+                            cursorColor: Colors.white,
+                            animationDuration: Duration(milliseconds: 300),
+                            textStyle: TextStyle(
+                                fontSize: 26,
+                                height: 1.6,
+                                color: ColorConstants.white),
+                            backgroundColor: ColorConstants.primaryColor,
+                            obscuringCharacter: '*',
+                            enableActiveFill: false,
+                            controller: textEditingController,
+                            keyboardType: TextInputType.number,
+                            boxShadows: [
+                              BoxShadow(
+                                offset: Offset(0, 1),
+                                color: Colors.black12,
+                                blurRadius: 10,
+                              )
+                            ],
+                            onCompleted: (v) {
+                              print(v);
+
+                              formKey.currentState.validate();
+                              // conditions for validating
+                              if (currentText.length != 6) {
+                              } else {
+                                setState(() {
+                                  hasError = false;
+                                  textEditingController.text = '';
+                                  sendOtp(otp: v, user: widget.userId);
+                                });
+                              }
+                            },
+                            onChanged: (value) {
+                              print(value);
+                              setState(() {
+                                currentText = value;
+                              });
+                            },
+                            beforeTextPaste: (text) {
+                              print("Allowing to paste $text");
+                              return true;
+                            },
+                          )),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(20.0),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Enter the 6-digit code we sent to',
-                          style: TextStyle(fontSize: 16,
-                              color: ColorConstants.whiteLighterColor
-                          ),
-                        ),
-                        Text(
-                          widget.emailAddress,
-                          style: TextStyle(
-                              fontSize: 14, color: ColorConstants.secondaryColor),
-                        ),
-                        Text(
-                          'to continue',
-                          style: TextStyle(fontSize: 16,
-                              color: ColorConstants.whiteLighterColor
-                          ),
-                        ),
-                      ],
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Text(
+                        hasError
+                            ? "*Please fill up all the cells properly"
+                            : "",
+                        style: TextStyle(
+                            color: ColorConstants.secondaryColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                     SizedBox(
-                      height: Dims.sizedBoxHeight(),
+                      height: Dims.sizedBoxHeight(height: 30.0),
                     ),
-                    Visibility(
-                      visible: !pageState,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Form(
-                            key: formKey,
-                            child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 4.0, horizontal: 10),
-                                child: PinCodeTextField(
-                                  appContext: context,
-                                  pastedTextStyle: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  length: 6,
-                                  obscureText: true,
-                                  validator: (v) {
-                                    if (v.length < 6) {
-                                      return "";
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  pinTheme: PinTheme(
-                                    shape: PinCodeFieldShape.box,
-                                    fieldHeight: 50,
-                                    fieldWidth: 50,
-                                    activeFillColor:
-                                    hasError ? Colors.orange : Colors.white,
-                                  ),
-                                  cursorColor: Colors.white,
-                                  animationDuration: Duration(milliseconds: 300),
-                                  textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
-                                  backgroundColor: ColorConstants.primaryColor,
-                                  obscuringCharacter: '*',
-                                  enableActiveFill: false,
-                                  controller: textEditingController,
-                                  keyboardType: TextInputType.number,
-                                  boxShadows: [
-                                    BoxShadow(
-                                      offset: Offset(0, 1),
-                                      color: Colors.black12,
-                                      blurRadius: 10,
-                                    )
-                                  ],
-                                  onCompleted: (v) {
-                                    print(v);
-
-                                    formKey.currentState.validate();
-                                    // conditions for validating
-                                    if (currentText.length != 6) {
-
-                                    } else {
-                                      setState(() {
-                                        hasError = false;
-                                        textEditingController.text = '';
-                                        sendOtp(otp: v, user: widget.userId);
-                                      });
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    print(value);
-                                    setState(() {
-                                      currentText = value;
-                                    });
-                                  },
-                                  beforeTextPaste: (text) {
-                                    print("Allowing to paste $text");
-                                    return true;
-                                  },
-                                )),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                            child: Text(
-                              hasError ? "*Please fill up all the cells properly" : "",
-                              style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ),
-
-                          SizedBox(
-                            height: Dims.sizedBoxHeight(height: 30.0),
-                          ),
-                          GestureDetector(onTap: (){
-                              reSendOtp(user: widget.userId);
-                          },
-                          child: TextStyles.textDetails(
-                              textValue: 'RESEND VIA EMAIL',
-                              textSize: 16.0,
-                              textColor: ColorConstants.whiteLighterColor
-                          ),
-                          ),
-
-                        ],
-                      ),
+                    GestureDetector(
+                      onTap: () {
+                        reSendOtp(user: widget.userId);
+                      },
+                      child: TextStyles.textDetails(
+                          textValue: 'RESEND VIA EMAIL',
+                          textSize: 16.0,
+                          textColor: ColorConstants.whiteLighterColor),
                     ),
-                    Visibility(
-                      visible: pageState,
-                      child: Column(
-                        children: [
-                          SizedBox(height: 20),
-                          CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
-                          SizedBox(height: 20),
-                          Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
-                        ],
-                      ),
-                    ),
-
                   ],
-                )),
+                ),
+              ),
+              Visibility(
+                visible: pageState,
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'verifying code...',
+                      style: TextStyle(
+                          color: Colors.white, fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          )),
         ),
       ],
     );
@@ -259,11 +262,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       map['userId'] = user;
       map['otp'] = otp;
 
-      var response = await http
-          .post(HttpService.rootVerifyEmail, body: map,headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootVerifyEmail, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -405,11 +407,10 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       var map = Map<String, dynamic>();
       map['userId'] = user;
 
-      var response = await http
-          .post(HttpService.rootResendEmail, body: map,headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootResendEmail, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -437,7 +438,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
               scaffoldKey: _scaffoldKey,
               timer: 5,
               bgColor: ColorConstants.secondaryColor);
-
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -468,9 +468,8 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
   }
 
   void _redirectuser() {
-    Future.delayed(Duration(seconds: 3), (){
+    Future.delayed(Duration(seconds: 3), () {
       pushPage(context, SetPinPage());
-
     });
   }
 

@@ -19,7 +19,6 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 
-
 class CardPayment extends StatefulWidget {
   final int amount;
 
@@ -29,17 +28,14 @@ class CardPayment extends StatefulWidget {
   _CardPaymentState createState() => _CardPaymentState();
 }
 
-class _CardPaymentState extends State<CardPayment>
-
-     {
+class _CardPaymentState extends State<CardPayment> {
   final _cardFormKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   BuildContext loadingDialogContext;
-  String userId, nairaBalance,email;
+  String userId, nairaBalance, email;
   bool pageState;
-  String apiReference,apiId,reference;
-
+  String apiReference, apiId, reference;
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -47,23 +43,18 @@ class _CardPaymentState extends State<CardPayment>
     email = (pref.getString('email_address') ?? '');
     //userPin = (pref.getString('lock_code') ?? '');
     nairaBalance = (pref.getString('nairaBalance') ?? '');
-
   }
 
-  final TextEditingController _cardPinFieldController =
-  TextEditingController();
+  final TextEditingController _cardPinFieldController = TextEditingController();
   final TextEditingController _cardNumberFieldController =
-  TextEditingController();
-  final TextEditingController _emailController =
-  TextEditingController();
-  final TextEditingController _cardOtpFieldController =
-  TextEditingController();
-  final TextEditingController _nameController =
-  TextEditingController();
+      TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _cardOtpFieldController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _cardMonthFieldController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _cardYearFieldController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _cardCvvFieldController = TextEditingController();
 
   @override
@@ -72,9 +63,9 @@ class _CardPaymentState extends State<CardPayment>
     pageState = false;
 
     getData().whenComplete(() => {
-    setState(() {}),
-      _emailController.text = email,
-    });
+          setState(() {}),
+          _emailController.text = email,
+        });
 
     _nameController.text = 'Raphito';
     _cardNumberFieldController.text = '5531886652142950';
@@ -83,10 +74,7 @@ class _CardPaymentState extends State<CardPayment>
     _cardCvvFieldController.text = '564';
     _cardPinFieldController.text = '3310';
     _cardOtpFieldController.text = '12345';
-
-
   }
-
 
   @override
   void dispose() {
@@ -100,258 +88,253 @@ class _CardPaymentState extends State<CardPayment>
   @override
   Widget build(BuildContext context) {
     return (pageState)
-    ? loadingPage(state: pageState)
+        ? loadingPage(state: pageState)
         : Scaffold(
-        key: this._scaffoldKey,
-        backgroundColor: ColorConstants.primaryColor,
-        appBar: TopBar(
-          backgroundColorStart: ColorConstants.primaryColor,
-          backgroundColorEnd: ColorConstants.secondaryColor,
-          icon:
-          Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-          title: 'Card Payment',
-          onPressed: null,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Column(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: double.infinity,
-                  child: Card(
-                    color: ColorConstants.primaryLighterColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Column(
-                        children: [
-                          SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ClipRRect(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    child: Container(
-                                        color: ColorConstants.primaryLighterColor,
-                                        height: 45,width: 45,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Image.asset('assets/images/flutterwave.png', height: 40,width: 40,),
-                                        ))),
-                                Row(children: [
-                                  Icon(Icons.lock, color: ColorConstants.whiteLighterColor, size: 18,),
-                                  SizedBox(width: 5,),
-                                  Text(
-                                    "Secured by flutterwave.",
-                                    style: TextStyle(
-                                        color: Colors.yellow[700],
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],)
-                              ],),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: Text(
-                              "Enter your card details to pay.",
-                              style: TextStyle(
-                                  color: ColorConstants.whiteLighterColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(height: 20),
-
-                          NormalFields(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            hintText: 'Name on Card',
-                            labelText: '',
-                            onChanged: (name) {},
-                            textInputType: TextInputType.text,
-                            controller: _nameController,
-                          ),
-                          SizedBox(height: 20),
-                          NormalFields(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            hintText: 'Your Email Address',
-                            labelText: '',
-                            isEditable: false,
-                            onChanged: (name) {},
-                            textInputType: TextInputType.text,
-                            controller: _emailController,
-                          ),
-                          SizedBox(height: 20),
-                          NormalFields(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            hintText: 'Card Number',
-                            labelText: '',
-                            isEditable: false,
-                            onChanged: (name) {},
-                            textInputType: TextInputType.number,
-                            controller: _cardNumberFieldController,
-                          ),
-                          SizedBox(height: 20),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            key: this._scaffoldKey,
+            backgroundColor: ColorConstants.primaryColor,
+            appBar: TopBar(
+              backgroundColorStart: ColorConstants.primaryColor,
+              backgroundColorEnd: ColorConstants.secondaryColor,
+              icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+              title: 'Card Payment',
+              onPressed: null,
+              textColor: Colors.white,
+              iconColor: Colors.white,
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: double.infinity,
+                      child: Card(
+                        color: ColorConstants.primaryLighterColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
                             children: [
-                              Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: NormalFields(
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width,
-                                    hintText: 'Exp. Month',
-                                    hintSize: 13,
-
-                                    labelText: '',
-                                    isEditable: true,
-                                    onChanged: (name) {},
-                                    textInputType: TextInputType.number,
-                                    controller: _cardMonthFieldController,
+                              SizedBox(height: 10),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 4.0, horizontal: 8),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                        child: Container(
+                                            color: ColorConstants
+                                                .primaryLighterColor,
+                                            height: 45,
+                                            width: 45,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Image.asset(
+                                                'assets/images/flutterwave.png',
+                                                height: 40,
+                                                width: 40,
+                                              ),
+                                            ))),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.lock,
+                                          color:
+                                              ColorConstants.whiteLighterColor,
+                                          size: 18,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "Secured by flutterwave.",
+                                          style: TextStyle(
+                                              color: Colors.yellow[700],
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                child: Text(
+                                  "Enter your card details to pay.",
+                                  style: TextStyle(
+                                      color: ColorConstants.whiteLighterColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              NormalFields(
+                                width: MediaQuery.of(context).size.width,
+                                hintText: 'Name on Card',
+                                labelText: '',
+                                onChanged: (name) {},
+                                textInputType: TextInputType.text,
+                                controller: _nameController,
+                              ),
+                              SizedBox(height: 20),
+                              NormalFields(
+                                width: MediaQuery.of(context).size.width,
+                                hintText: 'Your Email Address',
+                                labelText: '',
+                                isEditable: false,
+                                onChanged: (name) {},
+                                textInputType: TextInputType.text,
+                                controller: _emailController,
+                              ),
+                              SizedBox(height: 20),
+                              NormalFields(
+                                width: MediaQuery.of(context).size.width,
+                                hintText: 'Card Number',
+                                labelText: '',
+                                isEditable: false,
+                                onChanged: (name) {},
+                                textInputType: TextInputType.number,
+                                controller: _cardNumberFieldController,
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 4.0),
+                                      child: NormalFields(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        hintText: 'Exp. Month',
+                                        hintSize: 13,
+                                        labelText: '',
+                                        isEditable: true,
+                                        onChanged: (name) {},
+                                        textInputType: TextInputType.number,
+                                        controller: _cardMonthFieldController,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: NormalFields(
-                                    width: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .width,
-                                    hintText: 'Exp. Year',
-                                    hintSize: 13,
-                                    labelText: '',
-                                    isEditable: true,
-                                    onChanged: (name) {},
-                                    textInputType: TextInputType.number,
-                                    controller: _cardYearFieldController,
+                                  Expanded(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 4.0),
+                                      child: NormalFields(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        hintText: 'Exp. Year',
+                                        hintSize: 13,
+                                        labelText: '',
+                                        isEditable: true,
+                                        onChanged: (name) {},
+                                        textInputType: TextInputType.number,
+                                        controller: _cardYearFieldController,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: NormalFields(
+                                      width: MediaQuery.of(context).size.width,
+                                      hintSize: 13,
+                                      hintText: 'CVV',
+                                      labelText: '',
+                                      isEditable: true,
+                                      onChanged: (name) {},
+                                      textInputType: TextInputType.number,
+                                      controller: _cardCvvFieldController,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Expanded(
-                                flex: 4,
-                                child: NormalFields(
-                                  width: MediaQuery
-                                      .of(context)
-                                      .size
-                                      .width,
-                                  hintSize: 13,
-                                  hintText: 'CVV',
-                                  labelText: '',
-                                  isEditable: true,
-                                  onChanged: (name) {},
-                                  textInputType: TextInputType.number,
-                                  controller: _cardCvvFieldController,
-                                ),
+                              SizedBox(height: 20),
+                              Divider(color: ColorConstants.whiteLighterColor),
+                              SizedBox(height: 20),
+                              Align(
+                                alignment: Alignment.center,
+                                child: CustomButton(
+                                    margin: 0,
+                                    height: 40,
+                                    disableButton: true,
+                                    onPressed: () {
+                                      showInfoDialog(
+                                        height: 250,
+                                        Widgets: popUpPinBody(),
+                                        call: 'vPayment',
+                                        title: 'Enter card pin',
+                                      );
+                                    },
+                                    text: 'Pay NGN' + widget.amount.toString()),
                               ),
+                              SizedBox(height: 30),
                             ],
                           ),
-                          SizedBox(height: 20),
-                          Divider(
-                              color: ColorConstants.whiteLighterColor
-                          ),
-
-                          SizedBox(height: 20),
-                          Align(
-                            alignment: Alignment.center,
-                            child: CustomButton(
-                                margin: 0,
-                                height: 40,
-                                disableButton: true,
-                                onPressed: () {
-                                  showInfoDialog( height:250,Widgets: popUpPinBody(),call: 'vPayment', title: 'Enter card pin', );
-                                },
-                                text: 'Pay NGN'+ widget.amount.toString()),
-                          ),
-                          SizedBox(height: 30),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-    );
+          );
   }
 
   void _onCardFormClick() {
     this._hideKeyboard();
-    if (this._cardFormKey.currentState.validate()) {
-
-    }
+    if (this._cardFormKey.currentState.validate()) {}
   }
 
   void _makeCardPayment() {
     Navigator.of(this.context).pop();
-
-
   }
-  
+
   void _hideKeyboard() {
     FocusScope.of(this.context).requestFocus(FocusNode());
   }
 
-
   void verifyPayment() async {
-      if (_nameController.text.isEmpty) {
+    if (_nameController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter cardholders name',
           context: context,
           scaffoldKey: _scaffoldKey);
     } else if (_emailController.text.isEmpty) {
-        ShowSnackBar.showInSnackBar(
-            value: 'Enter email address',
-            context: context,
-            scaffoldKey: _scaffoldKey);
-      } else if (_cardNumberFieldController.text.isEmpty) {
-        ShowSnackBar.showInSnackBar(
-            value: 'Enter card number',
-            context: context,
-            scaffoldKey: _scaffoldKey);
-
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter email address',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (_cardNumberFieldController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter card number',
+          context: context,
+          scaffoldKey: _scaffoldKey);
     } else if (_cardMonthFieldController.text.isEmpty) {
-        ShowSnackBar.showInSnackBar(
-            value: 'Enter expiration month',
-            context: context,
-            scaffoldKey: _scaffoldKey);
-
-      }else if (_cardYearFieldController.text.isEmpty) {
-        ShowSnackBar.showInSnackBar(
-            value: 'Enter expiration year',
-            context: context,
-            scaffoldKey: _scaffoldKey);
-
-      }else if (_cardCvvFieldController.text.isEmpty) {
-        ShowSnackBar.showInSnackBar(
-            value: 'Enter card cvv number',
-            context: context,
-            scaffoldKey: _scaffoldKey);
-
-      }
-      else {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter expiration month',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (_cardYearFieldController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter expiration year',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (_cardCvvFieldController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter card cvv number',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
@@ -377,9 +360,8 @@ class _CardPaymentState extends State<CardPayment>
 
         var response = await http
             .post(HttpService.rootVerifyCardPayment, body: map, headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 30), onTimeout: () {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 30), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
@@ -400,16 +382,18 @@ class _CardPaymentState extends State<CardPayment>
             cPageState(state: false);
 
             String authMode = verifySmartcard.data.authMode;
-             apiReference = verifySmartcard.data.apiReference;
+            apiReference = verifySmartcard.data.apiReference;
             apiId = verifySmartcard.data.apiId.toString();
             reference = verifySmartcard.data.reference;
 
-            if(authMode == 'otp'){
-              showInfoDialog(height: 250,Widgets:  popUpOtpBody(),title: 'Enter OTP',call: 'otp',);
-
-            }else if (authMode == 'redirect'){
-
-            }
+            if (authMode == 'otp') {
+              showInfoDialog(
+                height: 250,
+                Widgets: popUpOtpBody(),
+                title: 'Enter OTP',
+                call: 'otp',
+              );
+            } else if (authMode == 'redirect') {}
             //redirectPage();
           } else if (!status) {
             cPageState(state: false);
@@ -439,7 +423,7 @@ class _CardPaymentState extends State<CardPayment>
   }
 
   void verifyOtp() async {
-    cPageState(state: false);
+    cPageState(state: true);
     try {
       var map = Map<String, dynamic>();
       map['userId'] = userId;
@@ -448,12 +432,10 @@ class _CardPaymentState extends State<CardPayment>
       map['otp'] = _cardOtpFieldController.text;
       map['reference'] = reference;
 
-
-      var response = await http
-          .post(HttpService.rootVerifyOtp, body: map, headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootVerifyOtp, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -475,14 +457,16 @@ class _CardPaymentState extends State<CardPayment>
           String balance = otpVerification.data.balance.toString();
 
           ShowSnackBar.showInSnackBar(
-              value: message+ ' ' +otpVerification.data.amount.toString() + ' was added to your account',
+              value: message +
+                  ' ' +
+                  otpVerification.data.amount.toString() +
+                  ' was added to your account',
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
 
           kopenPage(context, LandingPage());
           SharedPrefrences.addStringToSP("nairaBalance", balance);
-
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -507,11 +491,10 @@ class _CardPaymentState extends State<CardPayment>
           scaffoldKey: _scaffoldKey,
           timer: 5);
     }
-
   }
 
-
-  void showInfoDialog({double height, Widget Widgets, String call, String title = 'Info'}) {
+  void showInfoDialog(
+      {double height, Widget Widgets, String call, String title = 'Info'}) {
     showDialog(
         context: context,
         builder: (context) {
@@ -552,7 +535,7 @@ class _CardPaymentState extends State<CardPayment>
                                     },
                                     child: Padding(
                                       padding:
-                                      const EdgeInsets.only(right: 8.0),
+                                          const EdgeInsets.only(right: 8.0),
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
@@ -574,10 +557,9 @@ class _CardPaymentState extends State<CardPayment>
                               disableButton: true,
                               onPressed: () {
                                 Navigator.of(context).pop();
-                                if(call == 'vPayment'){
+                                if (call == 'vPayment') {
                                   verifyPayment();
-
-                                }else if(call == 'otp'){
+                                } else if (call == 'otp') {
                                   verifyOtp();
                                 }
                               },
@@ -597,10 +579,7 @@ class _CardPaymentState extends State<CardPayment>
     return Column(
       children: [
         NormalFields(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           hintSize: 16,
           hintText: 'Enter card pin',
           labelText: '',
@@ -609,7 +588,9 @@ class _CardPaymentState extends State<CardPayment>
           textInputType: TextInputType.number,
           controller: _cardPinFieldController,
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
       ],
     );
   }
@@ -618,10 +599,7 @@ class _CardPaymentState extends State<CardPayment>
     return Column(
       children: [
         NormalFields(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           hintSize: 13,
           hintText: 'Enter Otp',
           labelText: '',
@@ -630,7 +608,9 @@ class _CardPaymentState extends State<CardPayment>
           textInputType: TextInputType.text,
           controller: _cardOtpFieldController,
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
       ],
     );
   }
@@ -640,5 +620,4 @@ class _CardPaymentState extends State<CardPayment>
       pageState = state;
     });
   }
-
 }

@@ -41,23 +41,18 @@ class _SignUpPageState extends State<SignUpPage> {
   bool isUserActive = false;
   bool isFirstScreen;
 
-
-
   checkFirstScreen() {
     if (widget.userPin == '') {
       setState(() {
         isFirstScreen = false;
       });
-
     } else {
       setState(() {
         isFirstScreen = true;
-
       });
     }
     print(isFirstScreen);
   }
-
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final FocusNode myFocusNodePassword = FocusNode();
@@ -98,12 +93,14 @@ class _SignUpPageState extends State<SignUpPage> {
       key: _scaffoldKey,
       backgroundColor: ColorConstants.primaryColor,
       body: (isFirstScreen)
-          ? MainScreenLock(userPin: widget.userPin,)
+          ? MainScreenLock(
+              userPin: widget.userPin,
+            )
           : (pageState)
               ? loadingPage(state: pageState)
               : SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: Column(children: <Widget>[
                       SafeArea(child: SizedBox(height: 5)),
                       _buildSignUpForm(context),
@@ -117,143 +114,147 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildSignUpForm(BuildContext context) {
-    return Card(
-      color: ColorConstants.primaryLighterColor,
-      child: Padding(
-        padding:
-            const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 70, top: 30),
-        child: Form(
-          child: Column(children: [
-            Image.asset('assets/images/mabrologo.png'),
-            SizedBox(height: 15),
-            GestureDetector(
-              onTap: () {
-                kopenPage(context, LandingPage());
-              },
-              child: Text(
-                'Create A new account'.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: ColorConstants.white,
-                ),
-              ),
-            ),
-            SizedBox(height: 15),
-            RoundedTextfield(
-              icon: Icons.person,
-              hintText: 'Full name',
-              labelText: 'Full name',
-              controller: signupNameController,
-              myFocusNode: myFocusNodeName,
-              textInputType: TextInputType.name,
-              onChanged: (name) {
-                _name = name;
-              },
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            RoundedTextfield(
-              icon: Icons.email_outlined,
-              hintText: 'Email address',
-              labelText: 'Email address',
-              controller: signupEmailController,
-              myFocusNode: myFocusNodeEmail,
-              textInputType: TextInputType.emailAddress,
-              onChanged: (email) {
-                _email = email;
-              },
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            PasswordTextField(
-              icon: Icons.lock,
-              textHint: 'Password',
-              controller: signupPasswordController,
-              myFocusNode: myFocusNodePassword,
-              labelText: '',
-              onChanged: (password) {
-                setState(() {
-                  _password = password;
-                  charLength = password.length;
-                });
-              },
-            ),
-            SizedBox(
-              height: Dims.sizedBoxHeight(),
-            ),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: Checkbox(
-                          activeColor: ColorConstants.secondaryColor,
-                          checkColor: ColorConstants.whiteLighterColor,
-                          side: BorderSide(
-                              color: ColorConstants.whiteLighterColor),
-                          value: checkState,
-                          onChanged: (state) {
-                            setState(() {
-                              checkState = state;
-                            });
-                          }),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Flexible(
-                      child: TextStyles.richTexts(
-                          onPress1: () {
-                            kopenPage(context, TermsOfUsePage());
-                          },
-                          onPress2: () {
-                            kopenPage(context, PrivacyPolicyPage());
-                          },
-                          text1: 'By signing up, I agree to the ',
-                          text2: ' terms of use',
-                          text3: '',
-                          text4: ''),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: Dims.sizedBoxHeight(
-                      height: Dims.screenHeight(context) * 0.03),
-                ),
-                CustomButton(
-                    margin: 0,
-                    disableButton: checkState,
-                    onPressed: () {
-                      _signUp();
-                    },
-                    text: 'Sign Up'),
-                SizedBox(
-                  height: Dims.sizedBoxHeight(height: 15),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    kopenPage(context, SignInPage());
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextStyles.textDetails(
-                          textValue: 'Already have an account?', textSize: 14),
-                      SizedBox(width: 10),
-                      TextStyles.textDetails(
-                          textValue: 'Sign In'.toUpperCase(),
-                          textSize: 14,
-                          textColor: ColorConstants.secondaryColor),
-                    ],
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: Card(
+        color: ColorConstants.primaryLighterColor,
+        child: Padding(
+          padding:
+              const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 70, top: 15),
+          child: Form(
+            child: Column(children: [
+              Image.asset('assets/images/mabrologo.png'),
+              SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  kopenPage(context, LandingPage());
+                },
+                child: Text(
+                  'Create A new account'.toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
                   ),
                 ),
-              ],
-            ),
-          ]),
+              ),
+              SizedBox(height: 20),
+              RoundedTextfield(
+                icon: Icons.person,
+                hintText: 'Full name',
+                labelText: 'Full name',
+                controller: signupNameController,
+                myFocusNode: myFocusNodeName,
+                textInputType: TextInputType.name,
+                onChanged: (name) {
+                  _name = name;
+                },
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              RoundedTextfield(
+                icon: Icons.email_outlined,
+                hintText: 'Email address',
+                labelText: 'Email address',
+                controller: signupEmailController,
+                myFocusNode: myFocusNodeEmail,
+                textInputType: TextInputType.emailAddress,
+                onChanged: (email) {
+                  _email = email;
+                },
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              PasswordTextField(
+                icon: Icons.lock,
+                textHint: 'Password',
+                controller: signupPasswordController,
+                myFocusNode: myFocusNodePassword,
+                labelText: '',
+                onChanged: (password) {
+                  setState(() {
+                    _password = password;
+                    charLength = password.length;
+                  });
+                },
+              ),
+              SizedBox(
+                height: Dims.sizedBoxHeight(),
+              ),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Checkbox(
+                            activeColor: ColorConstants.secondaryColor,
+                            checkColor: ColorConstants.whiteLighterColor,
+                            side: BorderSide(
+                                color: ColorConstants.whiteLighterColor),
+                            value: checkState,
+                            onChanged: (state) {
+                              setState(() {
+                                checkState = state;
+                              });
+                            }),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        child: TextStyles.richTexts(
+                            onPress1: () {
+                              kopenPage(context, TermsOfUsePage());
+                            },
+                            onPress2: () {
+                              kopenPage(context, PrivacyPolicyPage());
+                            },
+                            text1: 'By signing up, I agree to the ',
+                            text2: ' terms of use',
+                            text3: '',
+                            text4: ''),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: Dims.sizedBoxHeight(
+                        height: Dims.screenHeight(context) * 0.03),
+                  ),
+                  CustomButton(
+                      margin: 0,
+                      disableButton: checkState,
+                      onPressed: () {
+                        _signUp();
+                      },
+                      text: 'Sign Up'),
+                  SizedBox(
+                    height: Dims.sizedBoxHeight(height: 15),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      kopenPage(context, SignInPage());
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextStyles.textDetails(
+                            textValue: 'Already have an account?',
+                            textSize: 14),
+                        SizedBox(width: 10),
+                        TextStyles.textDetails(
+                            textValue: 'Sign In'.toUpperCase(),
+                            textSize: 14,
+                            textColor: ColorConstants.secondaryColor),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ]),
+          ),
         ),
       ),
     );
@@ -296,9 +297,9 @@ class _SignUpPageState extends State<SignUpPage> {
         map['password'] = _password;
         map['name'] = _name;
 
-        var response = await http
-            .post(HttpService.rootReg, body: map, headers: {
-          'Authorization': 'Bearer '+HttpService.token,
+        var response =
+            await http.post(HttpService.rootReg, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
         }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -316,7 +317,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
           bool status = regUser.status;
 
-
           if (status) {
             cPageState(state: false);
             String otp = regUser.data.oTP;
@@ -332,7 +332,7 @@ class _SignUpPageState extends State<SignUpPage> {
             SharedPrefrences.addStringToSP("userId", userId);
             SharedPrefrences.addStringToSP("password", _password);
 
-           _redirectuser(code: otp, userId: userId);
+            _redirectuser(code: otp, userId: userId);
           } else if (!status) {
             cPageState(state: false);
             cause = regUser.causes.emailAddress;
@@ -342,7 +342,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
-
           }
         } else {
           cPageState(state: false);

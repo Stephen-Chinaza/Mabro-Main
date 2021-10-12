@@ -43,6 +43,7 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
     super.initState();
     getUserData();
     inputNum = 0;
+    pageState = false;
   }
 
   void _callBackFunction(String name, String dialCode, String flag) {
@@ -72,112 +73,149 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: TextStyles.textDetails(
-                      centerText: true,
-                      textSize: 20,
-                      textColor: ColorConstants.secondaryColor,
-                      textValue:
-                      'Phone Number Verification',
-                    ),),
-
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: TextStyles.textDetails(
+                        centerText: true,
+                        textSize: 20,
+                        textColor: ColorConstants.secondaryColor,
+                        textValue: 'Phone Number Verification',
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(
                   height: 30,
                 ),
-                Image.asset('assets/images/registration.png', height: 130,width: 190,),
+                Image.asset(
+                  'assets/images/registration.png',
+                  height: 130,
+                  width: 190,
+                ),
                 SizedBox(
                   height: 30,
                 ),
-                Padding(padding: EdgeInsets.symmetric(horizontal: 8), child: TextStyles.textDetails(
-                  centerText: true,
-                  textSize: 16,
-                  textColor: ColorConstants.whiteLighterColor,
-                  textValue:
-                  'Enter your mobile number to receive a verification code',
-                ),),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: TextStyles.textDetails(
+                    centerText: true,
+                    textSize: 16,
+                    textColor: ColorConstants.whiteLighterColor,
+                    textValue:
+                        'Enter your mobile number to receive a verification code',
+                  ),
+                ),
                 SizedBox(
                   height: screenHeight * 0.04,
                 ),
                 Container(
+                  width: MediaQuery.of(context).size.width,
                   margin: EdgeInsets.symmetric(
                       horizontal: screenWidth > 600 ? screenWidth * 0.2 : 16),
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                       color: ColorConstants.primaryLighterColor,
-
-
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Column(
                     children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        height: 45,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: ColorConstants.whiteColor, width: 0.2,
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Row(
+                      Visibility(
+                        visible: !pageState,
+                        child: Column(
                           children: [
-                            CountryPicker(
-                              callBackFunction: _callBackFunction,
-                              headerText: 'Select Country',
-                              headerBackgroundColor: ColorConstants.primaryColor,
-                              headerTextColor: Colors.white,
-
-                            ),
-                            SizedBox(
-                              width: screenWidth * 0.01,
-                            ),
-                            Expanded(
-                              child: TextField(
-                                cursorColor: ColorConstants.secondaryColor,
-                                style: TextStyle(color: ColorConstants.white),
-                                decoration: const InputDecoration(
-                                  hintText: 'Contact Number',
-                                  border: InputBorder.none,
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  hintStyle: TextStyle(
-                                      fontStyle: FontStyle.normal,
-                                      color: ColorConstants.whiteLighterColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w300),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(vertical: 13.5),
+                            Container(
+                              margin: const EdgeInsets.all(8),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              height: 45,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: ColorConstants.whiteColor,
+                                  width: 0.2,
                                 ),
-                                controller: _contactEditingController,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10)
-                                ],
-                                onChanged: (String input) {
-                                  setState(() {
-                                    inputNum = input.length;
-                                  });
-                                },
-
+                                borderRadius: BorderRadius.circular(4),
                               ),
+                              child: Row(
+                                children: [
+                                  CountryPicker(
+                                    callBackFunction: _callBackFunction,
+                                    headerText: 'Select Country',
+                                    headerBackgroundColor:
+                                        ColorConstants.primaryColor,
+                                    headerTextColor: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: screenWidth * 0.01,
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      cursorColor:
+                                          ColorConstants.secondaryColor,
+                                      style: TextStyle(
+                                          color: ColorConstants.white),
+                                      decoration: const InputDecoration(
+                                        hintText: 'Contact Number',
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        hintStyle: TextStyle(
+                                            fontStyle: FontStyle.normal,
+                                            color: ColorConstants
+                                                .whiteLighterColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w300),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 13.5),
+                                      ),
+                                      controller: _contactEditingController,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [
+                                        LengthLimitingTextInputFormatter(10)
+                                      ],
+                                      onChanged: (String input) {
+                                        setState(() {
+                                          inputNum = input.length;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            CustomButton(
+                              onPressed: () {
+                                clickOnLogin(context);
+                              },
+                              text: 'Send otp',
+                              disableButton: true,
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      CustomButton(
-                        onPressed: () {
-                          clickOnLogin(context);
-                        },
-                        text: 'Send otp',
-                        disableButton: true,
+                      Visibility(
+                        visible: pageState,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 20),
+                            CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'verifying code...',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontStyle: FontStyle.italic),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -207,14 +245,12 @@ class _ConfirmPhoneNScreenState extends State<ConfirmPhoneNScreen> {
       map['userId'] = userId;
       map['phone_number'] = '0' + _contactEditingController.text;
 
-
       print('0' + _contactEditingController.text);
 
-      var response = await http
-          .post(HttpService.rootSendPhone, body: map, headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootSendPhone, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
           value: 'The connection has timed out, please try again!',

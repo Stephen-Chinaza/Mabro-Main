@@ -135,7 +135,7 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                                               color: _selectedIndex !=
                                                   null &&
                                                   _selectedIndex == i
-                                                  ? ColorConstants.secondaryColor
+                                                  ? Colors.deepPurpleAccent
                                                   : Colors.transparent,
                                               width: 2,
                                             ),

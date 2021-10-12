@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
-import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/register_user.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -52,79 +51,82 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: (pageState)
           ? loadingPage(state: pageState)
           : SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SafeArea(child: SizedBox(height: 5)),
-              Container(
-                height: 370,
-                child: Card(
-                  color: ColorConstants.primaryLighterColor,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 5,),
-                      TextStyles.textHeadings(
-                          textValue: 'Reset Password'.toUpperCase(),
-                          textSize: 16,
-                          textColor: ColorConstants.whiteColor),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(height: 20),
-                      ),
-                      Divider(color: Colors.grey.withOpacity(0.2), height: 0.5),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(height: 20),
-                      ),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(height: 20),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: TextStyles.textDetails(
-                            textValue:
-                            'Please provide the following details to reset your password.',
-                            textSize: 16,
-                            textColor: ColorConstants.whiteLighterColor),
-                      ),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(height: 20),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RoundedTextfield(
-                          icon: Icons.email_outlined,
-                          hintText: 'Please Enter Email',
-                          labelText: 'Email',
-                          controller: signinEmailController,
-                          myFocusNode: myFocusNodeEmail,
-                          textInputType: TextInputType.emailAddress,
-                          onChanged: (email) {},
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SafeArea(child: SizedBox(height: 5)),
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Card(
+                        color: ColorConstants.primaryLighterColor,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            TextStyles.textHeadings(
+                                textValue: 'Reset Password'.toUpperCase(),
+                                textSize: 16,
+                                textColor: ColorConstants.secondaryColor),
+                            SizedBox(
+                              height: Dims.sizedBoxHeight(height: 20),
+                            ),
+                            Divider(
+                                color: Colors.grey.withOpacity(0.2),
+                                height: 0.5),
+                            SizedBox(
+                              height: Dims.sizedBoxHeight(height: 20),
+                            ),
+                            SizedBox(
+                              height: Dims.sizedBoxHeight(height: 20),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              child: TextStyles.textDetails(
+                                  textValue:
+                                      'Please provide the following details to reset your password.',
+                                  textSize: 16,
+                                  textColor: ColorConstants.whiteLighterColor),
+                            ),
+                            SizedBox(
+                              height: Dims.sizedBoxHeight(height: 20),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: RoundedTextfield(
+                                icon: Icons.email_outlined,
+                                hintText: 'Please Enter Email',
+                                labelText: 'Email',
+                                controller: signinEmailController,
+                                myFocusNode: myFocusNodeEmail,
+                                textInputType: TextInputType.emailAddress,
+                                onChanged: (email) {},
+                              ),
+                            ),
+                            SizedBox(
+                              height: Dims.sizedBoxHeight(height: 20),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CustomButton(
+                                  margin: 0,
+                                  disableButton: true,
+                                  onPressed: () {
+                                    //_redirectuser(code: '909099', userId: 'tguy566g', userEmail: signinEmailController.text);
+                                    _sendOtp();
+                                  },
+                                  text: 'Reset Password'),
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        height: Dims.sizedBoxHeight(height: 20),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomButton(
-                            margin: 0,
-                            disableButton: true,
-                            onPressed: () {
-                              //_redirectuser(code: '909099', userId: 'tguy566g', userEmail: signinEmailController.text);
-                              _sendOtp();
-                            },
-                            text: 'Reset Password'),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -135,7 +137,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
-    }  else {
+    } else {
       cPageState(state: true);
       String message;
       String userId;
@@ -145,9 +147,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
         var response = await http
             .post(HttpService.rootForgotPassword, body: map, headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
@@ -170,7 +171,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             String otp = regUser.data.oTP;
             userId = regUser.data.userId;
 
-
             ShowSnackBar.showInSnackBar(
                 iconData: Icons.check_circle,
                 value: message,
@@ -187,7 +187,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
-
           }
         } else {
           cPageState(state: false);
@@ -197,8 +196,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               scaffoldKey: _scaffoldKey,
               timer: 5);
         }
-      }
-      on SocketException {
+      } on SocketException {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'check your internet connection',
@@ -212,16 +210,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   void _redirectuser({String code, String userId, String userEmail}) {
     cPageState(state: false);
     Future.delayed(Duration(seconds: 3), () {
-
-          kopenPage(
+      kopenPage(
           context,
           ResetPasswordPage(
             userId: userId,
-          userEmail: signinEmailController.text,
-          otp: code,
-      ));
+            userEmail: signinEmailController.text,
+            otp: code,
+          ));
       signinEmailController.text = '';
-
     });
   }
 

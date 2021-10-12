@@ -70,110 +70,111 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       backgroundColor: ColorConstants.primaryColor,
       body: (pageState)
           ? loadingPage(state: pageState)
-          :SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SafeArea(
-                child: SizedBox(
-                  height: 5,
-                ),
-              ),
-              Container(
-                height: 540,
-                child: Card(
-                  color: ColorConstants.primaryLighterColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(height: 10),
-                        ),
-                        TextStyles.textDetails(
-                            textValue: 'Reset Password '.toUpperCase(),
-                            textSize: 16,
-                            textColor: ColorConstants.white),
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(height: 20),
-                        ),
-                        Divider(
-                            color: Colors.grey.withOpacity(0.2), height: 0.5),
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(height: 20),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: TextStyles.textDetails(
-                            textValue:
-                                'A token has been sent to your email please provide the following details to reset your password.',
-                            textSize: 16,
-                            textColor: ColorConstants.whiteLighterColor,
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SafeArea(
+                      child: SizedBox(
+                        height: 5,
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height,
+                      child: Card(
+                        color: ColorConstants.primaryLighterColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(height: 10),
+                              ),
+                              TextStyles.textDetails(
+                                  textValue: 'Reset Password '.toUpperCase(),
+                                  textSize: 16,
+                                  textColor: ColorConstants.secondaryColor),
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(height: 20),
+                              ),
+                              Divider(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  height: 0.5),
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(height: 20),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: TextStyles.textDetails(
+                                  textValue:
+                                      'A token has been sent to your email please provide the following details to reset your password.',
+                                  textSize: 16,
+                                  textColor: ColorConstants.whiteLighterColor,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              RoundedTextfield(
+                                icon: Icons.email_outlined,
+                                hintText: 'Please Enter Email',
+                                labelText: 'Email',
+                                isEditable: false,
+                                controller: signinEmailController,
+                                myFocusNode: myFocusNodeEmail,
+                                textInputType: TextInputType.emailAddress,
+                                onChanged: (email) {},
+                              ),
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(),
+                              ),
+                              PasswordTextField(
+                                icon: Icons.lock_open,
+                                textHint: 'Password',
+                                controller: signinPasswordController,
+                                labelText: '',
+                                onChanged: (password) {},
+                              ),
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(),
+                              ),
+                              PasswordTextField(
+                                icon: Icons.lock_open,
+                                textHint: 'Password Again',
+                                controller: signinCPasswordController,
+                                labelText: '',
+                                onChanged: (password) {},
+                              ),
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(),
+                              ),
+                              RoundedTextfield(
+                                icon: Icons.vpn_key,
+                                hintText: 'Enter Token',
+                                labelText: 'Token',
+                                controller: tokenController,
+                                textInputType: TextInputType.name,
+                                onChanged: (token) {},
+                              ),
+                              SizedBox(
+                                height: Dims.sizedBoxHeight(height: 30),
+                              ),
+                              CustomButton(
+                                  margin: 0,
+                                  disableButton: true,
+                                  onPressed: () {
+                                    _sendOtp();
+                                  },
+                                  text: 'Reset Password'),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 20),
-                        RoundedTextfield(
-                          icon: Icons.email_outlined,
-                          hintText: 'Please Enter Email',
-                          labelText: 'Email',
-                          isEditable: false,
-                          controller: signinEmailController,
-                          myFocusNode: myFocusNodeEmail,
-                          textInputType: TextInputType.emailAddress,
-                          onChanged: (email) {},
-                        ),
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(),
-                        ),
-                        PasswordTextField(
-                          icon: Icons.lock_open,
-                          textHint: 'Password',
-                          controller: signinPasswordController,
-                          labelText: '',
-                          onChanged: (password) {},
-                        ),
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(),
-                        ),
-                        PasswordTextField(
-                          icon: Icons.lock_open,
-                          textHint: 'Password Again',
-                          controller: signinCPasswordController,
-                          labelText: '',
-                          onChanged: (password) {},
-                        ),
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(),
-                        ),
-                        RoundedTextfield(
-                          icon: Icons.vpn_key,
-                          hintText: 'Enter Token',
-                          labelText: 'Token',
-                          controller: tokenController,
-                          textInputType: TextInputType.name,
-                          onChanged: (token) {},
-                        ),
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(height: 30),
-                        ),
-                        CustomButton(
-                            margin: 0,
-                            disableButton: true,
-                            onPressed: () {
-                              _sendOtp();
-                            },
-                            text: 'Reset Password'),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -184,27 +185,26 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
-    }else if(tokenController.text.isEmpty){
+    } else if (tokenController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'enter sent token',
           bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
-
-    }else if(signinPasswordController.text.isEmpty){
+    } else if (signinPasswordController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'password field required',
           bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
-    }else if(signinCPasswordController.text.isEmpty){
+    } else if (signinCPasswordController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 're-enter password',
           bgColor: ColorConstants.secondaryColor,
           context: context,
           scaffoldKey: _scaffoldKey);
-
-    } else if(signinPasswordController.text.isEmpty != signinCPasswordController.text.isEmpty){
+    } else if (signinPasswordController.text.isEmpty !=
+        signinCPasswordController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'password fields does not match',
           bgColor: ColorConstants.secondaryColor,
@@ -235,99 +235,27 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          RegisterUser regUser = RegisterUser.fromJson(body);
+          RegisterUser data = RegisterUser.fromJson(body);
 
-          bool status = regUser.status;
-          message = regUser.message;
+          bool status = data.status;
+          message = data.message;
           if (status) {
             cPageState(state: false);
-            String otp = regUser.data.oTP;
-            userId = regUser.data.userId;
+            String otp = data.data.oTP;
+            userId = data.data.userId;
 
+            // ShowSnackBar.showInSnackBar(
+            //     iconData: Icons.check_circle,
+            //     value: message,
+            //     context: context,
+            //     scaffoldKey: _scaffoldKey,
+            //     timer: 5);
 
-            ShowSnackBar.showInSnackBar(
-                iconData: Icons.check_circle,
-                value: message,
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-
+            print(userId);
             _resetPassword();
           } else if (!status) {
             cPageState(state: false);
 
-            ShowSnackBar.showInSnackBar(
-                value: message,
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-           }
-        } else {
-          cPageState(state: false);
-          ShowSnackBar.showInSnackBar(
-              value: 'network error',
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-        }
-      } on SocketException {
-        cPageState(state: false);
-        ShowSnackBar.showInSnackBar(
-            value: 'check your internet connection',
-            context: context,
-            scaffoldKey: _scaffoldKey,
-            timer: 5);
-      }
-    }
-  }
-
-  void _resetPassword() async {
-
-      cPageState(state: true);
-      String message;
-      String userId;
-      try {
-        var map = Map<String, dynamic>();
-        map['userId'] = widget.userId;
-        map['password'] = signinPasswordController.text;
-        map['repeat_password'] = signinCPasswordController.text;
-
-        var response =
-        await http.post(HttpService.rootResetPassword, body: map, headers: {
-          'Authorization': 'Bearer ' + HttpService.token,
-        }).timeout(const Duration(seconds: 15), onTimeout: () {
-          cPageState(state: false);
-          ShowSnackBar.showInSnackBar(
-              value: 'The connection has timed out, please try again!',
-              bgColor: ColorConstants.secondaryColor,
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-          return null;
-        });
-        if (response.statusCode == 200) {
-          var body = jsonDecode(response.body);
-
-          RegisterUser regUser = RegisterUser.fromJson(body);
-
-          bool status = regUser.status;
-
-          if (status) {
-            cPageState(state: false);
-            String otp = regUser.data.oTP;
-            userId = regUser.data.userId;
-            message = regUser.message;
-
-            ShowSnackBar.showInSnackBar(
-                iconData: Icons.check_circle,
-                value: message,
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-
-            _redirectuser();
-          } else if (!status) {
-            cPageState(state: false);
             ShowSnackBar.showInSnackBar(
                 value: message,
                 context: context,
@@ -350,17 +278,83 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             scaffoldKey: _scaffoldKey,
             timer: 5);
       }
+    }
+  }
 
+  void _resetPassword() async {
+    cPageState(state: true);
+    String message;
+    String userId;
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = widget.userId;
+      map['password'] = signinPasswordController.text;
+      map['repeat_password'] = signinCPasswordController.text;
+
+      var response =
+          await http.post(HttpService.rootResetPassword, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            bgColor: ColorConstants.secondaryColor,
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+        return null;
+      });
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        RegisterUser regUser = RegisterUser.fromJson(body);
+
+        bool status = regUser.status;
+
+        if (status) {
+          cPageState(state: false);
+          // String otp = regUser.data.oTP;
+          //userId = regUser.data.userId;
+          message = regUser.message;
+
+          ShowSnackBar.showInSnackBar(
+              iconData: Icons.check_circle,
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+
+          _redirectuser();
+        } else if (!status) {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      cPageState(state: false);
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
   }
 
   void _redirectuser({String code, String userId}) {
     cPageState(state: false);
     Future.delayed(Duration(seconds: 3), () {
-      pushPage(
-          context,
-              SignInPage(
-              ));
-
+      pushPage(context, SignInPage());
     });
   }
 

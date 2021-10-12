@@ -85,17 +85,30 @@ class DemoData {
 
   static List<ImageList> get electricityImages => [
     ImageList(
-        image: 'assets/images/ekoelect.jpg',
+        image: 'assets/images/abujaelectric.jpg',
         title: 'Eko Electricity Distribution Company'),
     ImageList(
-        image: 'assets/images/ikejaelect.png',
+        image: 'assets/images/kanoelectric.jpg',
         title: 'Ikeja Electricity Distribution Company'),
     ImageList(
-        image: 'assets/images/kanoelect.png',
+        image: 'assets/images/portharcourtelectric.jpg',
         title: 'Kano Electricity Distribution Company'),
     ImageList(
-        image: 'assets/images/eedcelect.png',
+        image: 'assets/images/kadunaelectric.jpg',
         title: 'Enugu Electricity Distribution Company'),
+        ImageList(
+        image: 'assets/images/joselectric.jpg',
+        title: 'Enugu Electricity Distribution Company'),
+        ImageList(
+        image: 'assets/images/ibadanelectric.jpg',
+        title: 'Enugu Electricity Distribution Company'),
+        ImageList(
+        image: 'assets/images/ikejaelectric.jpg',
+        title: 'Enugu Electricity Distribution Company'),
+        ImageList(
+        image: 'assets/images/ekoelectric.jpg',
+        title: 'Enugu Electricity Distribution Company'),
+  
   ];
 
   static List<TextList> get text => [

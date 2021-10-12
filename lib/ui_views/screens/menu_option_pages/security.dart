@@ -78,7 +78,10 @@ class _MenuInfoState extends State<MenuInfo> {
   void initState() {
     super.initState();
     updateState = false;
-    getData();
+    getData().then((value) => {
+          print(password),
+          updateSecurityState(),
+        });
     twoFactorState = false;
     fingerPrintState = true;
     timeoutLockState = false;
@@ -91,9 +94,8 @@ class _MenuInfoState extends State<MenuInfo> {
     userId = (pref.getString('userId') ?? '');
     twoFactorAuth = (pref.getString('two_factor_authentication') ?? ''); //
     fingerPrintLogin = (pref.getString('finger_print_login') ?? ''); //
-    timeoutLock =  (pref.getString('timeout_lock') ?? '');
+    timeoutLock = (pref.getString('timeout_lock') ?? '');
     setState(() {});
-    updateSecurityState();
   }
 
   void updateSecurityState() {
@@ -177,18 +179,23 @@ class _MenuInfoState extends State<MenuInfo> {
                                 widget: Switch(
                                   activeColor: ColorConstants.secondaryColor,
                                   activeTrackColor: ColorConstants.whiteColor,
-                                  inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                                  inactiveThumbColor: ColorConstants.whiteLighterColor,
+                                  inactiveTrackColor: ColorConstants
+                                      .whiteLighterColor
+                                      .withOpacity(0.4),
+                                  inactiveThumbColor:
+                                      ColorConstants.whiteLighterColor,
                                   value: twoFactorState,
                                   onChanged: (bool value) {
                                     setState(() {
                                       twoFactorState = value;
                                       if (twoFactorState) {
                                         updateSettings(
-                                            key: 'two_factor_authentication', value: 1);
+                                            key: 'two_factor_authentication',
+                                            value: 1);
                                       } else {
                                         updateSettings(
-                                            key: 'two_factor_authentication', value: 0);
+                                            key: 'two_factor_authentication',
+                                            value: 0);
                                       }
                                     });
                                   },
@@ -200,19 +207,23 @@ class _MenuInfoState extends State<MenuInfo> {
                                 widget: Switch(
                                   activeColor: ColorConstants.secondaryColor,
                                   activeTrackColor: ColorConstants.whiteColor,
-                                  inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                                  inactiveThumbColor: ColorConstants.whiteLighterColor,
+                                  inactiveTrackColor: ColorConstants
+                                      .whiteLighterColor
+                                      .withOpacity(0.4),
+                                  inactiveThumbColor:
+                                      ColorConstants.whiteLighterColor,
                                   value: fingerPrintState,
                                   onChanged: (bool value) {
-
                                     setState(() {
                                       twoFactorState = value;
                                       if (twoFactorState) {
                                         updateSettings(
-                                            key: 'finger_print_login', value: 1);
+                                            key: 'finger_print_login',
+                                            value: 1);
                                       } else {
                                         updateSettings(
-                                            key: 'finger_print_login', value: 0);
+                                            key: 'finger_print_login',
+                                            value: 0);
                                       }
                                     });
                                   },
@@ -224,8 +235,11 @@ class _MenuInfoState extends State<MenuInfo> {
                                 widget: Switch(
                                   activeColor: ColorConstants.secondaryColor,
                                   activeTrackColor: ColorConstants.whiteColor,
-                                  inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                                  inactiveThumbColor: ColorConstants.whiteLighterColor,
+                                  inactiveTrackColor: ColorConstants
+                                      .whiteLighterColor
+                                      .withOpacity(0.4),
+                                  inactiveThumbColor:
+                                      ColorConstants.whiteLighterColor,
                                   value: timeoutLockState,
                                   onChanged: (bool value) {
                                     setState(() {
@@ -244,7 +258,6 @@ class _MenuInfoState extends State<MenuInfo> {
                 ),
               ),
             ),
-
           ],
         ),
       ),
@@ -277,9 +290,11 @@ class _MenuInfoState extends State<MenuInfo> {
           ),
         ),
       ),
-      title: Text(title, style: TextStyle(color: ColorConstants.whiteLighterColor)),
+      title: Text(title,
+          style: TextStyle(color: ColorConstants.whiteLighterColor)),
       trailing: (widget == null)
-          ? Icon(Icons.arrow_forward_ios_sharp, size: 13, color: ColorConstants.whiteLighterColor)
+          ? Icon(Icons.arrow_forward_ios_sharp,
+              size: 13, color: ColorConstants.whiteLighterColor)
           : widget,
       onTap: onTapped,
     );
@@ -335,7 +350,6 @@ class _MenuInfoState extends State<MenuInfo> {
                 },
                 controller: newPinController,
               ),
-
               SizedBox(height: 15),
               NormalFields(
                 maxLength: 4,
@@ -352,7 +366,7 @@ class _MenuInfoState extends State<MenuInfo> {
                 height: 20,
               ),
               CustomButton(
-                margin: 0,
+                  margin: 0,
                   disableButton: true,
                   onPressed: () {
                     changePin(pinLength: pinLength);
@@ -366,7 +380,7 @@ class _MenuInfoState extends State<MenuInfo> {
   }
 
   void changePin({
-    int pinLength,
+    int pinLength = 0,
   }) async {
     if (oldPinController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
@@ -397,14 +411,13 @@ class _MenuInfoState extends State<MenuInfo> {
         var map = Map<String, dynamic>();
         map['userId'] = userId;
         map['password'] = password;
-        map['repeat_lock_code'] = oldPinController.text;
+        map['repeat_lock_code'] = cNewPinController.text;
         map['lock_code'] = newPinController.text;
 
-        var response = await http
-            .post(HttpService.rootUpdateUserPin, body: map,headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+        var response =
+            await http.post(HttpService.rootUpdateUserPin, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
               context: context,
@@ -537,7 +550,6 @@ class _MenuInfoState extends State<MenuInfo> {
                 },
                 controller: newPasswordController,
               ),
-
               SizedBox(height: 15),
               NormalFields(
                 width: MediaQuery.of(context).size.width,
@@ -600,7 +612,6 @@ class _MenuInfoState extends State<MenuInfo> {
         map['password'] = newPasswordController.text;
         map['repeat_password'] = cNewPasswordController.text;
 
-
         var response = await http
             .post(HttpService.rootUpdateUserPassword, body: map)
             .timeout(const Duration(seconds: 15), onTimeout: () {
@@ -658,11 +669,10 @@ class _MenuInfoState extends State<MenuInfo> {
       map['userId'] = userId;
       map[key] = value;
 
-      var response = await http
-          .post(HttpService.rootUpdateSettings, body: map, headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootUpdateSettings, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         _updateState(false);
 
         ShowSnackBar.showInSnackBar(

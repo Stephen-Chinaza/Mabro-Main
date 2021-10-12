@@ -29,24 +29,15 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  String _email, _password;
   String message, vEmail, id;
-  bool pageState;
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final FocusNode myFocusNodePassword = FocusNode();
   final FocusNode myFocusNodeEmail = FocusNode();
-
+  final FocusNode myFocusNodePassword = FocusNode();
+  bool pageState;
   TextEditingController signinEmailController = new TextEditingController();
   TextEditingController signinPasswordController = new TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    pageState = false;
-    _email = '';
-    _password = '';
-  }
+  String _email, _password;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
@@ -59,41 +50,31 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: ColorConstants.primaryColor,
-      body: (pageState)
-          ? loadingPage(state: pageState)
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                    children: <Widget>[
-                      SafeArea(child: SizedBox(height: 5)),
-                      _buildSignUpForm(context),
-                    ]),
-              ),
-            ),
-    );
+  void initState() {
+    super.initState();
+    pageState = false;
+    _email = '';
+    _password = '';
   }
 
   Widget _buildSignUpForm(BuildContext context) {
     return Container(
-      height: 430,
+      height: MediaQuery.of(context).size.height,
       child: Card(
         color: ColorConstants.primaryLighterColor,
-        child:
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 30),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
           child: Form(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Center(child: Image.asset('assets/images/mabrologo.png')),
               SizedBox(height: 15),
               Center(
                 child: Text(
                   'Login to your account'.toUpperCase(),
-                  style: TextStyle(fontSize: 16, color: ColorConstants.white,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
                   ),
                 ),
               ),
@@ -205,11 +186,10 @@ class _SignInPageState extends State<SignInPage> {
         map['email_address'] = _email;
         map['password'] = _password;
 
-        var response = await http
-            .post(HttpService.rootLogin, body: map,headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+        var response =
+            await http.post(HttpService.rootLogin, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
             bgColor: ColorConstants.secondaryColor,
@@ -263,10 +243,11 @@ class _SignInPageState extends State<SignInPage> {
                   String userId = loginUser.data.userId.toString();
                   String email = loginUser.data.emailAddress;
                   String lockCode = loginUser.data.lockCode;
-                  String nairaBalance = loginUser.data.nairaBalance;
-                  String verifiedEmail = loginUser.data.verifiedEmail.toString();
-                  String verifiedPhone = loginUser.data.verifiedPhone.toString();
-
+                  String nairaBalance = loginUser.data.nairaBalance.toString();
+                  String verifiedEmail =
+                      loginUser.data.verifiedEmail.toString();
+                  String verifiedPhone =
+                      loginUser.data.verifiedPhone.toString();
 
                   SharedPrefrences.addStringToSP("lock_code", lockCode);
                   SharedPrefrences.addStringToSP("surname", surName);
@@ -278,9 +259,10 @@ class _SignInPageState extends State<SignInPage> {
                   SharedPrefrences.addStringToSP("userId", userId);
                   SharedPrefrences.addStringToSP("email_address", email);
                   SharedPrefrences.addStringToSP("blocked", blocked);
-                  SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
-                  SharedPrefrences.addStringToSP("verified_phone", verifiedPhone);
-
+                  SharedPrefrences.addStringToSP(
+                      "verified_email", verifiedEmail);
+                  SharedPrefrences.addStringToSP(
+                      "verified_phone", verifiedPhone);
 
                   ShowSnackBar.showInSnackBar(
                     value: message,
@@ -303,6 +285,7 @@ class _SignInPageState extends State<SignInPage> {
                   scaffoldKey: _scaffoldKey,
                   timer: 5);
             }
+            
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 bgColor: ColorConstants.secondaryColor,
@@ -344,5 +327,24 @@ class _SignInPageState extends State<SignInPage> {
     setState(() {
       pageState = state;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: ColorConstants.primaryColor,
+      body: (pageState)
+          ? loadingPage(state: pageState)
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(children: <Widget>[
+                  SafeArea(child: SizedBox(height: 5)),
+                  _buildSignUpForm(context),
+                ]),
+              ),
+            ),
+    );
   }
 }

@@ -14,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:mabro/ui_views/screens/password_setting/set_password_page.dart';
+import 'package:mabro/core/models/login_user.dart';
+
 
 
 class MainScreenLock extends StatefulWidget {
@@ -30,6 +33,8 @@ class _MainScreenLockState extends State<MainScreenLock> {
   bool pinState, checkPinState;
   bool isValid;
   String userId;
+  String _email;
+  String _password;
 
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -50,6 +55,8 @@ class _MainScreenLockState extends State<MainScreenLock> {
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userId = (pref.getString('userId') ?? '');
+    _email = (pref.getString('email_address') ?? '');
+    _password = (pref.getString('password') ?? '');
   }
 
   _isValidCallback() {
@@ -121,10 +128,9 @@ class _MainScreenLockState extends State<MainScreenLock> {
     Future.delayed(Duration(seconds: 3), () {
       checkPinState = false;
       setState(() {
-        print(isValid);
-        print('isValid');
+       
         if(isValid){
-          getUserInfo();
+          _signIn();
         }else{
           ShowSnackBar.showInSnackBar(
               value: 'Invalid Pin Entered',
@@ -141,103 +147,135 @@ class _MainScreenLockState extends State<MainScreenLock> {
     kopenPage(context, SignInPage());
   }
 
-  void _userInfo() async {
-    String message;
-    try {
-      var map = Map<String, dynamic>();
-      map['userId'] = userId;
+ void _signIn() async {
+    
+      try {
+        var map = Map<String, dynamic>();
+        map['email_address'] = _email;
+        map['password'] = _password;
 
-      var response = await http
-          .post(HttpService.rootUserInfo, body: map, headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      }).timeout(const Duration(seconds: 15), onTimeout: () {
-
-        ShowSnackBar.showInSnackBar(
-            value: 'The connection has timed out, please try again!',
+        var response =
+            await http.post(HttpService.rootLogin, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
+          ShowSnackBar.showInSnackBar(
             bgColor: ColorConstants.secondaryColor,
+            value: 'The connection has timed out, please try again!',
             context: context,
             scaffoldKey: _scaffoldKey,
-            timer: 5);
-        return null;
-      });
-      if (response.statusCode == 200) {
-        var body = jsonDecode(response.body);
+            timer: 5,
+          );
 
-        UserInfo userInfo = UserInfo.fromJson(body);
+          return null;
+        });
 
-        bool status = userInfo.status;
-        message = userInfo.message;
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
 
+          LoginUser loginUser = LoginUser.fromJson(body);
 
-        if (status) {
+          bool status = loginUser.status;
+          String message = loginUser.message;
+          if (status) {
+            String verifiedEmail = loginUser.data.verifiedEmail.toString();
+            String blocked = loginUser.data.blocked.toString();
+            String lockCode = loginUser.data.lockCode;
 
-          userId = userInfo.data.bvns.user;
+            //TODO CHECK IF USER IS BLOCKED OR LOCK_CODE IS SET
+            if (verifiedEmail == '1') {
+              if (lockCode == '') {
+                ShowSnackBar.showInSnackBar(
+                    bgColor: ColorConstants.secondaryColor,
+                    value: 'User lock code not set',
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5);
+                Future.delayed(Duration(seconds: 5), () {
+                  pushPage(context, SetPinPage());
+                });
+              } else {
+                if (blocked == '1') {
+                  ShowSnackBar.showInSnackBar(
+                      bgColor: ColorConstants.secondaryColor,
+                      value: 'User is currently blocked',
+                      context: context,
+                      scaffoldKey: _scaffoldKey,
+                      timer: 5);
+                } else {
+                  String firstName = loginUser.data.firstName;
+                  String surName = loginUser.data.surname;
+                  String phone = loginUser.data.phoneNumber;
+                  String id = loginUser.data.id.toString();
+                  String userId = loginUser.data.userId.toString();
+                  String email = loginUser.data.emailAddress;
+                  String lockCode = loginUser.data.lockCode;
+                  String nairaBalance = loginUser.data.nairaBalance.toString();
+                  String verifiedEmail =
+                      loginUser.data.verifiedEmail.toString();
+                  String verifiedPhone =
+                      loginUser.data.verifiedPhone.toString();
 
-          String accountName = userInfo.data.account.accountName.toString();
-          String accountNumber = userInfo.data.account.accountNumber.toString();
-          String bankName = userInfo.data.account.bankName.toString();
-          String firstName = userInfo.data.bvns.firstName.toString();
-          String surName = userInfo.data.bvns.surname.toString();
-          String bvn = userInfo.data.bvns.bvn.toString();
+                  SharedPrefrences.addStringToSP("lock_code", lockCode);
+                  SharedPrefrences.addStringToSP("surname", surName);
+                  SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
 
-          String emailTransactionNotification = userInfo.data.settings.emailTransactionNotification.toString();
-          String smsNotification = userInfo.data.settings.smsNotification.toString();
-          String twoFactorAuthentication = userInfo.data.settings.twoFactorAuthentication.toString();
-          String fingerPrintLogin = userInfo.data.settings.fingerPrintLogin.toString();
-          String newsletter = userInfo.data.settings.newsletter.toString();
+                  SharedPrefrences.addStringToSP("first_name", firstName);
+                  SharedPrefrences.addStringToSP("phone_number", phone);
+                  SharedPrefrences.addStringToSP("id", id);
+                  SharedPrefrences.addStringToSP("userId", userId);
+                  SharedPrefrences.addStringToSP("email_address", email);
+                  SharedPrefrences.addStringToSP("blocked", blocked);
+                  SharedPrefrences.addStringToSP(
+                      "verified_email", verifiedEmail);
+                  SharedPrefrences.addStringToSP(
+                      "verified_phone", verifiedPhone);
 
+                  ShowSnackBar.showInSnackBar(
+                    value: message,
+                    iconData: Icons.check_circle,
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5,
+                  );
 
-          SharedPrefrences.addStringToSP("userId", userId);
-
-          SharedPrefrences.addStringToSP("account_name", accountName);
-          SharedPrefrences.addStringToSP("account_number", accountNumber);
-          SharedPrefrences.addStringToSP("bank_name", bankName);
-          SharedPrefrences.addStringToSP("bvn", bvn);
-          SharedPrefrences.addStringToSP("first_name", firstName);
-          SharedPrefrences.addStringToSP("surname", surName);
-
-
-          SharedPrefrences.addStringToSP("sms_notification", smsNotification);
-          SharedPrefrences.addStringToSP("email_transaction_notification", emailTransactionNotification);
-          SharedPrefrences.addStringToSP("two_factor_authentication", twoFactorAuthentication);
-          SharedPrefrences.addStringToSP("finger_print_login", fingerPrintLogin);
-          SharedPrefrences.addStringToSP("newsletter", newsletter);
-
-
+                  getUserInfo();
+                  
+                }
+              }
+            } else {
+              ShowSnackBar.showInSnackBar(
+                  value: 'Please verify your email',
+                  context: context,
+                  scaffoldKey: _scaffoldKey,
+                  timer: 5);
+            }
+            
+          } else if (!status) {
+            ShowSnackBar.showInSnackBar(
+                bgColor: ColorConstants.secondaryColor,
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+          }
+        } else {
           ShowSnackBar.showInSnackBar(
-              value: 'authentication successful',
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-          Future.delayed(Duration(seconds: 2), () {
-            pushPage(context, LandingPage());
-
-
-          });
-        } else if (!status) {
-
-          ShowSnackBar.showInSnackBar(
-              value: message,
+              bgColor: ColorConstants.secondaryColor,
+              value: 'network error',
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
         }
-      } else {
-
+      } on SocketException {
+        
         ShowSnackBar.showInSnackBar(
-            value: 'network error',
+            bgColor: ColorConstants.secondaryColor,
+            value: 'check your internet connection',
             context: context,
             scaffoldKey: _scaffoldKey,
             timer: 5);
       }
-    } on SocketException {
-
-      ShowSnackBar.showInSnackBar(
-          value: 'check your internet connection',
-          context: context,
-          scaffoldKey: _scaffoldKey,
-          timer: 5);
-    }
+    
   }
 
   void getUserInfo(){

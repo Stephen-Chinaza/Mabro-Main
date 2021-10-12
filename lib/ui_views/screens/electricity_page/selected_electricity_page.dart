@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/core/models/buy_airtime_bundle.dart';
 import 'package:mabro/core/models/demo_data.dart';
 import 'package:mabro/core/models/electricity_data_companies.dart';
 import 'package:mabro/core/services/repositories.dart';
@@ -40,7 +41,7 @@ class _SelectedElectricitySubPageState
   bool checkState;
   List<String> meterType;
   String electName, electLogo;
-  String userPin,serviceId,meterInitData;
+  String userPin, serviceId, meterInitData;
 
   String userId, nairaBalance;
 
@@ -51,8 +52,6 @@ class _SelectedElectricitySubPageState
   TextEditingController _meterNumberController = new TextEditingController();
   TextEditingController _amountController = new TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -77,7 +76,10 @@ class _SelectedElectricitySubPageState
     electLogo = 'assets/images/ekoelect.jpg';
     pageState = false;
 
-    meterInitData = 'Prepaid';
+    _meterNumberController.text = '1010101010101';
+    _phoneController.text = '08011111111';
+    _amountController.text = '2000';
+    meterInitData = 'Postpaid';
     _meterTypeController.text = meterInitData;
     serviceId = 'abuja-electric';
 
@@ -98,225 +100,231 @@ class _SelectedElectricitySubPageState
   Widget build(BuildContext context) {
     return (pageState)
         ? loadingPage(state: pageState)
-        :Stack(
-      children: [
-        buildFirstContainer(),
-        buildSecondContainer(),
-        Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: ColorConstants.primaryColor,
-          appBar: TopBar(
-            backgroundColorStart: ColorConstants.primaryColor,
-            backgroundColorEnd: ColorConstants.secondaryColor,
-            icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-            title: 'Electricity bills',
-            onPressed: null,
-            textColor: Colors.white,
-            iconColor: Colors.white,
-          ),
-          body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Card(
-                  elevation: 3,
-                  color: ColorConstants.primaryLighterColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20),
-                          Builder(builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                buildShowBottomSheet(
-                                  context: context,
-                                  bottomsheetContent:
-                                  _bottomSheetContentElectricityCompanies(
-                                    context,
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: 75,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(8),
+        : Stack(
+            children: [
+              buildFirstContainer(),
+              buildSecondContainer(),
+              Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: ColorConstants.primaryColor,
+                appBar: TopBar(
+                  backgroundColorStart: ColorConstants.primaryColor,
+                  backgroundColorEnd: ColorConstants.secondaryColor,
+                  icon:
+                      Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+                  title: 'Electricity bills',
+                  onPressed: null,
+                  textColor: Colors.white,
+                  iconColor: Colors.white,
+                ),
+                body: SingleChildScrollView(
+                    child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Card(
+                    elevation: 3,
+                    color: ColorConstants.primaryLighterColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 20),
+                            Builder(builder: (context) {
+                              return GestureDetector(
+                                onTap: () {
+                                  buildShowBottomSheet(
+                                    context: context,
+                                    bottomsheetContent:
+                                        _bottomSheetContentElectricityCompanies(
+                                      context,
                                     ),
-                                    border: Border.all(
-                                        color: ColorConstants.whiteLighterColor,
-                                        width: 0.5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Image.asset(electLogo,
-                                              height: 40, width: 40),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Text(electName,
-                                              style: TextStyle(
-                                                  color:
-                                                  ColorConstants.whiteColor,
-                                                  fontSize: 12)),
-                                        ],
+                                  );
+                                },
+                                child: Container(
+                                  height: 75,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
                                       ),
-                                      Icon(
-                                        Icons.arrow_drop_down_sharp,
-                                        size: 30,
-                                        color: ColorConstants.whiteLighterColor,
-                                      ),
-                                    ],
+                                      border: Border.all(
+                                          color:
+                                              ColorConstants.whiteLighterColor,
+                                          width: 0.5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Image.asset(electLogo,
+                                                height: 40, width: 40),
+                                            SizedBox(
+                                              width: 12,
+                                            ),
+                                            Text(electName,
+                                                style: TextStyle(
+                                                    color: ColorConstants
+                                                        .whiteColor,
+                                                    fontSize: 12)),
+                                          ],
+                                        ),
+                                        Icon(
+                                          Icons.arrow_drop_down_sharp,
+                                          size: 30,
+                                          color:
+                                              ColorConstants.whiteLighterColor,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }),
-                          SizedBox(height: 15),
-                          // Builder(builder: (context) {
-                          //   return GestureDetector(
-                          //     onTap: () {
-                          //       buildShowBottomSheet(
-                          //         context: context,
-                          //         bottomsheetContent:
-                          //             _bottomSheetContentMobileCarrier(
-                          //           context,
-                          //         ),
-                          //       );
-                          //     },
-                          //     child: IconFields(
-                          //       hintText: 'Select Beneficiary',
-                          //       isEditable: false,
-                          //       labelText: widget.title,
-                          //       controller: _beneficiaryController,
-                          //     ),
-                          //   );
-                          // }),
-                          // SizedBox(height: 15),
-                          Builder(builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                buildShowBottomSheet(
-                                  context: context,
-                                  bottomsheetContent:
-                                  _bottomSheetContentMeterType(
-                                    context,
-                                  ),
-                                );
-                              },
-                              child: IconFields(
-                                hintText: 'Select meter type',
-                                isEditable: false,
-                                labelText: widget.title,
-                                controller: _meterTypeController,
-                              ),
-                            );
-                          }),
-                          SizedBox(height: 15),
-                          NormalFields(
-                            width: MediaQuery.of(context).size.width,
-                            hintText: 'Meter number',
-                            labelText: '',
-                            onChanged: (name) {},
-                            controller: _meterNumberController,
-                          ),
-                          SizedBox(height: 15),
-                          NormalFields(
-                            width: MediaQuery.of(context).size.width,
-                            hintText: 'Phone number',
-                            labelText: '',
-                            onChanged: (name) {},
-                            textInputType: TextInputType.number,
-                            controller: _phoneController,
-                          ),
-                          SizedBox(height: 15),
-                          NormalFields(
-                            width: MediaQuery.of(context).size.width,
-                            hintText: 'Enter Amount',
-                            labelText: '',
-                            textInputType: TextInputType.number,
-                            onChanged: (name) {},
-                            controller: _amountController,
-                          ),
-                          SizedBox(height: 5),
-                          Text('Balance: NGN $nairaBalance',
-                              style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 12)),
-                          SizedBox(height: 15),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.start,
-                          //   children: [
-                          //     SizedBox(
-                          //       height: 20,
-                          //       width: 20,
-                          //       child: Checkbox(
-                          //           value: checkState,
-                          //           checkColor: ColorConstants.white,
-                          //           focusColor: ColorConstants.secondaryColor,
-                          //           activeColor: ColorConstants.secondaryColor,
-                          //           onChanged: (state) {
-                          //             setState(() {
-                          //               checkState = state;
-                          //             });
-                          //           }),
-                          //     ),
-                          //     SizedBox(
-                          //       width: 10,
-                          //     ),
-                          //     Flexible(
-                          //       child: Text('Save Beneficiary',
-                          //           style: TextStyle(
-                          //               fontWeight: FontWeight.w800,
-                          //               color: ColorConstants.whiteLighterColor,
-                          //               fontSize: 14)),
-                          //     ),
-                          //   ],
-                          // ),
-                          // SizedBox(height: 10),
-                          Divider(
-                              color: ColorConstants.whiteLighterColor),
-                          SizedBox(height: 10),
-                          PasswordTextField(
-                            icon: Icons.lock_open,
-                            textHint: 'Enter pin',
-                            controller: _pinController,
-                            labelText: 'Enter pin',
-                            onChanged: (password) {},
-                          ),
-                          SizedBox(height: 5),
-                          Text('Enter transaction pin for authorization',
-                              style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
-                                  fontSize: 12)),
-                          SizedBox(height: 20),
-                          Align(
-                            alignment: Alignment.center,
-                            child: CustomButton(
-                                margin: 0,
-                                height: 40,
-                                disableButton: true,
-                                onPressed: () {
-                                  verifyMeterNumber();
+                              );
+                            }),
+                            SizedBox(height: 15),
+                            // Builder(builder: (context) {
+                            //   return GestureDetector(
+                            //     onTap: () {
+                            //       buildShowBottomSheet(
+                            //         context: context,
+                            //         bottomsheetContent:
+                            //             _bottomSheetContentMobileCarrier(
+                            //           context,
+                            //         ),
+                            //       );
+                            //     },
+                            //     child: IconFields(
+                            //       hintText: 'Select Beneficiary',
+                            //       isEditable: false,
+                            //       labelText: widget.title,
+                            //       controller: _beneficiaryController,
+                            //     ),
+                            //   );
+                            // }),
+                            // SizedBox(height: 15),
+                            Builder(builder: (context) {
+                              return GestureDetector(
+                                onTap: () {
+                                  buildShowBottomSheet(
+                                    context: context,
+                                    bottomsheetContent:
+                                        _bottomSheetContentMeterType(
+                                      context,
+                                    ),
+                                  );
                                 },
-                                text: 'Pay subscription now'),
-                          ),
-                          SizedBox(height: 30),
-                        ]),
+                                child: IconFields(
+                                  hintText: 'Select meter type',
+                                  isEditable: false,
+                                  labelText: widget.title,
+                                  controller: _meterTypeController,
+                                ),
+                              );
+                            }),
+                            SizedBox(height: 15),
+                            NormalFields(
+                              width: MediaQuery.of(context).size.width,
+                              hintText: 'Meter number',
+                              labelText: '',
+                              textInputType: TextInputType.number,
+                              onChanged: (name) {},
+                              controller: _meterNumberController,
+                            ),
+                            SizedBox(height: 15),
+                            NormalFields(
+                              width: MediaQuery.of(context).size.width,
+                              hintText: 'Phone number',
+                              labelText: '',
+                              onChanged: (name) {},
+                              textInputType: TextInputType.number,
+                              controller: _phoneController,
+                            ),
+                            SizedBox(height: 15),
+                            NormalFields(
+                              width: MediaQuery.of(context).size.width,
+                              hintText: 'Enter Amount',
+                              labelText: '',
+                              textInputType: TextInputType.number,
+                              onChanged: (name) {},
+                              controller: _amountController,
+                            ),
+                            SizedBox(height: 5),
+                            Text('Balance: NGN $nairaBalance',
+                                style: TextStyle(
+                                    color: ColorConstants.whiteLighterColor,
+                                    fontSize: 12)),
+                            SizedBox(height: 15),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   children: [
+                            //     SizedBox(
+                            //       height: 20,
+                            //       width: 20,
+                            //       child: Checkbox(
+                            //           value: checkState,
+                            //           checkColor: ColorConstants.white,
+                            //           focusColor: ColorConstants.secondaryColor,
+                            //           activeColor: ColorConstants.secondaryColor,
+                            //           onChanged: (state) {
+                            //             setState(() {
+                            //               checkState = state;
+                            //             });
+                            //           }),
+                            //     ),
+                            //     SizedBox(
+                            //       width: 10,
+                            //     ),
+                            //     Flexible(
+                            //       child: Text('Save Beneficiary',
+                            //           style: TextStyle(
+                            //               fontWeight: FontWeight.w800,
+                            //               color: ColorConstants.whiteLighterColor,
+                            //               fontSize: 14)),
+                            //     ),
+                            //   ],
+                            // ),
+                            // SizedBox(height: 10),
+                            Divider(color: ColorConstants.whiteLighterColor),
+                            SizedBox(height: 10),
+                            PasswordTextField(
+                              icon: Icons.lock_open,
+                              textHint: 'Enter pin',
+                              controller: _pinController,
+                              textInputType: TextInputType.number,
+                              labelText: 'Enter pin',
+                              onChanged: (password) {},
+                            ),
+                            SizedBox(height: 5),
+                            Text('Enter transaction pin for authorization',
+                                style: TextStyle(
+                                    color: ColorConstants.secondaryColor,
+                                    fontSize: 12)),
+                            SizedBox(height: 20),
+                            Align(
+                              alignment: Alignment.center,
+                              child: CustomButton(
+                                  margin: 0,
+                                  height: 40,
+                                  disableButton: true,
+                                  onPressed: () {
+                                    verifyMeterNumber();
+                                  },
+                                  text: 'Pay subscription now'),
+                            ),
+                            SizedBox(height: 30),
+                          ]),
+                    ),
                   ),
-                ),
-              )),
-        ),
-      ],
-    );
+                )),
+              ),
+            ],
+          );
   }
 
   Widget _bottomSheetContentMeterType(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     return Column(
       children: [
         BottomSheetHeader(
@@ -335,7 +343,7 @@ class _SelectedElectricitySubPageState
   Widget _buildMeterTypeList(BuildContext context) {
     return Container(
       child: ListView.builder(
-          itemCount: providerImages.length,
+          itemCount: meterType.length,
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemBuilder: (context, i) {
@@ -360,6 +368,8 @@ class _SelectedElectricitySubPageState
             onTapped();
           },
           child: Container(
+            width: MediaQuery.of(context).size.width,
+            color: ColorConstants.primaryColor,
             margin: EdgeInsets.all(8),
             child: Text(title,
                 style: TextStyle(
@@ -373,24 +383,20 @@ class _SelectedElectricitySubPageState
     );
   }
 
-
-
   Widget _bottomSheetContentElectricityCompanies(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     return Column(
       children: [
         BottomSheetHeader(
           buttomSheetTitle: 'Select electricity company',
         ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(height: 6),
-          buildElectricity(
+        Expanded(
+          child: buildElectricity(
             context,
             HttpService.rootElectricityCompanyList,
-
           ),
-        ]),
+        ),
       ],
     );
   }
@@ -405,22 +411,24 @@ class _SelectedElectricitySubPageState
             onTapped();
           },
           child: Container(
+            color: ColorConstants.primaryColor,
+            width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.all(8),
             child: Row(
               children: [
                 Image.asset(
                   image,
-                  height: 40,
-                  width: 40,
+                  height: 50,
+                  width: 50,
                 ),
                 SizedBox(
                   width: 12,
                 ),
                 Text(title,
                     style: TextStyle(
-                        fontWeight: FontWeight.w800,
-                        color: ColorConstants.secondaryColor,
-                        fontSize: 10)),
+                        fontWeight: FontWeight.w400,
+                        color: ColorConstants.whiteLighterColor,
+                        fontSize: 14)),
               ],
             ),
           ),
@@ -433,6 +441,79 @@ class _SelectedElectricitySubPageState
     );
   }
 
+  FutureBuilder<ElectricityCompanyList> buildElectricity(
+      BuildContext context, String url) {
+    return FutureBuilder(
+      future: HttpService.electricityCompanyList(context, userId, url),
+      builder: (BuildContext context,
+          AsyncSnapshot<ElectricityCompanyList> snapshot) {
+        ElectricityCompanyList electricityCompanyList = snapshot.data;
+
+        if (snapshot.hasData) {
+          if (electricityCompanyList.data.electricity.length == 0) {
+            return Center(
+              child: Text(
+                'Network error',
+                style: TextStyle(
+                    fontSize: 16, color: ColorConstants.secondaryColor),
+              ),
+            );
+          } else {
+            return Container(
+              child: ListView.builder(
+                  itemCount: electricityCompanyList.data.electricity.length + 1,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, i) {
+                    return buildElectricityCompanyDetails(
+                        title: electricityCompanyList.data.electricity[i].name,
+                        image: providerImages[i].image,
+                        onTapped: () {
+                          setState(() {
+                            electName =
+                                electricityCompanyList.data.electricity[i].name;
+                            electLogo = providerImages[i].image;
+                            serviceId = electricityCompanyList
+                                .data.electricity[i].serviceId;
+                            kbackBtn(context);
+                          });
+                        });
+                  }),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Center(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {});
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Error in network',
+                    style: TextStyle(
+                        fontSize: 16, color: ColorConstants.whiteLighterColor),
+                  ),
+                  Icon(
+                    Icons.refresh,
+                    size: 25,
+                  )
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Center(
+              child: CircularProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
+          ));
+        }
+      },
+    );
+  }
+
   void verifyMeterNumber() async {
     if (_meterTypeController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
@@ -440,27 +521,25 @@ class _SelectedElectricitySubPageState
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }
-    else if (_meterNumberController.text.isEmpty) {
+    } else if (_meterNumberController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter meter number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }
-    else if (_phoneController.text.isEmpty) {
+    } else if (_phoneController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter phone number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }else if (_amountController.text.isEmpty) {
+    } else if (_amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter amount',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }   else if (_pinController.text.isEmpty) {
+    } else if (_pinController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter transaction pin',
           context: context,
@@ -476,14 +555,13 @@ class _SelectedElectricitySubPageState
         var map = Map<String, dynamic>();
         map['userId'] = userId;
         map['service_id'] = serviceId;
-        map['meter_number'] = _meterNumberController;
-        map['meter_type'] = _meterTypeController;
+        map['meter_number'] = _meterNumberController.text;
+        map['meter_type'] = _meterTypeController.text;
 
         var response = await http
             .post(HttpService.rootVerifyMeterNumber, body: map, headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
 
           ShowSnackBar.showInSnackBar(
@@ -551,30 +629,28 @@ class _SelectedElectricitySubPageState
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }
-    else if (_meterNumberController.text.isEmpty) {
+    } else if (_meterNumberController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.primaryColor,
           value: 'Enter meter number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }
-    else if (_phoneController.text.isEmpty) {
+    } else if (_phoneController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.primaryColor,
           value: 'Enter phone number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }else if (_amountController.text.isEmpty) {
+    } else if (_amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.primaryColor,
           value: 'Enter amount',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }   else if (_pinController.text.isEmpty) {
+    } else if (_pinController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter transaction pin',
           context: context,
@@ -590,16 +666,15 @@ class _SelectedElectricitySubPageState
         var map = Map<String, dynamic>();
         map['userId'] = userId;
         map['service_id'] = serviceId;
-        map['meter_number'] = _meterNumberController;
+        map['meter_number'] = _meterNumberController.text;
         map['meter_type'] = _meterTypeController.text;
         map['phone_number'] = _phoneController.text;
-        map['amount'] = int.parse(_amountController.text);
+        map['amount'] = _amountController.text;
 
         var response = await http
             .post(HttpService.rootPayElectricityBill, body: map, headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
 
           ShowSnackBar.showInSnackBar(
@@ -614,10 +689,10 @@ class _SelectedElectricitySubPageState
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          //BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
+          BuyAirtimeBundle data = BuyAirtimeBundle.fromJson(body);
 
-          bool status = true;
-          String message = 'regUser.message';
+          bool status = data.status;
+          String message = data.message;
           if (status) {
             cPageState(state: false);
 
@@ -631,7 +706,6 @@ class _SelectedElectricitySubPageState
             cPageState(state: false);
 
             ShowSnackBar.showInSnackBar(
-                bgColor: ColorConstants.primaryColor,
                 value: message,
                 context: context,
                 scaffoldKey: _scaffoldKey,
@@ -641,7 +715,6 @@ class _SelectedElectricitySubPageState
           cPageState(state: false);
 
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
               value: 'network error',
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -650,7 +723,6 @@ class _SelectedElectricitySubPageState
       } on SocketException {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
             value: 'check your internet connection',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -659,81 +731,9 @@ class _SelectedElectricitySubPageState
     }
   }
 
-
   void cPageState({bool state = false}) {
     setState(() {
       pageState = state;
     });
-  }
-
-  FutureBuilder<ElectricityCompanyList> buildElectricity(
-      BuildContext context, String url) {
-    return FutureBuilder(
-      future: HttpService.electricityCompanyList(context, userId, url),
-      builder: (BuildContext context,
-          AsyncSnapshot<ElectricityCompanyList> snapshot) {
-        ElectricityCompanyList electricityCompanyList = snapshot.data;
-
-        if (snapshot.hasData) {
-          if (electricityCompanyList.data.electricity.length == 0) {
-            return Center(
-              child: Text(
-                'No data found',
-                style: TextStyle(
-                    fontSize: 16, color: ColorConstants.secondaryColor),
-              ),
-            );
-          } else {
-            return Container(
-              child: ListView.builder(
-                  itemCount: electricityCompanyList.data.electricity.length,
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemBuilder: (context, i) {
-                    return buildElectricityCompanyDetails(
-                        title: electricityCompanyList.data.electricity[i].name,
-                        image: providerImages[i].image,
-                        onTapped: () {
-                          setState(() {
-                            electName = electricityCompanyList.data.electricity[i].name;
-                            electLogo = providerImages[i].image;
-                            serviceId = electricityCompanyList.data.electricity[i].serviceId;
-                            kbackBtn(context);
-                          });
-                        });
-                  }),
-            );
-          }
-        } else if (snapshot.hasError) {
-          return Center(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {});
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Error in network',
-                    style: TextStyle(
-                        fontSize: 16, color: ColorConstants.whiteLighterColor),
-                  ),
-                  Icon(
-                    Icons.refresh,
-                    size: 25,
-                  )
-                ],
-              ),
-            ),
-          );
-        } else {
-          return Center(
-              child: CircularProgressIndicator(
-                valueColor:
-                AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
-              ));
-        }
-      },
-    );
   }
 }

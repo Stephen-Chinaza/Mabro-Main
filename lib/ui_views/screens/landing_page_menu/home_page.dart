@@ -97,9 +97,7 @@ class _HomePageState extends State<HomePage> {
 
       if (bankState) {
         showInfoDialog(310, _buildBody(), title: 'Account setup');
-      } else {
-
-      }
+      } else {}
     });
   }
 
@@ -248,7 +246,7 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-                if (checkedItem == 7) {
+              if (checkedItem == 7) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
@@ -266,27 +264,28 @@ class _HomePageState extends State<HomePage> {
                     context: context,
                     scaffoldKey: _scaffoldKey,
                     timer: 5);
-              }else if (checkedItem == 10) {
+              } else if (checkedItem == 10) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
                     scaffoldKey: _scaffoldKey,
                     timer: 5);
-              }else if (checkedItem == 11) {
+              } else if (checkedItem == 11) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
                     scaffoldKey: _scaffoldKey,
                     timer: 5);
-              }   else {
+              } else {
                 kopenPage(context, menuScreens[checkedItem]);
               }
             },
             child: Card(
               elevation: 3,
               color: ColorConstants.primaryLighterColor,
-              shape: RoundedRectangleBorder(side: new BorderSide(color: ColorConstants.whiteLighterColor,
-                  width: 0.1),
+              shape: RoundedRectangleBorder(
+                  side: new BorderSide(
+                      color: ColorConstants.whiteLighterColor, width: 0.1),
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
@@ -311,7 +310,8 @@ class _HomePageState extends State<HomePage> {
                             subList[index].title,
                             style: TextStyle(
                                 color: ColorConstants.whiteLighterColor,
-                                fontSize: 11, fontWeight: FontWeight.w400),
+                                fontSize: 11,
+                                fontWeight: FontWeight.w400),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -329,7 +329,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   final Color primary = ColorConstants.primaryColor;
-  final Color active =  ColorConstants.whiteLighterColor;
+  final Color active = ColorConstants.whiteLighterColor;
   final Color divider = Colors.grey.shade600;
 
   _buildDrawer(BuildContext context) {
@@ -337,7 +337,8 @@ class _HomePageState extends State<HomePage> {
       child: Container(
         padding: const EdgeInsets.only(left: 16.0, right: 40),
         decoration: BoxDecoration(
-            color:  ColorConstants.primaryColor, boxShadow: [BoxShadow(color: Colors.black45)]),
+            color: ColorConstants.primaryColor,
+            boxShadow: [BoxShadow(color: Colors.black45)]),
         width: 300,
         child: SafeArea(
           child: SingleChildScrollView(
@@ -350,10 +351,11 @@ class _HomePageState extends State<HomePage> {
                     height: 35,
                     width: 35,
                     decoration: BoxDecoration(
-                      gradient:  ColorConstants.primaryGradient,
-                      borderRadius: BorderRadius.circular(35.0),
-                        border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.2)
-                    ),
+                        gradient: ColorConstants.primaryGradient,
+                        borderRadius: BorderRadius.circular(35.0),
+                        border: Border.all(
+                            color: ColorConstants.whiteLighterColor,
+                            width: 0.2)),
                     child: Center(
                       child: IconButton(
                         icon: Icon(
@@ -451,16 +453,17 @@ class _HomePageState extends State<HomePage> {
                           elevation: 5,
                           color: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                            side: new BorderSide(
+                                color: ColorConstants.whiteLighterColor,
                                 width: 0.1),
                             borderRadius:
-                            BorderRadius.all(Radius.circular(50.0)),
+                                BorderRadius.all(Radius.circular(50.0)),
                           ),
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: ColorConstants.primaryGradient,
                               borderRadius:
-                              BorderRadius.all(Radius.circular(50.0)),
+                                  BorderRadius.all(Radius.circular(50.0)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
@@ -503,7 +506,8 @@ class _HomePageState extends State<HomePage> {
                       child: Card(
                         elevation: 5,
                         shape: RoundedRectangleBorder(
-                          side: new BorderSide(color: ColorConstants.whiteLighterColor,
+                          side: new BorderSide(
+                              color: ColorConstants.whiteLighterColor,
                               width: 0.1),
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
@@ -535,7 +539,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       _buildRow(
                         "Pay Tv Subscription",
-                        icon:Icons.tv,
+                        icon: Icons.tv,
                         showBadge: false,
                         page: SelectedCableTvPage(),
                       ),
@@ -546,7 +550,6 @@ class _HomePageState extends State<HomePage> {
                 ListTileTheme(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
-
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.only(left: 0),
                       childrenPadding: EdgeInsets.only(left: 20),
@@ -557,8 +560,9 @@ class _HomePageState extends State<HomePage> {
                           elevation: 5,
                           color: Colors.transparent,
                           shape: RoundedRectangleBorder(
-                            side: new BorderSide(color: ColorConstants.whiteLighterColor,
-                            width: 0.1),
+                            side: new BorderSide(
+                                color: ColorConstants.whiteLighterColor,
+                                width: 0.1),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50.0)),
                           ),
@@ -618,9 +622,10 @@ class _HomePageState extends State<HomePage> {
                 // ),
                 // _buildDivider(),
 
-                _buildRow("Notifications",icon: Icons.notifications,
-                    page: NotificationsPage()),
-                _buildRow("Contact us",icon: Icons.phone,
+                _buildRow("Notifications",
+                    icon: Icons.notifications, page: NotificationsPage()),
+                _buildRow("Contact us",
+                    icon: Icons.phone,
                     page: ContactUs(
                         cardColor: Colors.white,
                         textColor: ColorConstants.secondaryColor,
@@ -638,7 +643,7 @@ class _HomePageState extends State<HomePage> {
                         twitterHandle: 'AbhishekDoshi26',
                         instagram: '_abhishek_doshi',
                         facebookHandle: '_abhishek_doshi')),
-                _buildRow( "FAQ",icon: Icons.info_outline, page: FAQPage()),
+                _buildRow("FAQ", icon: Icons.info_outline, page: FAQPage()),
                 SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
@@ -647,10 +652,11 @@ class _HomePageState extends State<HomePage> {
                   child: Container(
                     width: 100,
                     decoration: BoxDecoration(
-                      gradient: ColorConstants.primaryGradient,
-                      borderRadius: BorderRadius.circular(35.0),
-                        border: Border.all(color: ColorConstants.whiteLighterColor, width: 0.1)
-                    ),
+                        gradient: ColorConstants.primaryGradient,
+                        borderRadius: BorderRadius.circular(35.0),
+                        border: Border.all(
+                            color: ColorConstants.whiteLighterColor,
+                            width: 0.1)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
@@ -676,8 +682,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRow( String title,
-      {IconData icon,Widget page, bool showBadge = true, bool openState = true}) {
+  Widget _buildRow(String title,
+      {IconData icon,
+      Widget page,
+      bool showBadge = true,
+      bool openState = true}) {
     final TextStyle tStyle =
         TextStyle(color: active, fontSize: 14, fontWeight: FontWeight.normal);
     return GestureDetector(
@@ -698,12 +707,14 @@ class _HomePageState extends State<HomePage> {
         ),
         child: ListTile(
           contentPadding: EdgeInsets.all(0),
-          leading:  Container(
+          leading: Container(
             height: 37,
             width: 37,
             child: Container(
               decoration: BoxDecoration(
-                color: (showBadge) ? ColorConstants.secondaryColor : ColorConstants.transparent,
+                color: (showBadge)
+                    ? ColorConstants.secondaryColor
+                    : ColorConstants.transparent,
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
               ),
               child: Padding(
@@ -728,11 +739,10 @@ class _HomePageState extends State<HomePage> {
   SliverToBoxAdapter _buildPictureDisplay() {
     return SliverToBoxAdapter(
         child: Container(
-          color: ColorConstants.primaryColor,
+      color: ColorConstants.primaryColor,
       height: 180,
       child: Card(
         color: ColorConstants.primaryColor,
-
         child: Container(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -788,9 +798,9 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   title,
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      ),
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 GestureDetector(
                                     onTap: () {
@@ -847,7 +857,8 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Please to continue enjoying your smooth transactions with MABRO add your account details.',
-            style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+            style: TextStyle(
+                fontSize: 16, color: ColorConstants.whiteLighterColor),
           ),
         ),
       ],
@@ -856,111 +867,101 @@ class _HomePageState extends State<HomePage> {
 
   void _userInfo() async {
     String message;
-      try {
-        var map = Map<String, dynamic>();
-        map['userId'] = userId;
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
 
-        var response = await http
-            .post(HttpService.rootUserInfo, body: map, headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        }).timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootUserInfo, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            bgColor: ColorConstants.secondaryColor,
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+        return null;
+      });
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
 
+        UserInfo userInfo = UserInfo.fromJson(body);
+
+        bool status = userInfo.status;
+        message = userInfo.message;
+
+        if (status) {
+          //String otp = userInfo.data.oTP;
+          userId = userInfo.data.settings.user;
+
+          String firstName = userInfo.data.bvns.firstName.toString();
+          String surName = userInfo.data.bvns.surname.toString();
+          String bvn = userInfo.data.bvns.bvn.toString();
+
+          SharedPrefrences.addStringToSP("bvn", bvn);
+          SharedPrefrences.addStringToSP("first_name", firstName);
+          SharedPrefrences.addStringToSP("surname", surName);
+
+          String accountName = userInfo.data.account.accountName.toString();
+          String accountNumber = userInfo.data.account.accountNumber.toString();
+          String bankName = userInfo.data.account.bankName.toString();
+          SharedPrefrences.addStringToSP("account_name", accountName);
+          SharedPrefrences.addStringToSP("bank_name", bankName);
+
+          String emailTransactionNotification =
+              userInfo.data.settings.emailTransactionNotification.toString();
+          String smsNotification =
+              userInfo.data.settings.smsNotification.toString();
+          String twoFactorAuthentication =
+              userInfo.data.settings.twoFactorAuthentication.toString();
+          String fingerPrintLogin =
+              userInfo.data.settings.fingerPrintLogin.toString();
+          String newsletter = userInfo.data.settings.newsletter.toString();
+
+          SharedPrefrences.addStringToSP("userId", userId);
+          SharedPrefrences.addStringToSP("account_number", accountNumber);
+
+          SharedPrefrences.addStringToSP("sms_notification", smsNotification);
+          SharedPrefrences.addStringToSP(
+              "email_transaction_notification", emailTransactionNotification);
+          SharedPrefrences.addStringToSP(
+              "two_factor_authentication", twoFactorAuthentication);
+          SharedPrefrences.addStringToSP(
+              "finger_print_login", fingerPrintLogin);
+          SharedPrefrences.addStringToSP("newsletter", newsletter);
+
+          // ShowSnackBar.showInSnackBar(
+          //     iconData: Icons.check_circle,
+          //     value: message,
+          //     context: context,
+          //     scaffoldKey: _scaffoldKey,
+          //     timer: 5);
+
+        } else if (!status) {
           ShowSnackBar.showInSnackBar(
-              value: 'The connection has timed out, please try again!',
-              bgColor: ColorConstants.secondaryColor,
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-          return null;
-        });
-        if (response.statusCode == 200) {
-          var body = jsonDecode(response.body);
-
-          UserInfo userInfo = UserInfo.fromJson(body);
-
-          bool status = userInfo.status;
-          message = userInfo.message;
-
-
-          if (status) {
-
-            //String otp = userInfo.data.oTP;
-            userId = userInfo.data.settings.user;
-
-
-              String firstName = userInfo.data.bvns.firstName.toString();
-              String surName = userInfo.data.bvns.surname.toString();
-              String bvn = userInfo.data.bvns.bvn.toString();
-
-              SharedPrefrences.addStringToSP("bvn", bvn);
-              SharedPrefrences.addStringToSP("first_name", firstName);
-              SharedPrefrences.addStringToSP("surname", surName);
-
-
-
-
-              String accountName = userInfo.data.account.accountName.toString();
-              String accountNumber = userInfo.data.account.accountNumber.toString();
-              String bankName = userInfo.data.account.bankName.toString();
-              SharedPrefrences.addStringToSP("account_name", accountName);
-              SharedPrefrences.addStringToSP("bank_name", bankName);
-
-
-
-            String emailTransactionNotification = userInfo.data.settings.emailTransactionNotification.toString();
-            String smsNotification = userInfo.data.settings.smsNotification.toString();
-            String twoFactorAuthentication = userInfo.data.settings.twoFactorAuthentication.toString();
-            String fingerPrintLogin = userInfo.data.settings.fingerPrintLogin.toString();
-            String newsletter = userInfo.data.settings.newsletter.toString();
-
-
-            SharedPrefrences.addStringToSP("userId", userId);
-            SharedPrefrences.addStringToSP("account_number", accountNumber);
-
-            SharedPrefrences.addStringToSP("sms_notification", smsNotification);
-            SharedPrefrences.addStringToSP("email_transaction_notification", emailTransactionNotification);
-            SharedPrefrences.addStringToSP("two_factor_authentication", twoFactorAuthentication);
-            SharedPrefrences.addStringToSP("finger_print_login", fingerPrintLogin);
-            SharedPrefrences.addStringToSP("newsletter", newsletter);
-
-
-
-            // ShowSnackBar.showInSnackBar(
-            //     iconData: Icons.check_circle,
-            //     value: message,
-            //     context: context,
-            //     scaffoldKey: _scaffoldKey,
-            //     timer: 5);
-
-
-          } else if (!status) {
-
-            ShowSnackBar.showInSnackBar(
-                value: message,
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-
-          }
-        } else {
-
-          ShowSnackBar.showInSnackBar(
-              value: 'network error',
+              value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
         }
-      } on SocketException {
-
+      } else {
         ShowSnackBar.showInSnackBar(
-            value: 'check your internet connection',
+            value: 'network error',
             context: context,
             scaffoldKey: _scaffoldKey,
             timer: 5);
       }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
   }
 
-  void getUserInfo(){
+  void getUserInfo() {
     Future.delayed(Duration(seconds: 5), () {
       _userInfo();
     });

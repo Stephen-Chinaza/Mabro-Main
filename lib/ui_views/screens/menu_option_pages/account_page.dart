@@ -63,7 +63,6 @@ class _AccountPageState extends State<AccountPage> {
       });
     }
 
-    print(userId);
   }
 
   @override
@@ -107,7 +106,6 @@ class _AccountPageState extends State<AccountPage> {
                                 height: 180,
                                 decoration: BoxDecoration(
                                     color: ColorConstants.primaryLighterColor,
-
                                     borderRadius: BorderRadius.circular(15.0)),
                                 child: Column(
                                   children: [
@@ -125,7 +123,8 @@ class _AccountPageState extends State<AccountPage> {
                                                 ),
                                                 TextStyles.textSubHeadings(
                                                   textSize: 16,
-                                                  textColor: ColorConstants.whiteColor,
+                                                  textColor:
+                                                      ColorConstants.secondaryColor,
                                                   textValue: 'Primary Account',
                                                 ),
                                               ],
@@ -204,17 +203,20 @@ class _AccountPageState extends State<AccountPage> {
                                               children: [
                                                 TextStyles.textDetails(
                                                   textSize: 16,
-                                                  textColor: ColorConstants.whiteLighterColor,
+                                                  textColor: ColorConstants
+                                                      .whiteLighterColor,
                                                   textValue: bankName,
                                                 ),
                                                 TextStyles.textDetails(
                                                   textSize: 16,
-                                                  textColor: ColorConstants.whiteLighterColor,
+                                                  textColor: ColorConstants
+                                                      .whiteLighterColor,
                                                   textValue: accountNumber,
                                                 ),
                                                 TextStyles.textDetails(
                                                   textSize: 16,
-                                                  textColor: ColorConstants.whiteLighterColor,
+                                                  textColor: ColorConstants
+                                                      .whiteLighterColor,
                                                   textValue: accountName,
                                                 ),
                                               ],
@@ -247,72 +249,73 @@ class _AccountPageState extends State<AccountPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(4.0),
-                child:
-                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  SizedBox(height: 10),
-                  TextStyles.textDetails(
-                    textSize: 16,
-                    textColor: Colors.white,
-                    textValue: 'Account Setup ',
-                  ),
-                  SizedBox(height: 10),
-                  TextStyles.textDetails(
-                    textSize: 14,
-                    textColor: ColorConstants.whiteLighterColor,
-                    textValue: 'Add bank account information and Bvn',
-                  ),
-                  SizedBox(height: 20),
-                  Builder(builder: (context) {
-                    return GestureDetector(
-                      onTap: () {
-                        buildShowBottomSheet(
-                          context: context,
-                          bottomsheetContent: _bottomSheetContent(context),
-                        );
-                      },
-                      child: IconFields(
-                        isEditable: false,
-                        hintText: 'Select bank',
-                        controller: bankNameController,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      TextStyles.textDetails(
+                        textSize: 16,
+                        textColor: Colors.white,
+                        textValue: 'Account Setup ',
                       ),
-                    );
-                  }),
-                  SizedBox(height: 15),
-                  NormalFields(
-                    width: MediaQuery.of(context).size.width,
-                    hintText: 'Enter account number',
-                    labelText: '',
-                    maxLength: 10,
-                    textInputType: TextInputType.number,
-                    onChanged: (String count) {
-                      textCount = count.length;
-                      if (textCount == 10) {
-                        // getAccountName().then((value) => {
-                        //       setState(() {
-                        //         accountNameController.text = value;
-                        //       })
-                        //     });
-                      }
-                    },
-                    controller: accountNumberController,
-                  ),
-                  SizedBox(height: 15),
+                      SizedBox(height: 10),
+                      TextStyles.textDetails(
+                        textSize: 14,
+                        textColor: ColorConstants.whiteLighterColor,
+                        textValue: 'Add bank account information and Bvn',
+                      ),
+                      SizedBox(height: 20),
+                      Builder(builder: (context) {
+                        return GestureDetector(
+                          onTap: () {
+                            buildShowBottomSheet(
+                              context: context,
+                              bottomsheetContent: _bottomSheetContent(context),
+                            );
+                          },
+                          child: IconFields(
+                            isEditable: false,
+                            hintText: 'Select bank',
+                            controller: bankNameController,
+                          ),
+                        );
+                      }),
+                      SizedBox(height: 15),
+                      NormalFields(
+                        width: MediaQuery.of(context).size.width,
+                        hintText: 'Enter account number',
+                        labelText: '',
+                        maxLength: 10,
+                        textInputType: TextInputType.number,
+                        onChanged: (String count) {
+                          textCount = count.length;
+                          if (textCount == 10) {
+                            // getAccountName().then((value) => {
+                            //       setState(() {
+                            //         accountNameController.text = value;
+                            //       })
+                            //     });
+                          }
+                        },
+                        controller: accountNumberController,
+                      ),
+                      SizedBox(height: 15),
                       NormalFields(
                         width: MediaQuery.of(context).size.width,
                         hintText: 'Enter bank verification number',
                         labelText: 'Enter BVN',
                         maxLength: 11,
+                    
                         textInputType: TextInputType.number,
                         onChanged: (String count) {
                           setState(() {
                             textCount = count.length;
                             if (textCount == 11) {
-
                               getAccountBvn().then((value) => {
-                                setState(() {
-                                  accountNameController.text = value;
-                                })
-                              });
+                                    setState(() {
+                                      accountNameController.text = value;
+                                    })
+                                  });
                             } else {
                               btnState = false;
                             }
@@ -321,36 +324,34 @@ class _AccountPageState extends State<AccountPage> {
                         controller: bvnController,
                       ),
                       SizedBox(height: 15),
-                  NormalFields(
-                    width: MediaQuery.of(context).size.width,
-                    isEditable: false,
-                    hintText: 'Enter account name',
-                    labelText: '',
-                    onChanged: (name) {},
-                    controller: accountNameController,
-                  ),
-
-                  SizedBox(height: 20),
-                  TextStyles.textDetails(
-                    textSize: 14,
-                    textColor: ColorConstants.whiteLighterColor,
-                    textValue:
-                        'We are a digital bank and just like your regular bank,we need your BVN to be able to process transactios. Dial *565*0# on your mobile phone to get your bvn.',
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  CustomButton(
-                      margin: 0,
-                      disableButton: btnState,
-                      onPressed: () {
-                        updateAccountDetails();
-                      },
-                      text: btnText),
-                ]),
+                      NormalFields(
+                        width: MediaQuery.of(context).size.width,
+                        isEditable: false,
+                        hintText: 'Enter account name',
+                        labelText: '',
+                        onChanged: (name) {},
+                        controller: accountNameController,
+                      ),
+                      SizedBox(height: 20),
+                      TextStyles.textDetails(
+                        textSize: 14,
+                        textColor: ColorConstants.whiteLighterColor,
+                        textValue:
+                            'We are a digital bank and just like your regular bank,we need your BVN to be able to process transactios. Dial *565*0# on your mobile phone to get your bvn.',
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      CustomButton(
+                          margin: 0,
+                          disableButton: btnState,
+                          onPressed: () {
+                            updateAccountDetails();
+                          },
+                          text: btnText),
+                    ]),
               ),
               SizedBox(height: 50),
-
             ],
           ),
         ),
@@ -388,6 +389,7 @@ class _AccountPageState extends State<AccountPage> {
                       setState(() {
                         bankNameController.text = banks.data[i].name;
                         bankCode = banks.data[i].code;
+                        print(bankCode);
                       });
                     });
               });
@@ -412,10 +414,9 @@ class _AccountPageState extends State<AccountPage> {
             onTapped();
           },
           child: Container(
-            height: 60,
+            height: 50,
             decoration: BoxDecoration(
               color: ColorConstants.primaryColor,
-
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -447,10 +448,9 @@ class _AccountPageState extends State<AccountPage> {
       map['account_number'] = accountNumberController.text;
 
       var response = await http
-          .post(HttpService.rootVerifyAccountNumber, body: map,headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .post(HttpService.rootVerifyAccountNumber, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         changeBtnText(value: 'Add bank account');
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -473,7 +473,6 @@ class _AccountPageState extends State<AccountPage> {
           String sName = accountVerification.data.surname;
 
           btnState = true;
-
         } else if (!status) {
           changeBtnText(value: 'Add bank account');
           ShowSnackBar.showInSnackBar(
@@ -500,11 +499,10 @@ class _AccountPageState extends State<AccountPage> {
       map['bvn'] = bvnController.text;
       map['userId'] = userId;
 
-      var response = await http
-          .post(HttpService.rootVerifyBvn, body: map,headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootVerifyBvn, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         changeBtnText(value: 'Add bank account');
         ShowSnackBar.showInSnackBar(
             value: 'The connection has timed out, please try again!',
@@ -525,7 +523,7 @@ class _AccountPageState extends State<AccountPage> {
           changeBtnText(value: 'Add bank account');
           String fName = accountVerification.data.firstName;
           String sName = accountVerification.data.surname;
-          String accountName = '$fName '+ '$sName';
+          String accountName = '$fName ' + '$sName';
           btnState = true;
           return accountName;
         } else if (!status) {
@@ -580,12 +578,10 @@ class _AccountPageState extends State<AccountPage> {
         map['account_number'] = accountNumberController.text;
         map['bank_code'] = bankCode;
 
-
-        var response = await http
-            .post(HttpService.rootUpdateAccount, body: map,headers: {
-          'Authorization': 'Bearer '+HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+        var response =
+            await http.post(HttpService.rootUpdateAccount, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
@@ -595,7 +591,9 @@ class _AccountPageState extends State<AccountPage> {
         });
 
         if (response.statusCode == 200) {
+         
           var body = jsonDecode(response.body);
+
           cPageState(state: false);
 
           UpdateBankDetails updateBankDetails =
@@ -608,17 +606,16 @@ class _AccountPageState extends State<AccountPage> {
 
             String accountName = updateBankDetails.data.accountName;
 
-
             var at = accountName.split(' ');
             String surname = at[0].trim();
             String firstName = at[1].trim();
 
-            SharedPrefrences.addStringToSP("account_number", accountNumber);
+            SharedPrefrences.addStringToSP("account_number", accountNumberController.text);
             SharedPrefrences.addStringToSP("account_name", accountName);
-            SharedPrefrences.addStringToSP("bank_name", bankName);
+            SharedPrefrences.addStringToSP("bank_name", bankNameController.text);
             SharedPrefrences.addStringToSP("surname", surname);
             SharedPrefrences.addStringToSP("first_name", firstName);
-            SharedPrefrences.addStringToSP("id", id);
+           // SharedPrefrences.addStringToSP("id", id);
 
             bankNameController.text = '';
             accountNameController.text = '';

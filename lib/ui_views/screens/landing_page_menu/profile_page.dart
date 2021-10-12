@@ -72,7 +72,6 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: ColorConstants.primaryColor,
-
         body: SingleChildScrollView(
           child: _buildUserInfo(),
         ));
@@ -83,7 +82,6 @@ class _MenuPageState extends State<MenuPage> {
       padding: const EdgeInsets.all(4),
       child: Column(
         children: <Widget>[
-
           Card(
             color: ColorConstants.primaryLighterColor,
             child: Container(
@@ -97,7 +95,9 @@ class _MenuPageState extends State<MenuPage> {
                     actions: <Widget>[],
                   ),
                   SizedBox(height: 20),
-                  Divider(color: ColorConstants.whiteLighterColor,),
+                  Divider(
+                    color: ColorConstants.whiteLighterColor,
+                  ),
                   SizedBox(height: 20),
                   Column(
                     children: [
@@ -126,7 +126,7 @@ class _MenuPageState extends State<MenuPage> {
                           title: 'Phone',
                           subTitle: phone,
                           icon: Icons.phone,
-                          hideEdit: phoneState,
+                          hideEdit: false,
                           onTap: () {
                             openEditPhone();
                           }),
@@ -172,7 +172,7 @@ class _MenuPageState extends State<MenuPage> {
       bool hideEdit = true,
       Function onTap}) {
     return ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        contentPadding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
         leading: Container(
           height: 50,
           width: 50,
@@ -200,18 +200,18 @@ class _MenuPageState extends State<MenuPage> {
         title: Text(
           title,
           style: TextStyle(
-              fontStyle: FontStyle.normal,
-              fontSize: 16,
-              color: ColorConstants.whiteLighterColor,
-              ),
+            fontStyle: FontStyle.normal,
+            fontSize: 16,
+            color: ColorConstants.whiteLighterColor,
+          ),
         ),
         subtitle: Text(
           subTitle.toLowerCase(),
           style: TextStyle(
-              fontStyle: FontStyle.normal,
-              color: ColorConstants.whiteLighterColor,
-              fontSize: 14,
-              ),
+            fontStyle: FontStyle.normal,
+            color: ColorConstants.whiteLighterColor,
+            fontSize: 14,
+          ),
         ),
         trailing: (hideEdit)
             ? SizedBox.shrink()
@@ -272,12 +272,15 @@ class ProfileHeader extends StatelessWidget {
               borderWidth: 2.0,
             ),
           ),
-          SizedBox(width: 15,),
+          SizedBox(
+            width: 15,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height:20,),
-
+              SizedBox(
+                height: 20,
+              ),
               Text(
                 title,
                 style: TextStyle(
@@ -286,7 +289,9 @@ class ProfileHeader extends StatelessWidget {
                   color: ColorConstants.whiteLighterColor,
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Text(
                 'Acct. No: 2014365453',
                 style: TextStyle(
@@ -298,7 +303,6 @@ class ProfileHeader extends StatelessWidget {
             ],
           ),
         ],
-
       ),
     );
   }
@@ -331,8 +335,7 @@ class Avatar extends StatelessWidget {
             ? ColorConstants.primaryColor
             : ColorConstants.primaryColor,
         child: Container(
-          child: Icon(Icons.person, color: ColorConstants.white, size: 40)
-        ),
+            child: Icon(Icons.person, color: ColorConstants.white, size: 40)),
       ),
     );
   }
