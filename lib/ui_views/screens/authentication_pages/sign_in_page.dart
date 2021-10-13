@@ -1,4 +1,4 @@
-import 'package:mabro/core/models/login_user.dart';
+import 'package:mabro/core/models/login_user.dart'; 
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/screens/authentication_pages/sign_up_page.dart';

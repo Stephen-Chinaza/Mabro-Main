@@ -484,7 +484,6 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
           cPageState(state: false);
 
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
               value: 'The connection has timed out, please try again!',
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -519,7 +518,6 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
           }
         } else {
           cPageState(state: false);
-
           ShowSnackBar.showInSnackBar(
               value: 'network error',
               context: context,

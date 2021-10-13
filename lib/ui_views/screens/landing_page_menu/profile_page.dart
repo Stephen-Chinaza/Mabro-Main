@@ -92,6 +92,7 @@ class _MenuPageState extends State<MenuPage> {
                 children: <Widget>[
                   ProfileHeader(
                     title: "MY PROFILE",
+                    subtitle: email,
                     actions: <Widget>[],
                   ),
                   SizedBox(height: 20),
@@ -117,11 +118,7 @@ class _MenuPageState extends State<MenuPage> {
                           onTap: () {
                             openAccountPage();
                           }),
-                      buildListTile(
-                          title: 'Email',
-                          subTitle: email,
-                          icon: Icons.email,
-                          hideEdit: true),
+
                       buildListTile(
                           title: 'Phone',
                           subTitle: phone,
@@ -293,7 +290,7 @@ class ProfileHeader extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                'Acct. No: 2014365453',
+                'Email $subtitle',
                 style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontSize: 16,

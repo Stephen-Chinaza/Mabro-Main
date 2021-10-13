@@ -51,9 +51,9 @@ dependencies:
   qr_flutter: ^4.0.0
   qr_code_scanner: ^0.4.0
   share: ^0.6.5+4
-  expansion_tile_card: ^2.0.0
-  flutter_contacts: ^1.1.1+2
-  flutter_webview_plugin: ^0.4.0
+  #expansion_tile_card: ^2.0.0
+  #flutter_contacts: ^1.1.1+2
+  #flutter_webview_plugin: ^0.4.0
 
 
 dev_dependencies:
