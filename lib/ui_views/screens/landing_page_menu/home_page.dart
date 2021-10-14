@@ -108,6 +108,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: ColorConstants.primaryColor,
       drawer: _buildDrawer(context),
       body: CustomScrollView(
+        
         physics: AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           _buildToolbar(context),
@@ -239,6 +240,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return SliverGrid(
+    
       gridDelegate:
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
       delegate: SliverChildBuilderDelegate(
@@ -246,7 +248,7 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 7) {
+              if (checkedItem == 6) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,
@@ -894,20 +896,26 @@ class _HomePageState extends State<HomePage> {
         if (status) {
           //String otp = userInfo.data.oTP;
           userId = userInfo.data.settings.user;
+          if (userInfo.data.bvns == null) {
+          } else {
+            String firstName = userInfo.data.bvns.firstName.toString();
+            String surName = userInfo.data.bvns.surname.toString();
+            String bvn = userInfo.data.bvns.bvn.toString();
 
-          String firstName = userInfo.data.bvns.firstName.toString();
-          String surName = userInfo.data.bvns.surname.toString();
-          String bvn = userInfo.data.bvns.bvn.toString();
+            SharedPrefrences.addStringToSP("bvn", bvn);
+            SharedPrefrences.addStringToSP("first_name", firstName);
+            SharedPrefrences.addStringToSP("surname", surName);
+          }
 
-          SharedPrefrences.addStringToSP("bvn", bvn);
-          SharedPrefrences.addStringToSP("first_name", firstName);
-          SharedPrefrences.addStringToSP("surname", surName);
-
-          String accountName = userInfo.data.account.accountName.toString();
-          String accountNumber = userInfo.data.account.accountNumber.toString();
-          String bankName = userInfo.data.account.bankName.toString();
-          SharedPrefrences.addStringToSP("account_name", accountName);
-          SharedPrefrences.addStringToSP("bank_name", bankName);
+          if (userInfo.data.account == null) {
+          } else {
+            String accountName = userInfo.data.account.accountName.toString();
+            String accountNumber =
+                userInfo.data.account.accountNumber.toString();
+            String bankName = userInfo.data.account.bankName.toString();
+            SharedPrefrences.addStringToSP("account_name", accountName);
+            SharedPrefrences.addStringToSP("bank_name", bankName);
+          }
 
           String emailTransactionNotification =
               userInfo.data.settings.emailTransactionNotification.toString();
@@ -927,17 +935,10 @@ class _HomePageState extends State<HomePage> {
               "email_transaction_notification", emailTransactionNotification);
           SharedPrefrences.addStringToSP(
               "two_factor_authentication", twoFactorAuthentication);
+          print(twoFactorAuthentication.toString());
           SharedPrefrences.addStringToSP(
               "finger_print_login", fingerPrintLogin);
           SharedPrefrences.addStringToSP("newsletter", newsletter);
-
-          // ShowSnackBar.showInSnackBar(
-          //     iconData: Icons.check_circle,
-          //     value: message,
-          //     context: context,
-          //     scaffoldKey: _scaffoldKey,
-          //     timer: 5);
-
         } else if (!status) {
           ShowSnackBar.showInSnackBar(
               value: message,
@@ -962,7 +963,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getUserInfo() {
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 2), () {
       _userInfo();
     });
   }
