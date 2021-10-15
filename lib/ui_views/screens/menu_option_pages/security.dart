@@ -28,6 +28,8 @@ class SecurityPage extends StatefulWidget {
 }
 
 class _SecurityPageState extends State<SecurityPage> {
+
+  int pinLength = 0;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -78,10 +80,10 @@ class _MenuInfoState extends State<MenuInfo> {
   void initState() {
     super.initState();
     updateState = false;
-    getData().then((value) => {
-          print(password),
-          updateSecurityState(),
-        });
+    getData().then((value) =>
+    {
+
+    });
     twoFactorState = false;
     fingerPrintState = true;
     timeoutLockState = false;
@@ -95,6 +97,9 @@ class _MenuInfoState extends State<MenuInfo> {
     twoFactorAuth = (pref.getString('two_factor_authentication') ?? ''); //
     fingerPrintLogin = (pref.getString('finger_print_login') ?? ''); //
     timeoutLock = (pref.getString('timeout_lock') ?? '');
+
+    updateSecurityState();
+
     setState(() {});
   }
 
@@ -118,7 +123,7 @@ class _MenuInfoState extends State<MenuInfo> {
       key: _scaffoldKey,
       backgroundColor: ColorConstants.primaryColor,
       body: Container(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Visibility(
               visible: updateState,
@@ -130,131 +135,137 @@ class _MenuInfoState extends State<MenuInfo> {
                     Text(
                       'updating...',
                       style: TextStyle(
-                          fontSize: 16, color: ColorConstants.primaryColor),
+                          fontSize: 16, color: ColorConstants.secondaryColor),
                     ),
                   ],
                 ),
               ),
             ),
-            Card(
-              elevation: 3,
-              color: ColorConstants.primaryLighterColor,
-              child: Container(
-                color: Colors.transparent,
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        ...ListTile.divideTiles(
-                          color: Colors.grey,
-                          tiles: [
-                            buildListTile(
-                                title: "Reset Pin",
-                                icon: Typicons.lock_open,
-                                widget: null,
-                                onTapped: () {
-                                  buildShowBottomSheet(
-                                    context: context,
-                                    bottomsheetContent:
-                                        _bottomSheetPinContent(context),
-                                  );
-                                }),
-                            buildListTile(
-                                title: "Reset Password",
-                                icon: Typicons.lock_open,
-                                widget: null,
-                                onTapped: () {
-                                  buildShowBottomSheet(
-                                    context: context,
-                                    bottomsheetContent:
-                                        _bottomSheetPasswordContent(context),
-                                  );
-                                }),
-                            buildListTile(
-                                title: "2 - Factor Authentication",
-                                icon: Icons.security,
-                                widget: Switch(
-                                  activeColor: ColorConstants.secondaryColor,
-                                  activeTrackColor: ColorConstants.whiteColor,
-                                  inactiveTrackColor: ColorConstants
-                                      .whiteLighterColor
-                                      .withOpacity(0.4),
-                                  inactiveThumbColor:
-                                      ColorConstants.whiteLighterColor,
-                                  value: twoFactorState,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      twoFactorState = value;
-                                      if (twoFactorState) {
-                                        updateSettings(
-                                            key: 'two_factor_authentication',
-                                            value: 1);
-                                      } else {
-                                        updateSettings(
-                                            key: 'two_factor_authentication',
-                                            value: 0);
-                                      }
-                                    });
-                                  },
-                                ),
-                                onTapped: () {}),
-                            buildListTile(
-                                title: "Setup Touch ID",
-                                icon: Icons.touch_app,
-                                widget: Switch(
-                                  activeColor: ColorConstants.secondaryColor,
-                                  activeTrackColor: ColorConstants.whiteColor,
-                                  inactiveTrackColor: ColorConstants
-                                      .whiteLighterColor
-                                      .withOpacity(0.4),
-                                  inactiveThumbColor:
-                                      ColorConstants.whiteLighterColor,
-                                  value: fingerPrintState,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      twoFactorState = value;
-                                      if (twoFactorState) {
-                                        updateSettings(
-                                            key: 'finger_print_login',
-                                            value: 1);
-                                      } else {
-                                        updateSettings(
-                                            key: 'finger_print_login',
-                                            value: 0);
-                                      }
-                                    });
-                                  },
-                                ),
-                                onTapped: () {}),
-                            buildListTile(
-                                title: "Timeout Lock Screen",
-                                icon: Icons.lock_clock,
-                                widget: Switch(
-                                  activeColor: ColorConstants.secondaryColor,
-                                  activeTrackColor: ColorConstants.whiteColor,
-                                  inactiveTrackColor: ColorConstants
-                                      .whiteLighterColor
-                                      .withOpacity(0.4),
-                                  inactiveThumbColor:
-                                      ColorConstants.whiteLighterColor,
-                                  value: timeoutLockState,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      timeoutLockState = false;
-                                      SharedPrefrences.addBoolToSP(
-                                          "timeout_lock", timeoutLockState);
-                                    });
-                                  },
-                                ),
-                                onTapped: () {}),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+            Container(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
+              child: Card(
+                elevation: 3,
+                color: ColorConstants.primaryLighterColor,
+                child: Container(
+                  color: Colors.transparent,
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.only(top: 1, left: 1, right: 1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          ...ListTile.divideTiles(
+                            color: Colors.grey,
+                            tiles: [
+                              buildListTile(
+                                  title: "Reset Pin",
+                                  icon: Typicons.lock_open,
+                                  widget: null,
+                                  onTapped: () {
+                                    buildShowBottomSheet(
+                                      context: context,
+                                      bottomsheetContent:
+                                      _bottomSheetPinContent(context),
+                                    );
+                                  }),
+                              buildListTile(
+                                  title: "Reset Password",
+                                  icon: Typicons.lock_open,
+                                  widget: null,
+                                  onTapped: () {
+                                    buildShowBottomSheet(
+                                      context: context,
+                                      bottomsheetContent:
+                                      _bottomSheetPasswordContent(context),
+                                    );
+                                  }),
+                              buildListTile(
+                                  title: "2 - Factor Authentication",
+                                  icon: Icons.security,
+                                  widget: Switch(
+                                    activeColor: ColorConstants.secondaryColor,
+                                    activeTrackColor: ColorConstants.whiteColor,
+                                    inactiveTrackColor: ColorConstants
+                                        .whiteLighterColor
+                                        .withOpacity(0.4),
+                                    inactiveThumbColor:
+                                    ColorConstants.whiteLighterColor,
+                                    value: twoFactorState,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        twoFactorState = value;
+                                        if (twoFactorState) {
+                                          updateSettings(
+                                              key: 'two_factor_authentication',
+                                              value: '1');
+                                        } else {
+                                          updateSettings(
+                                              key: 'two_factor_authentication',
+                                              value: '0');
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  onTapped: () {}),
+                              buildListTile(
+                                  title: "Setup Touch ID",
+                                  icon: Icons.touch_app,
+                                  widget: Switch(
+                                    activeColor: ColorConstants.secondaryColor,
+                                    activeTrackColor: ColorConstants.whiteColor,
+                                    inactiveTrackColor: ColorConstants
+                                        .whiteLighterColor
+                                        .withOpacity(0.4),
+                                    inactiveThumbColor:
+                                    ColorConstants.whiteLighterColor,
+                                    value: fingerPrintState,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        fingerPrintState = value;
+                                        if (fingerPrintState) {
+                                          updateSettings(
+                                              key: 'finger_print_login',
+                                              value: '1');
+                                        } else {
+                                          updateSettings(
+                                              key: 'finger_print_login',
+                                              value: '0');
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  onTapped: () {}),
+                              buildListTile(
+                                  title: "Timeout Lock Screen",
+                                  icon: Icons.lock_clock,
+                                  widget: Switch(
+                                    activeColor: ColorConstants.secondaryColor,
+                                    activeTrackColor: ColorConstants.whiteColor,
+                                    inactiveTrackColor: ColorConstants
+                                        .whiteLighterColor
+                                        .withOpacity(0.4),
+                                    inactiveThumbColor:
+                                    ColorConstants.whiteLighterColor,
+                                    value: timeoutLockState,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        timeoutLockState = false;
+                                        SharedPrefrences.addBoolToSP(
+                                            "timeout_lock", timeoutLockState);
+                                      });
+                                    },
+                                  ),
+                                  onTapped: () {}),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -294,7 +305,7 @@ class _MenuInfoState extends State<MenuInfo> {
           style: TextStyle(color: ColorConstants.whiteLighterColor)),
       trailing: (widget == null)
           ? Icon(Icons.arrow_forward_ios_sharp,
-              size: 13, color: ColorConstants.whiteLighterColor)
+          size: 13, color: ColorConstants.whiteLighterColor)
           : widget,
       onTap: onTapped,
     );
@@ -315,32 +326,24 @@ class _MenuInfoState extends State<MenuInfo> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(height: 20),
               TextStyles.textDetails(
                 textSize: 16,
-                textColor: ColorConstants.whiteLighterColor,
+                textColor: ColorConstants.secondaryColor,
                 textValue:
-                    'The Pin you are about to reset is for your transactions',
+                'The Pin you are about to reset is for your transactions',
               ),
               SizedBox(height: 15),
+
               NormalFields(
                 maxLength: 4,
                 textInputType: TextInputType.number,
-                width: MediaQuery.of(context).size.width,
-                hintText: '****** (Enter old pin)',
-                labelText: 'Enter Pin',
-                onChanged: (oldPin) {
-                  _oldPin = oldPin;
-                },
-                controller: oldPinController,
-              ),
-              SizedBox(height: 15),
-              NormalFields(
-                maxLength: 4,
-                textInputType: TextInputType.number,
-                width: MediaQuery.of(context).size.width,
-                hintText: '****** (Enter new pin)',
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                hintText: 'Enter new pin',
                 labelText: 'Enter New Pin',
                 onChanged: (String newPin) {
                   setState(() {
@@ -354,8 +357,11 @@ class _MenuInfoState extends State<MenuInfo> {
               NormalFields(
                 maxLength: 4,
                 textInputType: TextInputType.number,
-                width: MediaQuery.of(context).size.width,
-                hintText: '****** (Confirm new pin)',
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
+                hintText: 'Confirm new pin',
                 labelText: 'Confirm Pin',
                 onChanged: (cNewPin) {
                   _cNewPin = cNewPin;
@@ -379,130 +385,6 @@ class _MenuInfoState extends State<MenuInfo> {
     );
   }
 
-  void changePin({
-    int pinLength = 0,
-  }) async {
-    if (oldPinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'old pin required',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (newPinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'enter new pin', context: context, scaffoldKey: _scaffoldKey);
-    } else if (cNewPinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'confirm new pin',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (newPinController.text != cNewPinController.text) {
-      ShowSnackBar.showInSnackBar(
-          value: 'pin does not match',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (pinLength != 4) {
-      ShowSnackBar.showInSnackBar(
-          value: 'pin must be equal to 4 characters',
-          context: context,
-          scaffoldKey: _scaffoldKey,
-          timer: 5);
-    } else {
-      try {
-        var map = Map<String, dynamic>();
-        map['userId'] = userId;
-        map['password'] = password;
-        map['repeat_lock_code'] = cNewPinController.text;
-        map['lock_code'] = newPinController.text;
-
-        var response =
-            await http.post(HttpService.rootUpdateUserPin, body: map, headers: {
-          'Authorization': 'Bearer ' + HttpService.token,
-        }).timeout(const Duration(seconds: 15), onTimeout: () {
-          ShowSnackBar.showInSnackBar(
-              value: 'The connection has timed out, please try again!',
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-          return null;
-        });
-
-        if (response.statusCode == 200) {
-          var body = jsonDecode(response.body);
-
-          UpdatePassword settingsData = UpdatePassword.fromJson(body);
-
-          bool status = settingsData.status;
-          String message = settingsData.message;
-          kbackBtn(context);
-
-          if (status) {
-            String id = settingsData.data.settings.id.toString();
-            bool bankState = settingsData.data.bank;
-            bool userState = settingsData.data.user;
-
-            ShowSnackBar.showInSnackBar(
-                value: message, context: context, scaffoldKey: _scaffoldKey);
-
-            //notifications data
-            SharedPrefrences.addBoolToSP("bank_state", bankState);
-            SharedPrefrences.addStringToSP(
-                "user", settingsData.data.settings.user.toString());
-            SharedPrefrences.addStringToSP("two_factor_auth",
-                settingsData.data.settings.twoFactorAuth.toString());
-            SharedPrefrences.addStringToSP("default_account",
-                settingsData.data.settings.defaultAccount.toString());
-            SharedPrefrences.addStringToSP("sell_asset_email_alert",
-                settingsData.data.settings.sellAssetEmailAlert.toString());
-            SharedPrefrences.addStringToSP("add_fund_email_alert",
-                settingsData.data.settings.addFundEmailAlert.toString());
-            SharedPrefrences.addStringToSP("buy_asset_email_alert",
-                settingsData.data.settings.buyAccessEmailAlert.toString());
-            SharedPrefrences.addStringToSP("login_email_alert",
-                settingsData.data.settings.loginEmailAlert.toString());
-            SharedPrefrences.addStringToSP("newsletter_email_alert",
-                settingsData.data.settings.newsletterEmailAlert.toString());
-            SharedPrefrences.addStringToSP("withdraw_fund_email_alert",
-                settingsData.data.settings.withdrawFundEmailAlert.toString());
-
-            SharedPrefrences.addStringToSP("withdraw_fund_phone_alert",
-                settingsData.data.settings.withdrawFundPhoneAlert.toString());
-            SharedPrefrences.addStringToSP("withdraw_fund_phone_alert",
-                settingsData.data.settings.withdrawFundPhoneAlert.toString());
-            SharedPrefrences.addStringToSP("sell_asset_phone_alert",
-                settingsData.data.settings.sellAssetPhoneAlert.toString());
-            SharedPrefrences.addStringToSP("buy_asset_phone_alert",
-                settingsData.data.settings.buyAssetPhoneAlert.toString());
-            SharedPrefrences.addStringToSP("newsletter_phone_alert",
-                settingsData.data.settings.newsletterPhoneAlert.toString());
-            SharedPrefrences.addStringToSP("add_fund_phone_alert",
-                settingsData.data.settings.addFundPhoneAlert.toString());
-          } else if (!status) {
-            ShowSnackBar.showInSnackBar(
-                value: message,
-                context: context,
-                bgColor: ColorConstants.primaryColor,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-          }
-        } else {
-          ShowSnackBar.showInSnackBar(
-              value: 'network error',
-              context: context,
-              bgColor: ColorConstants.primaryColor,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-        }
-      } on SocketException {
-        ShowSnackBar.showInSnackBar(
-            value: 'check your internet connection',
-            context: context,
-            bgColor: ColorConstants.primaryColor,
-            scaffoldKey: _scaffoldKey,
-            timer: 5);
-      }
-    }
-  }
-
   _bottomSheetPasswordContent(BuildContext context) {
     String _oldPassword = '';
     String _newPassword = '';
@@ -518,18 +400,21 @@ class _MenuInfoState extends State<MenuInfo> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(height: 20),
               TextStyles.textDetails(
-                textSize: 16,
+                textSize: 15,
                 textColor: ColorConstants.secondaryColor,
                 textValue:
-                    'The Password you are about to reset is for your Login Authentication'
-                        .toUpperCase(),
+                'The Password you are about to reset is for your Login Authentication'
+                    .toUpperCase(),
               ),
               SizedBox(height: 15),
               NormalFields(
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 hintText: 'Enter old password',
                 labelText: 'Enter password',
                 onChanged: (oldPassword) {
@@ -539,7 +424,10 @@ class _MenuInfoState extends State<MenuInfo> {
               ),
               SizedBox(height: 15),
               NormalFields(
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 hintText: 'Enter new password',
                 labelText: 'Enter new Password',
                 onChanged: (newPassword) {
@@ -552,7 +440,10 @@ class _MenuInfoState extends State<MenuInfo> {
               ),
               SizedBox(height: 15),
               NormalFields(
-                width: MediaQuery.of(context).size.width,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
                 hintText: 'Confirm new password',
                 labelText: 'Confirm password',
                 onChanged: (cNewPassword) {
@@ -567,7 +458,7 @@ class _MenuInfoState extends State<MenuInfo> {
                   margin: 0,
                   disableButton: true,
                   onPressed: () {
-                    changePassword(pinLength: pinLength);
+                    changePassword();
                   },
                   text: buttonText),
             ]),
@@ -577,9 +468,7 @@ class _MenuInfoState extends State<MenuInfo> {
     );
   }
 
-  void changePassword({
-    int pinLength,
-  }) async {
+  void changePassword() async {
     if (oldPasswordController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'old password required',
@@ -612,8 +501,11 @@ class _MenuInfoState extends State<MenuInfo> {
         map['password'] = newPasswordController.text;
         map['repeat_password'] = cNewPasswordController.text;
 
+
         var response = await http
-            .post(HttpService.rootUpdateUserPassword, body: map)
+            .post(HttpService.rootUpdateUserPassword, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        })
             .timeout(const Duration(seconds: 15), onTimeout: () {
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
@@ -631,12 +523,20 @@ class _MenuInfoState extends State<MenuInfo> {
           bool status = regUser.status;
           String message = regUser.message;
           if (status) {
+            SharedPrefrences.addStringToSP("password", newPasswordController.text);
+            Future.delayed(Duration(seconds: 4), (){
+              kbackBtn(context);
+            });
             ShowSnackBar.showInSnackBar(
                 iconData: Icons.check_circle,
                 value: message,
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
+            oldPasswordController.text = '';
+            newPasswordController.text = '';
+            cNewPasswordController.text = '';
+
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 value: message,
@@ -661,7 +561,7 @@ class _MenuInfoState extends State<MenuInfo> {
     }
   }
 
-  void updateSettings({String key, int value}) async {
+  void updateSettings({String key, String value}) async {
     _updateState(true);
 
     try {
@@ -669,8 +569,11 @@ class _MenuInfoState extends State<MenuInfo> {
       map['userId'] = userId;
       map[key] = value;
 
+      print(key);
+      print(value);
+
       var response =
-          await http.post(HttpService.rootUpdateSettings, body: map, headers: {
+      await http.post(HttpService.rootUpdateSettings, body: map, headers: {
         'Authorization': 'Bearer ' + HttpService.token,
       }).timeout(const Duration(seconds: 15), onTimeout: () {
         _updateState(false);
@@ -733,5 +636,94 @@ class _MenuInfoState extends State<MenuInfo> {
     setState(() {
       updateState = state;
     });
+  }
+
+  void changePin({int pinLength}) async {
+    if (oldPinController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'old pin required',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (newPinController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'enter new pin', context: context, scaffoldKey: _scaffoldKey);
+    } else if (cNewPinController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'confirm new pin',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (newPinController.text != cNewPinController.text) {
+      ShowSnackBar.showInSnackBar(
+          value: 'pin does not match',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    }
+
+    else {
+      try {
+        var map = Map<String, dynamic>();
+        map['userId'] = userId;
+        map['password'] = password;
+        map['repeat_lock_code'] = cNewPinController.text;
+        map['lock_code'] = newPinController.text;
+
+        var response =
+        await http.post(HttpService.rootUpdateUserPin, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
+          ShowSnackBar.showInSnackBar(
+              value: 'The connection has timed out, please try again!',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+          return null;
+        });
+
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+
+          UpdatePassword settingsData = UpdatePassword.fromJson(body);
+
+          bool status = settingsData.status;
+          String message = settingsData.message;
+
+
+          if (status) {
+            Future.delayed(Duration(seconds: 4), (){
+              kbackBtn(context);
+            });
+            ShowSnackBar.showInSnackBar(
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+            cNewPinController.text = '';
+            newPinController.text = '';
+
+            SharedPrefrences.addStringToSP("lock_code", newPinController.text);
+
+
+          } else if (!status) {
+            ShowSnackBar.showInSnackBar(
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+          }
+        } else {
+          ShowSnackBar.showInSnackBar(
+              value: 'network error',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } on SocketException {
+        ShowSnackBar.showInSnackBar(
+            value: 'check your internet connection',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    }
   }
 }

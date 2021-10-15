@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'custom_button.dart';
 
 class GetStartedButton extends StatefulWidget {
+  final String userPin;
+
+  const GetStartedButton({Key key, this.userPin}) : super(key: key);
   @override
   _GetStartedButtonState createState() => _GetStartedButtonState();
 }
@@ -23,7 +26,7 @@ class _GetStartedButtonState extends State<GetStartedButton> {
             SharedPrefrences.addBoolToSP('isonBoardTrue', true);
             pushPage(
               context,
-              SignUpPage(),
+              SignUpPage(userPin: widget.userPin),
             );
           },
           text: 'Get Started'),

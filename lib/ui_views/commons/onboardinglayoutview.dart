@@ -1,4 +1,3 @@
-
 import 'package:mabro/core/models/slider.dart';
 import 'package:mabro/ui_views/commons/slider_item.dart';
 import 'package:mabro/ui_views/widgets/onboarding_sliding_dots/slide_dots.dart';
@@ -9,6 +8,9 @@ import 'package:flutter/material.dart';
 import '../widgets/buttons/get_started_button.dart';
 
 class OnBoardingLayoutView extends StatefulWidget {
+  final String userPin;
+
+  const OnBoardingLayoutView({Key key, this.userPin}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _OnBoardingLayoutView();
 }
@@ -85,7 +87,9 @@ class _OnBoardingLayoutView extends State<OnBoardingLayoutView> {
                 bottom: 50,
                 left: 14,
                 right: 14,
-                child: inFinalPage() ? Container() : GetStartedButton()),
+                child: inFinalPage()
+                    ? Container()
+                    : GetStartedButton(userPin: widget.userPin)),
           ],
         ),
       );

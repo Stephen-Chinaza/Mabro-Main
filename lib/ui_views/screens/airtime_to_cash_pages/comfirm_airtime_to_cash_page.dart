@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/screens/transaction_success_page.dart/transaction_sucessful_page.dart';
@@ -53,9 +52,9 @@ class _ConfirmTransferPageState extends State<ConfirmTransferPage> {
                 child: TextStyles.textDetails(
                   textSize: 13,
                   textColor: ColorConstants.whiteLighterColor,
-                  textValue: 'only click on continue after you have transfered airtime ' +
-                      'to the above number within 6 mins otherwise click cancel',
-
+                  textValue:
+                      'only click on continue after you have transfered airtime ' +
+                          'to the above number within 6 mins otherwise click cancel',
                 ),
               ),
             ],
@@ -86,34 +85,38 @@ class BottomButton extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right:6.0),
-              child: TextButton(onPressed: (){},
+              padding: const EdgeInsets.only(right: 6.0),
+              child: TextButton(
+                  onPressed: () {},
                   style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(15.0),
-                    primary: Colors.white,
-                    textStyle: const TextStyle(fontSize: 14),
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-                    side: BorderSide(color: ColorConstants.secondaryColor, width: 2)
-                  ),
-                  child: Text('Cancel', style: TextStyle(color: ColorConstants.white),
-
+                      padding: const EdgeInsets.all(15.0),
+                      primary: Colors.white,
+                      textStyle: const TextStyle(fontSize: 14),
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      side: BorderSide(
+                          color: ColorConstants.secondaryColor, width: 2)),
+                  child: Text(
+                    'Cancel',
+                    style: TextStyle(color: ColorConstants.white),
                   )),
             ),
           ),
-          Expanded(child: Padding(
-            padding: const EdgeInsets.only(left:6.0),
-            child: CustomButton(
-              disableButton: true,
-              text: text2,
-              margin: 0,
-              width: 140,
-              onPressed: () {
-                showCustomDialog(context, title: 'Upload Screenshot');
-              },
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 6.0),
+              child: CustomButton(
+                disableButton: true,
+                text: text2,
+                margin: 0,
+                width: 140,
+                onPressed: () {
+                  showCustomDialog(context, title: 'Upload Screenshot');
+                },
+              ),
             ),
-          ),)
-
+          )
         ],
       ),
     );
@@ -157,8 +160,8 @@ class BottomButton extends StatelessWidget {
                       ),
                       TextStyles.textDetails(
                           textSize: 14,
-                          textValue: 'Please upload images that are less than 2MB',
-
+                          textValue:
+                              'Please upload images that are less than 2MB',
                           textColor: ColorConstants.secondaryColor),
                       SizedBox(height: 20),
                       CustomButton(
@@ -201,28 +204,28 @@ class TopInfoContainer extends StatelessWidget {
       child: Card(
           color: ColorConstants.primaryLighterColor,
           child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 10),
-            TextStyles.textDetails(
-                textSize: 14,
-                textColor: ColorConstants.whiteLighterColor,
-                textValue:
-                    '* Transfer N2,000.00 worth of airtime to this phone number below'),
-            SizedBox(height: 20),
-            copyPhone('08108803488',
-                "please do not save or call this number we don't accept VTU or recharge pin"),
-            SizedBox(height: 40),
-            TextStyles.textDetails(
-                textSize: 14,
-                textColor: ColorConstants.whiteLighterColor,
-                textValue:
-                    'please use displayed phone number once, as a new number will be provided for every transaction so as to avoid loss of artime'),
-          ],
-        ),
-      )),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 10),
+                TextStyles.textDetails(
+                    textSize: 14,
+                    textColor: ColorConstants.whiteLighterColor,
+                    textValue:
+                        '* Transfer N2,000.00 worth of airtime to this phone number below'),
+                SizedBox(height: 20),
+                copyPhone('08108803488',
+                    "please do not save or call this number we don't accept VTU or recharge pin"),
+                SizedBox(height: 40),
+                TextStyles.textDetails(
+                    textSize: 14,
+                    textColor: ColorConstants.whiteLighterColor,
+                    textValue:
+                        'please use displayed phone number once, as a new number will be provided for every transaction so as to avoid loss of artime'),
+              ],
+            ),
+          )),
     );
   }
 
@@ -254,13 +257,12 @@ class TopInfoContainer extends StatelessWidget {
                     child: new Tooltip(
                         preferBelow: false,
                         message: "Copy",
-                        child: Icon(Icons.copy_outlined, color: ColorConstants.secondaryColor))),
+                        child: Icon(Icons.copy_outlined,
+                            color: ColorConstants.secondaryColor))),
               ],
             ),
             SizedBox(height: 5),
-            TextStyles.textDetails(
-                textSize: 14,
-                textValue: phoneInfo),
+            TextStyles.textDetails(textSize: 14, textValue: phoneInfo),
           ],
         ),
       ),
@@ -295,12 +297,18 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
                 Icons.info_outlined,
                 color: ColorConstants.secondaryColor,
               ),
-              title: Text("How to transfer mtn airtime",
-                style: TextStyle(color: ColorConstants.whiteLighterColor,),
+              title: Text(
+                "How to transfer mtn airtime",
+                style: TextStyle(
+                  color: ColorConstants.whiteLighterColor,
+                ),
               ),
-              trailing: Icon((showTransfer)
-                  ? Icons.keyboard_arrow_down
-                  : Icons.keyboard_arrow_right,color: ColorConstants.whiteLighterColor,),
+              trailing: Icon(
+                (showTransfer)
+                    ? Icons.keyboard_arrow_down
+                    : Icons.keyboard_arrow_right,
+                color: ColorConstants.whiteLighterColor,
+              ),
               onTap: () {
                 setState(() {
                   if (showTransfer) {
@@ -326,7 +334,7 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
                       textColor: ColorConstants.whiteLighterColor,
                       textValue: '*600*Phone Number*Amount*PIN# \n\n'),
                   TextStyles.textDetails(
-                    textColor:  ColorConstants.whiteLighterColor,
+                    textColor: ColorConstants.whiteLighterColor,
                     textSize: 14,
                     textValue: 'Example: *600*08108803488*2000*0000#',
                   ),
@@ -342,10 +350,16 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
                 Icons.info_outlined,
                 color: ColorConstants.secondaryColor,
               ),
-              title: Text("How to set your pin", style: TextStyle(color: ColorConstants.whiteLighterColor,)),
-              trailing: Icon((showPin)
-                  ? Icons.keyboard_arrow_down
-                  : Icons.keyboard_arrow_right,color: ColorConstants.whiteLighterColor,),
+              title: Text("How to set your pin",
+                  style: TextStyle(
+                    color: ColorConstants.whiteLighterColor,
+                  )),
+              trailing: Icon(
+                (showPin)
+                    ? Icons.keyboard_arrow_down
+                    : Icons.keyboard_arrow_right,
+                color: ColorConstants.whiteLighterColor,
+              ),
               onTap: () {
                 setState(() {
                   if (showPin) {
@@ -363,7 +377,7 @@ class _MiddleInfoContainerState extends State<MiddleInfoContainer> {
                 children: [
                   TextStyles.textDetails(
                     textSize: 14,
-                    textColor:  ColorConstants.secondaryColor,
+                    textColor: ColorConstants.secondaryColor,
                     textValue: 'Your default PIN is 0000 \n\n',
                   ),
                   TextStyles.textDetails(
@@ -429,29 +443,26 @@ class BottomInfoContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
-        color: ColorConstants.primaryLighterColor,
+          color: ColorConstants.primaryLighterColor,
           child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-
-        TextStyles.textDetails(
-        textSize: 16,
-          textValue:
-              'Your order details',
-
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                TextStyles.textDetails(
+                  textSize: 16,
+                  textValue: 'Your order details',
+                ),
+                SizedBox(height: 20),
+                orderDetails('phone', '08108803488'),
+                SizedBox(height: 15),
+                orderDetails('Amount Sent', '2,000'),
+                SizedBox(height: 15),
+                orderDetails('Amount to Recieve', '1,500'),
+                SizedBox(height: 15),
+                orderDetails('Transaction Date', '22/02/1995'),
+              ],
             ),
-            SizedBox(height: 20),
-            orderDetails('phone', '08108803488'),
-            SizedBox(height: 15),
-            orderDetails('Amount Sent', '2,000'),
-            SizedBox(height: 15),
-            orderDetails('Amount to Recieve', '1,500'),
-            SizedBox(height: 15),
-            orderDetails('Transaction Date', '22/02/1995'),
-          ],
-        ),
-      )),
+          )),
     );
   }
 
@@ -463,13 +474,11 @@ class BottomInfoContainer extends StatelessWidget {
           textSize: 14,
           textColor: ColorConstants.whiteLighterColor,
           textValue: tag,
-
         ),
         TextStyles.textDetails(
           textSize: 14,
           textColor: ColorConstants.whiteLighterColor,
           textValue: value,
-
         ),
       ],
     );

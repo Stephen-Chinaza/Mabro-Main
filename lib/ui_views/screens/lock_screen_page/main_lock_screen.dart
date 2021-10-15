@@ -35,6 +35,7 @@ class _MainScreenLockState extends State<MainScreenLock> {
   String userId;
   String _email;
   String _password;
+  String _lockCode;
 
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -57,6 +58,7 @@ class _MainScreenLockState extends State<MainScreenLock> {
     userId = (pref.getString('userId') ?? '');
     _email = (pref.getString('email_address') ?? '');
     _password = (pref.getString('password') ?? '');
+    _lockCode = (pref.getString('lock_code') ?? '');
   }
 
   _isValidCallback() {
@@ -78,7 +80,10 @@ class _MainScreenLockState extends State<MainScreenLock> {
     isValid = false;
 
     getData().whenComplete(() => {
-    setState(() {})
+    setState(() {
+      print(_lockCode);
+
+    })
     });
 
   }
@@ -237,7 +242,6 @@ class _MainScreenLockState extends State<MainScreenLock> {
                     scaffoldKey: _scaffoldKey,
                     timer: 5,
                   );
-
                   getUserInfo();
                   
                 }

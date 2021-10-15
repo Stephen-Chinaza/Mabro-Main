@@ -12,7 +12,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool pageState = false;
-  String pinState;
+  String pinState = '';
 
   Future<void> checkFirstScreen() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -29,7 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    checkFirstScreen();
+    checkFirstScreen().then((value) => {
+          setState(() {}),
+        });
     Timer(
         Duration(seconds: 5),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -37,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ? SignUpPage(
                       userPin: pinState,
                     )
-                  : OnBoardingPage(),
+                  : OnBoardingPage(userPin: pinState),
             )));
   }
 

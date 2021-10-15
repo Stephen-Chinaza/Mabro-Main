@@ -32,10 +32,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
-    sms = (pref.getString('sms_notification') ?? null); //
-    emailTransactionNotify = (pref.getString('email_transaction_notification') ?? null); //
-    newsletter = (pref.getString('newsletter') ?? null); //
+    sms = (pref.getString('sms_notification') ?? ''); //
+    emailTransactionNotify = (pref.getString('email_transaction_notification') ?? ''); //
+    newsletter = (pref.getString('newsletter') ?? ''); //
     userId = (pref.getString('userId') ?? ''); //
+
+    updateNotificationState();
 
 
   }
@@ -71,10 +73,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
     newsletterState = false;
 
     getData().whenComplete(() => {
-    updateNotificationState(),
-        setState(()
-    {}),
-  }
+      setState(()
+      {}),
+    }
     );
 
     updateStatePN = false;
@@ -147,162 +148,162 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 Column(
                   children: <Widget>[
 
-                        // buildListTile(
-                        //     title: "Add fund",
-                        //     widget: Switch(
-                        //       activeColor: ColorConstants.secondaryColor,
-                        //       activeTrackColor: ColorConstants.whiteColor,
-                        //       inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                        //       inactiveThumbColor: ColorConstants.whiteLighterColor,
-                        //       value: pAddFundState,
-                        //       onChanged: (bool value) {
-                        //         setState(() {
-                        //           pAddFundState = value;
-                        //           if (pAddFundState) {
-                        //             updateSettings(
-                        //                 key: 'add_fund_phone_alert',
-                        //                 value: '1',
-                        //                 num: 1);
-                        //           } else {
-                        //             updateSettings(
-                        //                 key: 'add_fund_phone_alert',
-                        //                 value: null,
-                        //                 num: 1);
-                        //           }
-                        //         });
-                        //       },
-                        //     ),
-                        //     onTapped: () {}),
-                        buildListTile(
-                            title: "Sms alert",
-                            widget: Switch(
-                              activeColor: ColorConstants.secondaryColor,
-                              activeTrackColor: ColorConstants.whiteColor,
-                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                              inactiveThumbColor: ColorConstants.whiteLighterColor,
-                              value: smsState,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  smsState = value;
-                                  if (smsState) {
-                                    updateSettings(
-                                        key: 'sms_alert', value: 1,
-                                        num: 1);
-                                  } else {
-                                    updateSettings(
-                                        key: 'sms_alert', value: 0,
-                                        num: 1);
-                                  }
-                                });
-                              },
-                            ),
-                            onTapped: () {}),
-                        buildListTile(
-                            title: "Email transaction notification",
-                            widget: Switch(
-                              activeColor: ColorConstants.secondaryColor,
-                              activeTrackColor: ColorConstants.whiteColor,
-                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                              inactiveThumbColor: ColorConstants.whiteLighterColor,
-                              value: emailState,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  emailState = value;
+                    // buildListTile(
+                    //     title: "Add fund",
+                    //     widget: Switch(
+                    //       activeColor: ColorConstants.secondaryColor,
+                    //       activeTrackColor: ColorConstants.whiteColor,
+                    //       inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                    //       inactiveThumbColor: ColorConstants.whiteLighterColor,
+                    //       value: pAddFundState,
+                    //       onChanged: (bool value) {
+                    //         setState(() {
+                    //           pAddFundState = value;
+                    //           if (pAddFundState) {
+                    //             updateSettings(
+                    //                 key: 'add_fund_phone_alert',
+                    //                 value: '1',
+                    //                 num: 1);
+                    //           } else {
+                    //             updateSettings(
+                    //                 key: 'add_fund_phone_alert',
+                    //                 value: null,
+                    //                 num: 1);
+                    //           }
+                    //         });
+                    //       },
+                    //     ),
+                    //     onTapped: () {}),
+                    buildListTile(
+                        title: "Sms alert",
+                        widget: Switch(
+                          activeColor: ColorConstants.secondaryColor,
+                          activeTrackColor: ColorConstants.whiteColor,
+                          inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                          inactiveThumbColor: ColorConstants.whiteLighterColor,
+                          value: smsState,
+                          onChanged: (bool value) {
+                            setState(() {
+                              smsState = value;
+                              if (smsState) {
+                                updateSettings(
+                                    key: 'sms_notification', value: '1',
+                                    num: 1);
+                              } else {
+                                updateSettings(
+                                    key: 'sms_notification', value: '0',
+                                    num: 1);
+                              }
+                            });
+                          },
+                        ),
+                        onTapped: () {}),
+                    buildListTile(
+                        title: "Email transaction notification",
+                        widget: Switch(
+                          activeColor: ColorConstants.secondaryColor,
+                          activeTrackColor: ColorConstants.whiteColor,
+                          inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                          inactiveThumbColor: ColorConstants.whiteLighterColor,
+                          value: emailState,
+                          onChanged: (bool value) {
+                            setState(() {
+                              emailState = value;
 
-                                  if (emailState) {
-                                    updateSettings(
-                                        key: 'email_transaction_notification',
-                                        value: 1,
-                                        num: 1);
-                                  } else {
-                                    updateSettings(
-                                        key: 'email_transaction_notification',
-                                        value: 0,
-                                        num: 1);
-                                  }
-                                });
-                              },
-                            ),
-                            onTapped: () {}),
-                        // buildListTile(
-                        //     title: "Buy asset",
-                        //     widget: Switch(
-                        //       activeColor: ColorConstants.secondaryColor,
-                        //       activeTrackColor: ColorConstants.whiteColor,
-                        //       inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                        //       inactiveThumbColor: ColorConstants.whiteLighterColor,
-                        //       value: pBuyFundState,
-                        //       onChanged: (bool value) {
-                        //         setState(() {
-                        //           pBuyFundState = value;
-                        //
-                        //           if (pBuyFundState) {
-                        //             updateSettings(
-                        //                 key: 'buy_asset_phone_alert',
-                        //                 value: '1',
-                        //                 num: 1);
-                        //           } else {
-                        //             updateSettings(
-                        //                 key: 'buy_asset_phone_alert',
-                        //                 value: null,
-                        //                 num: 1);
-                        //           }
-                        //         });
-                        //       },
-                        //     ),
-                        //     onTapped: () {}),
-                        // buildListTile(
-                        //     title: "Sell asset",
-                        //     widget: Switch(
-                        //       activeColor: ColorConstants.secondaryColor,
-                        //       activeTrackColor: ColorConstants.whiteColor,
-                        //       inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                        //       inactiveThumbColor: ColorConstants.whiteLighterColor,
-                        //       value: pSellAsset,
-                        //       onChanged: (bool value) {
-                        //         setState(() {
-                        //           pSellAsset = value;
-                        //           if (pSellAsset) {
-                        //             updateSettings(
-                        //                 key: 'sell_asset_phone_alert',
-                        //                 value: '1',
-                        //                 num: 1);
-                        //           } else {
-                        //             updateSettings(
-                        //                 key: 'sell_asset_phone_alert',
-                        //                 value: null,
-                        //                 num: 1);
-                        //           }
-                        //         });
-                        //       },
-                        //     ),
-                        //     onTapped: () {}),
-                        buildListTile(
-                            title: "News letter",
-                            widget: Switch(
-                              activeColor: ColorConstants.secondaryColor,
-                              activeTrackColor: ColorConstants.whiteColor,
-                              inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
-                              inactiveThumbColor: ColorConstants.whiteLighterColor,
-                              value: newsletterState,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  newsletterState = value;
-                                  if (newsletterState) {
-                                    updateSettings(
-                                        key: 'newsletter',
-                                        value: 1,
-                                        num: 1);
-                                  } else {
-                                    updateSettings(
-                                        key: 'newsletter',
-                                        value: 0,
-                                        num: 1);
-                                  }
-                                });
-                              },
-                            ),
-                            onTapped: () {}),
+                              if (emailState) {
+                                updateSettings(
+                                    key: 'email_transaction_notification',
+                                    value: '1',
+                                    num: 1);
+                              } else {
+                                updateSettings(
+                                    key: 'email_transaction_notification',
+                                    value: '0',
+                                    num: 1);
+                              }
+                            });
+                          },
+                        ),
+                        onTapped: () {}),
+                    // buildListTile(
+                    //     title: "Buy asset",
+                    //     widget: Switch(
+                    //       activeColor: ColorConstants.secondaryColor,
+                    //       activeTrackColor: ColorConstants.whiteColor,
+                    //       inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                    //       inactiveThumbColor: ColorConstants.whiteLighterColor,
+                    //       value: pBuyFundState,
+                    //       onChanged: (bool value) {
+                    //         setState(() {
+                    //           pBuyFundState = value;
+                    //
+                    //           if (pBuyFundState) {
+                    //             updateSettings(
+                    //                 key: 'buy_asset_phone_alert',
+                    //                 value: '1',
+                    //                 num: 1);
+                    //           } else {
+                    //             updateSettings(
+                    //                 key: 'buy_asset_phone_alert',
+                    //                 value: null,
+                    //                 num: 1);
+                    //           }
+                    //         });
+                    //       },
+                    //     ),
+                    //     onTapped: () {}),
+                    // buildListTile(
+                    //     title: "Sell asset",
+                    //     widget: Switch(
+                    //       activeColor: ColorConstants.secondaryColor,
+                    //       activeTrackColor: ColorConstants.whiteColor,
+                    //       inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                    //       inactiveThumbColor: ColorConstants.whiteLighterColor,
+                    //       value: pSellAsset,
+                    //       onChanged: (bool value) {
+                    //         setState(() {
+                    //           pSellAsset = value;
+                    //           if (pSellAsset) {
+                    //             updateSettings(
+                    //                 key: 'sell_asset_phone_alert',
+                    //                 value: '1',
+                    //                 num: 1);
+                    //           } else {
+                    //             updateSettings(
+                    //                 key: 'sell_asset_phone_alert',
+                    //                 value: null,
+                    //                 num: 1);
+                    //           }
+                    //         });
+                    //       },
+                    //     ),
+                    //     onTapped: () {}),
+                    buildListTile(
+                        title: "News letter",
+                        widget: Switch(
+                          activeColor: ColorConstants.secondaryColor,
+                          activeTrackColor: ColorConstants.whiteColor,
+                          inactiveTrackColor: ColorConstants.whiteLighterColor.withOpacity(0.4),
+                          inactiveThumbColor: ColorConstants.whiteLighterColor,
+                          value: newsletterState,
+                          onChanged: (bool value) {
+                            setState(() {
+                              newsletterState = value;
+                              if (newsletterState) {
+                                updateSettings(
+                                    key: 'newsletter',
+                                    value: '1',
+                                    num: 1);
+                              } else {
+                                updateSettings(
+                                    key: 'newsletter',
+                                    value: '0',
+                                    num: 1);
+                              }
+                            });
+                          },
+                        ),
+                        onTapped: () {}),
 
                   ],
                 ),
@@ -536,7 +537,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
-  void updateSettings({String key, int value, int num}) async {
+  void updateSettings({String key, String value, int num}) async {
     _updateState(true, num);
 
     try {
@@ -617,7 +618,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         updateStatePN = state;
       }else if(num == 2){
 
-      updateStateE = state;}
+        updateStateE = state;}
     });
   }
 }

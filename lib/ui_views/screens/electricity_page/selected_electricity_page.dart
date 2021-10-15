@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/buy_airtime_bundle.dart';
 import 'package:mabro/core/models/demo_data.dart';
 import 'package:mabro/core/models/electricity_data_companies.dart';
@@ -21,7 +22,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io';
 
 // ignore: must_be_immutable
 class SelectedElectricitySubPage extends StatefulWidget {
@@ -76,10 +76,10 @@ class _SelectedElectricitySubPageState
     electLogo = 'assets/images/ekoelect.jpg';
     pageState = false;
 
-    _meterNumberController.text = '1010101010101';
+    _meterNumberController.text = '1111111111111';
     _phoneController.text = '08011111111';
     _amountController.text = '2000';
-    meterInitData = 'Postpaid';
+    meterInitData = 'Prepaid';
     _meterTypeController.text = meterInitData;
     serviceId = 'abuja-electric';
 
@@ -461,7 +461,7 @@ class _SelectedElectricitySubPageState
           } else {
             return Container(
               child: ListView.builder(
-                  itemCount: electricityCompanyList.data.electricity.length + 1,
+                  itemCount: 8,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, i) {
@@ -539,17 +539,19 @@ class _SelectedElectricitySubPageState
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    } else if (_pinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Enter transaction pin',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (userPin != _pinController.text) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Invalid pin entered',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else {
+    }
+    // else if (_pinController.text.isEmpty) {
+    //   ShowSnackBar.showInSnackBar(
+    //       value: 'Enter transaction pin',
+    //       context: context,
+    //       scaffoldKey: _scaffoldKey);
+    // } else if (userPin != _pinController.text) {
+    //   ShowSnackBar.showInSnackBar(
+    //       value: 'Invalid pin entered',
+    //       context: context,
+    //       scaffoldKey: _scaffoldKey);
+    // }
+    else {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
@@ -576,10 +578,10 @@ class _SelectedElectricitySubPageState
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          //BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
+          BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
 
-          bool status = true;
-          String message = 'regUser.message';
+          bool status = regUser.status;
+          String message = regUser.message;
           if (status) {
             cPageState(state: false);
             payElectricityBill();
@@ -593,7 +595,6 @@ class _SelectedElectricitySubPageState
             cPageState(state: false);
 
             ShowSnackBar.showInSnackBar(
-                bgColor: ColorConstants.primaryColor,
                 value: message,
                 context: context,
                 scaffoldKey: _scaffoldKey,
@@ -603,7 +604,6 @@ class _SelectedElectricitySubPageState
           cPageState(state: false);
 
           ShowSnackBar.showInSnackBar(
-              bgColor: ColorConstants.primaryColor,
               value: 'network error',
               context: context,
               scaffoldKey: _scaffoldKey,
@@ -612,7 +612,6 @@ class _SelectedElectricitySubPageState
       } on SocketException {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.primaryColor,
             value: 'check your internet connection',
             context: context,
             scaffoldKey: _scaffoldKey,
@@ -624,43 +623,41 @@ class _SelectedElectricitySubPageState
   void payElectricityBill() async {
     if (_meterTypeController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
           value: 'Select meter type',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
     } else if (_meterNumberController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
           value: 'Enter meter number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
     } else if (_phoneController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
           value: 'Enter phone number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
     } else if (_amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
-          bgColor: ColorConstants.primaryColor,
           value: 'Enter amount',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    } else if (_pinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Enter transaction pin',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (userPin != _pinController.text) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Invalid pin entered',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else {
+    }
+    //else if (_pinController.text.isEmpty) {
+    // ShowSnackBar.showInSnackBar(
+    //     value: 'Enter transaction pin',
+    //     context: context,
+    //     scaffoldKey: _scaffoldKey);
+    // } else if (userPin != _pinController.text) {
+    //   ShowSnackBar.showInSnackBar(
+    //       value: 'Invalid pin entered',
+    //       context: context,
+    //       scaffoldKey: _scaffoldKey);
+    //}
+    else {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
@@ -670,7 +667,8 @@ class _SelectedElectricitySubPageState
         map['meter_type'] = _meterTypeController.text;
         map['phone_number'] = _phoneController.text;
         map['amount'] = _amountController.text;
-
+        print(userId);
+        print(serviceId);
         var response = await http
             .post(HttpService.rootPayElectricityBill, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
@@ -693,6 +691,7 @@ class _SelectedElectricitySubPageState
 
           bool status = data.status;
           String message = data.message;
+
           if (status) {
             cPageState(state: false);
 
@@ -702,6 +701,10 @@ class _SelectedElectricitySubPageState
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
+
+            String balance = data.data.balance.toString();
+
+            SharedPrefrences.addStringToSP("nairaBalance", balance);
           } else if (!status) {
             cPageState(state: false);
 

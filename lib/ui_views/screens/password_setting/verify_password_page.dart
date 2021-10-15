@@ -82,161 +82,161 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           key: _scaffoldKey,
           backgroundColor: ColorConstants.primaryColor,
           body:  SingleChildScrollView(
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    child: Expanded(
-                      child: Column(children: <Widget>[
-                        SizedBox(
-                          height: Dims.sizedBoxHeight(height: 50),
-                        ),
-                        Container(
-                            padding: EdgeInsets.symmetric(horizontal: 0.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: Expanded(
+                child: Column(children: <Widget>[
+                  SizedBox(
+                    height: Dims.sizedBoxHeight(height: 50),
+                  ),
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: 0.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+
+                          GestureDetector(
+                              onTap: () {}, child: _buildSecurityText()),
+                          SizedBox(
+                            height: Dims.sizedBoxHeight(
+                                height:
+                                Dims.screenHeight(context) * 0.10),
+                          ),
+                          Visibility(
+                            visible: !pageState,
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-
-                                GestureDetector(
-                                    onTap: () {}, child: _buildSecurityText()),
-                                SizedBox(
-                                  height: Dims.sizedBoxHeight(
-                                      height:
-                                          Dims.screenHeight(context) * 0.10),
-                                ),
-                                Visibility(
-                                  visible: !pageState,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Form(
-                                        key: formKey,
-                                        child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0, horizontal: 40),
-                                            child: PinCodeTextField(
-                                              appContext: context,
-                                              pastedTextStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              length: 4,
-                                              obscureText: true,
-
-                                              validator: (v) {
-                                                if (v.length < 4) {
-                                                  return "";
-                                                } else {
-                                                  return null;
-                                                }
-                                              },
-                                              pinTheme: PinTheme(
-                                                shape: PinCodeFieldShape.box,
-                                                fieldHeight: 50,
-                                                fieldWidth: 50,
-                                                activeFillColor:
-                                                hasError ? Colors.orange : Colors.white,
-                                              ),
-                                              cursorColor: Colors.white,
-                                              animationDuration: Duration(milliseconds: 300),
-                                              textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
-                                              backgroundColor: ColorConstants.transparent,
-                                              obscuringCharacter: '*',
-                                              enableActiveFill: false,
-
-                                              controller: textEditingController,
-                                              keyboardType: TextInputType.number,
-
-                                              onCompleted: (v) {
-                                                print(v);
-
-                                                formKey.currentState.validate();
-                                                // conditions for validating
-                                                if (currentText.length != 4) {
-
-                                                } else {
-                                                  if (v == widget.textPin) {
-                                                    setState(() {
-                                                      hasError = false;
-                                                      textEditingController
-                                                          .text = '';
-                                                      _setPin(v);
-                                                    });
-                                                  }else{
-                                                    ShowSnackBar.showInSnackBar(
-                                                        bgColor: ColorConstants.secondaryColor,
-                                                        value: 'Pin mismatch re-enter pin',
-                                                        context: context,
-                                                        scaffoldKey: _scaffoldKey,
-                                                        timer: 5);
-                                                    textEditingController
-                                                        .text = '';
-                                                    Future.delayed(Duration(seconds: 3), (){
-                                                      kbackBtn(context);
-
-                                                    });
-                                                  }
-                                                }
-                                              },
-                                              onChanged: (value) {
-                                                print(value);
-                                                setState(() {
-                                                  currentText = value;
-                                                });
-                                              },
-                                              beforeTextPaste: (text) {
-                                                print("Allowing to paste $text");
-                                                //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                                //but you can show anything you want here, like your pop up saying wrong paste format or etc
-                                                return true;
-                                              },
-                                            )),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                        child: Text(
-                                          hasError ? "*Please fill up all the cells properly" : "",
-                                          style: TextStyle(
-                                              color: ColorConstants.secondaryColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Form(
+                                  key: formKey,
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 4.0, horizontal: 40),
+                                      child: PinCodeTextField(
+                                        appContext: context,
+                                        pastedTextStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                      ),
+                                        length: 4,
+                                        obscureText: true,
 
-                                      SizedBox(
-                                        height: Dims.sizedBoxHeight(height: 30.0),
-                                      ),
-                                      GestureDetector(onTap: (){
-                                        kbackBtn(context);
-                                      },
-                                      child: TextStyles.textHeadings(
-                                          textValue: 'BACK',
-                                          textSize: 16.0,
-                                          textColor: ColorConstants.whiteLighterColor
-                                      ),
-                                      ),
+                                        validator: (v) {
+                                          if (v.length < 4) {
+                                            return "";
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        pinTheme: PinTheme(
+                                          shape: PinCodeFieldShape.box,
+                                          fieldHeight: 50,
+                                          fieldWidth: 50,
+                                          activeFillColor:
+                                          hasError ? Colors.orange : Colors.white,
+                                        ),
+                                        cursorColor: Colors.white,
+                                        animationDuration: Duration(milliseconds: 300),
+                                        textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
+                                        backgroundColor: ColorConstants.transparent,
+                                        obscuringCharacter: '*',
+                                        enableActiveFill: false,
 
-                                    ],
+                                        controller: textEditingController,
+                                        keyboardType: TextInputType.number,
+
+                                        onCompleted: (v) {
+                                          print(v);
+
+                                          formKey.currentState.validate();
+                                          // conditions for validating
+                                          if (currentText.length != 4) {
+
+                                          } else {
+                                            if (v == widget.textPin) {
+                                              setState(() {
+                                                hasError = false;
+                                                textEditingController
+                                                    .text = '';
+                                                _setPin(v);
+                                              });
+                                            }else{
+                                              ShowSnackBar.showInSnackBar(
+                                                  bgColor: ColorConstants.secondaryColor,
+                                                  value: 'Pin mismatch re-enter pin',
+                                                  context: context,
+                                                  scaffoldKey: _scaffoldKey,
+                                                  timer: 5);
+                                              textEditingController
+                                                  .text = '';
+                                              Future.delayed(Duration(seconds: 3), (){
+                                                kbackBtn(context);
+
+                                              });
+                                            }
+                                          }
+                                        },
+                                        onChanged: (value) {
+                                          print(value);
+                                          setState(() {
+                                            currentText = value;
+                                          });
+                                        },
+                                        beforeTextPaste: (text) {
+                                          print("Allowing to paste $text");
+                                          //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
+                                          //but you can show anything you want here, like your pop up saying wrong paste format or etc
+                                          return true;
+                                        },
+                                      )),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                  child: Text(
+                                    hasError ? "*Please fill up all the cells properly" : "",
+                                    style: TextStyle(
+                                        color: ColorConstants.secondaryColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                 ),
-                                Visibility(
-                                  visible: pageState,
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 20),
-                                      CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
-                                      SizedBox(height: 20),
-                                      Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
-                                    ],
+
+                                SizedBox(
+                                  height: Dims.sizedBoxHeight(height: 30.0),
+                                ),
+                                GestureDetector(onTap: (){
+                                  kbackBtn(context);
+                                },
+                                  child: TextStyles.textHeadings(
+                                      textValue: 'BACK',
+                                      textSize: 16.0,
+                                      textColor: ColorConstants.whiteLighterColor
                                   ),
                                 ),
-
 
                               ],
-                            )),
-                      ]),
-                    ),
-                  ),
-                ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: pageState,
+                            child: Column(
+                              children: [
+                                SizedBox(height: 20),
+                                CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
+                                SizedBox(height: 20),
+                                Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
+                              ],
+                            ),
+                          ),
+
+
+                        ],
+                      )),
+                ]),
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -262,7 +262,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
             child: Text(
               ' Please remember this pin. It will be used to keep your account secured.',
               style:
-                  TextStyle(fontSize: 18, color: ColorConstants.whiteLighterColor),
+              TextStyle(fontSize: 18, color: ColorConstants.whiteLighterColor),
               textAlign: TextAlign.center,
             ),
           ),
@@ -283,7 +283,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
 
       var response = await http
           .post(HttpService.rootUserPin, body: map,headers: {
-      'Authorization': 'Bearer '+HttpService.token,
+        'Authorization': 'Bearer '+HttpService.token,
       })
           .timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);

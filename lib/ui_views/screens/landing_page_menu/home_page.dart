@@ -108,7 +108,6 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: ColorConstants.primaryColor,
       drawer: _buildDrawer(context),
       body: CustomScrollView(
-        
         physics: AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           _buildToolbar(context),
@@ -240,7 +239,6 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return SliverGrid(
-    
       gridDelegate:
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
       delegate: SliverChildBuilderDelegate(
@@ -248,7 +246,7 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 6) {
+              if (checkedItem == 5) {
                 ShowSnackBar.showInSnackBar(
                     value: 'feature coming up soon!!!',
                     context: context,

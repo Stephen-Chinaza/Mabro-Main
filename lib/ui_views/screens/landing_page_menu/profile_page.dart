@@ -198,6 +198,7 @@ class _MenuPageState extends State<MenuPage> {
           title,
           style: TextStyle(
             fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w600,
             fontSize: 16,
             color: ColorConstants.whiteLighterColor,
           ),
@@ -282,6 +283,7 @@ class ProfileHeader extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.bold,
                   fontSize: 16,
                   color: ColorConstants.whiteLighterColor,
                 ),
@@ -290,11 +292,11 @@ class ProfileHeader extends StatelessWidget {
                 height: 5,
               ),
               Text(
-                'Email $subtitle',
+                'email: $subtitle',
                 style: TextStyle(
                   fontStyle: FontStyle.normal,
-                  fontSize: 16,
-                  color: ColorConstants.whiteLighterColor,
+                  fontSize: 14,
+                  color: ColorConstants.secondaryColor,
                 ),
               ),
             ],

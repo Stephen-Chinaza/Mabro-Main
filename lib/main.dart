@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
-
+import 'package:mabro/ui_views/widgets/webview.dart';
 
 import 'package:mabro/ui_views/screens/splash_screen_page/splash_screen_page.dart';
 

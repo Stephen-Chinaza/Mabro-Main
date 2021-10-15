@@ -36,7 +36,7 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.6
   page_indicator: ^0.3.0
-  permission_handler: ^5.0.0
+  permission_handler: ^8.2.5
   #contacts_service: ^0.6.1
   pin_code_fields: ^7.3.0
   local_auth: ^1.1.7
@@ -44,16 +44,17 @@ dependencies:
   google_fonts: ^2.1.0
   flutter_sparkline: ^0.1.0
   typicons_flutter: ^0.4.2
-  url_launcher: ^5.7.10
+  url_launcher: ^6.0.12
   flushbar: ^1.10.4
   flutter_paystack: ^1.0.5+1
   monnify_flutter_sdk: ^1.1.0
   qr_flutter: ^4.0.0
   qr_code_scanner: ^0.4.0
   share: ^0.6.5+4
-  #expansion_tile_card: ^2.0.0
-  #flutter_contacts: ^1.1.1+2
-  #flutter_webview_plugin: ^0.4.0
+  #webviewx: ^0.2.1
+  plugin_platform_interface: ^2.0.2
+  flutter_contacts: ^1.1.1+2
+ # webview_flutter: ^2.0.12
 
 
 dev_dependencies:

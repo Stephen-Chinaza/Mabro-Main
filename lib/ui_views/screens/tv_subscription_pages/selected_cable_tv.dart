@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/buy_airtime_bundle.dart';
 import 'package:mabro/core/models/demo_data.dart';
 import 'package:mabro/core/models/electricity_data_companies.dart';
@@ -494,10 +495,10 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
+          BuyAirtimeBundle data = BuyAirtimeBundle.fromJson(body);
 
-          bool status = regUser.status;
-          String message = regUser.message;
+          bool status = data.status;
+          String message = data.message;
           if (status) {
             cPageState(state: false);
             payTvSubBill();
@@ -611,6 +612,10 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
             _smartCardController.text = '';
             _pinController.text = '';
             _phoneController.text = '';
+
+            String balance = data.data.balance.toString();
+
+            SharedPrefrences.addStringToSP("nairaBalance", balance);
           } else if (!status) {
             cPageState(state: false);
 

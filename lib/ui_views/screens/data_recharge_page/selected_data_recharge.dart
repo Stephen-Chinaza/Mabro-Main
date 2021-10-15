@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/buy_9mobile_bundle.dart';
 import 'package:mabro/core/models/buy_airtel_bundle.dart';
 import 'package:mabro/core/models/buy_airtime_bundle.dart';
@@ -729,10 +730,10 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
+          BuyAirtimeBundle data = BuyAirtimeBundle.fromJson(body);
 
-          bool status = regUser.status;
-          String message = regUser.message;
+          bool status = data.status;
+          String message = data.message;
           if (status) {
             cPageState(state: false);
 
@@ -742,6 +743,9 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
+                String balance = data.data.balance.toString();
+
+            SharedPrefrences.addStringToSP("nairaBalance", balance);
           } else if (!status) {
             cPageState(state: false);
 

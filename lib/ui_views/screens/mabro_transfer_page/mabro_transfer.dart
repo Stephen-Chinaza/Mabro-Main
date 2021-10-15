@@ -22,29 +22,37 @@ import 'package:mabro/ui_views/widgets/textfield/password_textfield.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInPage extends StatefulWidget {
+class MabroTransferPage extends StatefulWidget {
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _MabroTransferPageState createState() => _MabroTransferPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
-  String message, vEmail, id;
+class _MabroTransferPageState extends State<MabroTransferPage> {
+  String message, vEmail, userId;
   final FocusNode myFocusNodeEmail = FocusNode();
-  final FocusNode myFocusNodePassword = FocusNode();
+  final FocusNode myFocusNodeAmount = FocusNode();
   bool pageState;
-  TextEditingController signinEmailController = new TextEditingController();
-  TextEditingController signinPasswordController = new TextEditingController();
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController amountController = new TextEditingController();
 
-  String _email, _password;
+  Future<void> getUserDetails() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userId = (pref.getString('userId') ?? '');
+
+    setState(() {});
+  }
+
+  String _email, _amount;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void dispose() {
-    myFocusNodePassword.dispose();
+    myFocusNodeAmount.dispose();
     myFocusNodeEmail.dispose();
-    signinEmailController.dispose();
-    signinPasswordController.dispose();
+    emailController.dispose();
+    amountController.dispose();
 
     super.dispose();
   }
@@ -54,7 +62,11 @@ class _SignInPageState extends State<SignInPage> {
     super.initState();
     pageState = false;
     _email = '';
-    _password = '';
+    _amount = '';
+
+    getUserDetails().then((value) => {
+          setState(() {}),
+        });
   }
 
   Widget _buildSignUpForm(BuildContext context) {
@@ -67,11 +79,9 @@ class _SignInPageState extends State<SignInPage> {
           child: Form(
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Center(child: Image.asset('assets/images/mabrologo.png')),
-              SizedBox(height: 15),
               Center(
                 child: Text(
-                  'Login to your account'.toUpperCase(),
+                  'Mabro Transfer'.toUpperCase(),
                   style: TextStyle(
                     fontSize: 16,
                     color: ColorConstants.secondaryColor,
@@ -81,9 +91,9 @@ class _SignInPageState extends State<SignInPage> {
               SizedBox(height: 20),
               RoundedTextfield(
                 icon: Icons.email_outlined,
-                hintText: 'Email address',
+                hintText: 'Enter your email address',
                 labelText: '',
-                controller: signinEmailController,
+                controller: emailController,
                 myFocusNode: myFocusNodeEmail,
                 textInputType: TextInputType.emailAddress,
                 onChanged: (email) {
@@ -95,12 +105,12 @@ class _SignInPageState extends State<SignInPage> {
               ),
               PasswordTextField(
                 icon: Icons.lock_open,
-                textHint: 'Password',
-                controller: signinPasswordController,
-                myFocusNode: myFocusNodePassword,
+                textHint: 'Enter amount',
+                controller: amountController,
+                myFocusNode: myFocusNodeAmount,
                 labelText: '',
-                onChanged: (password) {
-                  _password = password;
+                onChanged: (amount) {
+                  _amount = amount;
                 },
               ),
               SizedBox(
@@ -131,7 +141,7 @@ class _SignInPageState extends State<SignInPage> {
                         margin: 0,
                         disableButton: true,
                         onPressed: () {
-                          _signIn();
+                          _verifyUser();
                         },
                         text: 'Sign In'),
                     SizedBox(
@@ -164,15 +174,15 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  void _signIn() async {
-    if (signinEmailController.text.isEmpty) {
+  void _verifyUser() async {
+    if (emailController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.secondaryColor,
           value: 'email field required',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    } else if (signinPasswordController.text.isEmpty) {
+    } else if (amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.secondaryColor,
           value: 'password field required',
@@ -183,8 +193,8 @@ class _SignInPageState extends State<SignInPage> {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
-        map['email_address'] = _email;
-        map['password'] = _password;
+        map['email_address'] = emailController.text;
+        map['userId'] = amountController;
 
         var response =
             await http.post(HttpService.rootLogin, body: map, headers: {
@@ -211,82 +221,6 @@ class _SignInPageState extends State<SignInPage> {
           String message = loginUser.message;
           if (status) {
             cPageState(state: false);
-            String verifiedEmail = loginUser.data.verifiedEmail.toString();
-            String blocked = loginUser.data.blocked.toString();
-            String lockCode = loginUser.data.lockCode;
-
-            //TODO CHECK IF USER IS BLOCKED OR LOCK_CODE IS SET
-            if (verifiedEmail == '1') {
-              if (lockCode == '') {
-                ShowSnackBar.showInSnackBar(
-                    bgColor: ColorConstants.secondaryColor,
-                    value: 'User lock code not set',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-                Future.delayed(Duration(seconds: 5), () {
-                  pushPage(context, SetPinPage());
-                });
-              } else {
-                if (blocked == '1') {
-                  ShowSnackBar.showInSnackBar(
-                      bgColor: ColorConstants.secondaryColor,
-                      value: 'User is currently blocked',
-                      context: context,
-                      scaffoldKey: _scaffoldKey,
-                      timer: 5);
-                } else {
-                  String firstName = loginUser.data.firstName;
-                  String surName = loginUser.data.surname;
-                  String phone = loginUser.data.phoneNumber;
-                  String id = loginUser.data.id.toString();
-                  String userId = loginUser.data.userId.toString();
-                  String email = loginUser.data.emailAddress;
-                  String lockCode = loginUser.data.lockCode;
-                  String password = signinPasswordController.text;
-                  String nairaBalance = loginUser.data.nairaBalance.toString();
-                  String verifiedEmail =
-                      loginUser.data.verifiedEmail.toString();
-                  String verifiedPhone =
-                      loginUser.data.verifiedPhone.toString();
-
-                  SharedPrefrences.addStringToSP("lock_code", lockCode);
-                  SharedPrefrences.addStringToSP("password", password);
-                  SharedPrefrences.addStringToSP("surname", surName);
-                  SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
-
-                  SharedPrefrences.addStringToSP("first_name", firstName);
-                  SharedPrefrences.addStringToSP("phone_number", phone);
-                  SharedPrefrences.addStringToSP("id", id);
-                  SharedPrefrences.addStringToSP("userId", userId);
-                  SharedPrefrences.addStringToSP("email_address", email);
-                  SharedPrefrences.addStringToSP("blocked", blocked);
-                  SharedPrefrences.addStringToSP(
-                      "verified_email", verifiedEmail);
-                  SharedPrefrences.addStringToSP(
-                      "verified_phone", verifiedPhone);
-
-                  ShowSnackBar.showInSnackBar(
-                    value: message,
-                    iconData: Icons.check_circle,
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5,
-                  );
-
-                  _redirectuser();
-                  signinEmailController.text = '';
-                  signinPasswordController.text = '';
-                }
-              }
-            } else {
-              ShowSnackBar.showInSnackBar(
-                  bgColor: ColorConstants.primaryColor,
-                  value: 'Please verify your email',
-                  context: context,
-                  scaffoldKey: _scaffoldKey,
-                  timer: 5);
-            }
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 bgColor: ColorConstants.secondaryColor,
