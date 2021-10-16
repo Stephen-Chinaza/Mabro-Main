@@ -1,10 +1,9 @@
 import 'package:mabro/core/models/login_user.dart';
+import 'package:mabro/core/models/transfer_fund.dart';
+import 'package:mabro/core/models/verify_transfer.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
-import 'package:mabro/ui_views/screens/authentication_pages/sign_up_page.dart';
-import 'package:mabro/ui_views/screens/forgot_password_page/forgot_password_page.dart';
-import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
-import 'package:mabro/ui_views/screens/password_setting/set_password_page.dart';
+import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,14 +11,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:mabro/constants/dimes/dimensions.dart';
-import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/services/repositories.dart';
 
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
-import 'package:mabro/ui_views/widgets/textfield/rounded_textfield.dart';
-import 'package:mabro/ui_views/widgets/textfield/password_textfield.dart';
-import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
+import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,8 +30,8 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeAmount = FocusNode();
   bool pageState;
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController amountController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _amountController = new TextEditingController();
 
   Future<void> getUserDetails() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -51,8 +47,8 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
   void dispose() {
     myFocusNodeAmount.dispose();
     myFocusNodeEmail.dispose();
-    emailController.dispose();
-    amountController.dispose();
+    _emailController.dispose();
+    _amountController.dispose();
 
     super.dispose();
   }
@@ -69,123 +65,91 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
         });
   }
 
-  Widget _buildSignUpForm(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      child: Card(
-        color: ColorConstants.primaryLighterColor,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
-          child: Form(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Center(
-                child: Text(
-                  'Mabro Transfer'.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: ColorConstants.secondaryColor,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              RoundedTextfield(
-                icon: Icons.email_outlined,
-                hintText: 'Enter your email address',
-                labelText: '',
-                controller: emailController,
-                myFocusNode: myFocusNodeEmail,
-                textInputType: TextInputType.emailAddress,
-                onChanged: (email) {
-                  _email = email;
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              PasswordTextField(
-                icon: Icons.lock_open,
-                textHint: 'Enter amount',
-                controller: amountController,
-                myFocusNode: myFocusNodeAmount,
-                labelText: '',
-                onChanged: (amount) {
-                  _amount = amount;
-                },
-              ),
-              SizedBox(
-                height: Dims.sizedBoxHeight(height: 15),
-              ),
-              GestureDetector(
-                onTap: () {
-                  kopenPage(context, ForgotPasswordPage());
-                },
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: TextStyles.textDetails(
-                      textValue: 'Forgot Password?'.toUpperCase(),
-                      textSize: 14,
-                      textColor: ColorConstants.whiteLighterColor),
-                ),
-              ),
-              SizedBox(
-                height: Dims.sizedBoxHeight(height: 10),
-              ),
-              Container(
+  Widget _buildTransferForm(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 320,
+          child: Card(
+            color: ColorConstants.primaryLighterColor,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 15),
+              child: Form(
                 child: Column(
-                  children: [
-                    SizedBox(
-                      height: Dims.sizedBoxHeight(height: 20),
-                    ),
-                    CustomButton(
-                        margin: 0,
-                        disableButton: true,
-                        onPressed: () {
-                          _verifyUser();
-                        },
-                        text: 'Sign In'),
-                    SizedBox(
-                      height: Dims.sizedBoxHeight(height: 20),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        kopenPage(context, SignUpPage());
-                      },
-                      child: Row(
-                        children: [
-                          TextStyles.textDetails(
-                              textValue: "Don't have an account?",
-                              textSize: 14),
-                          SizedBox(width: 10),
-                          TextStyles.textDetails(
-                              textValue: 'Sign Up'.toUpperCase(),
-                              textSize: 14,
-                              textColor: ColorConstants.secondaryColor),
-                        ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Provide transaction details'.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: ColorConstants.secondaryColor,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(height: 20),
+                      NormalFields(
+                        width: MediaQuery.of(context).size.width,
+                        hintText: 'Enter user email address',
+                        labelText: '',
+                        onChanged: (name) {},
+                        textInputType: TextInputType.emailAddress,
+                        controller: _emailController,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      NormalFields(
+                        width: MediaQuery.of(context).size.width,
+                        hintText: 'Enter amount to transfer',
+                        labelText: '',
+                        onChanged: (name) {},
+                        textInputType: TextInputType.number,
+                        controller: _amountController,
+                      ),
+                      SizedBox(
+                        height: Dims.sizedBoxHeight(height: 20),
+                      ),
+                      CustomButton(
+                          margin: 0,
+                          disableButton: true,
+                          onPressed: () {
+                            _verifyUser();
+                          },
+                          text: 'Continue'),
+                        SizedBox(height: 50),
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        Icon(Icons.lock, color: ColorConstants.whiteLighterColor),
+                        SizedBox(width: 5),
+                        Text(
+                          'Transfer secured by Mabro',
+                          style: TextStyle(
+                              color: ColorConstants.secondaryColor,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w200),
+                        ),
+                      ])
+                    ]),
               ),
-            ]),
+            ),
           ),
         ),
-      ),
+        //Expanded(child: Container()),
+
+      ],
     );
   }
 
   void _verifyUser() async {
-    if (emailController.text.isEmpty) {
+    if (_emailController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.secondaryColor,
-          value: 'email field required',
+          value: 'Enter reciepient email',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    } else if (amountController.text.isEmpty) {
+    } else if (_amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           bgColor: ColorConstants.secondaryColor,
-          value: 'password field required',
+          value: 'enter amount to transfer',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
@@ -193,11 +157,11 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();
-        map['email_address'] = emailController.text;
-        map['userId'] = amountController;
+        map['email_address'] = _emailController.text;
+        map['userId'] = userId;
 
         var response =
-            await http.post(HttpService.rootLogin, body: map, headers: {
+            await http.post(HttpService.verifyTransfer, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
         }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
@@ -215,12 +179,20 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          LoginUser loginUser = LoginUser.fromJson(body);
+          VerifyTransfer verifyUser = VerifyTransfer.fromJson(body);
 
-          bool status = loginUser.status;
-          String message = loginUser.message;
+          bool status = verifyUser.status;
+          String message = verifyUser.message;
           if (status) {
             cPageState(state: false);
+
+            String userName = verifyUser.data.name;
+
+            showInfoDialog(
+                230,
+                _buildBody(
+                  username: userName,
+                ));
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 bgColor: ColorConstants.secondaryColor,
@@ -251,11 +223,95 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
     }
   }
 
-  void _redirectuser() {
-    cPageState(state: false);
-    Future.delayed(Duration(seconds: 2), () {
-      pushPage(context, LandingPage());
-    });
+  void _completeTransfer() async {
+    if (_emailController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          bgColor: ColorConstants.secondaryColor,
+          value: 'Enter reciepient email',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    } else if (_amountController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          bgColor: ColorConstants.secondaryColor,
+          value: 'enter amount to transfer',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    } else {
+      cPageState(state: true);
+      try {
+        var map = Map<String, dynamic>();
+        map['email_address'] = _emailController.text;
+        map['amount'] = _amountController.text;
+        map['userId'] = userId;
+
+        var response =
+            await http.post(HttpService.verifyTransfer, body: map, headers: {
+          'Authorization': 'Bearer ' + HttpService.token,
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+            bgColor: ColorConstants.secondaryColor,
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5,
+          );
+
+          return null;
+        });
+
+        if (response.statusCode == 200) {
+          var body = jsonDecode(response.body);
+
+          TransferFund transferFund = TransferFund.fromJson(body);
+
+          bool status = transferFund.status;
+          String message = transferFund.message;
+          if (status) {
+            cPageState(state: false);
+
+            String balance = transferFund.data.balance.toString();
+            String amountTransferred =
+                transferFund.data.amountTransferred.toString();
+
+            ShowSnackBar.showInSnackBar(
+                bgColor: ColorConstants.secondaryColor,
+                value: "Transfer of " +amountTransferred +" successful ",
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+
+            SharedPrefrences.addStringToSP("nairaBalance", balance);
+          } else if (!status) {
+            ShowSnackBar.showInSnackBar(
+                bgColor: ColorConstants.secondaryColor,
+                value: message,
+                context: context,
+                scaffoldKey: _scaffoldKey,
+                timer: 5);
+            cPageState(state: false);
+          }
+        } else {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.secondaryColor,
+              value: 'network error',
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } on SocketException {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            bgColor: ColorConstants.secondaryColor,
+            value: 'check your internet connection',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    }
   }
 
   void cPageState({bool state = false}) {
@@ -268,6 +324,15 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: TopBar(
+        backgroundColorStart: ColorConstants.primaryColor,
+        backgroundColorEnd: ColorConstants.secondaryColor,
+        title: 'Mabro Transfer',
+        icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+        onPressed: null,
+        textColor: Colors.white,
+        iconColor: Colors.white,
+      ),
       backgroundColor: ColorConstants.primaryColor,
       body: (pageState)
           ? loadingPage(state: pageState)
@@ -276,10 +341,125 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
                 padding: const EdgeInsets.all(2.0),
                 child: Column(children: <Widget>[
                   SafeArea(child: SizedBox(height: 5)),
-                  _buildSignUpForm(context),
+                  _buildTransferForm(context),
                 ]),
               ),
             ),
+    );
+  }
+
+  void showInfoDialog(double height, Widget Widgets,
+      {String title = 'ConfirmUser'}) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            child: Stack(
+              children: [
+                Container(
+                  height: height,
+                  color: ColorConstants.primaryColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: ColorConstants.primaryLighterColor),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                        size: 25,
+                                      ),
+                                    ))
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: Widgets,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomButton(
+                                  disableButton: true,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    ShowSnackBar.showInSnackBar(
+                                        bgColor: ColorConstants.secondaryColor,
+                                        value: 'Transaction aborted',
+                                        context: context,
+                                        scaffoldKey: _scaffoldKey,
+                                        timer: 5);
+                                  },
+                                  text: 'Cancel'),
+                            ),
+                            Expanded(
+                              child: CustomButton(
+                                  disableButton: true,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    _completeTransfer();
+                                  },
+                                  text: 'Confirm'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget _buildBody({String username}) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Text(
+            'Transfer ' + _amountController.text + ' to ' + username,
+            style: TextStyle(
+                fontSize: 16, color: ColorConstants.whiteLighterColor),
+          ),
+          SizedBox(height: 20),
+          Text(
+            'Note: On transaction Successful this Process cannot be reversed.',
+            style:
+                TextStyle(fontSize: 16, color: ColorConstants.secondaryColor),
+          ),
+        ],
+      ),
     );
   }
 }

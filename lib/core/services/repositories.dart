@@ -21,7 +21,11 @@ class HttpService {
   static final String token =
       'kOoT3jVQAK73GAsRrftjnnXzXS6o7lfLi9iMENmJOx1nYbDPgaiqk7vs5lEpfXg4LMF+wFZWWommwTf1CrqTU1ZZz/my4WZxuReq/uDdBIs=';
 
-  static var rootReg = Uri.parse('https://mabro.ng/dev/register/create');
+  static var rootReg = Uri.parse('https://mabro.ng/dev2/register/create');
+  static var verifyTransfer =
+      Uri.parse('https://mabro.ng/dev2/_app/transfer/user/verify');
+  static var transferFund =
+      Uri.parse('https://mabro.ng/dev2/_app/transfer/user/process');
   static var rootUserInfo =
       Uri.parse('https://mabro.ng/dev/_app/account-details');
   static var rootLogin = Uri.parse('https://mabro.ng/dev/login/authenticate');

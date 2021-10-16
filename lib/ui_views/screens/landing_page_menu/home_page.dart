@@ -15,6 +15,7 @@ import 'package:mabro/ui_views/screens/airtime_to_cash_pages/airtime_to_cash_pag
 import 'package:mabro/ui_views/screens/btc_p2p_pages/p2p_buy_sell_page.dart';
 import 'package:mabro/ui_views/screens/education_page/selected_education_sub.dart';
 import 'package:mabro/ui_views/screens/lock_screen_page/main_lock_screen.dart';
+import 'package:mabro/ui_views/screens/mabro_transfer_page/mabro_transfer.dart';
 import 'package:mabro/ui_views/screens/recieve_btc_page/recieve_btc_page.dart';
 import 'package:mabro/ui_views/screens/contact_us_page/contact_us_page.dart';
 import 'package:mabro/ui_views/screens/data_recharge_page/selected_data_recharge.dart';
@@ -224,6 +225,7 @@ class _HomePageState extends State<HomePage> {
     int checkedItem = 0;
 
     List<Widget> menuScreens = [
+      MabroTransferPage(),
       AirtimeToCashPage(),
       SelectedDataRechargePage(),
       SelectedMobileCarrierPage(),
@@ -235,7 +237,7 @@ class _HomePageState extends State<HomePage> {
       BuySellGiftcardTran(),
       ReceiveBtcPage(),
       SelectedMobileCarrierPage(),
-      NewsUpdatePage(),
+      //NewsUpdatePage(),
     ];
 
     return SliverGrid(
