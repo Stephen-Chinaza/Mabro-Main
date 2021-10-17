@@ -1,6 +1,7 @@
-
 import 'dart:io';
 
+import 'package:flutter/painting.dart';
+import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/models/all_transactions_history.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -10,7 +11,9 @@ import 'package:mabro/ui_views/commons/transaction_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dash/flutter_dash.dart';
+import 'package:mabro/ui_views/screens/flutterwave_payment/flutterwave_payment.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
+import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
 
 class NairaWalletPage extends StatefulWidget {
@@ -23,14 +26,13 @@ class NairaWalletPage extends StatefulWidget {
 
 class _NairaWalletPageState extends State<NairaWalletPage>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
 
+  TextEditingController amountController = TextEditingController();
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this);
-    super.initState();
 
+    super.initState();
   }
 
   @override
@@ -40,108 +42,131 @@ class _NairaWalletPageState extends State<NairaWalletPage>
         buildFirstContainer(),
         buildSecondContainer(),
         Scaffold(
-          backgroundColor: ColorConstants.primaryColor,
+            backgroundColor: ColorConstants.primaryColor,
             appBar: TopBar(
               backgroundColorStart: ColorConstants.primaryColor,
               backgroundColorEnd: ColorConstants.secondaryColor,
               title: 'Naira Wallet',
-              icon:
-              Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+              icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
               onPressed: null,
               textColor: Colors.white,
               iconColor: Colors.white,
             ),
-
-          body: SingleChildScrollView(
-            child: Padding(
+            body: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Column(
-                children: [
-                  Container(child:
-                    Column(
-                      children: [
-                        SizedBox(height: 20),
-                        Container(
-                          height: 150,
-                          width: double.infinity,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0),
-                            color: ColorConstants.primaryLighterColor,
-                          ),
-                          child: Column(children: [
-                            Text(
-                            'Wallet Balance',
-                            style: TextStyle(
-                              color: ColorConstants.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'NGN 5,782',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+              child: Container(
+                child: ListView(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10),
+                          Container(
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: ColorConstants.primaryLighterColor,
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            Text(
-                              'Fund Wallet',
-                              style: TextStyle(
-                                color: Colors.green,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Row(children: [
-                              Expanded(
-                                child: NormalFields(
-                                  width: MediaQuery.of(context).size.width,
-                                  isEditable: true,
-                                  hintText: 'Amount',
-                                  labelText: '',
-                                  onChanged: (name) {},
-                                  //controller: accountNameController,
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 8.0, top: 4.0,left: 4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Wallet Balance',
+                                            style: TextStyle(
+                                              color: ColorConstants.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          Image.asset('assets/images/naira.jpg', width: 30, height: 30),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 4.0),
+                                      child: Text(
+                                        'NGN 5,782',
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 4.0),
+                                      child: Text(
+                                        'Fund Wallet',
+                                        style: TextStyle(
+                                          color: ColorConstants.whiteLighterColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 6,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 4.0),
+                                            child: NormalFields(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              isEditable: true,
+                                              hintText: 'Amount',
+                                              labelText: '',
+                                              textInputType: TextInputType.number,
+                                              controller: amountController,
+                                              onChanged: (name) {},
+                                              //controller: accountNameController,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 5),
+                                        Expanded(
+                                          flex: 2,
+                                          child: CustomButton(
+                                              margin: 0,
+                                              disableButton: true,
+                                              onPressed: () {
+                                                makePayment();
+                                              },
+                                              text: 'Fund'),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                  ],
                                 ),
-                              ),
-
-                              CustomButton(
-                                  margin: 0,
-                                  disableButton: true,
-                                  onPressed: () {
-
-                                  },
-                                  text: 'Fund'),
-                            ],)
-
-
-                          ],)
-                        )
-                      ],
-                    )
-                    ,)
-                ],
+                              ))
+                        ],
+                      ),
+                    ),),
+                     SizedBox(height: 20),
+                     Expanded(
+                       flex: 8,
+                       child: buildTransactionHistory(
+                            context, 'https://mabro.ng/dev/_app/transactions/fund-wallet'),
+                     ),
+                  ],
+                ),
               ),
+            )
             ),
-          )
-          // body: Padding(
-          //   padding: const EdgeInsets.all(0.0),
-          //   child: TabBarView(
-          //     children: [
-          //       buildTransactionHistory(
-          //           context, 'https://mabro.ng/dev/_app/transactions/all'),
-          //       buildTransactionHistory(context,
-          //           'https://mabro.ng/dev/_app/transactions/all/complete'),
-          //       buildTransactionHistory(context,
-          //           'https://mabro.ng/dev/_app/transactions/all/pending'),
-          //
-          //     ],
-          //     controller: _tabController,
-          //   ),
-          // ),
-        ),
       ],
     );
   }
@@ -160,34 +185,94 @@ class _NairaWalletPageState extends State<NairaWalletPage>
               child: Text(
                 'No Results for this transaction',
                 style: TextStyle(
-                    fontSize: 16, color: ColorConstants.secondaryColor, fontWeight: FontWeight.w200),
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w200),
               ),
             );
           } else {
-            return ListView.builder(
-              itemCount: allTransactionHistory.data.transactions.length,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (BuildContext context, index) {
-                return Container(
-                    child: transactionList(
-                      index: index,
-                      amount: allTransactionHistory.data.transactions[index].amount.toString(),
-                      createdDate: allTransactionHistory.data.transactions[index].createdAt,
-                      transactionTitle: allTransactionHistory.data.transactions[index].activity,
-                      transactionDetails:
-                      allTransactionHistory.data.transactions[index].description,
-                      currency: 'NGN',
-                    ));
-              },
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                itemCount: allTransactionHistory.data.transactions.length + 1,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (BuildContext context, index) {
+                  return (index == 0) ? Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
+                      color: ColorConstants.primaryLighterColor,
+                      border: Border.all(
+                        color: ColorConstants.whiteLighterColor, //                   <--- border color
+                        width: 0.2,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 6,
+                              child: Text(
+                                'Recent Wallet transactions',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: ColorConstants.white,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: ColorConstants.secondaryColor,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Center(
+                                    child: Text(
+                                      'All Transactions',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: ColorConstants.white,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      ],),
+                    )
+                  ) :Container(
+                      child: transactionList(
+                    index: index,
+                    amount: allTransactionHistory.data.transactions[index].amount
+                        .toString(),
+                    createdDate:
+                        allTransactionHistory.data.transactions[index].createdAt,
+                    transactionTitle:
+                        allTransactionHistory.data.transactions[index].activity,
+                    transactionDetails: allTransactionHistory
+                        .data.transactions[index].description,
+                    currency: 'NGN',
+                  ));
+                },
+              ),
             );
           }
         } else if (snapshot.hasError) {
           return Center(
             child: GestureDetector(
               onTap: () {
-                setState(() {
-
-                });
+                setState(() {});
               },
               child: Text(
                 'Error in network',
@@ -199,9 +284,9 @@ class _NairaWalletPageState extends State<NairaWalletPage>
         } else {
           return Center(
               child: CircularProgressIndicator(
-                valueColor:
+            valueColor:
                 AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
-              ));
+          ));
         }
       },
     );
@@ -217,28 +302,23 @@ class _NairaWalletPageState extends State<NairaWalletPage>
     String transactionDetails,
     String currency,
   }) {
-    return Stack(
-      children: [
-        // Positioned(
-        //   left: 20,
-        //   child: Container(
-        //       child: Dash(
-        //     direction: Axis.vertical,
-        //     length: 100,
-        //     dashThickness: 2.0,
-        //     dashLength: 10,
-        //     dashColor: ColorConstants.whiteLighterColor,
-        //   )),
-        // ),
-        TransactionContainer(
-            index: index,
-            amount: '$currency $amount',
-            icon: iconData,
-            color: colorData,
-            transactionName: transactionTitle,
-            date: createdDate,
-            transactionDetails: transactionDetails),
-      ],
-    );
+    return TransactionContainer(
+        index: index,
+        amount: '$currency $amount',
+        icon: iconData,
+        color: colorData,
+        transactionName: transactionTitle,
+        date: createdDate,
+        transactionDetails: transactionDetails);
+  }
+
+  void makePayment() {
+    if(amountController.text.isEmpty){
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter amount to proceed', context: context, timer: 5);
+
+    }else{
+      kopenPage(context, CardPayment(amount: int.tryParse(amountController.text)));
+    }
   }
 }

@@ -106,7 +106,7 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
             appBar: TopBar(
               backgroundColorStart: ColorConstants.primaryColor,
               backgroundColorEnd: ColorConstants.secondaryColor,
-              title: 'Confirm Transfer',
+              title: 'Airtime to Cash',
               icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
               onPressed: null,
               textColor: Colors.white,

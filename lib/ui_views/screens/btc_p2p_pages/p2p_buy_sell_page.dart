@@ -14,6 +14,9 @@ import 'package:mabro/ui_views/screens/btc_p2p_pages/buyer_details_page.dart';
 import 'dart:io';
 
 class BtcP2PBuySell extends StatefulWidget {
+  final bool buyInputState,sellInputState;
+
+  const BtcP2PBuySell({Key key, this.buyInputState = false, this.sellInputState = false}) : super(key: key);
   @override
   _BtcP2PBuySellState createState() => _BtcP2PBuySellState();
 }
@@ -40,8 +43,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
     defaultCoinSubTitle = 'BTC';
     defaultUSDRate = 'bitUSD';
 
-    SellingInputState = false;
-    BuyingInputState = false;
+    SellingInputState = widget.sellInputState;
+    BuyingInputState = widget.buyInputState;
     showSellingAds = false;
     showBuyingAds = false;
 
@@ -71,7 +74,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
             child: Column(
               children: [
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 Container(
                   child: Column(
@@ -130,14 +133,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
+
                       Row(
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(4.0),
                               child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius:
@@ -611,9 +612,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
+
                       Container(
                         color: ColorConstants.primaryColor,
                         width: size.width,
@@ -639,7 +638,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                 ],
                               ),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               _UserAdsContainer(
                                   idColor: Colors.green[900],
@@ -659,48 +658,46 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                               _UserAdsContainer(idColor: Colors.green[900]),
                               _UserAdsContainer(idColor: Colors.green[900]),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               Container(
                                   width: size.width,
-                                  height: 120,
-                                  child: Card(
-                                    color: ColorConstants.primaryLighterColor,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Want better price?',
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .whiteLighterColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16)),
-                                          Spacer(),
-                                          CustomButton(
-                                              margin: 0,
-                                              width: 220,
-                                              disableButton: true,
-                                              onPressed: () {
-                                                kopenPage(
-                                                    context,
-                                                    CreateBuyingAdsPage(
-                                                      coinType:
-                                                          defaultCoinTitle,
-                                                      coinSign:
-                                                          defaultCoinSubTitle,
-                                                      usdRate: defaultUSDRate,
-                                                    ));
-                                              },
-                                              text: 'Create Your Buying Ads'),
-                                        ],
-                                      ),
+                                  height: 100,
+                                  decoration: BoxDecoration(color: ColorConstants.primaryLighterColor,borderRadius: BorderRadius.circular(4)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Want better price?',
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .whiteLighterColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16)),
+                                        Spacer(),
+                                        CustomButton(
+                                            margin: 0,
+                                            width: 220,
+                                            disableButton: true,
+                                            onPressed: () {
+                                              kopenPage(
+                                                  context,
+                                                  CreateBuyingAdsPage(
+                                                    coinType:
+                                                        defaultCoinTitle,
+                                                    coinSign:
+                                                        defaultCoinSubTitle,
+                                                    usdRate: defaultUSDRate,
+                                                  ));
+                                            },
+                                            text: 'Create Your Buying Ads'),
+                                      ],
                                     ),
                                   )),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               Row(
                                 children: [
@@ -740,44 +737,42 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                               _UserAdsContainer(idColor: Colors.red[900]),
                               _UserAdsContainer(idColor: Colors.red[900]),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               Container(
                                   width: size.width,
-                                  height: 120,
-                                  child: Card(
-                                    color: ColorConstants.primaryLighterColor,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text('Want better price?',
-                                              style: TextStyle(
-                                                  color: ColorConstants
-                                                      .whiteLighterColor,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16)),
-                                          Spacer(),
-                                          CustomButton(
-                                              margin: 0,
-                                              width: 220,
-                                              disableButton: true,
-                                              onPressed: () {
-                                                kopenPage(
-                                                    context,
-                                                    CreateSellingAdsPage(
-                                                      coinType:
-                                                          defaultCoinTitle,
-                                                      coinSign:
-                                                          defaultCoinSubTitle,
-                                                      usdRate: defaultUSDRate,
-                                                    ));
-                                              },
-                                              text: 'Create Your Selling Ads'),
-                                        ],
-                                      ),
+                                  height: 100,
+                                  decoration: BoxDecoration(color: ColorConstants.primaryLighterColor,borderRadius: BorderRadius.circular(4)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Want better price?',
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .whiteLighterColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16)),
+                                        Spacer(),
+                                        CustomButton(
+                                            margin: 0,
+                                            width: 220,
+                                            disableButton: true,
+                                            onPressed: () {
+                                              kopenPage(
+                                                  context,
+                                                  CreateSellingAdsPage(
+                                                    coinType:
+                                                        defaultCoinTitle,
+                                                    coinSign:
+                                                        defaultCoinSubTitle,
+                                                    usdRate: defaultUSDRate,
+                                                  ));
+                                            },
+                                            text: 'Create Your Selling Ads'),
+                                      ],
                                     ),
                                   )),
                             ],
@@ -921,17 +916,18 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
       onTap: () {
         onTap();
       },
-      child: Container(
-        child: Card(
-          color: ColorConstants.primaryLighterColor,
-          elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Container(
+          decoration: BoxDecoration(          color: ColorConstants.primaryLighterColor,
+              borderRadius: BorderRadius.only(topRight:Radius.circular(4.0),bottomRight: Radius.circular(4.0))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 height: 140,
-                width: 10,
+                width: 5,
                 decoration: BoxDecoration(
                     color: idColor,
                     borderRadius: BorderRadius.only(
@@ -964,7 +960,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                   Text('Maximum: 0.00025181 BTC',
                       style: TextStyle(
                           color: ColorConstants.whiteLighterColor,
-                          fontSize: 16)),
+                          fontSize: 13)),
                   SizedBox(height: 5),
                   Row(
                     children: [
@@ -972,7 +968,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: ColorConstants.secondaryColor,
-                              fontSize: 16)),
+                              fontSize: 14)),
                       SizedBox(
                         width: 1,
                       ),
@@ -1001,12 +997,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                   Text('Completion time: ~0s',
                       style: TextStyle(
                           color: ColorConstants.whiteLighterColor,
-                          fontSize: 16)),
+                          fontSize: 13)),
                   SizedBox(height: 5),
                   Text('chievu',
                       style: TextStyle(
                           color: ColorConstants.whiteLighterColor,
-                          fontSize: 16)),
+                          fontSize: 13)),
                 ],
               ),
             ],

@@ -36,7 +36,7 @@ class TransactionContainer extends StatelessWidget {
                   children: [
                     Container(
                       color: ColorConstants.primaryColor,
-                      height: 250,
+                      height: 270,
                       child: Padding(
                         padding: const EdgeInsets.all(0.0),
                         child: Column(

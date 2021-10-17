@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                 children: <Widget>[
                   Container(
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.only(top: 16, left: 8.0),
                       child: SafeArea(
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                                   size: 30,
                                   color: ColorConstants.whiteLighterColor,
                                 )),
-                            SizedBox(width: 30),
+                            SizedBox(width: 15),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                   fontStyle: FontStyle.normal,
                   fontSize: 14,
                   color: ColorConstants.secondaryColor,
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.w300),
             ),
           ),
         ],
@@ -234,10 +234,9 @@ class _HomePageState extends State<HomePage> {
     List<Widget> menuScreens = [
       MabroTransferPage(),
       BankTransferPage(),
-      DepositWithdrawPage(),
-      Container(color: ColorConstants.primaryColor, child: Center(child:
-      Text('Make Withdrawal', style: TextStyle(color: Colors.white))),),
-      NairaWalletPage(),
+      DepositWithdrawPage(indexNum: 0,),
+      DepositWithdrawPage(indexNum: 1,),
+      NairaWalletPage(user: userId,),
       BtcP2PBuySell(),
       ReceiveBtcPage(),
       AirtimeToCashPage(),
@@ -259,7 +258,7 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 2) {
+              if (checkedItem == 7) {
                 _airtime2CashInfo();
               }else {
                 kopenPage(context, menuScreens[checkedItem]);
@@ -280,6 +279,7 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
+                         // color: ColorConstants.whiteLighterColor,
                           color: Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
                         // color: Colors
                         //     .primaries[Random().nextInt(Colors.primaries.length)],
@@ -607,7 +607,7 @@ class _HomePageState extends State<HomePage> {
                 _buildRow(
                   "Deposit / Withdrawal",
                   icon: Icons.dashboard_customize,
-                  page: DepositWithdrawPage(),
+                  page: DepositWithdrawPage(indexNum: 0,),
                 ),
                 // _buildRow(
                 //   "Buy Social Media Likes",

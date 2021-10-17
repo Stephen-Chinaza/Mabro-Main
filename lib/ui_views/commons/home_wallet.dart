@@ -17,13 +17,16 @@ class HomeWallet extends StatefulWidget {
 class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
   String nairaBalance = '';
   String btcBalance = '';
+  var formatter = NumberFormat('#,##,000');
 
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     nairaBalance = (pref.getString('nairaBalance') ?? '');
-    btcBalance = (pref.getString('bitcoin_balance') ?? '');
 
-    setState(() {});
+    setState(() {
+      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+
+    });
   }
 
   getCurrentDate() {

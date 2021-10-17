@@ -40,7 +40,9 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
     index = 0;
     selectWalletController.text = 'Your Mabro NGN Wallet';
 
-    paymentDetails = ['Your Mabro NGN Wallet', 'Your Personal' +widget.coinSign+'Wallet'];
+    paymentDetails = ['Your Mabro NGN Wallet',
+      //'Your Personal' +widget.coinSign+'Wallet'
+    ];
 
   }
 
@@ -76,8 +78,10 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  color: ColorConstants.primaryLighterColor,
+                Container(
+                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4.0),
+                  ),                    color: ColorConstants.primaryLighterColor,
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Column(
@@ -158,7 +162,7 @@ class _BuyerDetailsPageState extends State<BuyerDetailsPage> {
                       child: Text(
                           'Advertisement details',
                           style: TextStyle(
-                              color: ColorConstants.primaryColor,
+                              color: ColorConstants.white,
                               fontSize: 16)),
                     ), color: ColorConstants.secondaryColor,height: 50),
                     SizedBox(height: 5),

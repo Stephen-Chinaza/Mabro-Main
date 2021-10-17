@@ -26,6 +26,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DepositWithdrawPage extends StatefulWidget {
+  final int indexNum;
+
+  const DepositWithdrawPage({Key key, this.indexNum = 0}) : super(key: key);
   @override
   _DepositWithdrawPageState createState() => _DepositWithdrawPageState();
 }
@@ -54,7 +57,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
 
   @override
   void initState() {
-    _tabController = new TabController(length: 2, vsync: this);
+    _tabController = new TabController(length: 2, vsync: this,initialIndex: widget.indexNum);
     super.initState();
 
     showCharges = false;

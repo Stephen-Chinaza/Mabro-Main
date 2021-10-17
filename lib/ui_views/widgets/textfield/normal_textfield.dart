@@ -17,16 +17,16 @@ class NormalFields extends StatelessWidget {
 
   const NormalFields(
       {@required this.labelText,
-      this.hintText,
-      this.onChanged,
-      this.hintSize = 16,
-      this.controller,
-      this.onTap,
-      this.textInputType,
-      this.isEditable = true,
-      this.width,
-      this.myFocusNode,
-      this.maxLength = 200});
+        this.hintText,
+        this.onChanged,
+        this.hintSize = 16,
+        this.controller,
+        this.onTap,
+        this.textInputType,
+        this.isEditable = true,
+        this.width,
+        this.myFocusNode,
+        this.maxLength = 200});
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,8 @@ class NormalFields extends StatelessWidget {
       height: 45,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-         border:  Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)
-          ),
+          border:  Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)
+      ),
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: TextField(
