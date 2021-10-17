@@ -40,45 +40,38 @@ class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 0),
-      height: 160,
+      height: 150,
       width: double.infinity,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0),
-        color: ColorConstants.transparent,
-      ),
-      child: Card(
-        elevation: 10,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0),
         color: ColorConstants.primaryLighterColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Container(
-            color: ColorConstants.transparent,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PageIndicatorContainer(
-                align: IndicatorAlign.bottom,
-                length: 1,
-                indicatorSpace: 12.0,
-                padding: EdgeInsets.only(bottom: 0),
-                indicatorColor: ColorConstants.white,
-                indicatorSelectorColor: ColorConstants.primaryColor,
-                shape: IndicatorShape.circle(size: 0),
-                child: PageView(
-                  children: <Widget>[
-                    BalanceCard(
-                      bg: false,
-                      image: 'assets/images/naira.jpg',
-                      title: 'Naira Wallet',
-                      amount: "NGN" + nairaBalance + ".00",
-                      nairaEquiv: '',
-                      onClickOpenPage: 'View wallets',
-                      dateTime: getCurrentDate().toString(),
-                      onTapped: () => kopenPage(context, WalletPage()),
-                    ),
-                  ],
-                ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Container(
+          color: ColorConstants.transparent,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PageIndicatorContainer(
+              align: IndicatorAlign.bottom,
+              length: 1,
+              indicatorSpace: 12.0,
+              padding: EdgeInsets.only(bottom: 0),
+              indicatorColor: ColorConstants.white,
+              indicatorSelectorColor: ColorConstants.primaryColor,
+              shape: IndicatorShape.circle(size: 0),
+              child: PageView(
+                children: <Widget>[
+                  BalanceCard(
+                    bg: false,
+                    image: 'assets/images/naira.jpg',
+                    title: 'Naira Wallet',
+                    amount: "NGN" + nairaBalance + ".00",
+                    nairaEquiv: '',
+                    onClickOpenPage: 'View wallets',
+                    dateTime: getCurrentDate().toString(),
+                    onTapped: () => kopenPage(context, WalletPage()),
+                  ),
+                ],
               ),
             ),
           ),

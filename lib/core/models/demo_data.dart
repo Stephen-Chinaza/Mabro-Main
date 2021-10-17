@@ -8,13 +8,35 @@ class DemoData {
           title: "Mabro Transfer",
           icon: Icons.transfer_within_a_station,
         ),
+    HomeMenu(
+      title: "Bank Transfer",
+      icon: Icons.compare_arrows_sharp,
+    ),
+    HomeMenu(
+      title: "Fund Wallet",
+      icon: Typicons.device_laptop,
+    ),
+    HomeMenu(
+      title: "Make Withdrawal",
+      icon: Typicons.flow_children,
+    ),
+    HomeMenu(
+      title: "Naira Wallet",
+      icon: Icons.account_balance_wallet,
+    ),
+    HomeMenu(
+      title: "P2P \n Exchange",
+      icon: Typicons.chart_line,
+    ),
+    HomeMenu(title: "Crytpo Transactions", icon: Typicons.social_github),
+
         HomeMenu(
           title: "Airtime To Cash",
           icon: Typicons.device_phone,
         ),
         HomeMenu(
           title: "Buy Data",
-          icon: Typicons.credit_card,
+          icon: Typicons.compass,
         ),
         HomeMenu(
           title: "Buy Airtime",
@@ -22,27 +44,17 @@ class DemoData {
         ),
         HomeMenu(title: "Tv Subscription", icon: Typicons.social_youtube),
         HomeMenu(title: "Electricity", icon: Typicons.export_outline),
-        HomeMenu(title: "Education", icon: Typicons.social_github),
-        HomeMenu(
-          title: "Deposit/Withdraw",
-          icon: Typicons.device_laptop,
-        ),
-        HomeMenu(
-          title: "P2P \n Exchange",
-          icon: Typicons.chart_line,
-        ),
-        HomeMenu(
-          title: "Giftcard",
-          icon: Typicons.gift,
-        ),
-        HomeMenu(
-          title: "Receive/Transfer BTC",
-          icon: Typicons.globe,
-        ),
-        HomeMenu(
-          title: "Buy Social Media Likes",
-          icon: Typicons.social_facebook,
-        ),
+        //HomeMenu(title: "Education", icon: Typicons.social_github),
+
+        // HomeMenu(
+        //   title: "Giftcard",
+        //   icon: Typicons.gift,
+        // ),
+
+        // HomeMenu(
+        //   title: "Buy Social Media Likes",
+        //   icon: Typicons.social_facebook,
+        // ),
       ];
 
   static List<HomeMenu> get subs => [
@@ -62,10 +74,10 @@ class DemoData {
           title: "Electricity",
           icon: Icons.wifi_rounded,
         ),
-        HomeMenu(
-          title: "Updates",
-          icon: Icons.info,
-        ),
+        // HomeMenu(
+        //   title: "Updates",
+        //   icon: Icons.info,
+        // ),
       ];
 
   static List<ImageList> get images => [
@@ -212,3 +224,4 @@ class CoinList {
     this.usdRate,
   });
 }
+

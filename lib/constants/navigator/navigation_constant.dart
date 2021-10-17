@@ -2,8 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-  
-  kopenPage(BuildContext context, Widget page) {
+
+kopenPage(BuildContext context, Widget page) {
   return Navigator.push(
     context,
     MaterialPageRoute(

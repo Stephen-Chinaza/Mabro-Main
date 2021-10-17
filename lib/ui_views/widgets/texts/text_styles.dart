@@ -49,19 +49,21 @@ class TextStyles {
           fontStyle: FontStyle.normal,
           color: textColor,
           fontSize: textSize,
-          fontWeight: FontWeight.w400),
+          fontWeight: FontWeight.w400,
+          height: lineSpacing
+      ),
     );
   }
 
   static richTexts(
       {String text1,
-      String text2,
-      double size = 16,
-      String text3 = '',
-      String text4 = '',
-      Function onPress1,
-      bool centerText = false,
-      Function onPress2}) {
+        String text2,
+        double size = 16,
+        String text3 = '',
+        String text4 = '',
+        Function onPress1,
+        bool centerText = false,
+        Function onPress2}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

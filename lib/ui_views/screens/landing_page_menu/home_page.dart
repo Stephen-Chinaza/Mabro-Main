@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
+import 'package:mabro/core/models/airtime_to_cash_info.dart';
 import 'package:mabro/core/models/demo_data.dart';
 import 'package:mabro/core/models/userInfo.dart';
 import 'package:mabro/core/services/repositories.dart';
@@ -12,10 +14,12 @@ import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/home_wallet.dart';
 import 'package:mabro/ui_views/screens/airtime_page/selected_mobile_carrier.dart';
 import 'package:mabro/ui_views/screens/airtime_to_cash_pages/airtime_to_cash_page.dart';
+import 'package:mabro/ui_views/screens/bank_transfer/other_bank_transfer.dart';
 import 'package:mabro/ui_views/screens/btc_p2p_pages/p2p_buy_sell_page.dart';
 import 'package:mabro/ui_views/screens/education_page/selected_education_sub.dart';
 import 'package:mabro/ui_views/screens/lock_screen_page/main_lock_screen.dart';
 import 'package:mabro/ui_views/screens/mabro_transfer_page/mabro_transfer.dart';
+import 'package:mabro/ui_views/screens/naira_transactions_pages/naira_wallet_page.dart';
 import 'package:mabro/ui_views/screens/recieve_btc_page/recieve_btc_page.dart';
 import 'package:mabro/ui_views/screens/contact_us_page/contact_us_page.dart';
 import 'package:mabro/ui_views/screens/data_recharge_page/selected_data_recharge.dart';
@@ -47,6 +51,9 @@ class _HomePageState extends State<HomePage> {
   var mail, mail2;
   bool bankState;
   String accountNumber;
+
+  List colors = [Colors.purple, Colors.green, Colors.yellow, Colors.deepOrange];
+  Random random = new Random();
 
   @override
   void initState() {
@@ -114,7 +121,7 @@ class _HomePageState extends State<HomePage> {
           _buildToolbar(context),
           _buildMenuHeader(context, 'Quick access'),
           menuOption(context, _scaffoldKey),
-          _buildSizedBox(20),
+          _buildSizedBox(5),
           _buildPictureDisplay(),
         ],
       ),
@@ -210,7 +217,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                   fontStyle: FontStyle.normal,
                   fontSize: 14,
-                  color: ColorConstants.whiteColor,
+                  color: ColorConstants.secondaryColor,
                   fontWeight: FontWeight.bold),
             ),
           ),
@@ -226,17 +233,21 @@ class _HomePageState extends State<HomePage> {
 
     List<Widget> menuScreens = [
       MabroTransferPage(),
+      BankTransferPage(),
+      DepositWithdrawPage(),
+      Container(color: ColorConstants.primaryColor, child: Center(child:
+      Text('Make Withdrawal', style: TextStyle(color: Colors.white))),),
+      NairaWalletPage(),
+      BtcP2PBuySell(),
+      ReceiveBtcPage(),
       AirtimeToCashPage(),
       SelectedDataRechargePage(),
       SelectedMobileCarrierPage(),
       SelectedCableTvPage(),
       SelectedElectricitySubPage(),
-      SelectedEducationSubPage(),
-      DepositWithdrawPage(),
-      BtcP2PBuySell(),
-      BuySellGiftcardTran(),
-      ReceiveBtcPage(),
-      SelectedMobileCarrierPage(),
+      //SelectedEducationSubPage(),
+      //BuySellGiftcardTran(),
+      //SelectedMobileCarrierPage(),
       //NewsUpdatePage(),
     ];
 
@@ -248,37 +259,9 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 5) {
-                ShowSnackBar.showInSnackBar(
-                    value: 'feature coming up soon!!!',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-              } else if (checkedItem == 8) {
-                ShowSnackBar.showInSnackBar(
-                    value: 'feature coming up soon!!!',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-              } else if (checkedItem == 9) {
-                ShowSnackBar.showInSnackBar(
-                    value: 'feature coming up soon!!!',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-              } else if (checkedItem == 10) {
-                ShowSnackBar.showInSnackBar(
-                    value: 'feature coming up soon!!!',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-              } else if (checkedItem == 11) {
-                ShowSnackBar.showInSnackBar(
-                    value: 'feature coming up soon!!!',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-              } else {
+              if (checkedItem == 2) {
+                _airtime2CashInfo();
+              }else {
                 kopenPage(context, menuScreens[checkedItem]);
               }
             },
@@ -294,12 +277,22 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Icon(
-                      subList[index].icon,
-                      size: 22,
-                      color: ColorConstants.yellow,
-                      // color: Colors
-                      //     .primaries[Random().nextInt(Colors.primaries.length)],
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
+                        // color: Colors
+                        //     .primaries[Random().nextInt(Colors.primaries.length)],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Icon(
+                          subList[index].icon,
+                          size: 18,
+                         color: Colors.black87,
+
+                        ),
+                      ),
                     ),
                     SizedBox(height: 10),
                     Align(
@@ -438,7 +431,7 @@ class _HomePageState extends State<HomePage> {
                 _buildRow(
                   "Airtime to Cash",
                   icon: Icons.subscriptions,
-                  page: AirtimeToCashPage(),
+                  isMethod: true,
                 ),
                 ListTileTheme(
                     contentPadding: EdgeInsets.all(0),
@@ -687,6 +680,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildRow(String title,
       {IconData icon,
       Widget page,
+      bool isMethod = false,
       bool showBadge = true,
       bool openState = true}) {
     final TextStyle tStyle =
@@ -694,13 +688,15 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () => {
         Navigator.pop(context),
-        (openState)
-            ? kopenPage(context, page)
-            : ShowSnackBar.showInSnackBar(
-                value: 'feature coming up soon!!!',
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5)
+        (isMethod)
+            ? _airtime2CashInfo()
+            : (openState)
+                ? kopenPage(context, page)
+                : ShowSnackBar.showInSnackBar(
+                    value: 'feature coming up soon!!!',
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5)
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -747,7 +743,7 @@ class _HomePageState extends State<HomePage> {
         color: ColorConstants.primaryColor,
         child: Container(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(1.0),
             child: PageIndicatorContainer(
               align: IndicatorAlign.bottom,
               length: 2,
@@ -966,5 +962,67 @@ class _HomePageState extends State<HomePage> {
     Future.delayed(Duration(seconds: 2), () {
       _userInfo();
     });
+  }
+
+  void _airtime2CashInfo() async {
+    String message;
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response =
+          await http.post(HttpService.rootAirCashInfo, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            bgColor: ColorConstants.secondaryColor,
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+        return null;
+      });
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        AirtimeToCashInfo airtimeToCashInfo = AirtimeToCashInfo.fromJson(body);
+
+        bool status = airtimeToCashInfo.status;
+        message = airtimeToCashInfo.message;
+
+        if (status) {
+          kopenPage(
+              context,
+              AirtimeToCashPage(
+                mtnTransfer: airtimeToCashInfo.data.mtnTransfer,
+                mtnChangePin: airtimeToCashInfo.data.mtnChangePin,
+                airtelChangePin: airtimeToCashInfo.data.airtelChangePin,
+                airtelTransfer: airtimeToCashInfo.data.airtelTransfer,
+                gloTransfer: airtimeToCashInfo.data.gloTransfer,
+                gloChangePin: airtimeToCashInfo.data.gloChangePin,
+                mobileChangePin: airtimeToCashInfo.data.mobileChangePin,
+                mobileTransfer: airtimeToCashInfo.data.mobileTransfer,
+              ));
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
   }
 }

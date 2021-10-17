@@ -171,17 +171,17 @@ class NairaOptionsSelect extends StatelessWidget {
             ),
             Visibility(
                 child: Column(
-              children: [
-                Image.asset('assets/images/nodata.png',
-                    height: 200, width: 200),
-                SizedBox(height: 10),
-                TextStyles.textDetails(
-                  textSize: 14,
-                  textColor: Colors.grey.withOpacity(0.8),
-                  textValue: "You don't have any pending transactions yet",
-                ),
-              ],
-            )),
+                  children: [
+                    Image.asset('assets/images/nodata.png',
+                        height: 200, width: 200),
+                    SizedBox(height: 10),
+                    TextStyles.textDetails(
+                      textSize: 14,
+                      textColor: Colors.grey.withOpacity(0.8),
+                      textValue: "You don't have any pending transactions yet",
+                    ),
+                  ],
+                )),
             Visibility(
                 visible: false,
                 child: Padding(

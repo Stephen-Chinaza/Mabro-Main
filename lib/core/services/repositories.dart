@@ -26,8 +26,16 @@ class HttpService {
       Uri.parse('https://mabro.ng/dev2/_app/transfer/user/verify');
   static var transferFund =
       Uri.parse('https://mabro.ng/dev2/_app/transfer/user/process');
+  static var rootVerifyTransfer =
+  Uri.parse('https://mabro.ng/dev2/_app/transfer/bank/verify');
+  static var rootTransferFund =
+  Uri.parse('https://mabro.ng/dev2/_app/transfer/bank/process');
   static var rootUserInfo =
-      Uri.parse('https://mabro.ng/dev/_app/account-details');
+  Uri.parse('https://mabro.ng/dev/_app/account-details');
+  static var rootAirCashInfo =
+  Uri.parse('https://mabro.ng/dev2/_app/airtime-to-cash/data');
+  static var rootAirCashSubmit =
+  Uri.parse('https://mabro.ng/dev2/_app/airtime-to-cash/process');
   static var rootLogin = Uri.parse('https://mabro.ng/dev/login/authenticate');
   static var rootForgotPassword =
       Uri.parse('https://mabro.ng/dev/login/send-OTP');
@@ -91,9 +99,8 @@ class HttpService {
     try {
       var map = Map<String, dynamic>();
       map['userId'] = userId;
-
       var response = await http.post(
-          Uri.parse('https://mabro.ng/dev/_app/list-banks'),
+          Uri.parse('https://mabro.ng/dev2/_app/list-banks'),
           body: map,
           headers: {
             'Authorization': 'Bearer ' + HttpService.token,

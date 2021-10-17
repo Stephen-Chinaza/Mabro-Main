@@ -67,9 +67,9 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void initState() {
-    btnText = 'Add bank account';
     super.initState();
     getData();
+    btnText = 'Add bank account';
     bankState = false;
     btnState = false;
     pageState = false;
@@ -88,7 +88,7 @@ class _AccountPageState extends State<AccountPage> {
                 appBar: TopBar(
                   backgroundColorStart: ColorConstants.primaryColor,
                   backgroundColorEnd: ColorConstants.secondaryColor,
-                  title: 'Account',
+                  title: 'Update Account',
                   icon:
                       Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
                   onPressed: null,
@@ -255,7 +255,7 @@ class _AccountPageState extends State<AccountPage> {
                       SizedBox(height: 10),
                       TextStyles.textDetails(
                         textSize: 16,
-                        textColor: Colors.white,
+                        textColor: ColorConstants.secondaryColor,
                         textValue: 'Account Setup ',
                       ),
                       SizedBox(height: 10),

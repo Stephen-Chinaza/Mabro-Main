@@ -125,7 +125,7 @@ class _BalanceCardState extends State<BalanceCard>
                       fontStyle: FontStyle.normal,
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: ColorConstants.white),
+                      color: ColorConstants.secondaryColor),
                 ),
                 GestureDetector(
                   onTap: widget.onTapped,
@@ -161,9 +161,10 @@ class _BalanceCardState extends State<BalanceCard>
           ],
         )),
         Divider(color: Colors.grey.withOpacity(0.2), height: 0.5),
+        SizedBox(height: 10),
         Container(
             child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(0.0),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
