@@ -146,9 +146,9 @@ class TransactionContainer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 15,
+                    width: 5,
                   ),
-                  Icon(icon, color: color),
+                  Image.asset('assets/images/transaction.png', width: 30, height: 30),
                   SizedBox(
                     width: 20,
                   ),

@@ -100,7 +100,7 @@ class HttpService {
       var map = Map<String, dynamic>();
       map['userId'] = userId;
       var response = await http.post(
-          Uri.parse('https://mabro.ng/dev2/_app/list-banks'),
+          Uri.parse('https://mabro.ng/dev/_app/list-banks'),
           body: map,
           headers: {
             'Authorization': 'Bearer ' + HttpService.token,
@@ -116,6 +116,10 @@ class HttpService {
         var body = jsonDecode(response.body);
 
         ListBanks banks = ListBanks.fromJson(body);
+        ShowSnackBar.showInSnackBar(
+            value: body.toString(),
+            context: context,
+            timer: 5);
 
         bool status = banks.status;
         String message = banks.message;

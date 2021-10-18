@@ -377,6 +377,8 @@ class _AccountPageState extends State<AccountPage> {
       builder: (BuildContext context, AsyncSnapshot<ListBanks> snapshot) {
         if (snapshot.hasData) {
           ListBanks banks = snapshot.data;
+          print(banks.data.length);
+
           return ListView.builder(
               itemCount: banks.data.length,
               scrollDirection: Axis.vertical,
@@ -394,7 +396,7 @@ class _AccountPageState extends State<AccountPage> {
                     });
               });
         } else if (snapshot.hasError) {
-          return Center(child: Text('unable to load check internet'));
+          return Center(child: Text('unable to load check internet', style: TextStyle(color: Colors.white)));
         } else {
           return Center(
               child: CircularProgressIndicator(

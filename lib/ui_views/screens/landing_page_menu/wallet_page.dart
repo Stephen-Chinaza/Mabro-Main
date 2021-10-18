@@ -109,14 +109,13 @@ class _WalletPageState extends State<WalletPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 5,),
                         Text("NGN"+nairaBalance,
                             style: TextStyle(
                               color: Colors.green,
-                              fontSize: 18,
+                              fontSize: 16,
                             )),
                         SizedBox(height: 15,),
-                        _inputTextField(),
+                        //_inputTextField(),
                       ],
                     ),
                   ),
@@ -132,7 +131,7 @@ class _WalletPageState extends State<WalletPage> {
                     icon: Icons.arrow_downward,
                     rise_or_fall: ''
                 ),
-                SizedBox(height: 8,),
+                SizedBox(height: 5,),
                 _cryptoWallets(size: size,
                     img_url: 'assets/images/ethereum.png',
                     wallet_title: 'Ethereum',
@@ -142,7 +141,7 @@ class _WalletPageState extends State<WalletPage> {
                     icon: Icons.arrow_upward,
                     rise_or_fall: ''
                 ),
-                SizedBox(height: 8,),
+                SizedBox(height: 5,),
                 _cryptoWallets(size: size,
                     img_url: 'assets/images/litecoin.png',
                     wallet_title: 'Lite Coin',
@@ -152,13 +151,13 @@ class _WalletPageState extends State<WalletPage> {
                     icon: Icons.arrow_downward,
                     rise_or_fall: ''
                 ),
-                SizedBox(height: 8,),
+                SizedBox(height: 5,),
                 _cryptoWallets(size: size,
                     img_url: 'assets/images/usdt.png',
                     wallet_title: 'USDT',
                     color: Colors.red,
                     balance: '',
-                    dollar_equivalent: '',
+                    dollar_equivalent: '$nairaBalance',
                     icon: Icons.arrow_downward,
                     rise_or_fall: ''
                 ),
@@ -183,8 +182,7 @@ class _WalletPageState extends State<WalletPage> {
               padding: const EdgeInsets.only(right: 6.0),
               child: TextButton(
                   onPressed: () {
-                    BtcP2PBuySell(buyInputState: true,);
-
+                    kopenPage(context, BtcP2PBuySell(buyInputState: true,));
                   },
                   style: TextButton.styleFrom(
                       padding: const EdgeInsets.all(15.0),
@@ -211,7 +209,8 @@ class _WalletPageState extends State<WalletPage> {
                 margin: 0,
                 width: 140,
                 onPressed: () {
-                  BtcP2PBuySell(sellInputState: true,);
+                  kopenPage(context,  BtcP2PBuySell(sellInputState: true,));
+
                 },
               ),
             ),

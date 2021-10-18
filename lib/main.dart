@@ -48,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme:
           ThemeData(platform: TargetPlatform.iOS, primarySwatch: Colors.purple),
-      home: SplashScreen(),
+      home: WebViewExample(),
     );
   }
 }

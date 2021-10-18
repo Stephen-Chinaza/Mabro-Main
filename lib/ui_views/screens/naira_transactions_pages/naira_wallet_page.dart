@@ -88,7 +88,7 @@ class _NairaWalletPageState extends State<NairaWalletPage>
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                          Image.asset('assets/images/naira.jpg', width: 30, height: 30),
+                                          Image.asset('assets/images/naira.png', width: 30, height: 30),
                                         ],
                                       ),
                                     ),
@@ -194,7 +194,7 @@ class _NairaWalletPageState extends State<NairaWalletPage>
             return Container(
               height: MediaQuery.of(context).size.height,
               child: ListView.builder(
-                itemCount: allTransactionHistory.data.transactions.length + 1,
+                itemCount: allTransactionHistory.data.transactions.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, index) {
                   return (index == 0) ? Container(

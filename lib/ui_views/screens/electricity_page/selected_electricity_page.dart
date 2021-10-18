@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/buy_airtime_bundle.dart';
@@ -53,12 +54,18 @@ class _SelectedElectricitySubPageState
   TextEditingController _amountController = new TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  Future<void> getData() async {
+  var formatter = NumberFormat('#,##,000');
+  Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     userId = (pref.getString('userId') ?? '');
     userPin = (pref.getString('lock_code') ?? '');
     nairaBalance = (pref.getString('nairaBalance') ?? '');
 
+    setState(() {
+      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+
+    });
     setState(() {});
   }
 
@@ -68,7 +75,7 @@ class _SelectedElectricitySubPageState
   @override
   void initState() {
     super.initState();
-    getData();
+    getBalance();
     providerImages = DemoData.electricityImages;
     rechargeAmount = DemoData.airtime;
 

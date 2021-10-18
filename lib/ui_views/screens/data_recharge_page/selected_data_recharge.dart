@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/buy_9mobile_bundle.dart';
@@ -60,12 +61,18 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
   String userId;
   int maxLines = 1;
 
+  var formatter = NumberFormat('#,##,000');
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    nairaBalance = (pref.getString('nairaBalance') ?? '');
+
     userId = (pref.getString('userId') ?? '');
     userPin = (pref.getString('lock_code') ?? '');
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
 
+    setState(() {
+      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+
+    });
     setState(() {});
   }
 

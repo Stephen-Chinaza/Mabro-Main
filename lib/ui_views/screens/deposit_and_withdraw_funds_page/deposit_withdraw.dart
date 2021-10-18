@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
@@ -72,7 +73,12 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     getData();
     pageState = false;
     withdrawMethodController.text = 'Select withdrawal method';
+
   }
+
+
+  var formatter = NumberFormat('#,##,000');
+
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -82,6 +88,11 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     userId = (pref.getString('userId') ?? '');
     userPin = (pref.getString('lock_code') ?? '');
     nairaBalance = (pref.getString('nairaBalance') ?? '');
+
+    setState(() {
+      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+
+    });
 
     accountNameController.text = accountName;
     accountNumberController.text = accountNumber;
