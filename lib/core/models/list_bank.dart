@@ -30,7 +30,7 @@ class ListBanks {
 class Data {
   String name;
   String code;
-  int id;
+  var id;
   String createdAt;
   String updatedAt;
 

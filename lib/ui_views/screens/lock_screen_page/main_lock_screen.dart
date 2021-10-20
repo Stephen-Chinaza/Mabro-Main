@@ -17,8 +17,6 @@ import 'package:http/http.dart' as http;
 import 'package:mabro/ui_views/screens/password_setting/set_password_page.dart';
 import 'package:mabro/core/models/login_user.dart';
 
-
-
 class MainScreenLock extends StatefulWidget {
   final String userPin;
 
@@ -29,7 +27,6 @@ class MainScreenLock extends StatefulWidget {
 }
 
 class _MainScreenLockState extends State<MainScreenLock> {
-
   bool pinState, checkPinState;
   bool isValid;
   String userId;
@@ -37,20 +34,16 @@ class _MainScreenLockState extends State<MainScreenLock> {
   String _password;
   String _lockCode;
 
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
 
   final StreamController<bool> _verificationNotifier =
       StreamController<bool>.broadcast();
 
   _onPasscodeEntered(String enteredPasscode) {
-     isValid = widget.userPin == enteredPasscode;
+    isValid = widget.userPin == enteredPasscode;
     _verificationNotifier.add(isValid);
 
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   Future<void> getData() async {
@@ -80,52 +73,52 @@ class _MainScreenLockState extends State<MainScreenLock> {
     isValid = false;
 
     getData().whenComplete(() => {
-    setState(() {
-      print(_lockCode);
-
-    })
-    });
-
+          setState(() {
+            print(widget.userPin);
+          })
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
-            body: Stack(
-              children: [
-                PasscodeScreen(
-                  title: Text('Enter fingerprint or pin'.toUpperCase(),
-                      style: TextStyle(
-                        fontStyle: FontStyle.normal,
-                        color: ColorConstants.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  passwordEnteredCallback: _onPasscodeEntered,
-                  isValidCallback: _isValidCallback,
-                  isFingerValidCallback: _isFingerCallback,
-                  cancelCallback: _isCancelCallback,
-                  shouldTriggerVerification: _verificationNotifier.stream,
-                  cancelButton: Text('Login', style: TextStyle(color: ColorConstants.secondaryColor),),
-                  deleteButton: Text('Clear', style: TextStyle(color: ColorConstants.secondaryColor)),
-                ),
-                Visibility(
-                    visible: checkPinState,
-                    child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.black.withOpacity(0.8),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        ))),
-              ],
+      body: Stack(
+        children: [
+          PasscodeScreen(
+            title: Text('Enter fingerprint or pin'.toUpperCase(),
+                style: TextStyle(
+                  fontStyle: FontStyle.normal,
+                  color: ColorConstants.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                )),
+            passwordEnteredCallback: _onPasscodeEntered,
+            isValidCallback: _isValidCallback,
+            isFingerValidCallback: _isFingerCallback,
+            cancelCallback: _isCancelCallback,
+            shouldTriggerVerification: _verificationNotifier.stream,
+            cancelButton: Text(
+              'Login',
+              style: TextStyle(color: ColorConstants.secondaryColor),
             ),
-          );
-
+            deleteButton: Text('Clear',
+                style: TextStyle(color: ColorConstants.secondaryColor)),
+          ),
+          Visibility(
+              visible: checkPinState,
+              child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.black.withOpacity(0.8),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  ))),
+        ],
+      ),
+    );
   }
 
   void _redirectuser() {
@@ -133,10 +126,9 @@ class _MainScreenLockState extends State<MainScreenLock> {
     Future.delayed(Duration(seconds: 3), () {
       checkPinState = false;
       setState(() {
-       
-        if(isValid){
+        if (isValid) {
           _signIn();
-        }else{
+        } else {
           ShowSnackBar.showInSnackBar(
               value: 'Invalid Pin Entered',
               bgColor: ColorConstants.secondaryColor,
@@ -144,7 +136,6 @@ class _MainScreenLockState extends State<MainScreenLock> {
               scaffoldKey: _scaffoldKey);
         }
       });
-
     });
   }
 
@@ -152,137 +143,128 @@ class _MainScreenLockState extends State<MainScreenLock> {
     kopenPage(context, SignInPage());
   }
 
- void _signIn() async {
-    
-      try {
-        var map = Map<String, dynamic>();
-        map['email_address'] = _email;
-        map['password'] = _password;
+  void _signIn() async {
+    try {
+      var map = Map<String, dynamic>();
+      map['email_address'] = _email;
+      map['password'] = _password;
 
-        var response =
-            await http.post(HttpService.rootLogin, body: map, headers: {
-          'Authorization': 'Bearer ' + HttpService.token,
-        }).timeout(const Duration(seconds: 15), onTimeout: () {
-          ShowSnackBar.showInSnackBar(
-            bgColor: ColorConstants.secondaryColor,
-            value: 'The connection has timed out, please try again!',
-            context: context,
-            scaffoldKey: _scaffoldKey,
-            timer: 5,
-          );
+      var response =
+          await http.post(HttpService.rootLogin, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+          bgColor: ColorConstants.secondaryColor,
+          value: 'The connection has timed out, please try again!',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5,
+        );
 
-          return null;
-        });
+        return null;
+      });
 
-        if (response.statusCode == 200) {
-          var body = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
 
-          LoginUser loginUser = LoginUser.fromJson(body);
+        LoginUser loginUser = LoginUser.fromJson(body);
 
-          bool status = loginUser.status;
-          String message = loginUser.message;
-          if (status) {
-            String verifiedEmail = loginUser.data.verifiedEmail.toString();
-            String blocked = loginUser.data.blocked.toString();
-            String lockCode = loginUser.data.lockCode;
+        bool status = loginUser.status;
+        String message = loginUser.message;
+        if (status) {
+          String verifiedEmail = loginUser.data.verifiedEmail.toString();
+          String blocked = loginUser.data.blocked.toString();
+          String lockCode = loginUser.data.lockCode;
 
-            //TODO CHECK IF USER IS BLOCKED OR LOCK_CODE IS SET
-            if (verifiedEmail == '1') {
-              if (lockCode == '') {
-                ShowSnackBar.showInSnackBar(
-                    bgColor: ColorConstants.secondaryColor,
-                    value: 'User lock code not set',
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5);
-                Future.delayed(Duration(seconds: 5), () {
-                  pushPage(context, SetPinPage());
-                });
-              } else {
-                if (blocked == '1') {
-                  ShowSnackBar.showInSnackBar(
-                      bgColor: ColorConstants.secondaryColor,
-                      value: 'User is currently blocked',
-                      context: context,
-                      scaffoldKey: _scaffoldKey,
-                      timer: 5);
-                } else {
-                  String firstName = loginUser.data.firstName;
-                  String surName = loginUser.data.surname;
-                  String phone = loginUser.data.phoneNumber;
-                  String id = loginUser.data.id.toString();
-                  String userId = loginUser.data.userId.toString();
-                  String email = loginUser.data.emailAddress;
-                  String lockCode = loginUser.data.lockCode;
-                  String nairaBalance = loginUser.data.nairaBalance.toString();
-                  String verifiedEmail =
-                      loginUser.data.verifiedEmail.toString();
-                  String verifiedPhone =
-                      loginUser.data.verifiedPhone.toString();
-
-                  SharedPrefrences.addStringToSP("lock_code", lockCode);
-                  SharedPrefrences.addStringToSP("surname", surName);
-                  SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
-
-                  SharedPrefrences.addStringToSP("first_name", firstName);
-                  SharedPrefrences.addStringToSP("phone_number", phone);
-                  SharedPrefrences.addStringToSP("id", id);
-                  SharedPrefrences.addStringToSP("userId", userId);
-                  SharedPrefrences.addStringToSP("email_address", email);
-                  SharedPrefrences.addStringToSP("blocked", blocked);
-                  SharedPrefrences.addStringToSP(
-                      "verified_email", verifiedEmail);
-                  SharedPrefrences.addStringToSP(
-                      "verified_phone", verifiedPhone);
-
-                  ShowSnackBar.showInSnackBar(
-                    value: message,
-                    iconData: Icons.check_circle,
-                    context: context,
-                    scaffoldKey: _scaffoldKey,
-                    timer: 5,
-                  );
-                  getUserInfo();
-                  
-                }
-              }
-            } else {
+          //TODO CHECK IF USER IS BLOCKED OR LOCK_CODE IS SET
+          if (verifiedEmail == '1') {
+            if (lockCode == '') {
               ShowSnackBar.showInSnackBar(
-                  value: 'Please verify your email',
+                  bgColor: ColorConstants.secondaryColor,
+                  value: 'User lock code not set',
                   context: context,
                   scaffoldKey: _scaffoldKey,
                   timer: 5);
+              Future.delayed(Duration(seconds: 5), () {
+                pushPage(context, SetPinPage());
+              });
+            } else {
+              if (blocked == '1') {
+                ShowSnackBar.showInSnackBar(
+                    bgColor: ColorConstants.secondaryColor,
+                    value: 'User is currently blocked',
+                    context: context,
+                    scaffoldKey: _scaffoldKey,
+                    timer: 5);
+              } else {
+                String firstName = loginUser.data.firstName;
+                String surName = loginUser.data.surname;
+                String phone = loginUser.data.phoneNumber;
+                String id = loginUser.data.id.toString();
+                String userId = loginUser.data.userId.toString();
+                String email = loginUser.data.emailAddress;
+                String lockCode = loginUser.data.lockCode;
+                String nairaBalance = loginUser.data.nairaBalance.toString();
+                String verifiedEmail = loginUser.data.verifiedEmail.toString();
+                String verifiedPhone = loginUser.data.verifiedPhone.toString();
+
+                SharedPrefrences.addStringToSP("lock_code", lockCode);
+                SharedPrefrences.addStringToSP("surname", surName);
+                SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
+
+                SharedPrefrences.addStringToSP("first_name", firstName);
+                SharedPrefrences.addStringToSP("phone_number", phone);
+                SharedPrefrences.addStringToSP("id", id);
+                SharedPrefrences.addStringToSP("userId", userId);
+                SharedPrefrences.addStringToSP("email_address", email);
+                SharedPrefrences.addStringToSP("blocked", blocked);
+                SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
+                SharedPrefrences.addStringToSP("verified_phone", verifiedPhone);
+
+                ShowSnackBar.showInSnackBar(
+                  value: message,
+                  iconData: Icons.check_circle,
+                  context: context,
+                  scaffoldKey: _scaffoldKey,
+                  timer: 5,
+                );
+                getUserInfo();
+              }
             }
-            
-          } else if (!status) {
+          } else {
             ShowSnackBar.showInSnackBar(
-                bgColor: ColorConstants.secondaryColor,
-                value: message,
+                value: 'Please verify your email',
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
           }
-        } else {
+        } else if (!status) {
           ShowSnackBar.showInSnackBar(
               bgColor: ColorConstants.secondaryColor,
-              value: 'network error',
+              value: message,
               context: context,
               scaffoldKey: _scaffoldKey,
               timer: 5);
         }
-      } on SocketException {
-        
+      } else {
         ShowSnackBar.showInSnackBar(
             bgColor: ColorConstants.secondaryColor,
-            value: 'check your internet connection',
+            value: 'network error',
             context: context,
             scaffoldKey: _scaffoldKey,
             timer: 5);
       }
-    
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          bgColor: ColorConstants.secondaryColor,
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
   }
 
-  void getUserInfo(){
+  void getUserInfo() {
     ShowSnackBar.showInSnackBar(
         value: 'authentication successful',
         context: context,
@@ -291,11 +273,11 @@ class _MainScreenLockState extends State<MainScreenLock> {
     Future.delayed(Duration(seconds: 2), () {
       pushPage(context, LandingPage());
 
-     // _userInfo();
+      // _userInfo();
     });
   }
 
-  void openPage(){
+  void openPage() {
     Future.delayed(Duration(seconds: 2), () {
       ShowSnackBar.showInSnackBar(
           value: 'authentication successful',

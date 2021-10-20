@@ -62,7 +62,6 @@ class _AccountPageState extends State<AccountPage> {
         bankState = true;
       });
     }
-
   }
 
   @override
@@ -123,8 +122,8 @@ class _AccountPageState extends State<AccountPage> {
                                                 ),
                                                 TextStyles.textSubHeadings(
                                                   textSize: 16,
-                                                  textColor:
-                                                      ColorConstants.secondaryColor,
+                                                  textColor: ColorConstants
+                                                      .secondaryColor,
                                                   textValue: 'Primary Account',
                                                 ),
                                               ],
@@ -305,7 +304,6 @@ class _AccountPageState extends State<AccountPage> {
                         hintText: 'Enter bank verification number',
                         labelText: 'Enter BVN',
                         maxLength: 11,
-                    
                         textInputType: TextInputType.number,
                         onChanged: (String count) {
                           setState(() {
@@ -377,7 +375,6 @@ class _AccountPageState extends State<AccountPage> {
       builder: (BuildContext context, AsyncSnapshot<ListBanks> snapshot) {
         if (snapshot.hasData) {
           ListBanks banks = snapshot.data;
-          print(banks.data.length);
 
           return ListView.builder(
               itemCount: banks.data.length,
@@ -396,7 +393,9 @@ class _AccountPageState extends State<AccountPage> {
                     });
               });
         } else if (snapshot.hasError) {
-          return Center(child: Text('unable to load check internet', style: TextStyle(color: Colors.white)));
+          return Center(
+              child: Text('unable to load check internet',
+                  style: TextStyle(color: Colors.white)));
         } else {
           return Center(
               child: CircularProgressIndicator(
@@ -579,6 +578,7 @@ class _AccountPageState extends State<AccountPage> {
         map['userId'] = userId;
         map['account_number'] = accountNumberController.text;
         map['bank_code'] = bankCode;
+        map['bank_name'] = bankNameController.text;
 
         var response =
             await http.post(HttpService.rootUpdateAccount, body: map, headers: {
@@ -593,7 +593,6 @@ class _AccountPageState extends State<AccountPage> {
         });
 
         if (response.statusCode == 200) {
-         
           var body = jsonDecode(response.body);
 
           cPageState(state: false);
@@ -612,12 +611,14 @@ class _AccountPageState extends State<AccountPage> {
             String surname = at[0].trim();
             String firstName = at[1].trim();
 
-            SharedPrefrences.addStringToSP("account_number", accountNumberController.text);
+            SharedPrefrences.addStringToSP(
+                "account_number", accountNumberController.text);
             SharedPrefrences.addStringToSP("account_name", accountName);
-            SharedPrefrences.addStringToSP("bank_name", bankNameController.text);
+            SharedPrefrences.addStringToSP(
+                "bank_name", bankNameController.text);
             SharedPrefrences.addStringToSP("surname", surname);
             SharedPrefrences.addStringToSP("first_name", firstName);
-           // SharedPrefrences.addStringToSP("id", id);
+            // SharedPrefrences.addStringToSP("id", id);
 
             bankNameController.text = '';
             accountNameController.text = '';

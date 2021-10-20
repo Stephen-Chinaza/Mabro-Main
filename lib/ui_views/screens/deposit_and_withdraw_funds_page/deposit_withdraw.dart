@@ -4,8 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
-import 'package:mabro/core/helpers/sharedprefrences.dart';
-import 'package:mabro/core/models/register_user.dart';
 import 'package:mabro/core/models/withdrawal_data.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -58,7 +56,8 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
 
   @override
   void initState() {
-    _tabController = new TabController(length: 2, vsync: this,initialIndex: widget.indexNum);
+    _tabController = new TabController(
+        length: 2, vsync: this, initialIndex: widget.indexNum);
     super.initState();
 
     showCharges = false;
@@ -73,12 +72,9 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     getData();
     pageState = false;
     withdrawMethodController.text = 'Select withdrawal method';
-
   }
 
-
   var formatter = NumberFormat('#,##,000');
-
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -91,7 +87,6 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
 
     accountNameController.text = accountName;
@@ -114,59 +109,59 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     return (pageState)
         ? loadingPage(state: pageState)
         : Stack(
-      children: [
-        buildFirstContainer(),
-        buildSecondContainer(),
-        Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: ColorConstants.primaryColor,
-          appBar: new AppBar(
-            flexibleSpace: Container(
-              decoration: BoxDecoration(
-                color: ColorConstants.primaryLighterColor,
-              ),
-            ),
-            title: new Text("", style: TextStyle(fontSize: 18)),
-            leading: GestureDetector(
-                onTap: () {
-                  kbackBtn(context);
-                },
-                child: Icon(
-                  Platform.isIOS
-                      ? Icons.arrow_back_ios
-                      : Icons.arrow_back,
-                  color: Colors.white,
-                  size: 27,
-                )),
-            bottom: TabBar(
-              isScrollable: true,
-              unselectedLabelColor: Colors.white,
-              unselectedLabelStyle: TextStyle(fontSize: 14),
-              labelStyle: TextStyle(fontSize: 14),
-              labelColor: ColorConstants.whiteLighterColor,
-              tabs: [
-                new Tab(text: 'Deposit funds'),
-                new Tab(
-                  text: 'Withdraw funds',
-                ),
-              ],
-              controller: _tabController,
-              indicatorColor: Colors.white,
-              labelPadding: EdgeInsets.symmetric(horizontal: 50),
-              indicatorSize: TabBarIndicatorSize.tab,
-            ),
-            bottomOpacity: 1,
-          ),
-          body: TabBarView(
             children: [
-              SingleChildScrollView(child: _depositeFund()),
-              SingleChildScrollView(child: _withdrawFund()),
+              buildFirstContainer(),
+              buildSecondContainer(),
+              Scaffold(
+                key: _scaffoldKey,
+                backgroundColor: ColorConstants.primaryColor,
+                appBar: new AppBar(
+                  flexibleSpace: Container(
+                    decoration: BoxDecoration(
+                      color: ColorConstants.primaryLighterColor,
+                    ),
+                  ),
+                  title: new Text("", style: TextStyle(fontSize: 18)),
+                  leading: GestureDetector(
+                      onTap: () {
+                        kbackBtn(context);
+                      },
+                      child: Icon(
+                        Platform.isIOS
+                            ? Icons.arrow_back_ios
+                            : Icons.arrow_back,
+                        color: Colors.white,
+                        size: 27,
+                      )),
+                  bottom: TabBar(
+                    isScrollable: true,
+                    unselectedLabelColor: Colors.white,
+                    unselectedLabelStyle: TextStyle(fontSize: 14),
+                    labelStyle: TextStyle(fontSize: 14),
+                    labelColor: ColorConstants.whiteLighterColor,
+                    tabs: [
+                      new Tab(text: 'Deposit funds'),
+                      new Tab(
+                        text: 'Withdraw funds',
+                      ),
+                    ],
+                    controller: _tabController,
+                    indicatorColor: Colors.white,
+                    labelPadding: EdgeInsets.symmetric(horizontal: 50),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                  ),
+                  bottomOpacity: 1,
+                ),
+                body: TabBarView(
+                  children: [
+                    SingleChildScrollView(child: _depositeFund()),
+                    SingleChildScrollView(child: _withdrawFund()),
+                  ],
+                  controller: _tabController,
+                ),
+              ),
             ],
-            controller: _tabController,
-          ),
-        ),
-      ],
-    );
+          );
   }
 
   Widget _depositeFund() {
@@ -194,7 +189,8 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                 ),
                 SizedBox(height: 5),
                 Text('Balance: NGN$nairaBalance',
-                    style: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 14)),
+                    style: TextStyle(
+                        color: ColorConstants.whiteLighterColor, fontSize: 14)),
                 SizedBox(height: 30),
                 CustomButton(
                     margin: 0,
@@ -232,14 +228,14 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
           children: [
             Text('Deposit Amount',
                 style: TextStyle(
-                    color: ColorConstants.whiteLighterColor,
-                    fontSize: 14,
-                    )),
+                  color: ColorConstants.whiteLighterColor,
+                  fontSize: 14,
+                )),
             Text('NGN ' + amountController.text,
                 style: TextStyle(
-                    color: ColorConstants.whiteLighterColor,
-                    fontSize: 14,
-                    )),
+                  color: ColorConstants.whiteLighterColor,
+                  fontSize: 14,
+                )),
           ],
         ),
         SizedBox(
@@ -250,14 +246,14 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
           children: [
             Text('Processing fee',
                 style: TextStyle(
-                    color: ColorConstants.whiteLighterColor,
-                    fontSize: 14,
-                    )),
+                  color: ColorConstants.whiteLighterColor,
+                  fontSize: 14,
+                )),
             Text('NGN 0.00',
                 style: TextStyle(
-                    color: ColorConstants.whiteLighterColor,
-                    fontSize: 14,
-                    )),
+                  color: ColorConstants.whiteLighterColor,
+                  fontSize: 14,
+                )),
           ],
         ),
         SizedBox(
@@ -361,7 +357,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                           fontWeight: FontWeight.bold)),
                 ),
                 SizedBox(height: 8),
-                Divider(color: ColorConstants.whiteLighterColor,height: 0),
+                Divider(color: ColorConstants.whiteLighterColor, height: 0),
                 SizedBox(height: 8),
                 PasswordTextField(
                   icon: Icons.lock,
@@ -418,9 +414,9 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                 Text(
                                   title,
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                        ),
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 GestureDetector(
                                     onTap: () {
@@ -428,7 +424,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                     },
                                     child: Padding(
                                       padding:
-                                      const EdgeInsets.only(right: 8.0),
+                                          const EdgeInsets.only(right: 8.0),
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
@@ -453,7 +449,8 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                 kopenPage(
                                     context,
                                     SelectDepositPaymentTypePage(
-                                        amount: int.parse(amountController.text)));
+                                        amount:
+                                            int.parse(amountController.text)));
                               },
                               text: 'Proceed'),
                         ),
@@ -468,9 +465,9 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
   }
 
   Widget _bottomSheetContentMobileCarrier(
-      BuildContext context,
-      String title,
-      ) {
+    BuildContext context,
+    String title,
+  ) {
     return Column(
       children: [
         BottomSheetHeader(

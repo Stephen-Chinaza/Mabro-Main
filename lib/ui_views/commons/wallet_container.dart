@@ -113,7 +113,6 @@ class _BalanceCardState extends State<BalanceCard>
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-
             child: Stack(
           children: [
             Row(
@@ -124,7 +123,7 @@ class _BalanceCardState extends State<BalanceCard>
                   style: TextStyle(
                       fontStyle: FontStyle.normal,
                       fontSize: 15,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w300,
                       color: ColorConstants.secondaryColor),
                 ),
                 GestureDetector(
@@ -137,8 +136,7 @@ class _BalanceCardState extends State<BalanceCard>
                     ),
                     child: Container(
                       decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(0.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(0.0)),
                           gradient: ColorConstants.primaryGradient),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -176,7 +174,7 @@ class _BalanceCardState extends State<BalanceCard>
                     Text(
                       (showBalanceState) ? widget.amount : '******',
                       style: TextStyle(
-                        fontSize:20,
+                        fontSize: 20,
                         color: ColorConstants.whiteLighterColor,
                         fontWeight: FontWeight.w800,
                       ),
@@ -217,14 +215,16 @@ class _BalanceCardState extends State<BalanceCard>
                         setState(() {});
                       },
                       child: (showBalanceState)
-                          ? Icon(FontAwesomeIcons.eye,
+                          ? Icon(
+                              FontAwesomeIcons.eye,
                               size: 16,
-                        color: ColorConstants.whiteLighterColor,
-                      )
-                          : Icon(FontAwesomeIcons.eyeSlash,
+                              color: ColorConstants.whiteLighterColor,
+                            )
+                          : Icon(
+                              FontAwesomeIcons.eyeSlash,
                               size: 16,
-                        color: ColorConstants.whiteLighterColor,
-                      ),
+                              color: ColorConstants.whiteLighterColor,
+                            ),
                     ),
                   ],
                 ),
@@ -233,15 +233,12 @@ class _BalanceCardState extends State<BalanceCard>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'last refreshed @' +
-                          ' ' +
-                          getCurrentDate().toString(),
+                      'last refreshed @' + ' ' + getCurrentDate().toString(),
                       style: TextStyle(
                         fontStyle: FontStyle.normal,
                         fontWeight: FontWeight.w400,
                         fontSize: 12,
                         color: ColorConstants.whiteLighterColor,
-
                       ),
                     ),
                     GestureDetector(

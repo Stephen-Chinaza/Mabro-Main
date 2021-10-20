@@ -33,6 +33,8 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _amountController = new TextEditingController();
 
+  String userName = '';
+
   Future<void> getUserDetails() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userId = (pref.getString('userId') ?? '');
@@ -67,9 +69,10 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
 
   Widget _buildTransferForm(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 320,
+          height: MediaQuery.of(context).size.height,
           child: Card(
             color: ColorConstants.primaryLighterColor,
             child: Padding(
@@ -115,25 +118,27 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
                             _verifyUser();
                           },
                           text: 'Continue'),
-                        SizedBox(height: 50),
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        Icon(Icons.lock, color: ColorConstants.whiteLighterColor),
-                        SizedBox(width: 5),
-                        Text(
-                          'Transfer secured by Mabro',
-                          style: TextStyle(
-                              color: ColorConstants.secondaryColor,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w200),
-                        ),
-                      ])
+                      SizedBox(height: 25),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.lock,
+                                color: ColorConstants.whiteLighterColor),
+                            SizedBox(width: 5),
+                            Text(
+                              'Transfer secured by Mabro',
+                              style: TextStyle(
+                                  color: ColorConstants.secondaryColor,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w200),
+                            ),
+                          ])
                     ]),
               ),
             ),
           ),
         ),
         //Expanded(child: Container()),
-
       ],
     );
   }
@@ -186,7 +191,7 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
           if (status) {
             cPageState(state: false);
 
-            String userName = verifyUser.data.name;
+            userName = verifyUser.data.name;
 
             showInfoDialog(
                 230,
@@ -247,7 +252,7 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
         map['userId'] = userId;
 
         var response =
-            await http.post(HttpService.verifyTransfer, body: map, headers: {
+            await http.post(HttpService.transferFund, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
         }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
@@ -278,7 +283,10 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
 
             ShowSnackBar.showInSnackBar(
                 bgColor: ColorConstants.secondaryColor,
-                value: "Transfer of " +amountTransferred +" successful ",
+                value: "You have Sucessfully transfered " +
+                    amountTransferred +
+                    " to " +
+                    userName,
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);

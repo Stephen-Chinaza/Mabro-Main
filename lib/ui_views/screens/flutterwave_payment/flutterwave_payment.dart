@@ -393,7 +393,13 @@ class _CardPaymentState extends State<CardPayment> {
                 title: 'Enter OTP',
                 call: 'otp',
               );
-            } else if (authMode == 'redirect') {}
+            } else if (authMode == 'redirect') {
+              ShowSnackBar.showInSnackBar(
+                  value: 'redirected',
+                  context: context,
+                  scaffoldKey: _scaffoldKey,
+                  timer: 5);
+            }
             //redirectPage();
           } else if (!status) {
             cPageState(state: false);
@@ -465,7 +471,7 @@ class _CardPaymentState extends State<CardPayment> {
               scaffoldKey: _scaffoldKey,
               timer: 5);
 
-          kopenPage(context, LandingPage());
+          _redirectuser();
           SharedPrefrences.addStringToSP("nairaBalance", balance);
         } else if (!status) {
           cPageState(state: false);
@@ -618,6 +624,13 @@ class _CardPaymentState extends State<CardPayment> {
   void cPageState({bool state = false}) {
     setState(() {
       pageState = state;
+    });
+  }
+
+  void _redirectuser() {
+    cPageState(state: false);
+    Future.delayed(Duration(seconds: 4), () {
+      pushPage(context, LandingPage());
     });
   }
 }

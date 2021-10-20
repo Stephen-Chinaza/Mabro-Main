@@ -250,7 +250,8 @@ class _SignInPageState extends State<SignInPage> {
                   String verifiedPhone =
                       loginUser.data.verifiedPhone.toString();
 
-                  print(userId);
+                  print('lockCode');
+                  print(lockCode);
 
                   SharedPrefrences.addStringToSP("lock_code", lockCode);
                   SharedPrefrences.addStringToSP("password", password);
