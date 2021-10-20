@@ -15,9 +15,23 @@ import 'dart:io';
 
 class BtcP2PBuySell extends StatefulWidget {
   final bool buyInputState, sellInputState;
+  final String cointitle,
+      exchangeRate,
+      defaultCurrency,
+      buyingPrice,
+      sellingPrice,
+      usdBuyingPrice;
 
   const BtcP2PBuySell(
-      {Key key, this.buyInputState = false, this.sellInputState = false})
+      {Key key,
+      this.buyInputState = false,
+      this.sellInputState = false,
+      this.cointitle,
+      this.exchangeRate,
+      this.defaultCurrency,
+      this.buyingPrice,
+      this.sellingPrice,
+      this.usdBuyingPrice})
       : super(key: key);
   @override
   _BtcP2PBuySellState createState() => _BtcP2PBuySellState();
