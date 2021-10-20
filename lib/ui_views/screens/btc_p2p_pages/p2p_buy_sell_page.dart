@@ -14,9 +14,11 @@ import 'package:mabro/ui_views/screens/btc_p2p_pages/buyer_details_page.dart';
 import 'dart:io';
 
 class BtcP2PBuySell extends StatefulWidget {
-  final bool buyInputState,sellInputState;
+  final bool buyInputState, sellInputState;
 
-  const BtcP2PBuySell({Key key, this.buyInputState = false, this.sellInputState = false}) : super(key: key);
+  const BtcP2PBuySell(
+      {Key key, this.buyInputState = false, this.sellInputState = false})
+      : super(key: key);
   @override
   _BtcP2PBuySellState createState() => _BtcP2PBuySellState();
 }
@@ -133,7 +135,6 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           ),
                         ),
                       ),
-
                       Row(
                         children: [
                           Expanded(
@@ -232,10 +233,11 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             SizedBox(
                                               width: 5,
                                             ),
-                                            Text('Buying price:',
-                                                style: TextStyle(
-                                                    color: ColorConstants
-                                                        .whiteLighterColor),
+                                            Text(
+                                              'Buying price:',
+                                              style: TextStyle(
+                                                  color: ColorConstants
+                                                      .whiteLighterColor),
                                             ),
                                           ],
                                         ),
@@ -612,7 +614,6 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           ],
                         ),
                       ),
-
                       Container(
                         color: ColorConstants.primaryColor,
                         width: size.width,
@@ -663,9 +664,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                               Container(
                                   width: size.width,
                                   height: 100,
-                                  decoration: BoxDecoration(color: ColorConstants.primaryLighterColor,borderRadius: BorderRadius.circular(4)),
+                                  decoration: BoxDecoration(
+                                      color: ColorConstants.primaryLighterColor,
+                                      borderRadius: BorderRadius.circular(4)),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 10),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -685,8 +689,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                               kopenPage(
                                                   context,
                                                   CreateBuyingAdsPage(
-                                                    coinType:
-                                                        defaultCoinTitle,
+                                                    coinType: defaultCoinTitle,
                                                     coinSign:
                                                         defaultCoinSubTitle,
                                                     usdRate: defaultUSDRate,
@@ -742,7 +745,9 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                               Container(
                                   width: size.width,
                                   height: 100,
-                                  decoration: BoxDecoration(color: ColorConstants.primaryLighterColor,borderRadius: BorderRadius.circular(4)),
+                                  decoration: BoxDecoration(
+                                      color: ColorConstants.primaryLighterColor,
+                                      borderRadius: BorderRadius.circular(4)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Column(
@@ -764,8 +769,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                               kopenPage(
                                                   context,
                                                   CreateSellingAdsPage(
-                                                    coinType:
-                                                        defaultCoinTitle,
+                                                    coinType: defaultCoinTitle,
                                                     coinSign:
                                                         defaultCoinSubTitle,
                                                     usdRate: defaultUSDRate,
@@ -919,8 +923,11 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4.0),
         child: Container(
-          decoration: BoxDecoration(          color: ColorConstants.primaryLighterColor,
-              borderRadius: BorderRadius.only(topRight:Radius.circular(4.0),bottomRight: Radius.circular(4.0))),
+          decoration: BoxDecoration(
+              color: ColorConstants.primaryLighterColor,
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(4.0),
+                  bottomRight: Radius.circular(4.0))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1031,8 +1038,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          decoration:
-                              BoxDecoration(color: ColorConstants.primaryLighterColor),
+                          decoration: BoxDecoration(
+                              color: ColorConstants.primaryLighterColor),
                           width: MediaQuery.of(context).size.width,
                           height: 50,
                           child: Padding(
