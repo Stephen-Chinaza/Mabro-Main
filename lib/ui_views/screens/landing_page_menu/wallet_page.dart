@@ -1,4 +1,3 @@
-
 import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/res/colors.dart';
@@ -32,7 +31,6 @@ class _WalletPageState extends State<WalletPage> {
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
   }
 
@@ -44,9 +42,7 @@ class _WalletPageState extends State<WalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: ColorConstants.primaryColor,
       appBar: TopBar(
@@ -58,18 +54,21 @@ class _WalletPageState extends State<WalletPage> {
       body: SingleChildScrollView(
         child: Container(
           child: Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(6.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 15,),
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
                   decoration: BoxDecoration(
-                    color:ColorConstants.primaryLighterColor,
+                    color: ColorConstants.primaryLighterColor,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0, horizontal: 8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -82,25 +81,33 @@ class _WalletPageState extends State<WalletPage> {
                                   fontSize: 18,
                                 )),
                             GestureDetector(
-                              onTap: (){
-                                kopenPage(context,
-                                  DepositWithdrawPage(indexNum: 0,),);
+                              onTap: () {
+                                kopenPage(
+                                  context,
+                                  DepositWithdrawPage(
+                                    indexNum: 0,
+                                  ),
+                                );
                               },
-                              child: Container(
-                                width: 80,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(15.0)),
-                                    gradient: ColorConstants.primaryGradient),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      'Fund',
-                                      style: TextStyle(
-                                        color: ColorConstants.white,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w400,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 8.0, top: 8.0),
+                                child: Container(
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                      gradient: ColorConstants.primaryGradient),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        'Fund',
+                                        style: TextStyle(
+                                          color: ColorConstants.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -109,62 +116,82 @@ class _WalletPageState extends State<WalletPage> {
                             ),
                           ],
                         ),
-                        Text("NGN"+nairaBalance,
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: 16,
-                            )),
-                        SizedBox(height: 15,),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(nairaBalance,
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900,
+                                  )),
+                              Image.asset('assets/images/naira.png',
+                                  height: 30, width: 30)
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
                         //_inputTextField(),
                       ],
                     ),
                   ),
                 ),
-
-                SizedBox(height: 15,),
-                _cryptoWallets(size: size,
+                SizedBox(
+                  height: 15,
+                ),
+                _cryptoWallets(
+                    size: size,
                     img_url: 'assets/images/btc.jpg',
                     wallet_title: 'BTC',
                     color: Colors.red,
                     balance: '',
                     dollar_equivalent: '$nairaBalance',
                     icon: Icons.arrow_downward,
-                    rise_or_fall: ''
+                    rise_or_fall: ''),
+                SizedBox(
+                  height: 5,
                 ),
-                SizedBox(height: 5,),
-                _cryptoWallets(size: size,
+                _cryptoWallets(
+                    size: size,
                     img_url: 'assets/images/ethereum.png',
                     wallet_title: 'Ethereum',
                     color: Colors.green,
                     balance: '',
                     dollar_equivalent: '$nairaBalance',
                     icon: Icons.arrow_upward,
-                    rise_or_fall: ''
+                    rise_or_fall: ''),
+                SizedBox(
+                  height: 5,
                 ),
-                SizedBox(height: 5,),
-                _cryptoWallets(size: size,
+                _cryptoWallets(
+                    size: size,
                     img_url: 'assets/images/litecoin.png',
                     wallet_title: 'Lite Coin',
                     color: Colors.red,
                     balance: '',
                     dollar_equivalent: '$nairaBalance',
                     icon: Icons.arrow_downward,
-                    rise_or_fall: ''
+                    rise_or_fall: ''),
+                SizedBox(
+                  height: 5,
                 ),
-                SizedBox(height: 5,),
-                _cryptoWallets(size: size,
+                _cryptoWallets(
+                    size: size,
                     img_url: 'assets/images/usdt.png',
                     wallet_title: 'USDT',
                     color: Colors.red,
                     balance: '',
                     dollar_equivalent: '$nairaBalance',
                     icon: Icons.arrow_downward,
-                    rise_or_fall: ''
-                ),
-
+                    rise_or_fall: ''),
                 SizedBox(height: 20),
                 _bottomButton(),
-              ],),
+              ],
+            ),
           ),
         ),
       ),
@@ -182,7 +209,11 @@ class _WalletPageState extends State<WalletPage> {
               padding: const EdgeInsets.only(right: 6.0),
               child: TextButton(
                   onPressed: () {
-                    kopenPage(context, BtcP2PBuySell(buyInputState: true,));
+                    kopenPage(
+                        context,
+                        BtcP2PBuySell(
+                          buyInputState: true,
+                        ));
                   },
                   style: TextButton.styleFrom(
                       padding: const EdgeInsets.all(15.0),
@@ -192,8 +223,7 @@ class _WalletPageState extends State<WalletPage> {
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(4)),
-                      side: BorderSide(
-                          color: Colors.green[900], width: 2)),
+                      side: BorderSide(color: Colors.green[900], width: 2)),
                   child: Text(
                     'Buy',
                     style: TextStyle(color: ColorConstants.white),
@@ -209,8 +239,11 @@ class _WalletPageState extends State<WalletPage> {
                 margin: 0,
                 width: 140,
                 onPressed: () {
-                  kopenPage(context,  BtcP2PBuySell(sellInputState: true,));
-
+                  kopenPage(
+                      context,
+                      BtcP2PBuySell(
+                        sellInputState: true,
+                      ));
                 },
               ),
             ),
@@ -220,62 +253,59 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Widget _inputTextField(){
+  Widget _inputTextField() {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          border:  Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)
-      ),
-      child:
-    TextField(
-      keyboardType: TextInputType.text,
-      controller: TextEditingController(text: 'Search'),
-      cursorColor: ColorConstants.secondaryColor,
-      style: TextStyle(color: ColorConstants.whiteLighterColor),
-      decoration: InputDecoration(
-          counterText: "",
-          filled: true,
-          fillColor: ColorConstants.primaryColor.withOpacity(0.3),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-          prefixIcon:  Icon(
-            Icons.search,
-            color: ColorConstants.whiteLighterColor,
-            size: 22,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide:
-            BorderSide(color: ColorConstants.transparent, width: 0.2),
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: ColorConstants.transparent),
-            borderRadius: BorderRadius.circular(4.0),
-          ),
-          hintText: 'Search',
-          hintStyle: TextStyle(
-              fontStyle: FontStyle.normal,
+          border:
+              Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)),
+      child: TextField(
+        keyboardType: TextInputType.text,
+        controller: TextEditingController(text: 'Search'),
+        cursorColor: ColorConstants.secondaryColor,
+        style: TextStyle(color: ColorConstants.whiteLighterColor),
+        decoration: InputDecoration(
+            counterText: "",
+            filled: true,
+            fillColor: ColorConstants.primaryColor.withOpacity(0.3),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            prefixIcon: Icon(
+              Icons.search,
               color: ColorConstants.whiteLighterColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w300),
-          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13)),
-    ),
+              size: 22,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: ColorConstants.transparent, width: 0.2),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: ColorConstants.transparent),
+              borderRadius: BorderRadius.circular(4.0),
+            ),
+            hintText: 'Search',
+            hintStyle: TextStyle(
+                fontStyle: FontStyle.normal,
+                color: ColorConstants.whiteLighterColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w300),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13)),
+      ),
     );
   }
 
-
-
   Widget _cryptoWallets(
       {Size size,
-        String wallet_title,
-        String img_url,
-        Color color,
-        String dollar_equivalent,
-        String rise_or_fall,
-        IconData icon,
-        String balance,
-        Function onTap}) {
+      String wallet_title,
+      String img_url,
+      Color color,
+      String dollar_equivalent,
+      String rise_or_fall,
+      IconData icon,
+      String balance,
+      Function onTap}) {
     return GestureDetector(
       onTap: () {
         onTap();
@@ -294,9 +324,10 @@ class _WalletPageState extends State<WalletPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Image.asset(img_url,
-                          height: 25, width: 25),
-                      SizedBox(width: 10,),
+                      Image.asset(img_url, height: 25, width: 25),
+                      SizedBox(
+                        width: 10,
+                      ),
                       Text(
                         wallet_title,
                         style: TextStyle(
@@ -307,11 +338,10 @@ class _WalletPageState extends State<WalletPage> {
                         ),
                         textAlign: TextAlign.justify,
                       ),
-
                     ],
                   ),
                   Text(
-                    'NGN'+dollar_equivalent,
+                    'NGN' + dollar_equivalent,
                     style: TextStyle(
                       fontStyle: FontStyle.normal,
                       fontSize: 14,
@@ -319,7 +349,6 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                     textAlign: TextAlign.justify,
                   ),
-
                 ],
               ),
             ),

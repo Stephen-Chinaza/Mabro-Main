@@ -28,7 +28,6 @@ class SecurityPage extends StatefulWidget {
 }
 
 class _SecurityPageState extends State<SecurityPage> {
-
   int pinLength = 0;
   @override
   Widget build(BuildContext context) {
@@ -80,10 +79,7 @@ class _MenuInfoState extends State<MenuInfo> {
   void initState() {
     super.initState();
     updateState = false;
-    getData().then((value) =>
-    {
-
-    });
+    getData().then((value) => {});
     twoFactorState = false;
     fingerPrintState = true;
     timeoutLockState = false;
@@ -142,10 +138,7 @@ class _MenuInfoState extends State<MenuInfo> {
               ),
             ),
             Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height,
+              height: MediaQuery.of(context).size.height,
               child: Card(
                 elevation: 3,
                 color: ColorConstants.primaryLighterColor,
@@ -169,7 +162,7 @@ class _MenuInfoState extends State<MenuInfo> {
                                     buildShowBottomSheet(
                                       context: context,
                                       bottomsheetContent:
-                                      _bottomSheetPinContent(context),
+                                          _bottomSheetPinContent(context),
                                     );
                                   }),
                               buildListTile(
@@ -180,7 +173,7 @@ class _MenuInfoState extends State<MenuInfo> {
                                     buildShowBottomSheet(
                                       context: context,
                                       bottomsheetContent:
-                                      _bottomSheetPasswordContent(context),
+                                          _bottomSheetPasswordContent(context),
                                     );
                                   }),
                               buildListTile(
@@ -193,7 +186,7 @@ class _MenuInfoState extends State<MenuInfo> {
                                         .whiteLighterColor
                                         .withOpacity(0.4),
                                     inactiveThumbColor:
-                                    ColorConstants.whiteLighterColor,
+                                        ColorConstants.whiteLighterColor,
                                     value: twoFactorState,
                                     onChanged: (bool value) {
                                       setState(() {
@@ -221,7 +214,7 @@ class _MenuInfoState extends State<MenuInfo> {
                                         .whiteLighterColor
                                         .withOpacity(0.4),
                                     inactiveThumbColor:
-                                    ColorConstants.whiteLighterColor,
+                                        ColorConstants.whiteLighterColor,
                                     value: fingerPrintState,
                                     onChanged: (bool value) {
                                       setState(() {
@@ -249,7 +242,7 @@ class _MenuInfoState extends State<MenuInfo> {
                                         .whiteLighterColor
                                         .withOpacity(0.4),
                                     inactiveThumbColor:
-                                    ColorConstants.whiteLighterColor,
+                                        ColorConstants.whiteLighterColor,
                                     value: timeoutLockState,
                                     onChanged: (bool value) {
                                       setState(() {
@@ -305,7 +298,7 @@ class _MenuInfoState extends State<MenuInfo> {
           style: TextStyle(color: ColorConstants.whiteLighterColor)),
       trailing: (widget == null)
           ? Icon(Icons.arrow_forward_ios_sharp,
-          size: 13, color: ColorConstants.whiteLighterColor)
+              size: 13, color: ColorConstants.whiteLighterColor)
           : widget,
       onTap: onTapped,
     );
@@ -326,23 +319,19 @@ class _MenuInfoState extends State<MenuInfo> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(height: 20),
               TextStyles.textDetails(
                 textSize: 16,
                 textColor: ColorConstants.secondaryColor,
                 textValue:
-                'The Pin you are about to reset is for your transactions',
+                    'The Pin you are about to reset is for your transactions',
               ),
               SizedBox(height: 15),
-
               NormalFields(
                 maxLength: 4,
                 textInputType: TextInputType.number,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 hintText: 'Enter new pin',
                 labelText: 'Enter New Pin',
                 onChanged: (String newPin) {
@@ -357,10 +346,7 @@ class _MenuInfoState extends State<MenuInfo> {
               NormalFields(
                 maxLength: 4,
                 textInputType: TextInputType.number,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 hintText: 'Confirm new pin',
                 labelText: 'Confirm Pin',
                 onChanged: (cNewPin) {
@@ -400,21 +386,18 @@ class _MenuInfoState extends State<MenuInfo> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child:
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SizedBox(height: 20),
               TextStyles.textDetails(
                 textSize: 15,
                 textColor: ColorConstants.secondaryColor,
                 textValue:
-                'The Password you are about to reset is for your Login Authentication'
-                    .toUpperCase(),
+                    'The Password you are about to reset is for your Login Authentication'
+                        .toUpperCase(),
               ),
               SizedBox(height: 15),
               NormalFields(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 hintText: 'Enter old password',
                 labelText: 'Enter password',
                 onChanged: (oldPassword) {
@@ -424,10 +407,7 @@ class _MenuInfoState extends State<MenuInfo> {
               ),
               SizedBox(height: 15),
               NormalFields(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 hintText: 'Enter new password',
                 labelText: 'Enter new Password',
                 onChanged: (newPassword) {
@@ -440,10 +420,7 @@ class _MenuInfoState extends State<MenuInfo> {
               ),
               SizedBox(height: 15),
               NormalFields(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                width: MediaQuery.of(context).size.width,
                 hintText: 'Confirm new password',
                 labelText: 'Confirm password',
                 onChanged: (cNewPassword) {
@@ -501,12 +478,10 @@ class _MenuInfoState extends State<MenuInfo> {
         map['password'] = newPasswordController.text;
         map['repeat_password'] = cNewPasswordController.text;
 
-
         var response = await http
             .post(HttpService.rootUpdateUserPassword, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
-        })
-            .timeout(const Duration(seconds: 15), onTimeout: () {
+        }).timeout(const Duration(seconds: 15), onTimeout: () {
           ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
               context: context,
@@ -523,8 +498,9 @@ class _MenuInfoState extends State<MenuInfo> {
           bool status = regUser.status;
           String message = regUser.message;
           if (status) {
-            SharedPrefrences.addStringToSP("password", newPasswordController.text);
-            Future.delayed(Duration(seconds: 4), (){
+            SharedPrefrences.addStringToSP(
+                "password", newPasswordController.text);
+            Future.delayed(Duration(seconds: 4), () {
               kbackBtn(context);
             });
             ShowSnackBar.showInSnackBar(
@@ -536,7 +512,6 @@ class _MenuInfoState extends State<MenuInfo> {
             oldPasswordController.text = '';
             newPasswordController.text = '';
             cNewPasswordController.text = '';
-
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 value: message,
@@ -573,7 +548,7 @@ class _MenuInfoState extends State<MenuInfo> {
       print(value);
 
       var response =
-      await http.post(HttpService.rootUpdateSettings, body: map, headers: {
+          await http.post(HttpService.rootUpdateSettings, body: map, headers: {
         'Authorization': 'Bearer ' + HttpService.token,
       }).timeout(const Duration(seconds: 15), onTimeout: () {
         _updateState(false);
@@ -657,9 +632,7 @@ class _MenuInfoState extends State<MenuInfo> {
           value: 'pin does not match',
           context: context,
           scaffoldKey: _scaffoldKey);
-    }
-
-    else {
+    } else {
       try {
         var map = Map<String, dynamic>();
         map['userId'] = userId;
@@ -668,7 +641,7 @@ class _MenuInfoState extends State<MenuInfo> {
         map['lock_code'] = newPinController.text;
 
         var response =
-        await http.post(HttpService.rootUpdateUserPin, body: map, headers: {
+            await http.post(HttpService.rootUpdateUserPin, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
         }).timeout(const Duration(seconds: 15), onTimeout: () {
           ShowSnackBar.showInSnackBar(
@@ -687,9 +660,8 @@ class _MenuInfoState extends State<MenuInfo> {
           bool status = settingsData.status;
           String message = settingsData.message;
 
-
           if (status) {
-            Future.delayed(Duration(seconds: 4), (){
+            Future.delayed(Duration(seconds: 4), () {
               kbackBtn(context);
             });
             ShowSnackBar.showInSnackBar(
@@ -701,8 +673,6 @@ class _MenuInfoState extends State<MenuInfo> {
             newPinController.text = '';
 
             SharedPrefrences.addStringToSP("lock_code", newPinController.text);
-
-
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 value: message,

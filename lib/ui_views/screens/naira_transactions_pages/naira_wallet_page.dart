@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/painting.dart';
+import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/models/all_transactions_history.dart';
 import 'package:mabro/core/services/repositories.dart';
@@ -10,11 +11,11 @@ import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/commons/transaction_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dash/flutter_dash.dart';
 import 'package:mabro/ui_views/screens/flutterwave_payment/flutterwave_payment.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NairaWalletPage extends StatefulWidget {
   final String user;
@@ -26,13 +27,24 @@ class NairaWalletPage extends StatefulWidget {
 
 class _NairaWalletPageState extends State<NairaWalletPage>
     with SingleTickerProviderStateMixin {
+  String nairaBalance = '';
+  var formatter = NumberFormat('#,##,000');
 
   TextEditingController amountController = TextEditingController();
 
+  Future<void> getBalance() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
+
+    setState(() {
+      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+    });
+  }
+
   @override
   void initState() {
-
     super.initState();
+    getBalance();
   }
 
   @override
@@ -60,113 +72,123 @@ class _NairaWalletPageState extends State<NairaWalletPage>
                     Expanded(
                       flex: 4,
                       child: Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 10),
-                          Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: ColorConstants.primaryLighterColor,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8.0, top: 4.0,left: 4.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: ColorConstants.primaryLighterColor,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 8.0, top: 4.0, left: 4.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Wallet Balance',
+                                              style: TextStyle(
+                                                color: ColorConstants.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                            Image.asset(
+                                                'assets/images/naira.png',
+                                                width: 30,
+                                                height: 30),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        child: Text(
+                                          'NGN$nairaBalance',
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        child: Text(
+                                          'Fund Wallet',
+                                          style: TextStyle(
+                                            color: ColorConstants
+                                                .whiteLighterColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
                                         children: [
-                                          Text(
-                                            'Wallet Balance',
-                                            style: TextStyle(
-                                              color: ColorConstants.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
+                                          Expanded(
+                                            flex: 6,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 4.0),
+                                              child: NormalFields(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                isEditable: true,
+                                                hintText: 'Amount',
+                                                labelText: '',
+                                                textInputType:
+                                                    TextInputType.number,
+                                                controller: amountController,
+                                                onChanged: (name) {},
+                                                //controller: accountNameController,
+                                              ),
                                             ),
                                           ),
-                                          Image.asset('assets/images/naira.png', width: 30, height: 30),
+                                          SizedBox(width: 5),
+                                          Expanded(
+                                            flex: 2,
+                                            child: CustomButton(
+                                                margin: 0,
+                                                disableButton: true,
+                                                onPressed: () {
+                                                  makePayment();
+                                                },
+                                                text: 'Fund'),
+                                          ),
                                         ],
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 4.0),
-                                      child: Text(
-                                        'NGN 5,782',
-                                        style: TextStyle(
-                                          color: Colors.green,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 4.0),
-                                      child: Text(
-                                        'Fund Wallet',
-                                        style: TextStyle(
-                                          color: ColorConstants.whiteLighterColor,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 6,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 4.0),
-                                            child: NormalFields(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              isEditable: true,
-                                              hintText: 'Amount',
-                                              labelText: '',
-                                              textInputType: TextInputType.number,
-                                              controller: amountController,
-                                              onChanged: (name) {},
-                                              //controller: accountNameController,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 5),
-                                        Expanded(
-                                          flex: 2,
-                                          child: CustomButton(
-                                              margin: 0,
-                                              disableButton: true,
-                                              onPressed: () {
-                                                makePayment();
-                                              },
-                                              text: 'Fund'),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10),
-                                  ],
-                                ),
-                              ))
-                        ],
+                                      SizedBox(height: 10),
+                                    ],
+                                  ),
+                                ))
+                          ],
+                        ),
                       ),
-                    ),),
-                     SizedBox(height: 20),
-                     Expanded(
-                       flex: 8,
-                       child: buildTransactionHistory(
-                            context, 'https://mabro.ng/dev/_app/transactions/fund-wallet'),
-                     ),
+                    ),
+                    SizedBox(height: 20),
+                    Expanded(
+                      flex: 8,
+                      child: buildTransactionHistory(context,
+                          'https://mabro.ng/dev/_app/transactions/fund-wallet'),
+                    ),
                   ],
                 ),
               ),
-            )
-            ),
+            )),
       ],
     );
   }
@@ -197,73 +219,80 @@ class _NairaWalletPageState extends State<NairaWalletPage>
                 itemCount: allTransactionHistory.data.transactions.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, index) {
-                  return (index == 0) ? Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0)),
-                      color: ColorConstants.primaryLighterColor,
-                      border: Border.all(
-                        color: ColorConstants.whiteLighterColor, //                   <--- border color
-                        width: 0.2,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 6,
-                              child: Text(
-                                'Recent Wallet transactions',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: ColorConstants.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
+                  return (index == 0)
+                      ? Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8.0),
+                                topRight: Radius.circular(8.0)),
+                            color: ColorConstants.primaryLighterColor,
+                            border: Border.all(
+                              color: ColorConstants
+                                  .whiteLighterColor, //                   <--- border color
+                              width: 0.2,
                             ),
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: ColorConstants.secondaryColor,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Center(
-                                    child: Text(
-                                      'All Transactions',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: ColorConstants.white,
-                                          fontWeight: FontWeight.w400),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 6,
+                                      child: Text(
+                                        'Recent Wallet transactions',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: ColorConstants.white,
+                                            fontWeight: FontWeight.w400),
+                                      ),
                                     ),
-                                  ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          color: ColorConstants.secondaryColor,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Center(
+                                            child: Text(
+                                              'All Transactions',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: ColorConstants.white,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-
-                      ],),
-                    )
-                  ) :Container(
-                      child: transactionList(
-                    index: index,
-                    amount: allTransactionHistory.data.transactions[index].amount
-                        .toString(),
-                    createdDate:
-                        allTransactionHistory.data.transactions[index].createdAt,
-                    transactionTitle:
-                        allTransactionHistory.data.transactions[index].activity,
-                    transactionDetails: allTransactionHistory
-                        .data.transactions[index].description,
-                    currency: 'NGN',
-                  ));
+                          ))
+                      : Container(
+                          child: transactionList(
+                          index: index,
+                          amount: allTransactionHistory
+                              .data.transactions[index].amount
+                              .toString(),
+                          createdDate: allTransactionHistory
+                              .data.transactions[index].createdAt,
+                          transactionTitle: allTransactionHistory
+                              .data.transactions[index].activity,
+                          transactionDetails: allTransactionHistory
+                              .data.transactions[index].description,
+                          currency: 'NGN',
+                        ));
                 },
               ),
             );
@@ -313,12 +342,12 @@ class _NairaWalletPageState extends State<NairaWalletPage>
   }
 
   void makePayment() {
-    if(amountController.text.isEmpty){
+    if (amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Enter amount to proceed', context: context, timer: 5);
-
-    }else{
-      kopenPage(context, CardPayment(amount: int.tryParse(amountController.text)));
+    } else {
+      kopenPage(
+          context, CardPayment(amount: int.tryParse(amountController.text)));
     }
   }
 }
