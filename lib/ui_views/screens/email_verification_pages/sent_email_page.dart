@@ -32,80 +32,80 @@ class SentEmailPage extends StatelessWidget {
           backgroundColor: ColorConstants.primaryColor,
           body: SingleChildScrollView(
               child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: Dims.sizedBoxHeight(height: 50),
-                ),
-                Center(
-                  child: Container(
-                    child: Image(
-                      image: AssetImage('assets/images/email.png'),
-                      width: 100,
-                      height: 100,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Column(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'A Verfication code has been sent to',
-                      style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+                    SizedBox(
+                      height: Dims.sizedBoxHeight(height: 50),
                     ),
-                    Text(
-                      emailAddress,
-                      style: TextStyle(
-                          fontSize: 14, color: ColorConstants.secondaryColor),
+                    Center(
+                      child: Container(
+                        child: Image(
+                          image: AssetImage('assets/images/email.png'),
+                          width: 100,
+                          height: 100,
+                        ),
+                      ),
                     ),
-                    Text(
-                      'Please check your mail to continue',
-                      style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+                    SizedBox(
+                      height: 20,
                     ),
-                    Text(
-                      code,
-                      style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+                    Column(
+                      children: [
+                        Text(
+                          'A Verfication code has been sent to',
+                          style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+                        ),
+                        Text(
+                          emailAddress,
+                          style: TextStyle(
+                              fontSize: 14, color: ColorConstants.secondaryColor),
+                        ),
+                        Text(
+                          'Please check your mail to continue',
+                          style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+                        ),
+                        Text(
+                          code,
+                          style: TextStyle(fontSize: 16, color: ColorConstants.whiteLighterColor),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomButton(
+                          margin: 0,
+                          disableButton: true,
+                          onPressed: () {
+                            pushPage(
+                              context,
+                              EmailVerificationPage(emailAddress: emailAddress,userId: userId,otp: code,),
+                            );
+                          },
+                          text: 'Continue'.toUpperCase()),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        openEmailApp(context);
+                      },
+                      child: Center(
+                        child: Text(
+                          'Check Mail'.toUpperCase(),
+                          style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ColorConstants.whiteLighterColor),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomButton(
-                      margin: 0,
-                      disableButton: true,
-                      onPressed: () {
-                        pushPage(
-                          context,
-                          EmailVerificationPage(emailAddress: emailAddress,userId: userId,otp: code,),
-                        );
-                      },
-                      text: 'Continue'.toUpperCase()),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    openEmailApp(context);
-                  },
-                  child: Center(
-                    child: Text(
-                      'Check Mail'.toUpperCase(),
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ColorConstants.whiteLighterColor),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )),
+              )),
         ),
       ],
     );
@@ -114,7 +114,7 @@ class SentEmailPage extends StatelessWidget {
   void openEmailApp(BuildContext context) {
     try {
       AppAvailability.launchApp(
-              Platform.isIOS ? "message://" : "com.google.android.gm")
+          Platform.isIOS ? "message://" : "com.google.android.gm")
           .then((_) {
         print("App Email launched!");
       }).catchError((err) {

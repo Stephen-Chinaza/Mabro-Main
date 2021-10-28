@@ -1,7 +1,9 @@
+import 'package:mabro/core/models/email_verification_data.dart.dart';
 import 'package:mabro/core/models/login_user.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/screens/authentication_pages/sign_up_page.dart';
+import 'package:mabro/ui_views/screens/email_verification_pages/sent_email_page.dart';
 import 'package:mabro/ui_views/screens/forgot_password_page/forgot_password_page.dart';
 import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
 import 'package:mabro/ui_views/screens/password_setting/set_password_page.dart';
@@ -164,6 +166,84 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+  void reSendOtp({String userId, String email}) async {
+    cPageState(state: true);
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response =
+          await http.post(HttpService.rootResendEmail, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        EmailVerificationData verifyUser = EmailVerificationData.fromJson(body);
+
+        bool status = verifyUser.status;
+        String message = verifyUser.message;
+
+        if (status) {
+          cPageState(state: false);
+
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              iconData: Icons.check_circle,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 3,
+              bgColor: ColorConstants.secondaryColor);
+
+          //print(email);
+          Future.delayed(Duration(seconds: 4), () {
+            kopenPage(
+                context,
+                SentEmailPage(
+                  code: '',
+                  emailAddress: _email,
+                  userId: userId,
+                ));
+          });
+        } else if (!status) {
+          cPageState(state: false);
+          ShowSnackBar.showInSnackBar(
+              bgColor: ColorConstants.secondaryColor,
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        cPageState(state: false);
+        ShowSnackBar.showInSnackBar(
+            bgColor: ColorConstants.secondaryColor,
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      cPageState(state: false);
+      ShowSnackBar.showInSnackBar(
+          bgColor: ColorConstants.secondaryColor,
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+  }
+
   void _signIn() async {
     if (signinEmailController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
@@ -205,25 +285,34 @@ class _SignInPageState extends State<SignInPage> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
+          print(body);
+
           LoginUser loginUser = LoginUser.fromJson(body);
 
           bool status = loginUser.status;
           String message = loginUser.message;
+
           if (status) {
             cPageState(state: false);
             String verifiedEmail = loginUser.data.verifiedEmail.toString();
             String blocked = loginUser.data.blocked.toString();
-            String lockCode = loginUser.data.lockCode;
+            String lockCode = loginUser.data.lockCode.toString();
+            String userId = loginUser.data.userId;
+            String email = loginUser.data.emailAddress;
 
-            //TODO CHECK IF USER IS BLOCKED OR LOCK_CODE IS SET
+            print(email);
+
             if (verifiedEmail == '1') {
-              if (lockCode == '') {
+
+              if (lockCode == 'false') {
+                SharedPrefrences.addStringToSP("userId", userId);
+
                 ShowSnackBar.showInSnackBar(
                     bgColor: ColorConstants.secondaryColor,
                     value: 'User lock code not set',
                     context: context,
                     scaffoldKey: _scaffoldKey,
-                    timer: 5);
+                    timer: 3);
                 Future.delayed(Duration(seconds: 5), () {
                   pushPage(context, SetPinPage());
                 });
@@ -249,9 +338,6 @@ class _SignInPageState extends State<SignInPage> {
                       loginUser.data.verifiedEmail.toString();
                   String verifiedPhone =
                       loginUser.data.verifiedPhone.toString();
-
-                  print('lockCode');
-                  print(lockCode);
 
                   SharedPrefrences.addStringToSP("lock_code", lockCode);
                   SharedPrefrences.addStringToSP("password", password);
@@ -283,12 +369,17 @@ class _SignInPageState extends State<SignInPage> {
                 }
               }
             } else {
+              SharedPrefrences.addStringToSP("userId", userId);
+
               ShowSnackBar.showInSnackBar(
-                  bgColor: ColorConstants.primaryColor,
                   value: 'Please verify your email',
                   context: context,
                   scaffoldKey: _scaffoldKey,
-                  timer: 5);
+                  timer: 2);
+              cPageState(state: false);
+              Future.delayed(Duration(seconds: 3), () {
+                reSendOtp(userId: userId, email: email);
+              });
             }
           } else if (!status) {
             ShowSnackBar.showInSnackBar(

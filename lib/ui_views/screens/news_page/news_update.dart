@@ -21,7 +21,7 @@ class _NewsUpdatePageState extends State<NewsUpdatePage> {
       title: "Elon Musk says prices 'seem high' after Bitcoin hits new high ",
       subtitle:
           'The leading cryptocurrency reached an all-time high on \$57,492 in the past 24 hours, showed the data',
-      rise: '24/03/2021',
+      //rise: '24/03/2021',
     ),
     CoinList(
       image: 'assets/images/crypto2.jpg',
@@ -29,7 +29,7 @@ class _NewsUpdatePageState extends State<NewsUpdatePage> {
           "Digital artwork which exists as JPG file sold for Rs 501 crore - Who's the artist behind it? ",
       subtitle:
           'The work, called "Everydays: The First 5000 Days" is a collage of \$5,000 individual images, which were made one-per-day over more than thirteen years.',
-      rise: '2/03/2021',
+      // rise: '2/03/2021',
     ),
     CoinList(
       image: 'assets/images/crypto3.jpg',
@@ -37,14 +37,14 @@ class _NewsUpdatePageState extends State<NewsUpdatePage> {
           "Time heals all wounds': Stefan Thomas loses password to Bitcoin worth \$220 million, makes 'peace with loss'  ",
       subtitle:
           "Despite Thomas Bitcoin wealth, he forgot his password and he has already made eight unsuccessful attempts to unlock the encryption device.",
-      rise: '21/04/2021',
+      //rise: '21/04/2021',
     ),
     CoinList(
       image: 'assets/images/crypto4.jpg',
       title: "Understanding the Concept of Cryptocurrency ",
       subtitle:
           'You might be familiar with the names Bitcoin and Ethereum, but do you really know that these names can be used as a mode of exchange in everyday life? The tempting idea of becoming rich overnight might have crossed your mind often. And cryptocurrency gives you freedom to get benefit from it. ',
-      rise: '22/04/2021',
+      // rise: '22/04/2021',
     ),
   ];
 
@@ -72,7 +72,7 @@ class _NewsUpdatePageState extends State<NewsUpdatePage> {
         physics: AlwaysScrollableScrollPhysics(),
         itemBuilder: (context, i) {
           return _buildNewsCard(newsData[i].image, newsData[i].title,
-              newsData[i].rise, newsData[i].subtitle, onTap: () {
+              newsData[i].coinPrice, newsData[i].subtitle, onTap: () {
             kopenPage(
                 context,
                 NewDetailsPage(

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mabro/core/models/demo_data.dart';
+import 'package:mabro/core/models/p2p_models/list_coins.dart';
+import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
@@ -13,6 +16,8 @@ import 'package:mabro/ui_views/screens/btc_p2p_pages/buyer_details_page.dart';
 
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class BtcP2PBuySell extends StatefulWidget {
   final bool buyInputState, sellInputState;
   final String cointitle,
@@ -20,7 +25,8 @@ class BtcP2PBuySell extends StatefulWidget {
       defaultCurrency,
       buyingPrice,
       sellingPrice,
-      usdBuyingPrice;
+      usdBuyingPrice,
+      usdSellingPrice;
 
   const BtcP2PBuySell(
       {Key key,
@@ -31,7 +37,8 @@ class BtcP2PBuySell extends StatefulWidget {
       this.defaultCurrency,
       this.buyingPrice,
       this.sellingPrice,
-      this.usdBuyingPrice})
+      this.usdBuyingPrice,
+      this.usdSellingPrice})
       : super(key: key);
   @override
   _BtcP2PBuySellState createState() => _BtcP2PBuySellState();
@@ -42,22 +49,50 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
   String defaultCoinImage,
       defaultCoinTitle,
       defaultCoinSubTitle,
-      defaultUSDRate;
+      defaultUSDRate,
+      defaultBuyingPrice,
+      defaultSellingPrice,
+      defaultusdBuyingPrice,
+      defaultusdSellingPrice;
   bool SellingInputState, BuyingInputState;
   bool showSellingAds, showBuyingAds;
   bool showProgress;
   bool toogleCurrency;
   String inputCurrencyType;
+  String userId = '';
+
+  var formatter = NumberFormat("#,##0.00", "en_US");
+
+  Future<void> getData() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    userId = (pref.getString('userId') ?? '');
+  }
 
   @override
   void initState() {
     super.initState();
+    getData().then((value) => {
+          userId = userId,
+        });
     providerImages = DemoData.coinlists;
 
     defaultCoinImage = 'assets/images/btc.jpg';
     defaultCoinTitle = 'Bitcoin';
     defaultCoinSubTitle = 'BTC';
-    defaultUSDRate = 'bitUSD';
+    defaultUSDRate = widget.exchangeRate;
+    defaultSellingPrice = widget.sellingPrice;
+    defaultBuyingPrice = widget.buyingPrice;
+    defaultusdBuyingPrice = widget.usdBuyingPrice;
+    defaultusdSellingPrice = widget.usdSellingPrice;
+
+    setState(() {
+      defaultSellingPrice = formatter.format(int.tryParse(defaultSellingPrice));
+      defaultBuyingPrice = formatter.format(int.tryParse(defaultBuyingPrice));
+      defaultusdBuyingPrice =
+          formatter.format(int.tryParse(defaultusdBuyingPrice));
+      defaultusdSellingPrice =
+          formatter.format(int.tryParse(defaultusdSellingPrice));
+    });
 
     SellingInputState = widget.sellInputState;
     BuyingInputState = widget.buyInputState;
@@ -67,7 +102,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
     showProgress = false;
     toogleCurrency = true;
 
-    inputCurrencyType = 'NGN';
+    inputCurrencyType = widget.defaultCurrency;
   }
 
   @override
@@ -152,15 +187,17 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                       Row(
                         children: [
                           Expanded(
+                            flex: 6,
                             child: Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding:
+                                  const EdgeInsets.only(left: 4.0, right: 2),
                               child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8.0)),
                                     color: ColorConstants.primaryLighterColor,
                                   ),
-                                  width: 40,
+                                  height: 170,
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: Column(
@@ -186,52 +223,60 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             color: ColorConstants
                                                 .whiteLighterColor),
                                         SizedBox(height: 5),
-                                        Text('20,200,000.00',
+                                        Text('NGN $defaultSellingPrice',
                                             style: TextStyle(
-                                                color: Colors.green[900],
+                                                color: Colors.white,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.bold)),
                                         SizedBox(height: 5),
-                                        Text('NGN',
+                                        Text(
+                                            defaultCoinTitle +
+                                                ' (USD) = \$$defaultusdSellingPrice',
                                             style: TextStyle(
-                                                color: ColorConstants
-                                                    .whiteLighterColor,
+                                                fontSize: 12,
+                                                color: Colors.green[900],
                                                 fontWeight: FontWeight.bold)),
-                                        SizedBox(height: 15),
-                                        CustomButton(
-                                            margin: 0,
-                                            height: 30,
-                                            width: 95,
-                                            disableButton: true,
-                                            onPressed: () {
-                                              setState(() {
-                                                if (BuyingInputState) {
-                                                  BuyingInputState = false;
-                                                  SellingInputState = false;
-                                                } else if (!BuyingInputState) {
-                                                  BuyingInputState = true;
-                                                  SellingInputState = false;
-                                                } else if (SellingInputState) {
-                                                  BuyingInputState = false;
-                                                  SellingInputState = false;
-                                                }
-                                              });
-                                            },
-                                            text: 'Buy now'),
+                                        Spacer(),
+                                        Center(
+                                          child: CustomButton(
+                                              margin: 0,
+                                              height: 30,
+                                              disableButton: true,
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (BuyingInputState) {
+                                                    BuyingInputState = false;
+                                                    SellingInputState = false;
+                                                  } else if (!BuyingInputState) {
+                                                    BuyingInputState = true;
+                                                    SellingInputState = false;
+                                                  } else if (SellingInputState) {
+                                                    BuyingInputState = false;
+                                                    SellingInputState = false;
+                                                  }
+                                                });
+                                              },
+                                              text: 'Buy now'),
+                                        ),
                                       ],
                                     ),
                                   )),
                             ),
                           ),
                           Expanded(
+                            flex: 6,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(
+                                right: 4.0,
+                                left: 2.0,
+                              ),
                               child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8.0)),
                                     color: ColorConstants.primaryLighterColor,
                                   ),
-                                  width: 40,
+                                  height: 170,
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: Column(
@@ -259,21 +304,23 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                             color: ColorConstants
                                                 .whiteLighterColor),
                                         SizedBox(height: 5),
-                                        Text('19,780,824.14',
+                                        Text('NGN $defaultBuyingPrice',
                                             style: TextStyle(
-                                                color: Colors.red[900],
+                                                color: Colors.white,
+                                                fontSize: 14,
                                                 fontWeight: FontWeight.bold)),
                                         SizedBox(height: 5),
-                                        Text('NGN',
+                                        Text(
+                                            defaultCoinTitle +
+                                                ' (USD) = \$$defaultusdBuyingPrice',
                                             style: TextStyle(
-                                                color: ColorConstants
-                                                    .whiteLighterColor,
-                                                fontWeight: FontWeight.bold)),
-                                        SizedBox(height: 15),
+                                              fontSize: 12,
+                                              color: Colors.red[900],
+                                            )),
+                                        Spacer(),
                                         CustomButton(
                                             margin: 0,
                                             height: 30,
-                                            width: 95,
                                             disableButton: true,
                                             onPressed: () {
                                               setState(() {
@@ -706,7 +753,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                                     coinType: defaultCoinTitle,
                                                     coinSign:
                                                         defaultCoinSubTitle,
-                                                    usdRate: defaultUSDRate,
+                                                    nairaPrice:
+                                                        defaultSellingPrice,
+                                                    usdSellingPrice:
+                                                        defaultusdSellingPrice,
+                                                    usdExchangeRate:
+                                                        defaultUSDRate,
                                                   ));
                                             },
                                             text: 'Create Your Buying Ads'),
@@ -816,36 +868,53 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
         ),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: 6),
-          _buildCarrierList(),
+          _buildCoinList(),
         ]),
       ],
     );
   }
 
-  Widget _buildCarrierList() {
-    return Container(
-      child: ListView.builder(
-          itemCount: providerImages.length,
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemBuilder: (context, i) {
-            return buildListTile(
-                image: providerImages[i].image,
-                title: providerImages[i].title,
-                subtitle: providerImages[i].subtitle,
-                rise: providerImages[i].rise,
-                rate: providerImages[i].rate,
-                onTapped: () {
-                  kbackBtn(context);
-
-                  setState(() {
-                    defaultCoinImage = providerImages[i].image;
-                    defaultCoinTitle = providerImages[i].title;
-                    defaultCoinSubTitle = providerImages[i].subtitle;
-                    defaultUSDRate = providerImages[i].usdRate;
-                  });
-                });
-          }),
+  Widget _buildCoinList() {
+    return FutureBuilder(
+      future: HttpService.getCoinLists(context, userId),
+      builder:
+          (BuildContext context, AsyncSnapshot<ListCoinsDetails> snapshot) {
+        if (snapshot.hasData) {
+          ListCoinsDetails listCoinsDetails = snapshot.data;
+          return ListView.builder(
+              itemCount: 3,
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemBuilder: (context, i) {
+                return buildListTile(
+                    image: providerImages[i].image,
+                    title: listCoinsDetails.data[i].coin.toUpperCase(),
+                    subtitle: providerImages[i].subtitle,
+                    rise: '',
+                    nairaPrice: providerImages[i].nairaPrice,
+                    coinPrice: providerImages[i].coinPrice,
+                    onTapped: () {
+                      kbackBtn(context);
+                      setState(() {
+                        defaultCoinImage = providerImages[i].image;
+                        defaultCoinTitle = providerImages[i].title;
+                        defaultCoinSubTitle = providerImages[i].subtitle;
+                        defaultUSDRate = providerImages[i].usdRate;
+                      });
+                    });
+              });
+        } else if (snapshot.hasError) {
+          return Center(
+              child: Text('unable to load check internet',
+                  style: TextStyle(color: Colors.white)));
+        } else {
+          return Center(
+              child: CircularProgressIndicator(
+            valueColor:
+                AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
+          ));
+        }
+      },
     );
   }
 
@@ -853,7 +922,8 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
       {String title,
       String subtitle,
       String rise,
-      String rate,
+      String nairaPrice,
+      String coinPrice,
       String image,
       Function onTapped}) {
     Size size = MediaQuery.of(context).size;
@@ -869,51 +939,44 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
                 children: [
                   SizedBox(width: 10),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(image, width: 20, height: 20),
+                    child: Image.asset(image, width: 33, height: 33),
                   ),
                   SizedBox(width: 5),
-                  Container(
-                    width: size.width - 60,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
                           children: [
                             Text('$title',
                                 style: TextStyle(
-                                    color: ColorConstants.secondaryColor,
+                                    color: ColorConstants.whiteColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold)),
-                            Text('$subtitle',
-                                style: TextStyle(
-                                    color: ColorConstants.whiteLighterColor,
-                                    fontSize: 14)),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('$nairaPrice',
+                                    style: TextStyle(
+                                        color: ColorConstants.whiteColor,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold)),
+                                Text('$coinPrice',
+                                    style: TextStyle(
+                                        color: ColorConstants.whiteLighterColor,
+                                        fontSize: 12)),
+                              ],
+                            ),
                           ],
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('$rate',
-                                style: TextStyle(
-                                    color: ColorConstants.secondaryColor,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold)),
-                            Text('$rise',
-                                style: TextStyle(
-                                    color: ColorConstants.whiteLighterColor,
-                                    fontSize: 12)),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],

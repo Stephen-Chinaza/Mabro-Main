@@ -8,6 +8,8 @@ import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/airtime_to_cash_info.dart';
 import 'package:mabro/core/models/demo_data.dart';
+import 'package:mabro/core/models/p2p_models/exchangeInfo.dart';
+import 'package:mabro/core/models/update_account.dart';
 import 'package:mabro/core/models/userInfo.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
@@ -35,7 +37,6 @@ import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:page_indicator/page_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mabro/ui_views/screens/news_page/news_update.dart';
 import 'package:mabro/ui_views/screens/electricity_page/selected_electricity_page.dart';
 import 'package:mabro/ui_views/screens/tv_subscription_pages/selected_cable_tv.dart';
 import 'package:typicons_flutter/typicons_flutter.dart';
@@ -234,9 +235,15 @@ class _HomePageState extends State<HomePage> {
     List<Widget> menuScreens = [
       MabroTransferPage(),
       BankTransferPage(),
-      DepositWithdrawPage(indexNum: 0,),
-      DepositWithdrawPage(indexNum: 1,),
-      NairaWalletPage(user: userId,),
+      DepositWithdrawPage(
+        indexNum: 0,
+      ),
+      DepositWithdrawPage(
+        indexNum: 1,
+      ),
+      NairaWalletPage(
+        user: userId,
+      ),
       BtcP2PBuySell(),
       ReceiveBtcPage(),
       AirtimeToCashPage(),
@@ -258,9 +265,11 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               checkedItem = index;
-              if (checkedItem == 7) {
+              if (checkedItem == 5) {
+                _p2PUserInfo();
+              } else if (checkedItem == 7) {
                 _airtime2CashInfo();
-              }else {
+              } else {
                 kopenPage(context, menuScreens[checkedItem]);
               }
             },
@@ -278,9 +287,10 @@ class _HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Container(
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                         // color: ColorConstants.whiteLighterColor,
-                          color: Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0),
+                        shape: BoxShape.circle,
+                        // color: ColorConstants.whiteLighterColor,
+                        color: Color((Random().nextDouble() * 0xFFFFFF).toInt())
+                            .withOpacity(1.0),
                         // color: Colors
                         //     .primaries[Random().nextInt(Colors.primaries.length)],
                       ),
@@ -289,8 +299,7 @@ class _HomePageState extends State<HomePage> {
                         child: Icon(
                           subList[index].icon,
                           size: 18,
-                         color: Colors.black87,
-
+                          color: Colors.black87,
                         ),
                       ),
                     ),
@@ -607,7 +616,9 @@ class _HomePageState extends State<HomePage> {
                 _buildRow(
                   "Deposit / Withdrawal",
                   icon: Icons.dashboard_customize,
-                  page: DepositWithdrawPage(indexNum: 0,),
+                  page: DepositWithdrawPage(
+                    indexNum: 0,
+                  ),
                 ),
                 // _buildRow(
                 //   "Buy Social Media Likes",
@@ -1002,6 +1013,73 @@ class _HomePageState extends State<HomePage> {
                 gloChangePin: airtimeToCashInfo.data.gloChangePin,
                 mobileChangePin: airtimeToCashInfo.data.mobileChangePin,
                 mobileTransfer: airtimeToCashInfo.data.mobileTransfer,
+              ));
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message,
+              context: context,
+              scaffoldKey: _scaffoldKey,
+              timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error',
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection',
+          context: context,
+          scaffoldKey: _scaffoldKey,
+          timer: 5);
+    }
+  }
+
+  void _p2PUserInfo() async {
+    String message;
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+
+      var response =
+          await http.post(HttpService.rootP2PUserInfo, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            bgColor: ColorConstants.secondaryColor,
+            context: context,
+            scaffoldKey: _scaffoldKey,
+            timer: 5);
+        return null;
+      });
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        P2PExchangeDetails p2pExchangeDetails =
+            P2PExchangeDetails.fromJson(body);
+
+        bool status = p2pExchangeDetails.status;
+        message = p2pExchangeDetails.message;
+
+        if (status) {
+          kopenPage(
+              context,
+              BtcP2PBuySell(
+                buyingPrice:
+                    p2pExchangeDetails.data.bitcoin.buyingPrice.toString(),
+                sellingPrice:
+                    p2pExchangeDetails.data.bitcoin.sellingPrice.toString(),
+                usdBuyingPrice:
+                    p2pExchangeDetails.data.bitcoin.usdBuyingPrice.toString(),
+                usdSellingPrice:
+                    p2pExchangeDetails.data.bitcoin.usdSellingPrice.toString(),
+                exchangeRate:
+                    p2pExchangeDetails.data.basic.exchangeRate.toString(),
+                defaultCurrency:
+                    p2pExchangeDetails.data.basic.defaultCurrency.toString(),
               ));
         } else if (!status) {
           ShowSnackBar.showInSnackBar(

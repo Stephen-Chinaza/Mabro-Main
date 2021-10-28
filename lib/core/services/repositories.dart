@@ -9,6 +9,8 @@ import 'package:mabro/core/models/buy_glo_bundle.dart';
 import 'package:mabro/core/models/buy_mtn_bundle.dart';
 import 'package:mabro/core/models/electricity_data_companies.dart';
 import 'package:mabro/core/models/list_bank.dart';
+import 'package:mabro/core/models/p2p_models/exchangeInfo.dart';
+import 'package:mabro/core/models/p2p_models/list_coins.dart';
 import 'package:mabro/core/models/tv_data_companies/dstv.dart';
 import 'package:mabro/core/models/tv_data_companies/gotv.dart';
 import 'package:mabro/core/models/tv_data_companies/startimes_data.dart';
@@ -46,7 +48,7 @@ class HttpService {
   static var rootResetPassword =
       Uri.parse('https://mabro.ng/dev2/login/create-password');
   static var rootResendEmail =
-      Uri.parse('https://mabro.ng/dev2/login/verify-OTP');
+      Uri.parse('https://mabro.ng/dev/register/send-email-OTP');
   static var rootUserPin =
       Uri.parse('https://mabro.ng/dev2/register/create-lock-code');
   static var rootVerifyPhone =
@@ -95,6 +97,11 @@ class HttpService {
   static var rootVerifyOtp =
       Uri.parse('https://mabro.ng/dev2/_app/naira-wallet/verify-OTP');
 
+  //P2p Urls
+  static var rootP2PUserInfo = Uri.parse('https://mabro.ng/dev2/exchange/info');
+  static var rootCreateBuyAdInfo =
+      Uri.parse('https://mabro.ng/dev2/exchange/btc/buy/create-ad/save');
+
   static Future<ListBanks> getBankLists(BuildContext context, userId) async {
     try {
       var map = Map<String, dynamic>();
@@ -121,6 +128,47 @@ class HttpService {
         String message = banks.message;
         if (status) {
           return banks;
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message, context: context, timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error', context: context, timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection', context: context, timer: 5);
+    }
+  }
+
+  static Future<ListCoinsDetails> getCoinLists(
+      BuildContext context, userId) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = userId;
+      var response = await http.post(
+          Uri.parse('https://mabro.ng/dev2/exchange/info/coins'),
+          body: map,
+          headers: {
+            'Authorization': 'Bearer ' + HttpService.token,
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        ListCoinsDetails listCoinsDetails = ListCoinsDetails.fromJson(body);
+
+        bool status = listCoinsDetails.status;
+        String message = listCoinsDetails.message;
+        if (status) {
+          return listCoinsDetails;
         } else if (!status) {
           ShowSnackBar.showInSnackBar(
               value: message, context: context, timer: 5);

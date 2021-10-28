@@ -23,17 +23,38 @@ class UpdateBankDetails {
 }
 
 class Data {
+  String user;
   String accountName;
+  String accountNumber;
+  String bankName;
+  String bankCode;
+  String id;
 
-  Data({this.accountName});
+  Data(
+      {this.user,
+      this.accountName,
+      this.accountNumber,
+      this.bankName,
+      this.bankCode,
+      this.id});
 
   Data.fromJson(Map<String, dynamic> json) {
-    accountName = json['accountName'];
+    user = json['user'];
+    accountName = json['account_name'];
+    accountNumber = json['account_number'];
+    bankName = json['bank_name'];
+    bankCode = json['bank_code'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['accountName'] = this.accountName;
+    data['user'] = this.user;
+    data['account_name'] = this.accountName;
+    data['account_number'] = this.accountNumber;
+    data['bank_name'] = this.bankName;
+    data['bank_code'] = this.bankCode;
+    data['id'] = this.id;
     return data;
   }
 }

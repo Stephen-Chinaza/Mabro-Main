@@ -242,115 +242,119 @@ class _AccountPageState extends State<AccountPage> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(2.0),
-        child: Card(
-          color: ColorConstants.primaryLighterColor,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 10),
-                      TextStyles.textDetails(
-                        textSize: 16,
-                        textColor: ColorConstants.secondaryColor,
-                        textValue: 'Account Setup ',
-                      ),
-                      SizedBox(height: 10),
-                      TextStyles.textDetails(
-                        textSize: 14,
-                        textColor: ColorConstants.whiteLighterColor,
-                        textValue: 'Add bank account information and Bvn',
-                      ),
-                      SizedBox(height: 20),
-                      Builder(builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            buildShowBottomSheet(
-                              context: context,
-                              bottomsheetContent: _bottomSheetContent(context),
-                            );
-                          },
-                          child: IconFields(
-                            isEditable: false,
-                            hintText: 'Select bank',
-                            controller: bankNameController,
-                          ),
-                        );
-                      }),
-                      SizedBox(height: 15),
-                      NormalFields(
-                        width: MediaQuery.of(context).size.width,
-                        hintText: 'Enter account number',
-                        labelText: '',
-                        maxLength: 10,
-                        textInputType: TextInputType.number,
-                        onChanged: (String count) {
-                          textCount = count.length;
-                          if (textCount == 10) {
-                            // getAccountName().then((value) => {
-                            //       setState(() {
-                            //         accountNameController.text = value;
-                            //       })
-                            //     });
-                          }
-                        },
-                        controller: accountNumberController,
-                      ),
-                      SizedBox(height: 15),
-                      NormalFields(
-                        width: MediaQuery.of(context).size.width,
-                        hintText: 'Enter bank verification number',
-                        labelText: 'Enter BVN',
-                        maxLength: 11,
-                        textInputType: TextInputType.number,
-                        onChanged: (String count) {
-                          setState(() {
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Card(
+            color: ColorConstants.primaryLighterColor,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 10),
+                        TextStyles.textDetails(
+                          textSize: 16,
+                          textColor: ColorConstants.secondaryColor,
+                          textValue: 'Account Setup ',
+                        ),
+                        SizedBox(height: 10),
+                        TextStyles.textDetails(
+                          textSize: 14,
+                          textColor: ColorConstants.whiteLighterColor,
+                          textValue: 'Add bank account information and Bvn',
+                        ),
+                        SizedBox(height: 20),
+                        Builder(builder: (context) {
+                          return GestureDetector(
+                            onTap: () {
+                              buildShowBottomSheet(
+                                context: context,
+                                bottomsheetContent:
+                                    _bottomSheetContent(context),
+                              );
+                            },
+                            child: IconFields(
+                              isEditable: false,
+                              hintText: 'Select bank',
+                              controller: bankNameController,
+                            ),
+                          );
+                        }),
+                        SizedBox(height: 15),
+                        NormalFields(
+                          width: MediaQuery.of(context).size.width,
+                          hintText: 'Enter account number',
+                          labelText: '',
+                          maxLength: 10,
+                          textInputType: TextInputType.number,
+                          onChanged: (String count) {
                             textCount = count.length;
-                            if (textCount == 11) {
-                              getAccountBvn().then((value) => {
-                                    setState(() {
-                                      accountNameController.text = value;
-                                    })
-                                  });
-                            } else {
-                              btnState = false;
+                            if (textCount == 10) {
+                              // getAccountName().then((value) => {
+                              //       setState(() {
+                              //         accountNameController.text = value;
+                              //       })
+                              //     });
                             }
-                          });
-                        },
-                        controller: bvnController,
-                      ),
-                      SizedBox(height: 15),
-                      NormalFields(
-                        width: MediaQuery.of(context).size.width,
-                        isEditable: false,
-                        hintText: 'Enter account name',
-                        labelText: '',
-                        onChanged: (name) {},
-                        controller: accountNameController,
-                      ),
-                      SizedBox(height: 20),
-                      TextStyles.textDetails(
-                        textSize: 14,
-                        textColor: ColorConstants.whiteLighterColor,
-                        textValue:
-                            'We are a digital bank and just like your regular bank,we need your BVN to be able to process transactios. Dial *565*0# on your mobile phone to get your bvn.',
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      CustomButton(
-                          margin: 0,
-                          disableButton: btnState,
-                          onPressed: () {
-                            updateAccountDetails();
                           },
-                          text: btnText),
-                    ]),
-              ),
-              SizedBox(height: 50),
-            ],
+                          controller: accountNumberController,
+                        ),
+                        SizedBox(height: 15),
+                        NormalFields(
+                          width: MediaQuery.of(context).size.width,
+                          hintText: 'Enter bank verification number',
+                          labelText: 'Enter BVN',
+                          maxLength: 11,
+                          textInputType: TextInputType.number,
+                          onChanged: (String count) {
+                            setState(() {
+                              textCount = count.length;
+                              if (textCount == 11) {
+                                getAccountBvn().then((value) => {
+                                      setState(() {
+                                        accountNameController.text = value;
+                                      })
+                                    });
+                              } else {
+                                btnState = false;
+                              }
+                            });
+                          },
+                          controller: bvnController,
+                        ),
+                        SizedBox(height: 15),
+                        NormalFields(
+                          width: MediaQuery.of(context).size.width,
+                          isEditable: false,
+                          hintText: 'Enter account name',
+                          labelText: '',
+                          onChanged: (name) {},
+                          controller: accountNameController,
+                        ),
+                        SizedBox(height: 20),
+                        TextStyles.textDetails(
+                          textSize: 14,
+                          textColor: ColorConstants.whiteLighterColor,
+                          textValue:
+                              'We are a digital bank and just like your regular bank,we need your BVN to be able to process transactios. Dial *565*0# on your mobile phone to get your bvn.',
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        CustomButton(
+                            margin: 0,
+                            disableButton: btnState,
+                            onPressed: () {
+                              updateAccountDetails();
+                            },
+                            text: btnText),
+                      ]),
+                ),
+                SizedBox(height: 50),
+              ],
+            ),
           ),
         ),
       ),
@@ -607,7 +611,7 @@ class _AccountPageState extends State<AccountPage> {
 
             String accountName = updateBankDetails.data.accountName;
 
-            var at = accountName.split(' ');
+            var at = accountName.split('');
             String surname = at[0].trim();
             String firstName = at[1].trim();
 

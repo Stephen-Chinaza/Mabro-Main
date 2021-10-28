@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class TextFieldWithEndText extends StatelessWidget {
   final String labelText;
   final String inputCurrencyType;
@@ -19,16 +18,17 @@ class TextFieldWithEndText extends StatelessWidget {
 
   const TextFieldWithEndText(
       {Key key,
-        this.labelText,
-        this.hintText,
-        this.onChanged,
-        this.width,
-        this.onTap,
-        this.textInputType,
-        this.controller,
-        this.bgColor,
-        this.isEditable,
-        this.onIconTap, this.inputCurrencyType})
+      this.labelText,
+      this.hintText,
+      this.onChanged,
+      this.width,
+      this.onTap,
+      this.textInputType,
+      this.controller,
+      this.bgColor,
+      this.isEditable,
+      this.onIconTap,
+      this.inputCurrencyType})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -37,10 +37,11 @@ class TextFieldWithEndText extends StatelessWidget {
       height: 45,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-          border:  Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)
-      ),
+          border:
+              Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)),
       child: Padding(
-        padding: const EdgeInsets.all(2.0),
+        padding:
+            const EdgeInsets.only(left: 2.0, right: 2.0, top: 0, bottom: 0),
         child: Material(
           color: ColorConstants.primaryColor,
           elevation: 3,
@@ -65,14 +66,17 @@ class TextFieldWithEndText extends StatelessWidget {
                       style: TextStyle(
                           fontStyle: FontStyle.normal,
                           color: ColorConstants.whiteLighterColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorConstants.primaryColor.withOpacity(0.3),
                         border: InputBorder.none,
                         hintText: hintText,
-                        hintStyle: TextStyle(color: ColorConstants.whiteLighterColor, fontSize: 16.0,),
+                        hintStyle: TextStyle(
+                          color: ColorConstants.whiteLighterColor,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
                   ),
@@ -80,12 +84,10 @@ class TextFieldWithEndText extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text(
-                    inputCurrencyType ?? '',
+                child: Text(inputCurrencyType ?? '',
                     style: TextStyle(
-                      color: ColorConstants
-                          .whiteLighterColor,
-                      fontSize: 12,
+                      color: ColorConstants.whiteLighterColor,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                     )),
               ),

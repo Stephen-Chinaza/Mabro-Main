@@ -5,7 +5,6 @@ import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_ba
 import 'package:mabro/ui_views/commons/transaction_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dash/flutter_dash.dart';
 
 class AllTransactions extends StatefulWidget {
   final String user;
@@ -19,12 +18,10 @@ class _AllTransactionsState extends State<AllTransactions>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
-
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
     super.initState();
-
   }
 
   @override
@@ -43,10 +40,12 @@ class _AllTransactionsState extends State<AllTransactions>
             ),
             centerTitle: false,
             title: new Text("Transactions History",
-                style: TextStyle(fontSize: 16, color: ColorConstants.secondaryColor,)),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: ColorConstants.secondaryColor,
+                )),
             automaticallyImplyLeading: false,
             bottom: TabBar(
-
               isScrollable: false,
               tabs: [
                 new Tab(text: 'All'),
@@ -77,7 +76,6 @@ class _AllTransactionsState extends State<AllTransactions>
                     'https://mabro.ng/dev/_app/transactions/all/complete'),
                 buildTransactionHistory(context,
                     'https://mabro.ng/dev/_app/transactions/all/pending'),
-
               ],
               controller: _tabController,
             ),
@@ -101,7 +99,9 @@ class _AllTransactionsState extends State<AllTransactions>
               child: Text(
                 'No Results for this transaction',
                 style: TextStyle(
-                    fontSize: 16, color: ColorConstants.secondaryColor, fontWeight: FontWeight.w200),
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w200),
               ),
             );
           } else {
@@ -110,14 +110,17 @@ class _AllTransactionsState extends State<AllTransactions>
               scrollDirection: Axis.vertical,
               itemBuilder: (BuildContext context, index) {
                 return Container(
-                  child: transactionList(
-                    index: index,
-                      amount: allTransactionHistory.data.transactions[index].amount.toString(),
-                      createdDate: allTransactionHistory.data.transactions[index].createdAt,
-                      transactionTitle: allTransactionHistory.data.transactions[index].activity,
-                      transactionDetails:
-                          allTransactionHistory.data.transactions[index].description,
-                      currency: 'NGN',
+                    child: transactionList(
+                  index: index,
+                  amount: allTransactionHistory.data.transactions[index].amount
+                      .toString(),
+                  createdDate:
+                      allTransactionHistory.data.transactions[index].createdAt,
+                  transactionTitle:
+                      allTransactionHistory.data.transactions[index].activity,
+                  transactionDetails: allTransactionHistory
+                      .data.transactions[index].description,
+                  currency: 'NGN',
                 ));
               },
             );
@@ -126,9 +129,7 @@ class _AllTransactionsState extends State<AllTransactions>
           return Center(
             child: GestureDetector(
               onTap: () {
-                setState(() {
-
-                });
+                setState(() {});
               },
               child: Text(
                 'Error in network',
@@ -172,7 +173,7 @@ class _AllTransactionsState extends State<AllTransactions>
         //   )),
         // ),
         TransactionContainer(
-          index: index,
+            index: index,
             amount: '$currency $amount',
             icon: iconData,
             color: colorData,

@@ -1,9 +1,7 @@
-import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class PasswordTextField extends StatefulWidget {
   final String labelText;
@@ -49,7 +47,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(8.0)),
           border:
-          Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)),
+              Border.all(color: ColorConstants.whiteLighterColor, width: 0.5)),
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: TextField(
@@ -65,11 +63,12 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
             fillColor: ColorConstants.primaryColor.withOpacity(0.4),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4.0),
-              borderSide: const BorderSide(color: ColorConstants.whiteColor, width: 1.0),
+              borderSide: const BorderSide(
+                  color: ColorConstants.whiteColor, width: 1.0),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide:
-              BorderSide(color: ColorConstants.transparent, width: 0.2),
+                  BorderSide(color: ColorConstants.transparent, width: 0.2),
               borderRadius: BorderRadius.circular(4.0),
             ),
             enabledBorder: UnderlineInputBorder(
@@ -84,9 +83,8 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                     color: (widget.iconColor == null)
                         ? ColorConstants.whiteLighterColor
                         : widget.iconColor,
-              size: 22,
-
-            ),
+                    size: 22,
+                  ),
             hintStyle: TextStyle(
                 fontStyle: FontStyle.normal,
                 color: ColorConstants.whiteLighterColor,

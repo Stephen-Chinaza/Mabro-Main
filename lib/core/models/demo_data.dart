@@ -8,27 +8,27 @@ class DemoData {
           title: "Mabro Transfer",
           icon: Icons.transfer_within_a_station,
         ),
-    HomeMenu(
-      title: "Bank Transfer",
-      icon: Icons.compare_arrows_sharp,
-    ),
-    HomeMenu(
-      title: "Fund Wallet",
-      icon: Typicons.device_laptop,
-    ),
-    HomeMenu(
-      title: "Make Withdrawal",
-      icon: Typicons.flow_children,
-    ),
-    HomeMenu(
-      title: "Naira Wallet",
-      icon: Icons.account_balance_wallet,
-    ),
-    HomeMenu(
-      title: "P2P \n Exchange",
-      icon: Typicons.chart_line,
-    ),
-    HomeMenu(title: "Crytpo Transactions", icon: Typicons.social_github),
+        HomeMenu(
+          title: "Bank Transfer",
+          icon: Icons.compare_arrows_sharp,
+        ),
+        HomeMenu(
+          title: "Fund Wallet",
+          icon: Typicons.device_laptop,
+        ),
+        HomeMenu(
+          title: "Make Withdrawal",
+          icon: Typicons.flow_children,
+        ),
+        HomeMenu(
+          title: "Naira Wallet",
+          icon: Icons.account_balance_wallet,
+        ),
+        HomeMenu(
+          title: "P2P \n Exchange",
+          icon: Typicons.chart_line,
+        ),
+        HomeMenu(title: "Crytpo Transactions", icon: Typicons.social_github),
 
         HomeMenu(
           title: "Airtime To Cash",
@@ -132,7 +132,7 @@ class DemoData {
 
   static List<TextList> get text => [
         TextList(text: 'Mabro NGN Wallet'),
-        TextList(text: 'Bank transfer'),
+        //TextList(text: 'Bank transfer'),
       ];
 
   static List<CoinList> get coinlists => [
@@ -140,8 +140,22 @@ class DemoData {
             title: 'Bitcoin',
             image: 'assets/images/btc.jpg',
             subtitle: 'BTC',
-            rate: '19,780,207.92',
-            rise: '+ 1.50%',
+            nairaPrice: 'NGN 0.00',
+            coinPrice: '0 BTC',
+            usdRate: 'bitUSD'),
+        CoinList(
+            title: 'Litecoin',
+            image: 'assets/images/litecoin.png',
+            subtitle: 'LTC',
+            nairaPrice: 'NGN 0.00',
+            coinPrice: '0 LTC',
+            usdRate: 'bitUSD'),
+        CoinList(
+            title: 'Dogecoin',
+            image: 'assets/images/doge.png',
+            subtitle: 'DOGE',
+            nairaPrice: 'NGN 0.00',
+            coinPrice: '0 DOGE',
             usdRate: 'bitUSD'),
       ];
 
@@ -211,17 +225,16 @@ class CoinList {
   final String title;
   final String image;
   final String subtitle;
-  final String rise;
-  final String rate;
+  final String nairaPrice;
+  final String coinPrice;
   final String usdRate;
 
   CoinList({
     this.subtitle,
-    this.rise,
-    this.rate,
+    this.nairaPrice,
+    this.coinPrice,
     this.image,
     this.title,
     this.usdRate,
   });
 }
-

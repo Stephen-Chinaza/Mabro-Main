@@ -17,7 +17,7 @@ class HomeWallet extends StatefulWidget {
 class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
   String nairaBalance = '';
   String btcBalance = '';
-  var formatter = NumberFormat('#,##,000');
+  var formatter = NumberFormat("#,##0.00", "en_US");
 
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -25,7 +25,6 @@ class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
   }
 
@@ -45,7 +44,8 @@ class _HomeWalletState extends State<HomeWallet> with TickerProviderStateMixin {
       margin: EdgeInsets.only(bottom: 0),
       height: 150,
       width: double.infinity,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
         color: ColorConstants.primaryLighterColor,
       ),
       child: Padding(

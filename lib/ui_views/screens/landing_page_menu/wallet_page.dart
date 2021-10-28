@@ -23,7 +23,7 @@ class _WalletPageState extends State<WalletPage> {
   String nairaBalance = '';
   String dollarBalance = '';
   String btcBalance = '';
-  var formatter = NumberFormat('#,##,000');
+  var formatter = NumberFormat("#,##0.00", "en_US");
 
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
