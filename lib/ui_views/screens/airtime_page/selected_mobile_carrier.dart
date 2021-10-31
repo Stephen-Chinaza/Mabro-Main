@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_contacts/contact.dart';
 import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
@@ -12,6 +13,7 @@ import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/contact_page/contact_page.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
@@ -25,10 +27,12 @@ import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class SelectedMobileCarrierPage extends StatefulWidget {
-  String image, title, amount;
+  final Contact contact;
 
-  SelectedMobileCarrierPage({Key key, this.image, this.title})
-      : super(key: key);
+  SelectedMobileCarrierPage({
+    Key key,
+    this.contact = null,
+  }) : super(key: key);
   @override
   _SelectedMobileCarrierPageState createState() =>
       _SelectedMobileCarrierPageState();
@@ -56,6 +60,7 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
   String userId;
   String network;
   var formatter = NumberFormat('#,##,000');
+
   Future<void> getBalance() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
@@ -65,7 +70,6 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
     setState(() {});
   }
@@ -77,6 +81,14 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
     network = 'mtn';
     getBalance();
     pageState = false;
+
+    if (widget.contact == null) {
+      _phoneController.text = '';
+    } else {
+      _phoneController.text = widget.contact.phones.isNotEmpty
+          ? widget.contact.phones.first.number
+          : '(none)';
+    }
 
     providerImages = DemoData.images;
     beneficiaries = [
@@ -172,21 +184,26 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
                                       controller: _phoneController,
                                     ),
                                   ),
-                                  // Flexible(
-                                  //   flex: 1,
-                                  //   child: GestureDetector(
-                                  //     onTap: () {
-                                  //       kopenPage(context, ContactsPage());
-                                  //     },
-                                  //     child: Container(
-                                  //       child: Icon(
-                                  //         Icons.contact_phone,
-                                  //         size: 32,
-                                  //         color: Colors.orange,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // )
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    flex: 1,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        kopenPage(
+                                            context,
+                                            Contacts(
+                                              pageTitle: 'airtime',
+                                            ));
+                                      },
+                                      child: Container(
+                                        child: Icon(
+                                          Icons.contact_phone,
+                                          size: 40,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                               SizedBox(height: 20),

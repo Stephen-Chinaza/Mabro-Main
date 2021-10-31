@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   var mail, mail2;
   bool bankState;
   String accountNumber;
+  String nairaBalance;
 
   List colors = [Colors.purple, Colors.green, Colors.yellow, Colors.deepOrange];
   Random random = new Random();
@@ -84,12 +86,20 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  var formatter = NumberFormat("#,##0.00", "en_US");
+
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userId = (pref.getString('userId') ?? '');
     email = (pref.getString('email') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
     firstname = (pref.getString('first_name') ?? '');
+
+    nairaBalance = (pref.getString('nairaBalance') ?? '');
+
+    setState(() {
+      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+    });
 
     if (firstname == '') {
       username = '';
@@ -120,91 +130,305 @@ class _HomePageState extends State<HomePage> {
         physics: AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[
           _buildToolbar(context),
-          _buildMenuHeader(context, 'Quick access'),
-          menuOption(context, _scaffoldKey),
-          _buildSizedBox(5),
-          _buildPictureDisplay(),
+          _buildSizedBox(10),
+          _buildMenu(),
+          //menuOption(context, _scaffoldKey),
+          //_buildSizedBox(5),
+          //_buildPictureDisplay(),
         ],
       ),
     );
   }
 
+  SliverToBoxAdapter _buildMenu() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: _menuContainers(title: 'Mobile Transactions',
+            iconBg1: Colors.deepOrange,iconData1: Icons.cloud,menuTitle1: 'Buy Airtime',
+            page1: Container(),
+            iconBg2: ColorConstants.secondaryColor,iconData2: Icons.house_siding_sharp,
+            menuTitle2: 'Airtime 2 Cash',page2: Container(),
+            iconBg3: Colors.green,iconData3: Icons.drive_folder_upload,
+            menuTitle3: 'Buy Data',page3: Container()),
+      ),
+    );
+  }
   SliverToBoxAdapter _buildSizedBox(double height) {
     return SliverToBoxAdapter(
-      child: SizedBox(height: height),
+      child: SizedBox(height: height)
     );
   }
 
   SliverToBoxAdapter _buildToolbar(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        height: 270,
+        height: 440,
         child: Stack(
           children: [
             Container(
               child: Column(
                 children: <Widget>[
-                  Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16, left: 8.0),
-                      child: SafeArea(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  _scaffoldKey.currentState.openDrawer();
-                                },
-                                child: Icon(
-                                  Icons.menu,
-                                  size: 30,
-                                  color: ColorConstants.whiteLighterColor,
-                                )),
-                            SizedBox(width: 15),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  greetingMessage(),
-                                  style: TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: 18,
-                                    color: ColorConstants.whiteColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.start,
-                                ),
-                                Text(
-                                  username,
-                                  style: TextStyle(
-                                    fontStyle: FontStyle.normal,
-                                    fontSize: 18,
+                  Material(
+                    elevation: 20,
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16, left: 8.0),
+                        child: SafeArea(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    _scaffoldKey.currentState.openDrawer();
+                                  },
+                                  child: Icon(
+                                    Icons.menu,
+                                    size: 30,
                                     color: ColorConstants.whiteLighterColor,
+                                  )),
+                              SizedBox(width: 15),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    greetingMessage(),
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 18,
+                                      color: ColorConstants.secondaryColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.start,
                                   ),
-                                  textAlign: TextAlign.start,
-                                ),
-                              ],
-                            ),
-                          ],
+                                  Text(
+                                    username,
+                                    style: TextStyle(
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 18,
+                                      color: ColorConstants.whiteLighterColor,
+                                    ),
+                                    textAlign: TextAlign.start,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                      decoration: BoxDecoration(
+                        color: ColorConstants.primaryLighterColor,
+                      ),
+                      height: 90,
+                      width: MediaQuery.of(context).size.width,
                     ),
-                    decoration: BoxDecoration(
-                      color: ColorConstants.primaryColor,
-                    ),
-                    height: MediaQuery.of(context).size.height * 0.29,
-                    width: MediaQuery.of(context).size.width,
                   ),
                 ],
               ),
             ),
-            Positioned(top: 100, right: 4, left: 6, child: HomeWallet())
+            Positioned(
+                top: 100,
+                right: 0,
+                left: 0,
+                child: Material(
+                  elevation: 20,
+                  child: Container(
+                      height: 150,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          gradient: ColorConstants.primaryGradient1),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Image.asset('assets/images/naira.png',
+                                height: 40, width: 40),
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Wallet Balance',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              SizedBox(height: 8),
+                              Text(nairaBalance,
+                                  style: TextStyle(
+                                    color: Colors.green,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w900,
+                                  )),
+                            ],
+                          )
+                        ],
+                      )),
+                )),
+            Positioned(
+                top: 165,
+                right: 4,
+                left: 6,
+                child: _menuContainers(title: 'Banking Activities',
+    iconBg1: Colors.deepOrange,iconData1: Icons.cloud,menuTitle1: 'Mabro Transfer',
+                    page1: Container(),
+                  iconBg2: ColorConstants.secondaryColor,iconData2: Icons.house_siding_sharp,
+                    menuTitle2: 'Other Bank Transfer',page2: Container(),
+                    iconBg3: Colors.green,iconData3: Icons.drive_folder_upload,
+                    menuTitle3: 'Fund Wallet',page3: Container())),
+            // Positioned(top: 100, right: 4, left: 6, child: HomeWallet())
           ],
         ),
       ),
     );
   }
+
+  Widget _menuContainers(
+      {IconData iconData1, Color iconBg1, String title, String menuTitle1,
+        IconData iconData2, Color iconBg2, String menuTitle2,
+        IconData iconData3, Color iconBg3, String menuTitle3,
+        Widget page1, Widget page2,Widget page3,
+      }) {
+    return Container(
+      height: 270,
+      child: Material(
+          color: ColorConstants.primaryLighterColor,
+          elevation: 20,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    )),
+              ),
+              Divider(height: 8, color: ColorConstants.whiteLighterColor),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              kopenPage(context, page1);
+                            },
+                            child: Container(
+                              height: 100,
+                              width: 168,
+                              child: Material(
+                                color: ColorConstants.primaryColor,
+                                child:  _buildContent(menuTitle: menuTitle1,
+                                    iconBg: iconBg1,iconData: iconData1),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          GestureDetector(
+                            onTap: (){
+                              kopenPage(context, page2);
+                            },
+                            child: Container(
+                              height: 100,
+                              width: 168,
+                              child: Material(
+                                color: ColorConstants.primaryColor,
+                                child:  _buildContent(menuTitle: menuTitle2, iconBg: iconBg2,iconData: iconData3),
+
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: (){
+                        kopenPage(context, page3);
+                      },
+                      child: Container(
+                          height: 204,
+                          width: 160,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 3.0),
+                            child: Material(
+                              color: ColorConstants.primaryColor,
+                              child:  _buildContent(menuTitle: menuTitle3, iconBg: iconBg3,iconData: iconData3),
+
+                            ),
+                          )),
+                    ),
+                  )
+                ],
+              )
+            ],
+          )),
+    );
+  }
+
+  Widget _buildContent({IconData iconData, Color iconBg, String menuTitle}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: iconBg,
+
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: Icon(
+              iconData,
+              size: 20,
+              color: Colors.black.withOpacity(0.8),
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: double.infinity,
+            color: ColorConstants.transparent,
+            child: Center(
+              child: Text(
+                menuTitle,
+                style: TextStyle(
+                    color: ColorConstants.whiteColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  _openPage(Widget page){
+    kopenPage(context, page);
+  }
+
 
   SliverToBoxAdapter _buildMenuHeader(BuildContext context, String title) {
     return SliverToBoxAdapter(
@@ -1104,3 +1328,4 @@ class _HomePageState extends State<HomePage> {
     }
   }
 }
+

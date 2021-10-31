@@ -6,7 +6,6 @@ import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
-import 'package:mabro/ui_views/screens/airtime_page/selected_mobile_carrier.dart';
 import 'package:mabro/ui_views/widgets/bottomsheets/bottomsheet.dart';
 import 'package:mabro/ui_views/widgets/textfield/icon_textfield.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
@@ -104,12 +103,7 @@ class _SelectMobileCarrierState extends State<SelectMobileCarrier> {
                 image: providerImages[i].image,
                 title: providerImages[i].title,
                 onTapped: () {
-                   kbackBtn(context);
-                  kopenPage(
-                      context,
-                      SelectedMobileCarrierPage(
-                          image: providerImages[i].image,
-                          title: providerImages[i].title));
+                  kbackBtn(context);
                 });
           }),
     );
@@ -120,9 +114,9 @@ class _SelectMobileCarrierState extends State<SelectMobileCarrier> {
       children: [
         GestureDetector(
           onTap: () {
-                onTapped();
-              },
-                  child: Container(
+            onTapped();
+          },
+          child: Container(
             height: 60,
             decoration: BoxDecoration(
               color: Colors.white,

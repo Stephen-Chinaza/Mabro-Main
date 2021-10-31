@@ -7,7 +7,11 @@ Widget loadingPage({bool state = false}) {
     visible: state,
     child: Container(
       color: ColorConstants.primaryColor,
-      child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),)),
+      child: Center(
+          child: CircularProgressIndicator(
+        valueColor:
+            AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
+      )),
     ),
   );
 }

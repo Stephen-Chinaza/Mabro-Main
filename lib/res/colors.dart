@@ -27,9 +27,15 @@ class ColorConstants {
 
   static const primaryGradient = const LinearGradient(
     colors: const [secondaryColor, secondaryColor],
-    begin: const FractionalOffset(0.2, 0.2),
-    end: const FractionalOffset(1.0, 0.1),
-    stops: [0.0, 1.0],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    tileMode: TileMode.clamp,
+  );
+
+  static const primaryGradient1 = const LinearGradient(
+    colors: const [primaryColor, secondaryColor],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
     tileMode: TileMode.clamp,
   );
 

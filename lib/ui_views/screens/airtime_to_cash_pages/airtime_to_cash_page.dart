@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_contacts/contact.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:mabro/core/models/airtime_to_cash_info.dart';
@@ -8,6 +9,7 @@ import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/contact_page/contact_page.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
@@ -27,6 +29,7 @@ class AirtimeToCashPage extends StatefulWidget {
   final String gloTransfer;
   final String mobileChangePin;
   final String mobileTransfer;
+  final Contact contact;
 
   const AirtimeToCashPage(
       {Key key,
@@ -37,7 +40,8 @@ class AirtimeToCashPage extends StatefulWidget {
       this.gloChangePin,
       this.gloTransfer,
       this.mobileChangePin,
-      this.mobileTransfer})
+      this.mobileTransfer,
+      this.contact = null})
       : super(key: key);
   @override
   _AirtimeToCashPageState createState() => _AirtimeToCashPageState();
@@ -52,12 +56,12 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
   bool showTransactionInfo;
   String network;
   bool showTransfer, showPin;
-  TextEditingController phoneController = TextEditingController();
-  TextEditingController amountController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _amountController = TextEditingController();
   String email, userId;
   bool pageState;
-   String text1, text2;
-   IconData icon1, icon2;
+  String text1, text2;
+  IconData icon1, icon2;
 
   @override
   void initState() {
@@ -70,18 +74,21 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
     network = 'mtn';
     showTransfer = false;
     showPin = false;
-    // if (widget.phone == '') {
-    //   _name = '';
-    // } else {
-    //   _name = widget.phone;
-    // }
 
     _selectedIndex = 0;
     providerImages = DemoData.images;
 
     getData().then((value) => {
-      setState((){}),
-    });
+          setState(() {}),
+        });
+
+    if (widget.contact == null) {
+      _phoneController.text = '';
+    } else {
+      _phoneController.text = widget.contact.phones.isNotEmpty
+          ? widget.contact.phones.first.number
+          : '(none)';
+    }
   }
 
   _onSelected(int index) {
@@ -116,7 +123,6 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
               child: Container(
                 child: Column(
                   children: [
-
                     _topInfoContainer(),
                     SizedBox(height: 10),
                     _middleInfoContainer(),
@@ -129,15 +135,13 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                         textSize: 16,
                         textColor: ColorConstants.secondaryColor,
                         textValue:
-                        'only click on continue after you have transferred airtime ' +
-                            'to the above number within 6 mins otherwise click cancel',
+                            'only click on continue after you have transferred airtime ' +
+                                'to the above number within 6 mins otherwise click cancel',
                       ),
                     ),
                     SizedBox(height: 20),
 
-                    _bottomButton(
-                        ),
-
+                    _bottomButton(),
                   ],
                 ),
               ),
@@ -275,21 +279,47 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
                             }),
                       ),
                       SizedBox(height: 15),
-                      NormalFields(
-                        width: MediaQuery.of(context).size.width,
-                        hintText: 'Transferring from? (Phone number)',
-                        labelText: '',
-                        maxLength: 11,
-                        onChanged: (name) {},
-                        textInputType: TextInputType.number,
-                        controller: phoneController,
+                      Row(
+                        children: [
+                          Flexible(
+                            flex: 8,
+                            child: NormalFields(
+                              width: MediaQuery.of(context).size.width,
+                              hintText: 'Transferring from? (Phone number)',
+                              labelText: '',
+                              onChanged: (name) {},
+                              textInputType: TextInputType.number,
+                              controller: _phoneController,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Flexible(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: () {
+                                kopenPage(
+                                    context,
+                                    Contacts(
+                                      pageTitle: 'airtimeCash',
+                                    ));
+                              },
+                              child: Container(
+                                child: Icon(
+                                  Icons.contact_phone,
+                                  size: 40,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                       SizedBox(height: 15),
                       NormalFields(
                         hintText: 'Enter amount',
                         labelText: '',
                         textInputType: TextInputType.number,
-                        controller: amountController,
+                        controller: _amountController,
                         onChanged: (String text) {},
                       ),
                       SizedBox(height: 20),
@@ -436,13 +466,13 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
   void _submitInfo() async {
     String message = '';
 
-    if (phoneController.text.isEmpty) {
+    if (_phoneController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'please enter sender phone number',
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    } else if (amountController.text.isEmpty) {
+    } else if (_amountController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'please enter sent amount',
           context: context,
@@ -455,17 +485,17 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
         var map = Map<String, dynamic>();
         map['userId'] = userId;
         map['email_address'] = email;
-        map['amount'] = amountController.text;
-        map['phone_number'] = phoneController.text;
+        map['amount'] = _amountController.text;
+        map['phone_number'] = _phoneController.text;
         map['network'] = network;
 
         var response =
             await http.post(HttpService.rootAirCashSubmit, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
         }).timeout(const Duration(seconds: 15), onTimeout: () {
-              cPageState(state: false);
+          cPageState(state: false);
 
-              ShowSnackBar.showInSnackBar(
+          ShowSnackBar.showInSnackBar(
               value: 'The connection has timed out, please try again!',
               bgColor: ColorConstants.secondaryColor,
               context: context,
@@ -527,76 +557,72 @@ class _AirtimeToCashPageState extends State<AirtimeToCashPage> {
   }
 }
 
-
-
-  void showCustomDialog(BuildContext context,
-      {@required String title,
-      String okBtnText = "Submit",
-      String cancelBtnText = "Cancel",
-      Function okBtnFunction}) {
-    showDialog(
-        context: context,
-        builder: (BuildContext contxt) {
-          return AlertDialog(
-            title: Text(title, style: TextStyle(fontSize: 14)),
-            content: Builder(
-              builder: (context) {
-                return Container(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Stack(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/applogo.jpg')),
-                            ),
+void showCustomDialog(BuildContext context,
+    {@required String title,
+    String okBtnText = "Submit",
+    String cancelBtnText = "Cancel",
+    Function okBtnFunction}) {
+  showDialog(
+      context: context,
+      builder: (BuildContext contxt) {
+        return AlertDialog(
+          title: Text(title, style: TextStyle(fontSize: 14)),
+          content: Builder(
+            builder: (context) {
+              return Container(
+                width: double.infinity,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/applogo.jpg')),
                           ),
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Icon(Icons.close, size: 20),
-                          ),
-                        ],
-                      ),
-                      TextStyles.textDetails(
-                          textSize: 14,
-                          textValue:
-                              'Please upload images that are less than 2MB',
-                          textColor: ColorConstants.secondaryColor),
-                      SizedBox(height: 20),
-                      CustomButton(
-                        text: 'Use Camera',
-                        onPressed: () {},
-                      ),
-                      CustomButton(
-                        text: 'Upload File',
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        ),
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Icon(Icons.close, size: 20),
+                        ),
+                      ],
+                    ),
+                    TextStyles.textDetails(
+                        textSize: 14,
+                        textValue:
+                            'Please upload images that are less than 2MB',
+                        textColor: ColorConstants.secondaryColor),
+                    SizedBox(height: 20),
+                    CustomButton(
+                      text: 'Use Camera',
+                      onPressed: () {},
+                    ),
+                    CustomButton(
+                      text: 'Upload File',
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(okBtnText),
+              onPressed: okBtnFunction,
             ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text(okBtnText),
-                onPressed: okBtnFunction,
-              ),
-              FlatButton(
-                  child: Text(cancelBtnText),
-                  onPressed: () => Navigator.pop(contxt))
-            ],
-          );
-        });
-  }
-
+            FlatButton(
+                child: Text(cancelBtnText),
+                onPressed: () => Navigator.pop(contxt))
+          ],
+        );
+      });
+}
 
 Visibility textVisiblityDetails(
     String _text1, String _text2, String _text3, String _text4, bool state) {

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter_contacts/contact.dart';
 import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
@@ -12,6 +13,7 @@ import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/contact_page/contact_page.dart';
 import 'package:mabro/ui_views/widgets/bottomsheets/bottomsheet.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
@@ -27,8 +29,10 @@ import 'dart:convert';
 // ignore: must_be_immutable
 class SelectedElectricitySubPage extends StatefulWidget {
   String image, title, amount;
+  final Contact contact;
 
-  SelectedElectricitySubPage({Key key, this.image, this.title})
+  SelectedElectricitySubPage(
+      {Key key, this.image, this.title, this.contact = null})
       : super(key: key);
   @override
   _SelectedElectricitySubPageState createState() =>
@@ -64,7 +68,6 @@ class _SelectedElectricitySubPageState
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
     setState(() {});
   }
@@ -84,7 +87,7 @@ class _SelectedElectricitySubPageState
     pageState = false;
 
     _meterNumberController.text = '1111111111111';
-    _phoneController.text = '08011111111';
+    //_phoneController.text = '08011111111';
     _amountController.text = '2000';
     meterInitData = 'Prepaid';
     _meterTypeController.text = meterInitData;
@@ -96,6 +99,14 @@ class _SelectedElectricitySubPageState
     ];
     checkState = true;
     _selectedIndex = 0;
+
+    if (widget.contact == null) {
+      _phoneController.text = '';
+    } else {
+      _phoneController.text = widget.contact.phones.isNotEmpty
+          ? widget.contact.phones.first.number
+          : '(none)';
+    }
   }
 
   void dispose() {
@@ -239,13 +250,40 @@ class _SelectedElectricitySubPageState
                               controller: _meterNumberController,
                             ),
                             SizedBox(height: 15),
-                            NormalFields(
-                              width: MediaQuery.of(context).size.width,
-                              hintText: 'Phone number',
-                              labelText: '',
-                              onChanged: (name) {},
-                              textInputType: TextInputType.number,
-                              controller: _phoneController,
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 8,
+                                  child: NormalFields(
+                                    width: MediaQuery.of(context).size.width,
+                                    hintText: 'Phone number',
+                                    labelText: '',
+                                    onChanged: (name) {},
+                                    textInputType: TextInputType.number,
+                                    controller: _phoneController,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Flexible(
+                                  flex: 1,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      kopenPage(
+                                          context,
+                                          Contacts(
+                                            pageTitle: 'electricity',
+                                          ));
+                                    },
+                                    child: Container(
+                                      child: Icon(
+                                        Icons.contact_phone,
+                                        size: 40,
+                                        color: Colors.orange,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                             SizedBox(height: 15),
                             NormalFields(
@@ -546,19 +584,17 @@ class _SelectedElectricitySubPageState
           context: context,
           scaffoldKey: _scaffoldKey,
           timer: 5);
-    }
-    // else if (_pinController.text.isEmpty) {
-    //   ShowSnackBar.showInSnackBar(
-    //       value: 'Enter transaction pin',
-    //       context: context,
-    //       scaffoldKey: _scaffoldKey);
-    // } else if (userPin != _pinController.text) {
-    //   ShowSnackBar.showInSnackBar(
-    //       value: 'Invalid pin entered',
-    //       context: context,
-    //       scaffoldKey: _scaffoldKey);
-    // }
-    else {
+    } else if (_pinController.text.isEmpty) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Enter transaction pin',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else if (userPin != _pinController.text) {
+      ShowSnackBar.showInSnackBar(
+          value: 'Invalid pin entered',
+          context: context,
+          scaffoldKey: _scaffoldKey);
+    } else {
       cPageState(state: true);
       try {
         var map = Map<String, dynamic>();

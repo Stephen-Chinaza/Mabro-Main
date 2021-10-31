@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_contacts/contact.dart';
 import 'package:intl/intl.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
@@ -16,6 +17,7 @@ import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/contact_page/contact_page.dart';
 import 'package:mabro/ui_views/widgets/bottomsheets/bottomsheet.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
@@ -32,8 +34,11 @@ import 'package:http/http.dart' as http;
 // ignore: must_be_immutable
 class SelectedDataRechargePage extends StatefulWidget {
   String image, title, amount;
+  final Contact contact;
 
-  SelectedDataRechargePage({Key key, this.image, this.title}) : super(key: key);
+  SelectedDataRechargePage(
+      {Key key, this.image, this.title, this.contact = null})
+      : super(key: key);
   @override
   _SelectedDataRechargePageState createState() =>
       _SelectedDataRechargePageState();
@@ -71,7 +76,6 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
     setState(() {});
   }
@@ -98,6 +102,14 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
     ];
     checkState = true;
     _selectedIndex = 0;
+
+    if (widget.contact == null) {
+      _phoneController.text = '';
+    } else {
+      _phoneController.text = widget.contact.phones.isNotEmpty
+          ? widget.contact.phones.first.number
+          : '(none)';
+    }
   }
 
   _onSelected(int index) {
@@ -179,21 +191,26 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
                                       controller: _phoneController,
                                     ),
                                   ),
-                                  // Flexible(
-                                  //   flex: 1,
-                                  //   child: GestureDetector(
-                                  //     onTap: () {
-                                  //       kopenPage(context, ContactsPage());
-                                  //     },
-                                  //     child: Container(
-                                  //       child: Icon(
-                                  //         Icons.contact_phone,
-                                  //         size: 32,
-                                  //         color: Colors.orange,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // )
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    flex: 1,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        kopenPage(
+                                            context,
+                                            Contacts(
+                                              pageTitle: 'data',
+                                            ));
+                                      },
+                                      child: Container(
+                                        child: Icon(
+                                          Icons.contact_phone,
+                                          size: 40,
+                                          color: Colors.orange,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                                 ],
                               ),
                               SizedBox(height: 20),
@@ -750,7 +767,7 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
                 context: context,
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
-                String balance = data.data.balance.toString();
+            String balance = data.data.balance.toString();
 
             SharedPrefrences.addStringToSP("nairaBalance", balance);
           } else if (!status) {
