@@ -141,6 +141,7 @@ class DemoData {
             image: 'assets/images/btc.jpg',
             subtitle: 'BTC',
             nairaPrice: 'NGN 0.00',
+            color: Colors.orange,
             coinPrice: '0 BTC',
             usdRate: 'bitUSD'),
         CoinList(
@@ -148,6 +149,7 @@ class DemoData {
             image: 'assets/images/litecoin.png',
             subtitle: 'LTC',
             nairaPrice: 'NGN 0.00',
+            color: Colors.blue,
             coinPrice: '0 LTC',
             usdRate: 'bitUSD'),
         CoinList(
@@ -155,6 +157,7 @@ class DemoData {
             image: 'assets/images/doge.png',
             subtitle: 'DOGE',
             nairaPrice: 'NGN 0.00',
+            color: Colors.yellow,
             coinPrice: '0 DOGE',
             usdRate: 'bitUSD'),
       ];
@@ -228,8 +231,10 @@ class CoinList {
   final String nairaPrice;
   final String coinPrice;
   final String usdRate;
+  final Color color;
 
-  CoinList({
+  CoinList( {
+    this.color,
     this.subtitle,
     this.nairaPrice,
     this.coinPrice,

@@ -234,7 +234,7 @@ class _CreateSellingAdsPageState extends State<CreateSellingAdsPage>  with Singl
                         GestureDetector(
                           onTap: () {
                             showInfoDialog(
-                                 120.0, Text(
+                                120.0, Text(
                                 'The price has been accounted with trading fee (buyer pay the fee).',
                                 style: TextStyle(color: ColorConstants.secondaryColor,
                                     fontSize: 12)));
@@ -264,7 +264,7 @@ class _CreateSellingAdsPageState extends State<CreateSellingAdsPage>  with Singl
                         GestureDetector(
                           onTap: () {
                             showInfoDialog(
-                                 120.0, Text('This is the '+ widget.coinType + ' current price at CoinBase ' +
+                                120.0, Text('This is the '+ widget.coinType + ' current price at CoinBase ' +
                                 widget.coinSign +
                                 ' rate (37951.09). The price will fluctuate when CoinBase ' +
                                 widget.coinSign + ' rate changes.',
@@ -316,8 +316,8 @@ class _CreateSellingAdsPageState extends State<CreateSellingAdsPage>  with Singl
                         GestureDetector(
                           onTap: () {
                             showInfoDialog(120.0, Text('Maximum ' + widget.coinSign + ' amount in one trade',
-                            style: TextStyle(color: ColorConstants.secondaryColor,
-                                fontSize: 12,)));
+                                style: TextStyle(color: ColorConstants.secondaryColor,
+                                  fontSize: 12,)));
                           },
                           child: Icon(
                             Icons.info,
@@ -460,19 +460,19 @@ class _CreateSellingAdsPageState extends State<CreateSellingAdsPage>  with Singl
                     SizedBox(height: 20),
                     Row(children: [
                       Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 2.0),
-                          child: CustomButton(
-                              margin: 0,
-                              height: 30,
-                              width: 160,
-                              disableButton: true,
-                              onPressed: (){
-                                kbackBtn(context);
-                              },
-                              text: 'Cancel'),
-                        )),
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 2.0),
+                            child: CustomButton(
+                                margin: 0,
+                                height: 30,
+                                width: 160,
+                                disableButton: true,
+                                onPressed: (){
+                                  kbackBtn(context);
+                                },
+                                text: 'Cancel'),
+                          )),
                       Expanded(
                         flex: 4,
                         child: Padding(
@@ -599,7 +599,7 @@ class _CreateSellingAdsPageState extends State<CreateSellingAdsPage>  with Singl
                     Row(
                       children: [
                         Text(
-                             'bitUSD Price: ',
+                            'bitUSD Price: ',
                             style: TextStyle(color: ColorConstants.secondaryColor,
                                 fontSize: 12)),
                         SizedBox(
@@ -957,7 +957,7 @@ class _CreateSellingAdsPageState extends State<CreateSellingAdsPage>  with Singl
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Widgets,
-                          ),
+                        ),
 
 
 

@@ -1,9 +1,11 @@
+import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/models/login_user.dart';
 import 'package:mabro/core/models/transfer_fund.dart';
 import 'package:mabro/core/models/verify_transfer.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -67,12 +69,41 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
         });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: TopBar(
+        backgroundColorStart: ColorConstants.primaryColor,
+        backgroundColorEnd: ColorConstants.secondaryColor,
+        title: 'Mabro Transfer',
+        icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+        onPressed: null,
+        textColor: Colors.white,
+        iconColor: Colors.white,
+      ),
+      backgroundColor: ColorConstants.primaryColor,
+      bottomNavigationBar: bottomNav(),
+      body: (pageState)
+          ? loadingPage(state: pageState)
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(children: <Widget>[
+                  SafeArea(child: SizedBox(height: 5)),
+                  _buildTransferForm(context),
+                ]),
+              ),
+            ),
+    );
+  }
+
   Widget _buildTransferForm(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: MediaQuery.of(context).size.height,
+          height: MediaQuery.of(context).size.height - 120,
           child: Card(
             color: ColorConstants.primaryLighterColor,
             child: Padding(
@@ -119,20 +150,6 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
                           },
                           text: 'Continue'),
                       SizedBox(height: 25),
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.lock,
-                                color: ColorConstants.whiteLighterColor),
-                            SizedBox(width: 5),
-                            Text(
-                              'Transfer secured by Mabro',
-                              style: TextStyle(
-                                  color: ColorConstants.secondaryColor,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w200),
-                            ),
-                          ])
                     ]),
               ),
             ),
@@ -140,6 +157,23 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
         ),
         //Expanded(child: Container()),
       ],
+    );
+  }
+
+  Widget bottomNav() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Icon(Icons.lock, size: 18, color: Colors.purple),
+        SizedBox(width: 2),
+        Text(
+          'Transfer secured by Mabro',
+          style: TextStyle(
+              color: ColorConstants.secondaryColor,
+              fontSize: 14.0,
+              fontWeight: FontWeight.w200),
+        ),
+      ]),
     );
   }
 
@@ -291,7 +325,11 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
                 scaffoldKey: _scaffoldKey,
                 timer: 5);
 
+            _emailController.text = '';
+            _amountController.text = '';
+
             SharedPrefrences.addStringToSP("nairaBalance", balance);
+            _redirectuser();
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 bgColor: ColorConstants.secondaryColor,
@@ -328,32 +366,10 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: TopBar(
-        backgroundColorStart: ColorConstants.primaryColor,
-        backgroundColorEnd: ColorConstants.secondaryColor,
-        title: 'Mabro Transfer',
-        icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-        onPressed: null,
-        textColor: Colors.white,
-        iconColor: Colors.white,
-      ),
-      backgroundColor: ColorConstants.primaryColor,
-      body: (pageState)
-          ? loadingPage(state: pageState)
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Column(children: <Widget>[
-                  SafeArea(child: SizedBox(height: 5)),
-                  _buildTransferForm(context),
-                ]),
-              ),
-            ),
-    );
+  void _redirectuser() {
+    Future.delayed(Duration(seconds: 3), () {
+      pushPage(context, LandingPage());
+    });
   }
 
   void showInfoDialog(double height, Widget Widgets,

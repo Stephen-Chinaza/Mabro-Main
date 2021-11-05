@@ -21,24 +21,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BtcP2PBuySell extends StatefulWidget {
   final bool buyInputState, sellInputState;
   final String cointitle,
-      exchangeRate,
-      defaultCurrency,
       buyingPrice,
       sellingPrice,
       usdBuyingPrice,
-      usdSellingPrice;
+      usdSellingPrice,coinImage,
+      coinSign;
+
 
   const BtcP2PBuySell(
       {Key key,
       this.buyInputState = false,
       this.sellInputState = false,
       this.cointitle,
-      this.exchangeRate,
-      this.defaultCurrency,
       this.buyingPrice,
       this.sellingPrice,
       this.usdBuyingPrice,
-      this.usdSellingPrice})
+      this.usdSellingPrice, this.coinImage, this.coinSign})
       : super(key: key);
   @override
   _BtcP2PBuySellState createState() => _BtcP2PBuySellState();
@@ -79,7 +77,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
     defaultCoinImage = 'assets/images/btc.jpg';
     defaultCoinTitle = 'Bitcoin';
     defaultCoinSubTitle = 'BTC';
-    defaultUSDRate = widget.exchangeRate;
+    defaultUSDRate = '';
     defaultSellingPrice = widget.sellingPrice;
     defaultBuyingPrice = widget.buyingPrice;
     defaultusdBuyingPrice = widget.usdBuyingPrice;
@@ -102,7 +100,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
     showProgress = false;
     toogleCurrency = true;
 
-    inputCurrencyType = widget.defaultCurrency;
+    inputCurrencyType = 'NGN';
   }
 
   @override
@@ -654,27 +652,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           _UserAdsContainer(idColor: Colors.red[900]),
                         ]),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.info,
-                              color: ColorConstants.lighterSecondaryColor,
-                              size: 30,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Expanded(
-                                child: Text(
-                                    'Receive Bitcoin within 15 minutes or be refunded.',
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.whiteLighterColor))),
-                          ],
-                        ),
-                      ),
+
                       Container(
                         color: ColorConstants.primaryColor,
                         width: size.width,

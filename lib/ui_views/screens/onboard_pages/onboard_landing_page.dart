@@ -16,11 +16,11 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstants.primaryColor,
-      body: onBoradingBody(),
+      body: onBoardingBody(),
     );
   }
 
-  Widget onBoradingBody() => Container(
+  Widget onBoardingBody() => Container(
         child: OnBoardingLayoutView(userPin: widget.userPin),
       );
 }

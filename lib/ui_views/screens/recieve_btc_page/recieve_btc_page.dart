@@ -56,7 +56,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
   Color right = ColorConstants.whiteColor;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String title;
-  String walletAddress, user;
+  String walletAddress, userId;
   bool hideScanner;
   final dialogContextCompleter = Completer<BuildContext>();
 
@@ -71,7 +71,7 @@ class _ReceiveBtcPageState extends State<ReceiveBtcPage>
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    user = (pref.getString('user') ?? '');
+    userId = (pref.getString('userId') ?? '');
     walletAddress = (pref.getString('bitcoin_address') ??
         '3FZbgi29cpjq2GjdwV8eyHuJJnKLtktZc5');
 

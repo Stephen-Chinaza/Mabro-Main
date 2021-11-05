@@ -69,7 +69,7 @@ class _OnBoardingLayoutView extends State<OnBoardingLayoutView> {
                       bottom: 0.0,
                       top: MediaQuery.of(context).size.height * 0.28),
                   child: inFinalPage()
-                      ? GetStartedButton()
+                      ? GetStartedButton(userPin: widget.userPin)
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

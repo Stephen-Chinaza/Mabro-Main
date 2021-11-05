@@ -54,7 +54,8 @@ dependencies:
   #webviewx: ^0.2.1
   plugin_platform_interface: ^2.0.2
   flutter_contacts: ^1.1.1+2
-  #webview_flutter: ^2.1.1
+  webview_flutter: ^2.1.2
+  carousel_slider: ^4.0.0
 
 
 dev_dependencies:

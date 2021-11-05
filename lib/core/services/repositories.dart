@@ -98,7 +98,7 @@ class HttpService {
       Uri.parse('https://mabro.ng/dev2/_app/naira-wallet/verify-OTP');
 
   //P2p Urls
-  static var rootP2PUserInfo = Uri.parse('https://mabro.ng/dev2/exchange/info');
+  static var rootP2PUserInfo = Uri.parse('https://mabro.ng/dev2/exchange/info/coins');
   static var rootCreateBuyAdInfo =
       Uri.parse('https://mabro.ng/dev2/exchange/btc/buy/create-ad/save');
 

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/core/helpers/sharedprefrences.dart';
 import 'package:mabro/core/models/airtime_to_cash_info.dart';
@@ -19,6 +20,7 @@ import 'package:mabro/ui_views/screens/airtime_page/selected_mobile_carrier.dart
 import 'package:mabro/ui_views/screens/airtime_to_cash_pages/airtime_to_cash_page.dart';
 import 'package:mabro/ui_views/screens/bank_transfer/other_bank_transfer.dart';
 import 'package:mabro/ui_views/screens/btc_p2p_pages/p2p_buy_sell_page.dart';
+import 'package:mabro/ui_views/screens/coin_exchange_page/coin_exchange.dart';
 import 'package:mabro/ui_views/screens/education_page/selected_education_sub.dart';
 import 'package:mabro/ui_views/screens/lock_screen_page/main_lock_screen.dart';
 import 'package:mabro/ui_views/screens/mabro_transfer_page/mabro_transfer.dart';
@@ -53,10 +55,11 @@ class _HomePageState extends State<HomePage> {
   var mail, mail2;
   bool bankState;
   String accountNumber;
-  String nairaBalance;
+  String nairaBalance = '';
 
-  List colors = [Colors.purple, Colors.green, Colors.yellow, Colors.deepOrange];
-  Random random = new Random();
+  List<CoinList> coinList = [];
+
+  String saleStatus = 'p2pBuy';
 
   @override
   void initState() {
@@ -68,6 +71,8 @@ class _HomePageState extends State<HomePage> {
     mail2 = '';
     bankState = false;
     getData();
+
+    coinList = DemoData.coinlists;
 
     getUserInfo();
   }
@@ -131,7 +136,14 @@ class _HomePageState extends State<HomePage> {
         slivers: <Widget>[
           _buildToolbar(context),
           _buildSizedBox(10),
-          _buildMenu(),
+          _buildMenu1(),
+          _buildSizedBox(10),
+          _buildWallet(),
+          _buildSizedBox(10),
+          _buildMenu2(),
+          _buildSizedBox(10),
+          _buildMenu3(),
+
           //menuOption(context, _scaffoldKey),
           //_buildSizedBox(5),
           //_buildPictureDisplay(),
@@ -140,23 +152,179 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  SliverToBoxAdapter _buildMenu() {
+  SliverToBoxAdapter _buildMenu1() {
     return SliverToBoxAdapter(
       child: Padding(
         padding: const EdgeInsets.all(3.0),
-        child: _menuContainers(title: 'Mobile Transactions',
-            iconBg1: Colors.deepOrange,iconData1: Icons.cloud,menuTitle1: 'Buy Airtime',
-            page1: Container(),
-            iconBg2: ColorConstants.secondaryColor,iconData2: Icons.house_siding_sharp,
-            menuTitle2: 'Airtime 2 Cash',page2: Container(),
-            iconBg3: Colors.green,iconData3: Icons.drive_folder_upload,
-            menuTitle3: 'Buy Data',page3: Container()),
+        child: _menuContainers(
+          title: 'Mobile Transactions',
+          iconBg1: Colors.yellow,
+          iconData1: Typicons.device_phone,
+          menuTitle1: 'Buy Airtime',
+          page1: SelectedMobileCarrierPage(),
+          iconBg2: Colors.blue,
+          iconData2: Icons.money,
+          menuTitle2: 'Airtime 2 Cash',
+          page2: AirtimeToCashPage(),
+          iconBg3: Colors.purple,
+          iconData3: Typicons.compass,
+          menuTitle3: 'Buy Data',
+          page3: SelectedDataRechargePage(),
+        ),
       ),
     );
   }
-  SliverToBoxAdapter _buildSizedBox(double height) {
+
+  SliverToBoxAdapter _buildMenu2() {
     return SliverToBoxAdapter(
-      child: SizedBox(height: height)
+        child: Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: _menuContainers2(
+        title: 'Bill Payment',
+        iconBg1: Colors.orange,
+        iconData1: Typicons.device_phone,
+        menuTitle1: 'Tv Subscription',
+        page1: SelectedCableTvPage(),
+        iconBg2: ColorConstants.secondaryColor,
+        iconData2: Icons.money,
+        menuTitle2: 'Electricity Bill',
+        page2: SelectedElectricitySubPage(),
+        menuHeight: 130,
+        containerHeight: 190,
+      ),
+    ));
+  }
+
+  SliverToBoxAdapter _buildMenu3() {
+    return SliverToBoxAdapter(
+        child: Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: _menuContainers2(
+        title: 'P2P Exchange',
+        iconBg1: Colors.green,
+        iconData1: Icons.attribution_outlined,
+        menuTitle1: 'Buy',
+        function: true,
+        iconBg2: ColorConstants.secondaryColor,
+        iconData2: Icons.account_tree_sharp,
+        menuTitle2: 'Sell',
+        tap1: _p2PUserInfo,
+        tap2: _p2PUserInfo,
+        menuHeight: 130,
+        containerHeight: 190,
+      ),
+    ));
+  }
+
+  SliverToBoxAdapter _buildSizedBox(double height) {
+    return SliverToBoxAdapter(child: SizedBox(height: height));
+  }
+
+  SliverToBoxAdapter _buildWallet() {
+    return SliverToBoxAdapter(
+      child: Container(
+          child: CarouselSlider.builder(
+        itemCount: coinList.length + 1,
+        options: CarouselOptions(
+          aspectRatio: 3.0,
+          pageSnapping: true,
+          enlargeCenterPage: false,
+          viewportFraction: 0.6,
+          pauseAutoPlayOnTouch: true,
+          autoPlayCurve: Curves.linear,
+          autoPlayInterval: const Duration(seconds: 2),
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          disableCenter: true,
+          enableInfiniteScroll: true,
+          autoPlay: true,
+        ),
+        itemBuilder: (ctx, index, realIdx) {
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                saleStatus = 'exchange';
+              });
+              (index == 0)
+                  ? kopenPage(
+                      context,
+                      NairaWalletPage(
+                        user: userId,
+                      ),
+                    )
+                  : _p2PUserInfo(
+                      index: index,
+                      image: coinList[index - 1].image,
+                      coinTitle: coinList[index - 1].subtitle);
+            },
+            child: Container(
+              height: 100,
+              width: 150,
+              child: Card(
+                  color: ColorConstants.primaryLighterColor,
+                  child: (index == 0)
+                      ? _buildWalletItem(
+                          coinName: 'Naira Wallet',
+                          nairaEquivalent: nairaBalance,
+                          image: 'assets/images/naira.png',
+                          coinColor: Colors.green,
+                          coinBalance: 'Balance')
+                      : _buildWalletItem(
+                          coinName: coinList[index - 1].title + ' Balance',
+                          nairaEquivalent: coinList[index - 1].nairaPrice,
+                          image: coinList[index - 1].image,
+                          coinBalance: coinList[index - 1].coinPrice,
+                          coinColor: coinList[index - 1].color)),
+            ),
+          );
+        },
+      )),
+    );
+  }
+
+  Widget _buildWalletItem(
+      {String coinName,
+      String nairaEquivalent,
+      String image,
+      String coinBalance,
+      Color coinColor}) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                coinName,
+                style: TextStyle(
+                    color: ColorConstants.whiteLighterColor,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(height: 12),
+              Text(
+                nairaEquivalent,
+                style: TextStyle(
+                    color: ColorConstants.whiteColor,
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w800),
+              ),
+              SizedBox(height: 2),
+              Text(
+                coinBalance,
+                style: TextStyle(
+                    color: coinColor,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, left: 14),
+            child: Image.asset(image, height: 40, width: 40),
+          ),
+        ],
+      ),
     );
   }
 
@@ -270,15 +438,25 @@ class _HomePageState extends State<HomePage> {
                 )),
             Positioned(
                 top: 165,
-                right: 4,
-                left: 6,
-                child: _menuContainers(title: 'Banking Activities',
-    iconBg1: Colors.deepOrange,iconData1: Icons.cloud,menuTitle1: 'Mabro Transfer',
-                    page1: Container(),
-                  iconBg2: ColorConstants.secondaryColor,iconData2: Icons.house_siding_sharp,
-                    menuTitle2: 'Other Bank Transfer',page2: Container(),
-                    iconBg3: Colors.green,iconData3: Icons.drive_folder_upload,
-                    menuTitle3: 'Fund Wallet',page3: Container())),
+                right: 1,
+                left: 1,
+                child: _menuContainers(
+                  title: 'Banking Activities',
+                  iconBg1: Colors.deepOrange,
+                  iconData1: Icons.transfer_within_a_station,
+                  menuTitle1: 'Mabro Transfer',
+                  page1: MabroTransferPage(),
+                  iconBg2: ColorConstants.secondaryColor,
+                  iconData2: Icons.house_siding_sharp,
+                  menuTitle2: 'Other Bank Transfer',
+                  page2: BankTransferPage(),
+                  iconBg3: Colors.green,
+                  iconData3: Typicons.device_laptop,
+                  menuTitle3: 'Fund Wallet',
+                  page3: DepositWithdrawPage(
+                    indexNum: 0,
+                  ),
+                )),
             // Positioned(top: 100, right: 4, left: 6, child: HomeWallet())
           ],
         ),
@@ -287,13 +465,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _menuContainers(
-      {IconData iconData1, Color iconBg1, String title, String menuTitle1,
-        IconData iconData2, Color iconBg2, String menuTitle2,
-        IconData iconData3, Color iconBg3, String menuTitle3,
-        Widget page1, Widget page2,Widget page3,
-      }) {
+      {IconData iconData1,
+      Color iconBg1,
+      String title,
+      String menuTitle1,
+      IconData iconData2,
+      Color iconBg2,
+      String menuTitle2,
+      IconData iconData3,
+      Color iconBg3,
+      String menuTitle3,
+      Widget page1,
+      Widget page2,
+      Widget page3,
+      double containerHeight = 270,
+      double menuHeight = 100}) {
     return Container(
-      height: 270,
+      height: containerHeight,
       child: Material(
           color: ColorConstants.primaryLighterColor,
           elevation: 20,
@@ -320,16 +508,18 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               kopenPage(context, page1);
                             },
                             child: Container(
-                              height: 100,
+                              height: menuHeight,
                               width: 168,
                               child: Material(
                                 color: ColorConstants.primaryColor,
-                                child:  _buildContent(menuTitle: menuTitle1,
-                                    iconBg: iconBg1,iconData: iconData1),
+                                child: _buildContent(
+                                    menuTitle: menuTitle1,
+                                    iconBg: iconBg1,
+                                    iconData: iconData1),
                               ),
                             ),
                           ),
@@ -337,16 +527,18 @@ class _HomePageState extends State<HomePage> {
                             height: 5,
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               kopenPage(context, page2);
                             },
                             child: Container(
-                              height: 100,
+                              height: menuHeight,
                               width: 168,
                               child: Material(
                                 color: ColorConstants.primaryColor,
-                                child:  _buildContent(menuTitle: menuTitle2, iconBg: iconBg2,iconData: iconData3),
-
+                                child: _buildContent(
+                                    menuTitle: menuTitle2,
+                                    iconBg: iconBg2,
+                                    iconData: iconData2),
                               ),
                             ),
                           ),
@@ -359,20 +551,127 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         kopenPage(context, page3);
                       },
                       child: Container(
                           height: 204,
                           width: 160,
                           child: Padding(
-                            padding: const EdgeInsets.only(right: 3.0),
+                            padding: const EdgeInsets.only(right: 4.0),
                             child: Material(
                               color: ColorConstants.primaryColor,
-                              child:  _buildContent(menuTitle: menuTitle3, iconBg: iconBg3,iconData: iconData3),
-
+                              child: _buildContent(
+                                  menuTitle: menuTitle3,
+                                  iconBg: iconBg3,
+                                  iconData: iconData3),
                             ),
                           )),
+                    ),
+                  )
+                ],
+              )
+            ],
+          )),
+    );
+  }
+
+  Widget _menuContainers2({
+    IconData iconData1,
+    Color iconBg1,
+    String title,
+    bool function = false,
+    String menuTitle1,
+    IconData iconData2,
+    Color iconBg2,
+    String menuTitle2,
+    double containerHeight = 270,
+    double menuHeight = 100,
+    Widget page1,
+    Widget page2,
+    Function tap1,
+    Function tap2,
+  }) {
+    return Container(
+      height: containerHeight,
+      child: Material(
+          color: ColorConstants.primaryLighterColor,
+          elevation: 20,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    )),
+              ),
+              Divider(height: 8, color: ColorConstants.whiteLighterColor),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                saleStatus = 'p2pBuy';
+                              });
+
+                              (function == false)
+                                  ? kopenPage(context, page1)
+                                  : tap1();
+                            },
+                            child: Container(
+                              height: menuHeight,
+                              width: 168,
+                              child: Material(
+                                color: ColorConstants.primaryColor,
+                                child: _buildContent(
+                                    menuTitle: menuTitle1,
+                                    iconBg: iconBg1,
+                                    iconData: iconData1),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          saleStatus = 'p2pSell';
+                        });
+                        (function == false)
+                            ? kopenPage(context, page2)
+                            : tap2();
+                      },
+                      child: Container(
+                        height: menuHeight,
+                        width: 168,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 4.0),
+                          child: Material(
+                            color: ColorConstants.primaryColor,
+                            child: _buildContent(
+                                menuTitle: menuTitle2,
+                                iconBg: iconBg2,
+                                iconData: iconData2),
+                          ),
+                        ),
+                      ),
                     ),
                   )
                 ],
@@ -392,7 +691,6 @@ class _HomePageState extends State<HomePage> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: iconBg,
-
           ),
           child: Padding(
             padding: const EdgeInsets.all(6.0),
@@ -425,10 +723,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _openPage(Widget page){
+  _openPage(Widget page) {
     kopenPage(context, page);
   }
-
 
   SliverToBoxAdapter _buildMenuHeader(BuildContext context, String title) {
     return SliverToBoxAdapter(
@@ -490,7 +787,7 @@ class _HomePageState extends State<HomePage> {
             onTap: () {
               checkedItem = index;
               if (checkedItem == 5) {
-                _p2PUserInfo();
+                //_p2PUserInfo();
               } else if (checkedItem == 7) {
                 _airtime2CashInfo();
               } else {
@@ -857,22 +1154,20 @@ class _HomePageState extends State<HomePage> {
                 _buildRow("Contact us",
                     icon: Icons.phone,
                     page: ContactUs(
-                        cardColor: Colors.white,
+                        cardColor: ColorConstants.primaryColor,
                         textColor: ColorConstants.secondaryColor,
                         //logo: AssetImage('assets/images/mbl2.png'),
-                        email: 'adoshi26.ad@gmail.com',
-                        companyName: 'Abhishek Doshi',
+                        email: 'mabro@gmail.com',
+                        companyName: 'Mabro',
                         companyColor: ColorConstants.secondaryColor,
                         phoneNumber: '+917818044311',
                         website: 'https://google.com',
-                        githubUserName: 'AbhishekDoshi26',
-                        linkedinURL:
-                            'https://www.linkedin.com/in/abhishek-doshi-520983199/',
-                        tagLine: 'Mabro Connect',
+                        linkedinURL: 'Mabro',
+                        tagLine: 'Mabro Contacts',
                         taglineColor: ColorConstants.secondaryColor,
-                        twitterHandle: 'AbhishekDoshi26',
-                        instagram: '_abhishek_doshi',
-                        facebookHandle: '_abhishek_doshi')),
+                        twitterHandle: 'Mabro',
+                        instagram: 'Mabro',
+                        facebookHandle: 'Mabro')),
                 _buildRow("FAQ", icon: Icons.info_outline, page: FAQPage()),
                 SizedBox(height: 10),
                 GestureDetector(
@@ -1098,7 +1393,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _userInfo() async {
+  _userInfo() async {
     String message;
     try {
       var map = Map<String, dynamic>();
@@ -1261,7 +1556,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _p2PUserInfo() async {
+  _p2PUserInfo({int index, String image, String coinTitle}) async {
     String message;
     try {
       var map = Map<String, dynamic>();
@@ -1289,22 +1584,57 @@ class _HomePageState extends State<HomePage> {
         message = p2pExchangeDetails.message;
 
         if (status) {
-          kopenPage(
+          if (saleStatus == 'p2pBuy') {
+            kopenPage(
+                context,
+                BtcP2PBuySell(
+                  buyInputState: true,
+                  buyingPrice:
+                      p2pExchangeDetails.data[0].buyingPrice.toString(),
+                  sellingPrice:
+                      p2pExchangeDetails.data[0].sellingPrice.toString(),
+                  usdBuyingPrice:
+                      p2pExchangeDetails.data[0].usdBuyingPrice.toString(),
+                  usdSellingPrice:
+                      p2pExchangeDetails.data[0].usdSellingPrice.toString(),
+                ));
+          } else if (saleStatus == 'p2pSell') {
+            kopenPage(
+                context,
+                BtcP2PBuySell(
+                  sellInputState: true,
+                  buyingPrice:
+                      p2pExchangeDetails.data[0].buyingPrice.toString(),
+                  sellingPrice:
+                      p2pExchangeDetails.data[0].sellingPrice.toString(),
+                  usdBuyingPrice:
+                      p2pExchangeDetails.data[0].usdBuyingPrice.toString(),
+                  usdSellingPrice:
+                      p2pExchangeDetails.data[0].usdSellingPrice.toString(),
+                ));
+          } else if (saleStatus == 'exchange') {
+            print(index - 1);
+            kopenPage(
               context,
-              BtcP2PBuySell(
+              CoinExchange(
+                coinName: (index == 0)
+                    ? coinList[index].title
+                    : coinList[index - 1].title,
                 buyingPrice:
-                    p2pExchangeDetails.data.bitcoin.buyingPrice.toString(),
+                    p2pExchangeDetails.data[index - 1].buyingPrice.toString(),
                 sellingPrice:
-                    p2pExchangeDetails.data.bitcoin.sellingPrice.toString(),
-                usdBuyingPrice:
-                    p2pExchangeDetails.data.bitcoin.usdBuyingPrice.toString(),
-                usdSellingPrice:
-                    p2pExchangeDetails.data.bitcoin.usdSellingPrice.toString(),
-                exchangeRate:
-                    p2pExchangeDetails.data.basic.exchangeRate.toString(),
-                defaultCurrency:
-                    p2pExchangeDetails.data.basic.defaultCurrency.toString(),
-              ));
+                    p2pExchangeDetails.data[index - 1].sellingPrice.toString(),
+                usdBuyingPrice: p2pExchangeDetails
+                    .data[index - 1].usdBuyingPrice
+                    .toString(),
+                usdSellingPrice: p2pExchangeDetails
+                    .data[index - 1].usdSellingPrice
+                    .toString(),
+                coinImage: image,
+                coinSign: coinTitle,
+              ),
+            );
+          }
         } else if (!status) {
           ShowSnackBar.showInSnackBar(
               value: message,
@@ -1328,4 +1658,3 @@ class _HomePageState extends State<HomePage> {
     }
   }
 }
-

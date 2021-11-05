@@ -154,6 +154,9 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                               }
                             },
                             pinTheme: PinTheme(
+                              activeColor: ColorConstants.secondaryColor,
+                              inactiveColor: ColorConstants.secondaryColor,
+                              selectedColor: ColorConstants.secondaryColor,
                               shape: PinCodeFieldShape.box,
                               fieldHeight: 50,
                               fieldWidth: 50,

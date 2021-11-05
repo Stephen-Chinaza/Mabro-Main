@@ -68,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
     charLength = 0;
     pageState = false;
     checkState = false;
-    isFirstScreen = false;
+
     checkFirstScreen();
   }
 

@@ -9,6 +9,7 @@ import 'package:mabro/ui_views/screens/lock_screen_page/main_lock_screen.dart';
 
 
 import 'package:mabro/ui_views/screens/splash_screen_page/splash_screen_page.dart';
+import 'package:mabro/webview.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
