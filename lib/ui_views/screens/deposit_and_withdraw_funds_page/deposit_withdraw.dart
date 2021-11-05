@@ -135,10 +135,10 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                       )),
                   bottom: TabBar(
                     isScrollable: true,
-                    unselectedLabelColor: Colors.white,
+                    unselectedLabelColor: ColorConstants.whiteLighterColor,
                     unselectedLabelStyle: TextStyle(fontSize: 14),
                     labelStyle: TextStyle(fontSize: 14),
-                    labelColor: ColorConstants.whiteLighterColor,
+                    labelColor: ColorConstants.whiteColor,
                     tabs: [
                       new Tab(text: 'Deposit funds'),
                       new Tab(

@@ -394,13 +394,13 @@ class _CardPaymentState extends State<CardPayment> {
                 call: 'otp',
               );
             } else if (authMode == 'redirect') {
-              ShowSnackBar.showInSnackBar(
-                  value: 'redirected',
-                  context: context,
-                  scaffoldKey: _scaffoldKey,
-                  timer: 5);
+              // ShowSnackBar.showInSnackBar(
+              //     value: 'redirected',
+              //     context: context,
+              //     scaffoldKey: _scaffoldKey,
+              //     timer: 5);
             }
-            //redirectPage();
+            redirectUser();
           } else if (!status) {
             cPageState(state: false);
             ShowSnackBar.showInSnackBar(
@@ -426,6 +426,12 @@ class _CardPaymentState extends State<CardPayment> {
             timer: 5);
       }
     }
+  }
+
+  void redirectUser() {
+    Future.delayed(Duration(seconds: 6), () {
+      pushPage(context, LandingPage());
+    });
   }
 
   void verifyOtp() async {
@@ -629,7 +635,7 @@ class _CardPaymentState extends State<CardPayment> {
 
   void _redirectuser() {
     cPageState(state: false);
-    Future.delayed(Duration(seconds: 4), () {
+    Future.delayed(Duration(seconds: 6), () {
       pushPage(context, LandingPage());
     });
   }

@@ -367,7 +367,7 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
   }
 
   void _redirectuser() {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 6), () {
       pushPage(context, LandingPage());
     });
   }
