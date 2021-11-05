@@ -60,6 +60,7 @@ class ContactUs extends StatelessWidget {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           content: Container(
+            color: ColorConstants.primaryColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -92,194 +93,118 @@ class ContactUs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorConstants.primaryColor,
       bottomNavigationBar: ContactUsBottomAppBar(
         companyName: 'IcezTech',
-        textColor: Colors.black,
+        textColor: ColorConstants.whiteLighterColor,
         backgroundColor: Colors.transparent,
         email: 'iceztech@gmail.com',
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      kbackBtn(context);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Icon(
-                        Platform.isIOS
-                            ? Icons.arrow_back_ios
-                            : Icons.arrow_back,
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: tagLine != null,
-                    child: Text(
-                      tagLine ?? "",
-                      style: TextStyle(
-                        color: taglineColor,
-                        fontSize: 20.0,
-                        letterSpacing: 2.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container()
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Divider(
-                color: Colors.red,
-                thickness: 4,
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              Visibility(
-                visible: website != null,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  color: cardColor,
-                  child: ListTile(
-                    leading: Card(
-                      elevation: 5,
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Typicons.link,
-                            size: 20,
-                            color: ColorConstants.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      websiteText ?? 'Website',
-                      style: TextStyle(
-                        color: ColorConstants.secondaryColor,
-                      ),
-                    ),
-                    onTap: () => launch(website),
-                  ),
+            child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Card(
+            color: ColorConstants.primaryLighterColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              Visibility(
-                visible: phoneNumber != null,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  color: cardColor,
-                  child: ListTile(
-                    leading: Card(
-                      elevation: 5,
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
-                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Typicons.phone,
-                            size: 20,
-                            color: ColorConstants.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      phoneNumberText ?? 'Phone Number',
-                      style: TextStyle(
-                        color: ColorConstants.secondaryColor,
-                      ),
-                    ),
-                    onTap: () => showAlert(context),
-                  ),
-                ),
-              ),
-              Card(
-                clipBehavior: Clip.antiAlias,
-                margin: EdgeInsets.symmetric(
-                  vertical: 10.0,
-                  horizontal: 25.0,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                color: cardColor,
-                child: ListTile(
-                  leading: Card(
-                    elevation: 5,
-                    color: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: ColorConstants.primaryGradient,
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        kbackBtn(context);
+                      },
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.only(left: 8.0),
                         child: Icon(
-                          Typicons.mail,
-                          size: 20,
-                          color: ColorConstants.white,
+                          Platform.isIOS
+                              ? Icons.arrow_back_ios
+                              : Icons.arrow_back,
+                          color: Colors.white,
                         ),
                       ),
                     ),
-                  ),
-                  title: Text(
-                    emailText ?? 'Email ID',
-                    style: TextStyle(
-                      color: ColorConstants.secondaryColor,
+                    Visibility(
+                      visible: tagLine != null,
+                      child: Text(
+                        tagLine ?? "",
+                        style: TextStyle(
+                          color: taglineColor,
+                          fontSize: 20.0,
+                          letterSpacing: 2.0,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Container()
+                  ],
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Divider(
+                  color: ColorConstants.whiteLighterColor,
+                  thickness: 4,
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Visibility(
+                  visible: phoneNumber != null,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 6.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: cardColor,
+                    child: ListTile(
+                      leading: Card(
+                        elevation: 5,
+                        color: ColorConstants.whiteColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient1,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Typicons.phone,
+                              size: 20,
+                              color: ColorConstants.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        phoneNumberText ?? 'Phone number',
+                        style: TextStyle(
+                          color: ColorConstants.whiteColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                      onTap: () => showAlert(context),
                     ),
                   ),
-                  onTap: () => launch('mailto:' + email),
                 ),
-              ),
-              Visibility(
-                visible: twitterHandle != null,
-                child: Card(
+                Card(
                   clipBehavior: Clip.antiAlias,
                   margin: EdgeInsets.symmetric(
                     vertical: 10.0,
-                    horizontal: 25.0,
+                    horizontal: 6.0,
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
@@ -294,13 +219,13 @@ class ContactUs extends StatelessWidget {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
+                          gradient: ColorConstants.primaryGradient1,
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Icon(
-                            Typicons.social_twitter,
+                            Typicons.mail,
                             size: 20,
                             color: ColorConstants.white,
                           ),
@@ -308,195 +233,251 @@ class ContactUs extends StatelessWidget {
                       ),
                     ),
                     title: Text(
-                      'Twitter',
+                      emailText ?? 'Email Us',
                       style: TextStyle(
-                        color: ColorConstants.secondaryColor,
+                        color: ColorConstants.whiteColor,
+                        fontSize: 14,
                       ),
                     ),
-                    onTap: () => launch('https://twitter.com/' + twitterHandle),
+                    onTap: () => launch('mailto:' + email),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: facebookHandle != null,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  color: cardColor,
-                  child: ListTile(
-                    leading: Card(
-                      elevation: 5,
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
+                Visibility(
+                  visible: twitterHandle != null,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 6.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: cardColor,
+                    child: ListTile(
+                      leading: Card(
+                        elevation: 5,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Typicons.social_facebook,
-                            size: 20,
-                            color: ColorConstants.white,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient1,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Typicons.social_twitter,
+                              size: 20,
+                              color: ColorConstants.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    title: Text(
-                      'Facebook',
-                      style: TextStyle(
-                        color: ColorConstants.secondaryColor,
+                      title: Text(
+                        'Twitter',
+                        style: TextStyle(
+                          color: ColorConstants.whiteColor,
+                          fontSize: 14,
+                        ),
                       ),
+                      onTap: () =>
+                          launch('https://twitter.com/' + twitterHandle),
                     ),
-                    onTap: () =>
-                        launch('https://www.facebook.com/' + facebookHandle),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: instagram != null,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  color: cardColor,
-                  child: ListTile(
-                    leading: Card(
-                      elevation: 5,
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
+                Visibility(
+                  visible: facebookHandle != null,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 6.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: cardColor,
+                    child: ListTile(
+                      leading: Card(
+                        elevation: 5,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Typicons.social_instagram,
-                            size: 20,
-                            color: ColorConstants.white,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient1,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Typicons.social_facebook,
+                              size: 20,
+                              color: ColorConstants.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    title: Text(
-                      'Instagram',
-                      style: TextStyle(
-                        color: ColorConstants.secondaryColor,
+                      title: Text(
+                        'Facebook',
+                        style: TextStyle(
+                          color: ColorConstants.whiteColor,
+                          fontSize: 14,
+                        ),
                       ),
+                      onTap: () =>
+                          launch('https://www.facebook.com/' + facebookHandle),
                     ),
-                    onTap: () => launch('https://instagram.com/' + instagram),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: githubUserName != null,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  color: cardColor,
-                  child: ListTile(
-                    leading: Card(
-                      elevation: 5,
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
+                Visibility(
+                  visible: instagram != null,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 6.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: cardColor,
+                    child: ListTile(
+                      leading: Card(
+                        elevation: 5,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Typicons.social_github,
-                            size: 20,
-                            color: ColorConstants.white,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient1,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Typicons.social_instagram,
+                              size: 20,
+                              color: ColorConstants.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    title: Text(
-                      'Github',
-                      style: TextStyle(
-                        color: ColorConstants.secondaryColor,
+                      title: Text(
+                        'Instagram',
+                        style: TextStyle(
+                          color: ColorConstants.whiteColor,
+                          fontSize: 14,
+                        ),
                       ),
+                      onTap: () => launch('https://instagram.com/' + instagram),
                     ),
-                    onTap: () => launch('https://github.com/' + githubUserName),
                   ),
                 ),
-              ),
-              Visibility(
-                visible: linkedinURL != null,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 25.0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  color: cardColor,
-                  child: ListTile(
-                    leading: Card(
-                      elevation: 5,
-                      color: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: ColorConstants.primaryGradient,
+                Visibility(
+                  visible: githubUserName != null,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 6.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: cardColor,
+                    child: ListTile(
+                      leading: Card(
+                        elevation: 5,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Typicons.social_linkedin,
-                            size: 20,
-                            color: ColorConstants.white,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Typicons.social_github,
+                              size: 20,
+                              color: ColorConstants.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    title: Text(
-                      'Linkedin',
-                      style: TextStyle(
-                        color: ColorConstants.secondaryColor,
+                      title: Text(
+                        'Github',
+                        style: TextStyle(
+                          color: ColorConstants.secondaryColor,
+                        ),
                       ),
+                      onTap: () =>
+                          launch('https://github.com/' + githubUserName),
                     ),
-                    onTap: () => launch(linkedinURL),
                   ),
                 ),
-              ),
-            ],
+                Visibility(
+                  visible: linkedinURL != null,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 6.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    color: cardColor,
+                    child: ListTile(
+                      leading: Card(
+                        elevation: 5,
+                        color: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: ColorConstants.primaryGradient1,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              Typicons.social_linkedin,
+                              size: 20,
+                              color: ColorConstants.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        'Linkedin',
+                        style: TextStyle(
+                          color: ColorConstants.whiteColor,
+                          fontSize: 14,
+                        ),
+                      ),
+                      onTap: () => launch(linkedinURL),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        )),
       ),
     );
   }
