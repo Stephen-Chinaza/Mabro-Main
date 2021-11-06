@@ -189,7 +189,9 @@ class _CoinExchangeState extends State<CoinExchange>
           textColor: Colors.white,
           iconColor: Colors.white,
         ),
-        body: Container(
+        
+        body: Stack(children: [
+          Container(
           height: 1200,
           child: Column(
             children: [
@@ -274,8 +276,46 @@ class _CoinExchangeState extends State<CoinExchange>
             ],
           ),
         ),
-      ),
-    );
+        Visibility(
+              visible: hideScanner,
+              child: Container(
+                  color: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                height: MediaQuery.of(context).size.height,
+                child: Card(
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: QRView(
+                            key: qrKey,
+                            onQRViewCreated: _onQRViewCreated,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: (result != null)
+                              ? Text(
+                            'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}', textAlign: TextAlign.center,)
+                              : Text('Scan a code'),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+      
+        ])
+    ));
   }
 
   Widget ReceiveSlide() {
@@ -602,41 +642,7 @@ class _CoinExchangeState extends State<CoinExchange>
                 ),
               ),
             ),
-            Visibility(
-              visible: hideScanner,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                height: 400,
-                child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: QRView(
-                            key: qrKey,
-                            onQRViewCreated: _onQRViewCreated,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Center(
-                          child: (result != null)
-                              ? Text(
-                            'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}', textAlign: TextAlign.center,)
-                              : Text('Scan a code'),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            
           ],
         ),
       ),

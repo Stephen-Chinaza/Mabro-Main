@@ -73,7 +73,7 @@ class _AllTransactionsState extends State<AllTransactions>
                 buildTransactionHistory(
                     context, 'https://mabro.ng/dev/_app/transactions/all'),
                 buildTransactionHistory(context,
-                    'https://mabro.ng/dev/_app/transactions/all/complete'),
+                    'https://mabro.ng/dev/_app/transactions/all/completed'),
                 buildTransactionHistory(context,
                     'https://mabro.ng/dev/_app/transactions/all/pending'),
               ],
@@ -121,6 +121,9 @@ class _AllTransactionsState extends State<AllTransactions>
                   transactionDetails: allTransactionHistory
                       .data.transactions[index].description,
                   currency: 'NGN',
+                  activity: allTransactionHistory
+                      .data.transactions[index].activity
+                      .toString(),
                 ));
               },
             );
@@ -152,35 +155,57 @@ class _AllTransactionsState extends State<AllTransactions>
   Widget transactionList({
     int index,
     String amount,
-    IconData iconData,
-    Color colorData,
     String transactionTitle,
     String createdDate,
     String transactionDetails,
     String currency,
+    String activity,
   }) {
-    return Stack(
-      children: [
-        // Positioned(
-        //   left: 20,
-        //   child: Container(
-        //       child: Dash(
-        //     direction: Axis.vertical,
-        //     length: 100,
-        //     dashThickness: 2.0,
-        //     dashLength: 10,
-        //     dashColor: ColorConstants.whiteLighterColor,
-        //   )),
-        // ),
-        TransactionContainer(
-            index: index,
-            amount: '$currency $amount',
-            icon: iconData,
-            color: colorData,
-            transactionName: transactionTitle,
-            date: createdDate,
-            transactionDetails: transactionDetails),
-      ],
-    );
+    IconData iconData;
+    Color colorData;
+    switch (activity) {
+      case 'MABRO Transfer OUT':
+        iconData = Icons.call_received_outlined;
+        colorData = Colors.red;
+        break;
+      case 'Pay Electricity bill':
+        iconData = Icons.call_received_outlined;
+        colorData = Colors.red;
+        break;
+      case 'Bank Transfer':
+        iconData = Icons.call_received_outlined;
+        colorData = Colors.red;
+        break;
+      case 'Buy Mobile Data':
+        iconData = Icons.call_received_outlined;
+        colorData = Colors.red;
+        break;
+      case 'Buy Airtime':
+        iconData = Icons.call_received_outlined;
+        colorData = Colors.red;
+        break;
+      case 'Pay TV Subscription':
+        iconData = Icons.call_received_outlined;
+        colorData = Colors.red;
+        break;
+      case 'Fund Wallet':
+        iconData = Icons.call_made;
+        colorData = Colors.green;
+        break;
+
+      default:
+        iconData = Icons.call_merge;
+        colorData = Colors.deepPurple;
+        break;
+    }
+
+    return TransactionContainer(
+        index: index,
+        amount: '$currency $amount',
+        icon: iconData,
+        color: colorData,
+        transactionName: transactionTitle,
+        date: createdDate,
+        transactionDetails: transactionDetails);
   }
 }

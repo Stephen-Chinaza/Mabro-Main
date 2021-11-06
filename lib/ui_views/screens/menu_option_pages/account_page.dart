@@ -392,7 +392,6 @@ class _AccountPageState extends State<AccountPage> {
                       setState(() {
                         bankNameController.text = banks.data[i].name;
                         bankCode = banks.data[i].code;
-                        print(bankCode);
                       });
                     });
               });

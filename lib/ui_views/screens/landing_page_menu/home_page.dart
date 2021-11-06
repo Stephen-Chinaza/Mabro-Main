@@ -104,9 +104,9 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-    });
 
-    if (firstname == '') {
+
+      if (firstname == '') {
       username = '';
     } else {
       username = firstname;
@@ -123,6 +123,9 @@ class _HomePageState extends State<HomePage> {
         showInfoDialog(310, _buildBody(), title: 'Account setup');
       } else {}
     });
+    });
+
+    
   }
 
   @override
@@ -143,10 +146,6 @@ class _HomePageState extends State<HomePage> {
           _buildMenu2(),
           _buildSizedBox(10),
           _buildMenu3(),
-
-          //menuOption(context, _scaffoldKey),
-          //_buildSizedBox(5),
-          //_buildPictureDisplay(),
         ],
       ),
     );

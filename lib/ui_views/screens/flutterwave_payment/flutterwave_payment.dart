@@ -19,6 +19,8 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 
+import 'flutterwave_redirect_page.dart';
+
 class CardPayment extends StatefulWidget {
   final int amount;
 
@@ -394,13 +396,10 @@ class _CardPaymentState extends State<CardPayment> {
                 call: 'otp',
               );
             } else if (authMode == 'redirect') {
-              // ShowSnackBar.showInSnackBar(
-              //     value: 'redirected',
-              //     context: context,
-              //     scaffoldKey: _scaffoldKey,
-              //     timer: 5);
+              String url = verifySmartcard.data.redirectUrl.toString();
+
+              redirectUser(url: url);
             }
-            redirectUser();
           } else if (!status) {
             cPageState(state: false);
             ShowSnackBar.showInSnackBar(
@@ -428,9 +427,13 @@ class _CardPaymentState extends State<CardPayment> {
     }
   }
 
-  void redirectUser() {
+  void redirectUser({String url}) {
     Future.delayed(Duration(seconds: 6), () {
-      pushPage(context, LandingPage());
+      pushPage(
+          context,
+          FlutterWaveRedirectPage(
+            linkUrl: url,
+          ));
     });
   }
 
