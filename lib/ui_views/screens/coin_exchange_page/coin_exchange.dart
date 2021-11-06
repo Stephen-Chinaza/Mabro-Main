@@ -16,6 +16,7 @@ import 'package:mabro/ui_views/widgets/bottomsheets/bottomsheet.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
+import 'package:majascan/majascan.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:share/share.dart';
@@ -63,25 +64,54 @@ class _CoinExchangeState extends State<CoinExchange>
   int activeTabIndex = 0;
 
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  Barcode result;
+  //Barcode result;
   QRViewController controller;
   BuildContext dialogContext;
 
   var formatter = NumberFormat("#,##0.00", "en_US");
 
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      //controller.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller.resumeCamera();
-    }
-  }
+  String result = "Hey there !";
+  String scanResult = '';
 
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController btcAddressController = TextEditingController();
+
+  Future _scanQR() async {
+    try {
+      String qrResult = await MajaScan.startScan(
+          title: 'Scan Code',
+          barColor: ColorConstants.primaryLighterColor,
+          titleColor: Colors.white,
+          qRCornerColor: ColorConstants.secondaryColor,
+          qRScannerColor: ColorConstants.primaryColor,
+          flashlightEnable: true,
+          scanAreaScale: 0.7);
+      setState(() {
+        result = qrResult;
+        scanResult = qrResult;
+        btcAddressController.text = scanResult;
+      });
+    } on PlatformException catch (ex) {
+      if (ex.code == MajaScan.CameraAccessDenied) {
+        setState(() {
+          result = "Camera permission was denied";
+        });
+      } else {
+        setState(() {
+          result = "Unknown Error $ex";
+        });
+      }
+    } on FormatException {
+      setState(() {
+        result = "You pressed the back button before scanning anything";
+      });
+    } catch (ex) {
+      setState(() {
+        result = "Unknown Error $ex";
+      });
+    }
+  }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String title;
@@ -166,166 +196,127 @@ class _CoinExchangeState extends State<CoinExchange>
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        if (hideScanner) {
-          //Navigator.pop(context, false);
-          setState(() {
+        onWillPop: () async {
+          if (hideScanner) {
+            //Navigator.pop(context, false);
+            setState(() {
+              hideScanner = false;
+            });
+          } else {
             hideScanner = false;
-          });
-        } else {
-          hideScanner = false;
-          Navigator.pop(context, true);
-        }
-      },
-      child: Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: ColorConstants.primaryColor,
-        appBar: TopBar(
-          backgroundColorStart: ColorConstants.primaryColor,
-          backgroundColorEnd: ColorConstants.secondaryColor,
-          title: coinName + ' Exchange',
-          icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-          onPressed: null,
-          textColor: Colors.white,
-          iconColor: Colors.white,
-        ),
-        
-        body: Stack(children: [
-          Container(
-          height: 1200,
-          child: Column(
-            children: [
-          SizedBox(
-            height: 10,
-          ),
-          TabBar(
-            indicatorColor: Colors.transparent,
-            tabs: [
-              Tab(
-                child: Container(
-                    width: 165,
-                    decoration: activeTabIndex == 0
-                        ? BoxDecoration(
-                            gradient: ColorConstants.primaryGradient,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8)),
-                          )
-                        : BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorConstants.secondaryColor,
-                              style: BorderStyle.solid,
-                              width: 1.0,
-                            ),
-                          ),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                      child: Center(
-                          child: Text('Receive $coinName',
-                              style: TextStyle(
-                                  color: (activeTabIndex == 0)
-                                      ? ColorConstants.white
-                                      : ColorConstants.whiteLighterColor,
-                                  fontSize: 14))),
-                    )),
-              ),
-              Tab(
-                child: Container(
-                    width: 165,
-                    decoration: activeTabIndex == 1
-                        ? BoxDecoration(
-                            gradient: ColorConstants.primaryGradient,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8)),
-                          )
-                        : BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorConstants.secondaryColor,
-                              style: BorderStyle.solid,
-                              width: 1.0,
-                            ),
-                          ),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                      child: Center(
-                          child: Text('Send $coinName',
-                              style: TextStyle(
-                                  color: (activeTabIndex == 1)
-                                      ? ColorConstants.white
-                                      : ColorConstants.whiteLighterColor,
-                                  fontSize: 14))),
-                    )),
-              ),
-            ],
-            controller: _tabController,
-          ),
-          Expanded(
-            child: Container(
-              child: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  SingleChildScrollView(child: ReceiveSlide()),
-                  _sendSlide(),
-                ],
-              ),
+            Navigator.pop(context, true);
+          }
+        },
+        child: Scaffold(
+            key: _scaffoldKey,
+            backgroundColor: ColorConstants.primaryColor,
+            appBar: TopBar(
+              backgroundColorStart: ColorConstants.primaryColor,
+              backgroundColorEnd: ColorConstants.secondaryColor,
+              title: coinName + ' Exchange',
+              icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+              onPressed: null,
+              textColor: Colors.white,
+              iconColor: Colors.white,
             ),
-          ),
-            ],
-          ),
-        ),
-        Visibility(
-              visible: hideScanner,
-              child: Container(
-                  color: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                height: MediaQuery.of(context).size.height,
-                child: Card(
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: QRView(
-                            key: qrKey,
-                            onQRViewCreated: _onQRViewCreated,
-                          ),
+            body: Stack(children: [
+              Container(
+                height: 1200,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TabBar(
+                      indicatorColor: Colors.transparent,
+                      tabs: [
+                        Tab(
+                          child: Container(
+                              width: 165,
+                              decoration: activeTabIndex == 0
+                                  ? BoxDecoration(
+                                      gradient: ColorConstants.primaryGradient,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                    )
+                                  : BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      border: Border.all(
+                                        color: ColorConstants.secondaryColor,
+                                        style: BorderStyle.solid,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                child: Center(
+                                    child: Text('Receive $coinName',
+                                        style: TextStyle(
+                                            color: (activeTabIndex == 0)
+                                                ? ColorConstants.white
+                                                : ColorConstants
+                                                    .whiteLighterColor,
+                                            fontSize: 14))),
+                              )),
+                        ),
+                        Tab(
+                          child: Container(
+                              width: 165,
+                              decoration: activeTabIndex == 1
+                                  ? BoxDecoration(
+                                      gradient: ColorConstants.primaryGradient,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                    )
+                                  : BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                      border: Border.all(
+                                        color: ColorConstants.secondaryColor,
+                                        style: BorderStyle.solid,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                                child: Center(
+                                    child: Text('Send $coinName',
+                                        style: TextStyle(
+                                            color: (activeTabIndex == 1)
+                                                ? ColorConstants.white
+                                                : ColorConstants
+                                                    .whiteLighterColor,
+                                            fontSize: 14))),
+                              )),
+                        ),
+                      ],
+                      controller: _tabController,
+                    ),
+                    Expanded(
+                      child: Container(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: <Widget>[
+                            SingleChildScrollView(child: ReceiveSlide()),
+                            _sendSlide(),
+                          ],
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Center(
-                          child: (result != null)
-                              ? Text(
-                            'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}', textAlign: TextAlign.center,)
-                              : Text('Scan a code'),
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-      
-        ])
-    ));
+            ])));
   }
 
   Widget ReceiveSlide() {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        height: 1000,
+          height: 1000,
           color: ColorConstants.primaryColor,
-          child: Column(
-              children: [
+          child: Column(children: [
             Padding(
               padding: const EdgeInsets.all(4.0),
               child: Container(
@@ -410,7 +401,9 @@ class _CoinExchangeState extends State<CoinExchange>
                             ),
                             SizedBox(height: 10),
                             Text(
-                              '1 $defaultCoinSubTitle = ' + formatter.format(int.tryParse(defaultBuyingPrice)),
+                              '1 $defaultCoinSubTitle = ' +
+                                  formatter
+                                      .format(int.tryParse(defaultBuyingPrice)),
                               style: TextStyle(
                                   color: Colors.orange,
                                   fontWeight: FontWeight.bold,
@@ -418,8 +411,9 @@ class _CoinExchangeState extends State<CoinExchange>
                             ),
                             SizedBox(height: 5),
                             Text(
-                              '1 $defaultCoinSubTitle = ' + formatter.format(int.tryParse(defaultSellingPrice))
-                                   +
+                              '1 $defaultCoinSubTitle = ' +
+                                  formatter.format(
+                                      int.tryParse(defaultSellingPrice)) +
                                   'NGN',
                               style: TextStyle(
                                   color: Colors.green,
@@ -463,8 +457,12 @@ class _CoinExchangeState extends State<CoinExchange>
                                         ),
                                         SizedBox(height: 10),
                                         Text(
-                                          (int.tryParse(defaultusdBuyingPrice) is int) ? 'USD '+
-                                              formatter.format(int.tryParse(defaultusdBuyingPrice)) : 'USD '+ defaultusdBuyingPrice,
+                                          (int.tryParse(defaultusdBuyingPrice)
+                                                  is int)
+                                              ? 'USD ' +
+                                                  formatter.format(int.tryParse(
+                                                      defaultusdBuyingPrice))
+                                              : 'USD ' + defaultusdBuyingPrice,
                                           style: TextStyle(
                                               color: ColorConstants
                                                   .whiteLighterColor,
@@ -473,7 +471,9 @@ class _CoinExchangeState extends State<CoinExchange>
                                         ),
                                         SizedBox(height: 5),
                                         Text(
-                                          'NGN '+ formatter.format(int.tryParse(defaultBuyingPrice)),
+                                          'NGN ' +
+                                              formatter.format(int.tryParse(
+                                                  defaultBuyingPrice)),
                                           style: TextStyle(
                                               color: ColorConstants.white,
                                               fontWeight: FontWeight.w500,
@@ -489,22 +489,27 @@ class _CoinExchangeState extends State<CoinExchange>
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Align(
                                           alignment: Alignment.center,
                                           child: Text(
                                             'Sell ',
                                             style: TextStyle(
-                                                color: ColorConstants.secondaryColor,
+                                                color: ColorConstants
+                                                    .secondaryColor,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 14),
                                           ),
                                         ),
                                         SizedBox(height: 10),
                                         Text(
-                                          (int.tryParse(defaultusdSellingPrice) is int) ? 'USD '+
-                                          formatter.format(int.tryParse(defaultusdSellingPrice)) : 'USD '+ defaultusdSellingPrice,
+                                          (int.tryParse(defaultusdSellingPrice)
+                                                  is int)
+                                              ? 'USD ' +
+                                                  formatter.format(int.tryParse(
+                                                      defaultusdSellingPrice))
+                                              : 'USD ' + defaultusdSellingPrice,
                                           style: TextStyle(
                                               color: ColorConstants
                                                   .whiteLighterColor,
@@ -513,7 +518,9 @@ class _CoinExchangeState extends State<CoinExchange>
                                         ),
                                         SizedBox(height: 5),
                                         Text(
-                                          'NGN '+ formatter.format(int.tryParse(defaultSellingPrice)),
+                                          'NGN ' +
+                                              formatter.format(int.tryParse(
+                                                  defaultSellingPrice)),
                                           style: TextStyle(
                                               color: ColorConstants.white,
                                               fontWeight: FontWeight.w400,
@@ -526,7 +533,6 @@ class _CoinExchangeState extends State<CoinExchange>
                               ],
                             ),
                             SizedBox(height: 20),
-
                           ],
                         )))
               ],
@@ -536,9 +542,9 @@ class _CoinExchangeState extends State<CoinExchange>
               height: 500,
               width: MediaQuery.of(context).size.width,
               child: Card(
-                color: ColorConstants.primaryLighterColor,
-                child: _buildReceiveBtc(context, 'hfhjgfdbshjvbasdhvSHDVKHASVC')
-              ),
+                  color: ColorConstants.primaryLighterColor,
+                  child: _buildReceiveBtc(
+                      context, 'hfhjgfdbshjvbasdhvSHDVKHASVC')),
             )
           ])),
     );
@@ -577,11 +583,8 @@ class _CoinExchangeState extends State<CoinExchange>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap:(){
-                              setState(() {
-                                hideScanner = true;
-                              });
-
+                            onTap: () {
+                              _scanQR();
                             },
                             child: Text(
                               "Scan QR",
@@ -592,9 +595,9 @@ class _CoinExchangeState extends State<CoinExchange>
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               getClipBoardData().then((value) =>
-                              {btcAddressController.text = value});
+                                  {btcAddressController.text = value});
                             },
                             child: Text(
                               "Paste address",
@@ -604,7 +607,6 @@ class _CoinExchangeState extends State<CoinExchange>
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -634,15 +636,12 @@ class _CoinExchangeState extends State<CoinExchange>
                       margin: 0,
                       disableButton: true,
                       text: 'Continue',
-                      onPressed: () {
-
-                      },
+                      onPressed: () {},
                     ),
                   ],
                 ),
               ),
             ),
-            
           ],
         ),
       ),
@@ -795,8 +794,7 @@ class _CoinExchangeState extends State<CoinExchange>
   _buildReceiveBtc(BuildContext context, String walletAd) {
     return Container(
       height: 490,
-      child: Column(
-          children: [
+      child: Column(children: [
         SizedBox(
           height: 20,
         ),
@@ -810,7 +808,9 @@ class _CoinExchangeState extends State<CoinExchange>
                       color: ColorConstants.whiteLighterColor, fontSize: 16)),
               Text('USD 0.00',
                   style: TextStyle(
-                      color: ColorConstants.whiteColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      color: ColorConstants.whiteColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500)),
             ],
           ),
         ),
@@ -822,10 +822,14 @@ class _CoinExchangeState extends State<CoinExchange>
             children: [
               Text('0.0000000 BTC',
                   style: TextStyle(
-                      color: ColorConstants.whiteColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      color: ColorConstants.whiteColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500)),
               Text('NGN 0.00',
                   style: TextStyle(
-                      color: ColorConstants.whiteColor, fontSize: 16, fontWeight: FontWeight.w500)),
+                      color: ColorConstants.whiteColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500)),
             ],
           ),
         ),
@@ -853,8 +857,8 @@ class _CoinExchangeState extends State<CoinExchange>
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(walletAd,
-                style: TextStyle(
-                    color: ColorConstants.whiteColor, fontSize: 14)),
+                style:
+                    TextStyle(color: ColorConstants.whiteColor, fontSize: 14)),
           ),
         ),
         SizedBox(
@@ -942,7 +946,6 @@ class _CoinExchangeState extends State<CoinExchange>
         barrierDismissible: true,
         builder: (BuildContext context) {
           dialogContext = context;
-
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(5.0)), //this right here
@@ -994,11 +997,10 @@ class _CoinExchangeState extends State<CoinExchange>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap:(){
+                            onTap: () {
                               setState(() {
-                                hideScanner = true;
+                                _scanQR();
                               });
-
                             },
                             child: Text(
                               "Scan QR",
@@ -1009,9 +1011,9 @@ class _CoinExchangeState extends State<CoinExchange>
                             ),
                           ),
                           GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               getClipBoardData().then((value) =>
-                              {btcAddressController.text = value});
+                                  {btcAddressController.text = value});
                             },
                             child: Text(
                               "Paste address",
@@ -1021,7 +1023,6 @@ class _CoinExchangeState extends State<CoinExchange>
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
@@ -1037,46 +1038,9 @@ class _CoinExchangeState extends State<CoinExchange>
                       margin: 0,
                       disableButton: true,
                       text: 'Continue',
-                      onPressed: () {
-
-                      },
+                      onPressed: () {},
                     ),
                   ],
-                ),
-              ),
-            ),
-            Visibility(
-              visible: hideScanner,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                height: 400,
-                child: Card(
-                  child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: QRView(
-                            key: qrKey,
-                            onQRViewCreated: _onQRViewCreated,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Center(
-                          child: (result != null)
-                              ? Text(
-                            'Barcode Type: ${describeEnum(result.format)}   Data: ${result.code}', textAlign: TextAlign.center,)
-                              : Text('Scan a code'),
-                        ),
-                      )
-                    ],
-                  ),
                 ),
               ),
             ),
@@ -1084,16 +1048,5 @@ class _CoinExchangeState extends State<CoinExchange>
         ),
       ),
     );
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(()  {
-        result = scanData;
-        btcAddressController.text = result.code;
-        hideScanner = false;
-      });
-    });
   }
 }

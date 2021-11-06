@@ -37,7 +37,7 @@ dependencies:
   shared_preferences: ^2.0.6
   page_indicator: ^0.3.0
   permission_handler: ^8.2.5
-  #contacts_service: 0.6.3
+  majascan: ^0.4.0
   pin_code_fields: ^7.3.0
   local_auth: ^1.1.7
   flutter_appavailability: ^0.0.21

@@ -44,9 +44,12 @@
 
 		<key>NSContactsUsageDescription</key>
 		<string>This app requires contacts access to function properly.</string>
-	</dict>
-	<dict>
+
+		<key>NSCameraUsageDescription</key>
+		<string>Camera permission is required for qrcode scanning.</string>
+
 		<key>NSContactsUsageDescription</key>
 		<string>Reason we need access to the contact list</string>
 	</dict>
+
 </plist>
