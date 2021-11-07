@@ -24,9 +24,9 @@ class BtcP2PBuySell extends StatefulWidget {
       buyingPrice,
       sellingPrice,
       usdBuyingPrice,
-      usdSellingPrice,coinImage,
+      usdSellingPrice,
+      coinImage,
       coinSign;
-
 
   const BtcP2PBuySell(
       {Key key,
@@ -36,7 +36,9 @@ class BtcP2PBuySell extends StatefulWidget {
       this.buyingPrice,
       this.sellingPrice,
       this.usdBuyingPrice,
-      this.usdSellingPrice, this.coinImage, this.coinSign})
+      this.usdSellingPrice,
+      this.coinImage,
+      this.coinSign})
       : super(key: key);
   @override
   _BtcP2PBuySellState createState() => _BtcP2PBuySellState();
@@ -652,7 +654,6 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                           _UserAdsContainer(idColor: Colors.red[900]),
                         ]),
                       ),
-
                       Container(
                         color: ColorConstants.primaryColor,
                         width: size.width,
@@ -816,7 +817,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
                                                     coinType: defaultCoinTitle,
                                                     coinSign:
                                                         defaultCoinSubTitle,
-                                                    usdRate: defaultUSDRate,
+                                                    nairaPrice:
+                                                        defaultSellingPrice,
+                                                    usdSellingPrice:
+                                                        defaultusdSellingPrice,
+                                                    usdExchangeRate:
+                                                        defaultUSDRate,
                                                   ));
                                             },
                                             text: 'Create Your Selling Ads'),

@@ -86,6 +86,7 @@ class _CoinExchangeState extends State<CoinExchange>
           qRCornerColor: ColorConstants.secondaryColor,
           qRScannerColor: ColorConstants.primaryColor,
           flashlightEnable: true,
+          
           scanAreaScale: 0.7);
       setState(() {
         result = qrResult;

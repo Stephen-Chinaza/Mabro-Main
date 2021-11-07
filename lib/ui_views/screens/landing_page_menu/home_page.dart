@@ -51,7 +51,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String email, firstname, username, userId;
+  String email, firstname, username, userId, userPin;
   var mail, mail2;
   bool bankState;
   String accountNumber;
@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
     firstname = '';
     username = '';
     mail = '';
+    userPin = '';
     mail2 = '';
     bankState = false;
     getData();
@@ -96,6 +97,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     userId = (pref.getString('userId') ?? '');
+    userPin = (pref.getString('lock_code') ?? '');
     email = (pref.getString('email') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
     firstname = (pref.getString('first_name') ?? '');
@@ -105,27 +107,24 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
 
-
       if (firstname == '') {
-      username = '';
-    } else {
-      username = firstname;
-    }
-
-    setState(() {
-      if (accountNumber == '') {
-        bankState = true;
+        username = '';
       } else {
-        bankState = false;
+        username = firstname;
       }
 
-      if (bankState) {
-        showInfoDialog(310, _buildBody(), title: 'Account setup');
-      } else {}
-    });
-    });
+      setState(() {
+        if (accountNumber == '') {
+          bankState = true;
+        } else {
+          bankState = false;
+        }
 
-    
+        if (bankState) {
+          showInfoDialog(310, _buildBody(), title: 'Account setup');
+        } else {}
+      });
+    });
   }
 
   @override
@@ -906,62 +905,6 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(color: active, fontSize: 16.0),
                 ),
                 SizedBox(height: 30.0),
-
-                // ListTileTheme(
-                //   contentPadding: EdgeInsets.all(0),
-                //   dense: true, //removes additional space vertically
-                //   child: ExpansionTile(
-                //     tilePadding: EdgeInsets.all(0),
-                //     childrenPadding: EdgeInsets.only(left: 20),
-                //     leading: Container(
-                //       height: 43,
-                //       width: 43,
-                //       child: Card(
-                //         elevation: 5,
-                //         color: Colors.transparent,
-                //         shape: RoundedRectangleBorder(
-                //           side: new BorderSide(color: ColorConstants.whiteLighterColor,
-                //               width: 0.2),
-                //           borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                //
-                //         ),
-                //         child: Container(
-                //           decoration: BoxDecoration(
-                //             gradient:  ColorConstants.primaryGradient,
-                //             borderRadius:
-                //                 BorderRadius.all(Radius.circular(50.0)),
-                //           ),
-                //           child: Padding(
-                //             padding: const EdgeInsets.all(6.0),
-                //             child: Icon(
-                //               Typicons.chart_bar_outline,
-                //               size: 18,
-                //               color: ColorConstants.white,
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //     title: Text('Bitcoin P2P Exchange',
-                //         style: TextStyle(color: active, fontSize: 14)),
-                //     children: <Widget>[
-                //       _buildRow(
-                //         Icons.arrow_forward,
-                //         "BTC P2P Buy/Sell",
-                //         showBadge: false,
-                //         page: BtcP2PBuySell(),
-                //       ),
-                //       _buildRow(Icons.arrow_forward, "Transfer/Receive BTC",
-                //           showBadge: false, page: ReceiveBtcPage()),
-                //     ],
-                //   ),
-                // ),
-                // _buildDivider(),
-                _buildRow(
-                  "Airtime to Cash",
-                  icon: Icons.subscriptions,
-                  isMethod: true,
-                ),
                 ListTileTheme(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
@@ -985,7 +928,70 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient,
+                              gradient: ColorConstants.primaryGradient1,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50.0)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Icon(
+                                Icons.data_usage,
+                                size: 18,
+                                color: ColorConstants.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      title: Text('Banking Activities',
+                          style: TextStyle(color: active, fontSize: 15)),
+                      children: <Widget>[
+                        _buildRow(
+                          "Mabro Transfer",
+                          showBadge: false,
+                          icon: Icons.horizontal_rule,
+                          page: MabroTransferPage(),
+                        ),
+                        _buildRow(
+                          "Other bank Transfer",
+                          icon: Icons.horizontal_rule,
+                          showBadge: false,
+                          page: BankTransferPage(),
+                        ),
+                        _buildRow(
+                          "Fund Wallet",
+                          icon: Icons.horizontal_rule,
+                          showBadge: false,
+                          page: DepositWithdrawPage(
+                            indexNum: 0,
+                          ),
+                        ),
+                      ],
+                    )),
+                ListTileTheme(
+                    contentPadding: EdgeInsets.all(0),
+                    dense: true,
+                    iconColor: Colors.white,
+                    child: ExpansionTile(
+                      iconColor: Colors.white,
+                      tilePadding: EdgeInsets.all(0),
+                      childrenPadding: EdgeInsets.only(left: 20),
+                      leading: Container(
+                        height: 45,
+                        width: 45,
+                        child: Card(
+                          elevation: 5,
+                          color: Colors.transparent,
+                          shape: RoundedRectangleBorder(
+                            side: new BorderSide(
+                                color: ColorConstants.whiteLighterColor,
+                                width: 0.1),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(50.0)),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: ColorConstants.primaryGradient1,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50.0)),
                             ),
@@ -1006,12 +1012,12 @@ class _HomePageState extends State<HomePage> {
                         _buildRow(
                           "Buy Airtime",
                           showBadge: false,
-                          icon: Icons.send_to_mobile,
+                          icon: Icons.horizontal_rule,
                           page: SelectedMobileCarrierPage(),
                         ),
                         _buildRow(
                           "Buy Data",
-                          icon: Icons.system_update_alt,
+                          icon: Icons.horizontal_rule,
                           showBadge: false,
                           page: SelectedDataRechargePage(),
                         ),
@@ -1037,7 +1043,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient: ColorConstants.primaryGradient,
+                            gradient: ColorConstants.primaryGradient1,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(50.0)),
                           ),
@@ -1058,19 +1064,18 @@ class _HomePageState extends State<HomePage> {
                       _buildRow(
                         "Pay Electricity Bill",
                         showBadge: false,
-                        icon: Icons.electrical_services,
+                        icon: Icons.horizontal_rule,
                         page: SelectedElectricitySubPage(),
                       ),
                       _buildRow(
                         "Pay Tv Subscription",
-                        icon: Icons.tv,
+                        icon: Icons.horizontal_rule,
                         showBadge: false,
                         page: SelectedCableTvPage(),
                       ),
                     ],
                   ),
                 ),
-
                 ListTileTheme(
                     contentPadding: EdgeInsets.all(0),
                     dense: true,
@@ -1092,7 +1097,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                              gradient: ColorConstants.primaryGradient,
+                              gradient: ColorConstants.primaryGradient1,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(50.0)),
                             ),
@@ -1116,23 +1121,22 @@ class _HomePageState extends State<HomePage> {
                         _buildRow(
                           "Accounts",
                           showBadge: false,
-                          icon: Icons.food_bank_outlined,
+                          icon: Icons.horizontal_rule,
                           page: AccountPage(),
                         ),
                         _buildRow(
                           "Security",
                           showBadge: false,
-                          icon: Icons.security,
+                          icon: Icons.horizontal_rule,
                           page: SecurityPage(),
                         ),
                       ],
                     )),
-                // _buildRow(
-                //   "Sell / Buy GiftCards",
-                //   icon: Icons.card_giftcard,
-                //
-                //   openState: false,
-                // ),
+                _buildRow(
+                  "Airtime to Cash",
+                  icon: Icons.subscriptions,
+                  isMethod: true,
+                ),
                 _buildRow(
                   "Deposit / Withdrawal",
                   icon: Icons.dashboard_customize,
@@ -1140,14 +1144,6 @@ class _HomePageState extends State<HomePage> {
                     indexNum: 0,
                   ),
                 ),
-                // _buildRow(
-                //   "Buy Social Media Likes",
-                //   icon: Icons.money,
-                //   showBadge: false,
-                //   openState: false,
-                // ),
-                // _buildDivider(),
-
                 _buildRow("Notifications",
                     icon: Icons.notifications, page: NotificationsPage()),
                 _buildRow("Contact us",
@@ -1171,7 +1167,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
-                    kopenPage(context, MainScreenLock());
+                    kopenPage(context, MainScreenLock(userPin: userPin));
                   },
                   child: Container(
                     width: 100,
@@ -1239,9 +1235,7 @@ class _HomePageState extends State<HomePage> {
             width: 37,
             child: Container(
               decoration: BoxDecoration(
-                color: (showBadge)
-                    ? ColorConstants.secondaryColor
-                    : ColorConstants.transparent,
+                gradient: ColorConstants.primaryGradient1,
                 borderRadius: BorderRadius.all(Radius.circular(50.0)),
               ),
               child: Padding(
