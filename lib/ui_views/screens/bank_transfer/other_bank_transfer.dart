@@ -63,6 +63,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
       });
     }
 
+    print(userId);
   }
 
   @override
@@ -80,25 +81,25 @@ class _BankTransferPageState extends State<BankTransferPage> {
     return (pageState)
         ? loadingPage(state: pageState)
         : Stack(
-      children: [
-        buildFirstContainer(),
-        buildSecondContainer(),
-        Scaffold(
-          backgroundColor: ColorConstants.primaryColor,
-          appBar: TopBar(
-            backgroundColorStart: ColorConstants.primaryColor,
-            backgroundColorEnd: ColorConstants.secondaryColor,
-            title: 'Bank Transfer',
-            icon:
-            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
-            onPressed: null,
-            textColor: Colors.white,
-            iconColor: Colors.white,
-          ),
-          body:  _buildAccountForm(),
-        ),
-      ],
-    );
+            children: [
+              buildFirstContainer(),
+              buildSecondContainer(),
+              Scaffold(
+                backgroundColor: ColorConstants.primaryColor,
+                appBar: TopBar(
+                  backgroundColorStart: ColorConstants.primaryColor,
+                  backgroundColorEnd: ColorConstants.secondaryColor,
+                  title: 'Bank Transfer',
+                  icon:
+                      Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+                  onPressed: null,
+                  textColor: Colors.white,
+                  iconColor: Colors.white,
+                ),
+                body: _buildAccountForm(),
+              ),
+            ],
+          );
   }
 
   Widget _buildAccountForm() {
@@ -120,7 +121,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
                         TextStyles.textDetails(
                           textSize: 16,
                           textColor: ColorConstants.secondaryColor,
-                          textValue: 'Enter transactions details '.toUpperCase(),
+                          textValue:
+                              'Enter transactions details '.toUpperCase(),
                         ),
                         SizedBox(height: 10),
                         Builder(builder: (context) {
@@ -128,7 +130,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
                             onTap: () {
                               buildShowBottomSheet(
                                 context: context,
-                                bottomsheetContent: _bottomSheetContent(context),
+                                bottomsheetContent:
+                                    _bottomSheetContent(context),
                               );
                             },
                             child: IconFields(
@@ -147,13 +150,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
                           textInputType: TextInputType.number,
                           onChanged: (String count) {
                             textCount = count.length;
-                            if (textCount == 10) {
-                              // getAccountName().then((value) => {
-                              //       setState(() {
-                              //         accountNameController.text = value;
-                              //       })
-                              //     });
-                            }
+                            if (textCount == 10) {}
                           },
                           controller: accountNumberController,
                         ),
@@ -164,9 +161,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
                           labelText: '',
                           maxLength: 11,
                           textInputType: TextInputType.number,
-                          onChanged: (String count) {
-
-                          },
+                          onChanged: (String count) {},
                           controller: amountController,
                         ),
                         SizedBox(height: 15),
@@ -179,7 +174,6 @@ class _BankTransferPageState extends State<BankTransferPage> {
                           controller: narrationController,
                         ),
                         SizedBox(height: 20),
-
                         CustomButton(
                             margin: 0,
                             disableButton: true,
@@ -199,8 +193,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
   }
 
   Widget _bottomSheetContent(
-      BuildContext context,
-      ) {
+    BuildContext context,
+  ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       BottomSheetHeader(
         buttomSheetTitle: 'Select bank'.toUpperCase(),
@@ -237,9 +231,9 @@ class _BankTransferPageState extends State<BankTransferPage> {
         } else {
           return Center(
               child: CircularProgressIndicator(
-                valueColor:
+            valueColor:
                 AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
-              ));
+          ));
         }
       },
     );
@@ -279,8 +273,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
   }
 
   void verifyAccount() async {
-    cPageState(state: true);
-    if (bankNameController.text.isNotEmpty) {
+    if (bankNameController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Select bank', context: context, timer: 5);
     } else if (accountNumberController.text.isEmpty) {
@@ -293,12 +286,14 @@ class _BankTransferPageState extends State<BankTransferPage> {
       ShowSnackBar.showInSnackBar(
           value: 'Enter narration', context: context, timer: 5);
     } else {
+      cPageState(state: true);
+
       try {
         var map = Map<String, dynamic>();
         map['userId'] = userId;
         map['bank_code'] = '044';
 
-            //bankCode;
+        //bankCode;
         map['account_number'] = accountNumberController.text;
 
         var response = await http
@@ -317,7 +312,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
           var body = jsonDecode(response.body);
 
           AccountVerification accountVerification =
-          AccountVerification.fromJson(body);
+              AccountVerification.fromJson(body);
 
           bool status = accountVerification.status;
           String message = accountVerification.message;
@@ -325,7 +320,6 @@ class _BankTransferPageState extends State<BankTransferPage> {
             cPageState(state: false);
             print(userId);
             transferFund();
-
           } else if (!status) {
             cPageState(state: false);
             ShowSnackBar.showInSnackBar(
@@ -355,7 +349,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
   }
 
   void transferFund() async {
-    if (bankNameController.text.isNotEmpty) {
+    if (bankNameController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'Select bank', context: context, timer: 5);
     } else if (accountNumberController.text.isEmpty) {
@@ -374,11 +368,12 @@ class _BankTransferPageState extends State<BankTransferPage> {
         map['userId'] = userId;
         map['account_number'] = accountNumberController.text;
         map['bank_code'] = '044';
+
+        // bankCode;
         map['amount'] = amountController.text;
         map['narration'] = narrationController.text;
-
         var response =
-        await http.post(HttpService.rootTransferFund, body: map, headers: {
+            await http.post(HttpService.rootTransferFund, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
         }).timeout(const Duration(seconds: 15), onTimeout: () {
           cPageState(state: false);
@@ -390,20 +385,17 @@ class _BankTransferPageState extends State<BankTransferPage> {
         });
 
         if (response.statusCode == 200) {
-
           var body = jsonDecode(response.body);
 
           cPageState(state: false);
 
           UpdateBankDetails updateBankDetails =
-          UpdateBankDetails.fromJson(body);
+              UpdateBankDetails.fromJson(body);
 
           bool status = updateBankDetails.status;
           String message = updateBankDetails.message;
           if (status) {
             cPageState(state: false);
-
-
 
             bankNameController.text = '';
             amountController.text = '';
@@ -420,16 +412,12 @@ class _BankTransferPageState extends State<BankTransferPage> {
           } else if (!status) {
             cPageState(state: false);
             ShowSnackBar.showInSnackBar(
-                value: message,
-                context: context,
-                timer: 5);
+                value: message, context: context, timer: 5);
           }
         } else {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
-              value: 'network error',
-              context: context,
-              timer: 5);
+              value: 'network error', context: context, timer: 5);
         }
       } on SocketException {
         cPageState(state: false);

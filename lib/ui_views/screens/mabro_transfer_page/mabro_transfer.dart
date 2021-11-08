@@ -164,7 +164,7 @@ class _MabroTransferPageState extends State<MabroTransferPage> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Icon(Icons.lock, size: 18, color: Colors.purple),
+        Icon(Icons.lock, size: 18, color: ColorConstants.secondaryColor),
         SizedBox(width: 2),
         Text(
           'Transfer secured by Mabro',

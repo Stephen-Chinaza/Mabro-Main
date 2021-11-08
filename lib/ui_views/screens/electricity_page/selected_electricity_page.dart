@@ -101,7 +101,7 @@ class _SelectedElectricitySubPageState
     _selectedIndex = 0;
 
     if (widget.contact == null) {
-      _phoneController.text = '';
+      _phoneController.text = '08011111111';
     } else {
       _phoneController.text = widget.contact.phones.isNotEmpty
           ? widget.contact.phones.first.number
@@ -159,7 +159,7 @@ class _SelectedElectricitySubPageState
                                   );
                                 },
                                 child: Container(
-                                  height: 75,
+                                  height: 80,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(
                                         Radius.circular(8),
@@ -176,16 +176,22 @@ class _SelectedElectricitySubPageState
                                       children: [
                                         Row(
                                           children: [
-                                            Image.asset(electLogo,
-                                                height: 40, width: 40),
-                                            SizedBox(
-                                              width: 12,
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: Image.asset(electLogo,
+                                                  height: 60, width: 60),
                                             ),
-                                            Text(electName,
-                                                style: TextStyle(
-                                                    color: ColorConstants
-                                                        .whiteColor,
-                                                    fontSize: 12)),
+                                            Expanded(
+                                              flex: 4,
+                                              child: Text(electName,
+                                                  maxLines: 2,
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                      color: ColorConstants
+                                                          .whiteColor,
+                                                      fontSize: 12)),
+                                            ),
                                           ],
                                         ),
                                         Icon(

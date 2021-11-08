@@ -770,6 +770,10 @@ class _SelectedDataRechargePageState extends State<SelectedDataRechargePage> {
             String balance = data.data.balance.toString();
 
             SharedPrefrences.addStringToSP("nairaBalance", balance);
+
+            _phoneController.text = '';
+            _bundleController.text = '';
+            _pinController.text = '';
           } else if (!status) {
             cPageState(state: false);
 

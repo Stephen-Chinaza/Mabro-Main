@@ -83,7 +83,7 @@ class _SelectedMobileCarrierPageState extends State<SelectedMobileCarrierPage> {
     pageState = false;
 
     if (widget.contact == null) {
-      _phoneController.text = '';
+      _phoneController.text = '08011111111';
     } else {
       _phoneController.text = widget.contact.phones.isNotEmpty
           ? widget.contact.phones.first.number

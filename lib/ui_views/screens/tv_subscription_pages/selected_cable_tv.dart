@@ -68,7 +68,6 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
 
     setState(() {
       nairaBalance = formatter.format(int.tryParse(nairaBalance));
-
     });
     setState(() {});
   }
@@ -94,8 +93,8 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
     checkState = true;
     pageState = false;
 
-    _smartCardController.text = '121212121212';
-    _phoneController.text = '08108803488';
+    _smartCardController.text = '1212121212';
+    _phoneController.text = '08011111111';
   }
 
   void dispose() {
@@ -599,9 +598,6 @@ class _SelectedCableTvPageState extends State<SelectedCableTvPage> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
-          //
-          //
-          //BuyAirtimeBundle regUser = BuyAirtimeBundle.fromJson(body);
           BuyAirtimeBundle data = BuyAirtimeBundle.fromJson(body);
           bool status = data.status;
           String message = data.message;
