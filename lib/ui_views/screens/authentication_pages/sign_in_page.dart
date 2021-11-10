@@ -24,6 +24,7 @@ import 'package:mabro/ui_views/widgets/textfield/password_textfield.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -41,6 +42,13 @@ class _SignInPageState extends State<SignInPage> {
   String _email, _password;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  String pinState = '';
+
+  Future<void> checkFirstScreen() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pinState = (pref.getString('lock_code') ?? '');
+  }
+
   @override
   void dispose() {
     myFocusNodePassword.dispose();
@@ -57,6 +65,10 @@ class _SignInPageState extends State<SignInPage> {
     pageState = false;
     _email = '';
     _password = '';
+
+    checkFirstScreen().then((value) => {
+          pinState = pinState,
+        });
   }
 
   Widget _buildSignUpForm(BuildContext context) {
@@ -141,7 +153,11 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        kopenPage(context, SignUpPage());
+                        kopenPage(
+                            context,
+                            SignUpPage(
+                              userPin: pinState,
+                            ));
                       },
                       child: Row(
                         children: [
@@ -205,7 +221,6 @@ class _SignInPageState extends State<SignInPage> {
               timer: 3,
               bgColor: ColorConstants.secondaryColor);
 
-          //print(email);
           Future.delayed(Duration(seconds: 4), () {
             kopenPage(
                 context,
@@ -303,7 +318,6 @@ class _SignInPageState extends State<SignInPage> {
             print(email);
 
             if (verifiedEmail == '1') {
-
               if (lockCode == 'false') {
                 SharedPrefrences.addStringToSP("userId", userId);
 

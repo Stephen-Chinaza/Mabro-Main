@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,9 @@ class FlutterWaveRedirectPage extends StatefulWidget {
 }
 
 class FlutterWaveRedirectPageState extends State<FlutterWaveRedirectPage> {
+  final Completer<WebViewController> _controller =
+      Completer<WebViewController>();
+
   @override
   void initState() {
     super.initState();
@@ -36,8 +40,28 @@ class FlutterWaveRedirectPageState extends State<FlutterWaveRedirectPage> {
         ),
         body: WebView(
           initialUrl: widget.linkUrl,
+          //initialUrl: 'https://mabro.ng/dev3/exchange/btc',
           debuggingEnabled: false,
           gestureNavigationEnabled: true,
+          javascriptMode: JavascriptMode.unrestricted,
+          onWebViewCreated: (WebViewController webViewController) {
+            _controller.complete(webViewController);
+          },
+          onProgress: (int progress) {
+            print("WebView is loading (progress : $progress%)");
+          },
+          navigationDelegate: (NavigationRequest request) {
+            if (request.url.startsWith(
+                'https://mabro.ng/dev2/_app/naira-wallet/add-fund-success')) {
+              print('blocking navigation to Scarface Chinaza}');
+              return NavigationDecision.navigate;
+            }
+            print('allowing navigation to $request');
+            return NavigationDecision.navigate;
+          },
+          onPageFinished: (String url) {
+            print('Page finished loading: $url');
+          },
           //onWebResourceError: ,
         ));
   }

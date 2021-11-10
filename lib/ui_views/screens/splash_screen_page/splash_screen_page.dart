@@ -19,6 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
     bool onboardState = (pref.getBool('isonBoardTrue') ?? false);
     pinState = (pref.getString('lock_code') ?? '');
 
+    print(pinState);
+
     if (onboardState) {
       pageState = true;
     } else {

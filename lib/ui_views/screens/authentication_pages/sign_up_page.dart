@@ -15,7 +15,6 @@ import 'dart:convert';
 
 import 'package:mabro/constants/dimes/dimensions.dart';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
-import 'package:mabro/constants/string_constants/string_constants.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/screens/authentication_pages/sign_in_page.dart';
 import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
@@ -28,7 +27,7 @@ import 'package:flutter/material.dart';
 class SignUpPage extends StatefulWidget {
   final String userPin;
 
-  const SignUpPage({Key key, this.userPin}) : super(key: key);
+  const SignUpPage({Key key, this.userPin = ''}) : super(key: key);
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }

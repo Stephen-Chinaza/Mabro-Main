@@ -8,6 +8,7 @@ import 'package:mabro/core/models/update_password.dart';
 import 'package:mabro/core/services/repositories.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
+import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/widgets/bottomsheets/bottomsheet.dart';
@@ -64,6 +65,7 @@ class _MenuInfoState extends State<MenuInfo> {
   String userId;
   bool updateState;
   String password;
+  bool pageState;
 
   TextEditingController oldPinController = new TextEditingController();
   TextEditingController newPinController = new TextEditingController();
@@ -83,6 +85,7 @@ class _MenuInfoState extends State<MenuInfo> {
     twoFactorState = false;
     fingerPrintState = true;
     timeoutLockState = false;
+    pageState = true;
   }
 
   Future<void> getData() async {
@@ -323,7 +326,7 @@ class _MenuInfoState extends State<MenuInfo> {
               SizedBox(height: 20),
               TextStyles.textDetails(
                 textSize: 16,
-                textColor: ColorConstants.secondaryColor,
+                textColor: ColorConstants.whiteLighterColor,
                 textValue:
                     'The Pin you are about to reset is for your transactions',
               ),
@@ -359,7 +362,7 @@ class _MenuInfoState extends State<MenuInfo> {
               ),
               CustomButton(
                   margin: 0,
-                  disableButton: true,
+                  disableButton: pageState,
                   onPressed: () {
                     changePin(pinLength: pinLength);
                   },
@@ -500,9 +503,7 @@ class _MenuInfoState extends State<MenuInfo> {
           if (status) {
             SharedPrefrences.addStringToSP(
                 "password", newPasswordController.text);
-            Future.delayed(Duration(seconds: 4), () {
-              kbackBtn(context);
-            });
+            
             ShowSnackBar.showInSnackBar(
                 iconData: Icons.check_circle,
                 value: message,
@@ -512,6 +513,9 @@ class _MenuInfoState extends State<MenuInfo> {
             oldPasswordController.text = '';
             newPasswordController.text = '';
             cNewPasswordController.text = '';
+            Future.delayed(Duration(seconds: 4), () {
+              kbackBtn(context);
+            });
           } else if (!status) {
             ShowSnackBar.showInSnackBar(
                 value: message,
@@ -613,13 +617,14 @@ class _MenuInfoState extends State<MenuInfo> {
     });
   }
 
+  void cPageState({bool state = false}) {
+    setState(() {
+      pageState = state;
+    });
+  }
+
   void changePin({int pinLength}) async {
-    if (oldPinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'old pin required',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (newPinController.text.isEmpty) {
+    if (newPinController.text.isEmpty) {
       ShowSnackBar.showInSnackBar(
           value: 'enter new pin', context: context, scaffoldKey: _scaffoldKey);
     } else if (cNewPinController.text.isEmpty) {
@@ -634,6 +639,7 @@ class _MenuInfoState extends State<MenuInfo> {
           scaffoldKey: _scaffoldKey);
     } else {
       try {
+        cPageState(state: true);
         var map = Map<String, dynamic>();
         map['userId'] = userId;
         map['password'] = password;
@@ -655,15 +661,18 @@ class _MenuInfoState extends State<MenuInfo> {
         if (response.statusCode == 200) {
           var body = jsonDecode(response.body);
 
+          cPageState(state: true);
+
           UpdatePassword settingsData = UpdatePassword.fromJson(body);
 
           bool status = settingsData.status;
           String message = settingsData.message;
 
           if (status) {
-            Future.delayed(Duration(seconds: 4), () {
-              kbackBtn(context);
-            });
+            SharedPrefrences.addStringToSP("lock_code", newPinController.text);
+
+            cPageState(state: true);
+
             ShowSnackBar.showInSnackBar(
                 value: message,
                 context: context,
@@ -672,8 +681,9 @@ class _MenuInfoState extends State<MenuInfo> {
             cNewPinController.text = '';
             newPinController.text = '';
 
-            SharedPrefrences.addStringToSP("lock_code", newPinController.text);
           } else if (!status) {
+            cPageState(state: false);
+
             ShowSnackBar.showInSnackBar(
                 value: message,
                 context: context,
@@ -681,6 +691,8 @@ class _MenuInfoState extends State<MenuInfo> {
                 timer: 5);
           }
         } else {
+          cPageState(state: false);
+
           ShowSnackBar.showInSnackBar(
               value: 'network error',
               context: context,
@@ -688,6 +700,7 @@ class _MenuInfoState extends State<MenuInfo> {
               timer: 5);
         }
       } on SocketException {
+        cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             value: 'check your internet connection',
             context: context,

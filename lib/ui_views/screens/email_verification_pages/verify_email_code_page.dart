@@ -309,63 +309,6 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
           SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
           SharedPrefrences.addStringToSP("verified_phone", verifiedPhone);
 
-          //user user settings info
-          // String user = verifyUser.data.settings.user.toString();
-          // String defaultAccount =
-          //     verifyUser.data.settings.defaultAccount.toString();
-          // String addFundPhoneAlert =
-          //     verifyUser.data.settings.addFundPhoneAlert.toString();
-          // String withdrawFundPhoneAlert =
-          //     verifyUser.data.settings.withdrawFundPhoneAlert.toString();
-          // String addFundEmailAlert =
-          //     verifyUser.data.settings.addFundEmailAlert.toString();
-          // String withdrawFundEmailAlert =
-          //     verifyUser.data.settings.withdrawFundEmailAlert.toString();
-          // String buyAssetPhoneAlert =
-          //     verifyUser.data.settings.buyAssetPhoneAlert.toString();
-          // String buyAssetEmailAlert =
-          //     verifyUser.data.settings.buyAssetEmailAlert.toString();
-          // String sellAssetPhoneAlert =
-          //     verifyUser.data.settings.sellAssetPhoneAlert.toString();
-          // String sellAssetEmailAlert =
-          //     verifyUser.data.settings.sellAssetEmailAlert.toString();
-          // String loginEmailAlert =
-          //     verifyUser.data.settings.loginEmailAlert.toString();
-          // String newsletterPhoneAlert =
-          //     verifyUser.data.settings.newsletterPhoneAlert.toString();
-          // String newsletterEmailAlert =
-          //     verifyUser.data.settings.newsletterEmailAlert.toString();
-          // String smsAlert = verifyUser.data.settings.smsAlert.toString();
-          // String twoFactorAuth =
-          //     verifyUser.data.settings.twoFactorAuth.toString();
-
-          //saving user data to sharedprefs
-          // SharedPrefrences.addStringToSP("user", user);
-          // SharedPrefrences.addStringToSP("default_account", defaultAccount);
-          // SharedPrefrences.addStringToSP(
-          //     "add_fund_phone_alert", addFundPhoneAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "withdraw_fund_phone_alert", withdrawFundPhoneAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "add_fund_email_alert", addFundEmailAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "withdraw_fund_email_alert", withdrawFundEmailAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "buy_asset_phone_alert", buyAssetPhoneAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "sell_asset_phone_alert", sellAssetPhoneAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "buy_asset_email_alert", buyAssetEmailAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "sell_asset_email_alert", sellAssetEmailAlert);
-          // SharedPrefrences.addStringToSP("login_email_alert", loginEmailAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "newsletter_phone_alert", newsletterPhoneAlert);
-          // SharedPrefrences.addStringToSP(
-          //     "newsletter_email_alert", newsletterEmailAlert);
-          // SharedPrefrences.addStringToSP("sms_alert", smsAlert);
-          // SharedPrefrences.addStringToSP("two_factor_auth", twoFactorAuth);
-
           ShowSnackBar.showInSnackBar(
               value: message,
               iconData: Icons.check_circle,

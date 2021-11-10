@@ -38,7 +38,6 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   bool pageState, checkState;
   String userId;
 
-
   var onTapRecognizer;
 
   TextEditingController textEditingController = TextEditingController();
@@ -81,7 +80,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
         Scaffold(
           key: _scaffoldKey,
           backgroundColor: ColorConstants.primaryColor,
-          body:  SingleChildScrollView(
+          body: SingleChildScrollView(
             child: Container(
               height: MediaQuery.of(context).size.height,
               child: Expanded(
@@ -94,13 +93,11 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-
                           GestureDetector(
                               onTap: () {}, child: _buildSecurityText()),
                           SizedBox(
                             height: Dims.sizedBoxHeight(
-                                height:
-                                Dims.screenHeight(context) * 0.10),
+                                height: Dims.screenHeight(context) * 0.10),
                           ),
                           Visibility(
                             visible: !pageState,
@@ -121,7 +118,6 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                         ),
                                         length: 4,
                                         obscureText: true,
-
                                         validator: (v) {
                                           if (v.length < 4) {
                                             return "";
@@ -130,49 +126,58 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                           }
                                         },
                                         pinTheme: PinTheme(
+                                          activeColor:
+                                              ColorConstants.secondaryColor,
+                                          inactiveColor:
+                                              ColorConstants.secondaryColor,
+                                          selectedColor:
+                                              ColorConstants.secondaryColor,
                                           shape: PinCodeFieldShape.box,
                                           fieldHeight: 50,
                                           fieldWidth: 50,
-                                          activeFillColor:
-                                          hasError ? Colors.orange : Colors.white,
+                                          activeFillColor: hasError
+                                              ? Colors.orange
+                                              : Colors.white,
                                         ),
                                         cursorColor: Colors.white,
-                                        animationDuration: Duration(milliseconds: 300),
-                                        textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
-                                        backgroundColor: ColorConstants.transparent,
+                                        animationDuration:
+                                            Duration(milliseconds: 300),
+                                        textStyle: TextStyle(
+                                            fontSize: 26,
+                                            height: 1.6,
+                                            color: ColorConstants.white),
+                                        backgroundColor:
+                                            ColorConstants.transparent,
                                         obscuringCharacter: '*',
                                         enableActiveFill: false,
-
                                         controller: textEditingController,
                                         keyboardType: TextInputType.number,
-
                                         onCompleted: (v) {
                                           print(v);
 
                                           formKey.currentState.validate();
                                           // conditions for validating
                                           if (currentText.length != 4) {
-
                                           } else {
                                             if (v == widget.textPin) {
                                               setState(() {
                                                 hasError = false;
-                                                textEditingController
-                                                    .text = '';
+                                                textEditingController.text = '';
                                                 _setPin(v);
                                               });
-                                            }else{
+                                            } else {
                                               ShowSnackBar.showInSnackBar(
-                                                  bgColor: ColorConstants.secondaryColor,
-                                                  value: 'Pin mismatch re-enter pin',
+                                                  bgColor: ColorConstants
+                                                      .secondaryColor,
+                                                  value:
+                                                      'Pin mismatch re-enter pin',
                                                   context: context,
                                                   scaffoldKey: _scaffoldKey,
                                                   timer: 5);
-                                              textEditingController
-                                                  .text = '';
-                                              Future.delayed(Duration(seconds: 3), (){
+                                              textEditingController.text = '';
+                                              Future.delayed(
+                                                  Duration(seconds: 3), () {
                                                 kbackBtn(context);
-
                                               });
                                             }
                                           }
@@ -192,29 +197,31 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                                       )),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30.0),
                                   child: Text(
-                                    hasError ? "*Please fill up all the cells properly" : "",
+                                    hasError
+                                        ? "*Please fill up all the cells properly"
+                                        : "",
                                     style: TextStyle(
                                         color: ColorConstants.secondaryColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400),
                                   ),
                                 ),
-
                                 SizedBox(
                                   height: Dims.sizedBoxHeight(height: 30.0),
                                 ),
-                                GestureDetector(onTap: (){
-                                  kbackBtn(context);
-                                },
+                                GestureDetector(
+                                  onTap: () {
+                                    kbackBtn(context);
+                                  },
                                   child: TextStyles.textHeadings(
                                       textValue: 'BACK',
                                       textSize: 16.0,
-                                      textColor: ColorConstants.whiteLighterColor
-                                  ),
+                                      textColor:
+                                          ColorConstants.whiteLighterColor),
                                 ),
-
                               ],
                             ),
                           ),
@@ -223,14 +230,20 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                             child: Column(
                               children: [
                                 SizedBox(height: 20),
-                                CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white),),
+                                CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                ),
                                 SizedBox(height: 20),
-                                Text('verifying code...', style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),),
+                                Text(
+                                  'verifying code...',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontStyle: FontStyle.italic),
+                                ),
                               ],
                             ),
                           ),
-
-
                         ],
                       )),
                 ]),
@@ -250,9 +263,8 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           padding: const EdgeInsets.all(8.0),
           child: Text(
             'Enter pin again!',
-            style: TextStyle(fontSize: 25,
-                color: ColorConstants.secondaryColor
-            ),
+            style:
+                TextStyle(fontSize: 25, color: ColorConstants.secondaryColor),
             textAlign: TextAlign.center,
           ),
         ),
@@ -261,8 +273,8 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           child: Center(
             child: Text(
               ' Please remember this pin. It will be used to keep your account secured.',
-              style:
-              TextStyle(fontSize: 18, color: ColorConstants.whiteLighterColor),
+              style: TextStyle(
+                  fontSize: 18, color: ColorConstants.whiteLighterColor),
               textAlign: TextAlign.center,
             ),
           ),
@@ -279,13 +291,10 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
       map['userId'] = userId;
       map['lock_code'] = lockCode;
 
-
-
-      var response = await http
-          .post(HttpService.rootUserPin, body: map,headers: {
-        'Authorization': 'Bearer '+HttpService.token,
-      })
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+      var response =
+          await http.post(HttpService.rootUserPin, body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
         cPageState(state: false);
         ShowSnackBar.showInSnackBar(
             bgColor: ColorConstants.secondaryColor,
@@ -313,8 +322,6 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           String emailAddress = regUser.data.emailAddress.toString();
           String nairaBalance = regUser.data.nairaBalance.toString();
 
-
-
           String verifiedEmail = regUser.data.verifiedEmail.toString();
 
           //saving user data to sharedprefs
@@ -324,7 +331,6 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
           SharedPrefrences.addStringToSP("first_name", firstName);
           SharedPrefrences.addStringToSP("surname", surName);
           SharedPrefrences.addStringToSP("verified_email", verifiedEmail);
-
 
           SharedPrefrences.addStringToSP("lock_code", widget.textPin);
 

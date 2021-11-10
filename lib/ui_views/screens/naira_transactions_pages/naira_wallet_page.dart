@@ -292,6 +292,8 @@ class _NairaWalletPageState extends State<NairaWalletPage>
                           transactionDetails: allTransactionHistory
                               .data.transactions[index].description,
                           currency: 'NGN',
+                          iconData: Icons.call_made,
+                          colorData: Colors.green,
                         ));
                 },
               ),
@@ -306,16 +308,27 @@ class _NairaWalletPageState extends State<NairaWalletPage>
               child: Text(
                 'Error in network',
                 style: TextStyle(
-                    fontSize: 16, color: ColorConstants.whiteLighterColor),
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w200),
               ),
             ),
           );
         } else {
-          return Center(
-              child: CircularProgressIndicator(
-            valueColor:
-                AlwaysStoppedAnimation<Color>(ColorConstants.secondaryColor),
-          ));
+          return Container(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          ColorConstants.secondaryColor),
+                    )),
+              ],
+            ),
+          );
         }
       },
     );

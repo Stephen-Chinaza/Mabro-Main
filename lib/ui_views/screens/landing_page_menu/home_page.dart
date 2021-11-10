@@ -163,7 +163,8 @@ class _HomePageState extends State<HomePage> {
           iconBg2: Colors.blue,
           iconData2: Icons.money,
           menuTitle2: 'Airtime 2 Cash',
-          page2: AirtimeToCashPage(),
+          callFunction: _airtime2CashInfo,
+          functionType: true,
           iconBg3: Colors.purple,
           iconData3: Typicons.compass,
           menuTitle3: 'Buy Data',
@@ -199,7 +200,7 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.all(3.0),
       child: _menuContainers2(
         title: 'P2P Exchange',
-        iconBg1: Colors.green,
+        iconBg1: Colors.green[900],
         iconData1: Icons.attribution_outlined,
         menuTitle1: 'Buy',
         function: true,
@@ -264,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                           coinName: 'Naira Wallet',
                           nairaEquivalent: nairaBalance,
                           image: 'assets/images/naira.png',
-                          coinColor: Colors.green,
+                          coinColor: Colors.green[900],
                           coinBalance: 'Balance')
                       : _buildWalletItem(
                           coinName: coinList[index - 1].title + ' Balance',
@@ -425,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(height: 8),
                               Text(nairaBalance,
                                   style: TextStyle(
-                                    color: Colors.green,
+                                    color: Colors.green[900],
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                   )),
@@ -476,6 +477,8 @@ class _HomePageState extends State<HomePage> {
       Widget page1,
       Widget page2,
       Widget page3,
+      Function callFunction,
+      bool functionType = false,
       double containerHeight = 270,
       double menuHeight = 100}) {
     return Container(
@@ -526,7 +529,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              kopenPage(context, page2);
+                              (functionType)
+                                  ? callFunction()
+                                  : kopenPage(context, page2);
                             },
                             child: Container(
                               height: menuHeight,

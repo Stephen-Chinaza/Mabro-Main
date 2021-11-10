@@ -60,6 +60,7 @@ class _PinScreenState extends State<PinScreen> {
       };
     errorController = StreamController<ErrorAnimationType>();
   }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -74,18 +75,14 @@ class _PinScreenState extends State<PinScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-
                     GestureDetector(onTap: () {}, child: _buildSecurityText()),
-                    SizedBox(
-                      height: 25
-                    ),
+                    SizedBox(height: 25),
                     Form(
                       key: formKey,
                       child: Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 4.0, horizontal: 40),
                           child: PinCodeTextField(
-
                             appContext: context,
                             pastedTextStyle: TextStyle(
                               color: Colors.white,
@@ -102,15 +99,21 @@ class _PinScreenState extends State<PinScreen> {
                               }
                             },
                             pinTheme: PinTheme(
+                              activeColor: ColorConstants.secondaryColor,
+                              inactiveColor: ColorConstants.secondaryColor,
+                              selectedColor: ColorConstants.secondaryColor,
                               shape: PinCodeFieldShape.box,
                               fieldHeight: 50,
                               fieldWidth: 50,
                               activeFillColor:
-                              hasError ? Colors.orange : Colors.white,
+                                  hasError ? Colors.orange : Colors.white,
                             ),
                             cursorColor: Colors.white,
                             animationDuration: Duration(milliseconds: 300),
-                            textStyle: TextStyle(fontSize: 26, height: 1.6, color: ColorConstants.white),
+                            textStyle: TextStyle(
+                                fontSize: 26,
+                                height: 1.6,
+                                color: ColorConstants.white),
                             backgroundColor: ColorConstants.primaryColor,
                             obscuringCharacter: '*',
                             enableActiveFill: false,
@@ -130,7 +133,6 @@ class _PinScreenState extends State<PinScreen> {
                               formKey.currentState.validate();
                               // conditions for validating
                               if (currentText.length != 4) {
-
                               } else {
                                 setState(() {
                                   hasError = false;
@@ -157,7 +159,6 @@ class _PinScreenState extends State<PinScreen> {
                             },
                           )),
                     ),
-
                   ],
                 )),
           ]),
@@ -175,7 +176,7 @@ class _PinScreenState extends State<PinScreen> {
               'Create your unique 4-digit pin!',
               style: TextStyle(
                 fontSize: 25,
-                  color: ColorConstants.secondaryColor,
+                color: ColorConstants.secondaryColor,
               ),
               textAlign: TextAlign.center,
             ),
@@ -185,7 +186,8 @@ class _PinScreenState extends State<PinScreen> {
           padding: const EdgeInsets.all(12.0),
           child: Text(
             'Please remember this pin. It will be used to keep your account secured.',
-            style: TextStyle(fontSize: 18, color: ColorConstants.whiteLighterColor),
+            style: TextStyle(
+                fontSize: 18, color: ColorConstants.whiteLighterColor),
             textAlign: TextAlign.center,
           ),
         ),

@@ -55,6 +55,7 @@ class ContactUs extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: ColorConstants.primaryColor,
           elevation: 8.0,
           contentPadding: EdgeInsets.all(18.0),
           shape:
@@ -70,16 +71,22 @@ class ContactUs extends StatelessWidget {
                   child: Container(
                     height: 50.0,
                     alignment: Alignment.center,
-                    child: Text('Call'),
+                    child: Text('Call',
+                        style:
+                            TextStyle(color: ColorConstants.whiteLighterColor)),
                   ),
                 ),
-                Divider(),
+                Divider(
+                  color: ColorConstants.whiteLighterColor,
+                ),
                 InkWell(
                   onTap: () => launch('https://wa.me/' + phoneNumber),
                   child: Container(
                     alignment: Alignment.center,
                     height: 50.0,
-                    child: Text('WhatsApp'),
+                    child: Text('WhatsApp',
+                        style:
+                            TextStyle(color: ColorConstants.whiteLighterColor)),
                   ),
                 ),
               ],

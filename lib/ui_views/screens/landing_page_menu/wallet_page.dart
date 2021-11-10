@@ -123,7 +123,7 @@ class _WalletPageState extends State<WalletPage> {
                             children: [
                               Text(nairaBalance,
                                   style: TextStyle(
-                                    color: Colors.green,
+                                    color: Colors.green[900],
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
                                   )),
@@ -149,7 +149,7 @@ class _WalletPageState extends State<WalletPage> {
                     wallet_title: 'BTC',
                     color: Colors.red,
                     balance: '',
-                    dollar_equivalent: '$nairaBalance',
+                    dollar_equivalent: '0.00',
                     icon: Icons.arrow_downward,
                     rise_or_fall: ''),
                 SizedBox(
@@ -159,9 +159,9 @@ class _WalletPageState extends State<WalletPage> {
                     size: size,
                     img_url: 'assets/images/ethereum.png',
                     wallet_title: 'Ethereum',
-                    color: Colors.green,
+                    color: Colors.green[900],
                     balance: '',
-                    dollar_equivalent: '$nairaBalance',
+                    dollar_equivalent: '0.00',
                     icon: Icons.arrow_upward,
                     rise_or_fall: ''),
                 SizedBox(
@@ -173,7 +173,7 @@ class _WalletPageState extends State<WalletPage> {
                     wallet_title: 'Lite Coin',
                     color: Colors.red,
                     balance: '',
-                    dollar_equivalent: '$nairaBalance',
+                    dollar_equivalent: '0.00',
                     icon: Icons.arrow_downward,
                     rise_or_fall: ''),
                 SizedBox(
@@ -185,7 +185,7 @@ class _WalletPageState extends State<WalletPage> {
                     wallet_title: 'USDT',
                     color: Colors.red,
                     balance: '',
-                    dollar_equivalent: '$nairaBalance',
+                    dollar_equivalent: '0.00',
                     icon: Icons.arrow_downward,
                     rise_or_fall: ''),
                 SizedBox(height: 20),

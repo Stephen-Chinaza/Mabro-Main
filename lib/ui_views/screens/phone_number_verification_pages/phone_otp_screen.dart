@@ -173,6 +173,11 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                                     }
                                   },
                                   pinTheme: PinTheme(
+                                    activeColor: ColorConstants.secondaryColor,
+                                    inactiveColor:
+                                        ColorConstants.secondaryColor,
+                                    selectedColor:
+                                        ColorConstants.secondaryColor,
                                     shape: PinCodeFieldShape.box,
                                     fieldHeight: 50,
                                     fieldWidth: 50,
@@ -203,7 +208,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                                     print(v);
 
                                     formKey.currentState.validate();
-                                    // conditions for validating
+
                                     if (currentText.length != 6) {
                                     } else {
                                       setState(() {
@@ -221,8 +226,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
                                   },
                                   beforeTextPaste: (text) {
                                     print("Allowing to paste $text");
-                                    //if you return true then it will show the paste confirmation dialog. Otherwise if false, then nothing will happen.
-                                    //but you can show anything you want here, like your pop up saying wrong paste format or etc
+
                                     return true;
                                   },
                                 )),
