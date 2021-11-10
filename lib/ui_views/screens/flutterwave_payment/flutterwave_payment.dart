@@ -15,7 +15,6 @@ import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/textfield/normal_textfield.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 
@@ -350,16 +349,6 @@ class _CardPaymentState extends State<CardPayment> {
         map['pin'] = _cardPinFieldController.text;
         map['amount'] = widget.amount.toString();
 
-        print(userId);
-        print(_nameController.text);
-        print(email);
-        print(_cardNumberFieldController.text);
-        print(_cardCvvFieldController.text);
-        print(_cardMonthFieldController.text);
-        print(_cardYearFieldController.text);
-        print(_cardPinFieldController.text);
-        print(widget.amount);
-
         var response = await http
             .post(HttpService.rootVerifyCardPayment, body: map, headers: {
           'Authorization': 'Bearer ' + HttpService.token,
@@ -428,7 +417,7 @@ class _CardPaymentState extends State<CardPayment> {
   }
 
   void redirectUser({String url}) {
-    Future.delayed(Duration(seconds: 6), () {
+    Future.delayed(Duration(seconds: 0), () {
       pushPage(
           context,
           FlutterWaveRedirectPage(

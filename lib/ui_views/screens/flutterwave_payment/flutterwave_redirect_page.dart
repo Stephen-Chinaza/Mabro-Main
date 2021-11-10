@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:mabro/constants/navigator/navigation_constant.dart';
+import 'package:mabro/ui_views/screens/flutterwave_payment/success_page.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:mabro/res/colors.dart';
@@ -17,6 +20,8 @@ class FlutterWaveRedirectPage extends StatefulWidget {
 class FlutterWaveRedirectPageState extends State<FlutterWaveRedirectPage> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
+
+  String jsonUrl = 'https://mabro.ng/dev2/_app/naira-wallet/verify-transaction';
 
   @override
   void initState() {
@@ -53,10 +58,14 @@ class FlutterWaveRedirectPageState extends State<FlutterWaveRedirectPage> {
           navigationDelegate: (NavigationRequest request) {
             if (request.url.startsWith(
                 'https://mabro.ng/dev2/_app/naira-wallet/add-fund-success')) {
-              print('blocking navigation to Scarface Chinaza}');
-              return NavigationDecision.navigate;
+              pushPage(context, SuccessPage());
+              return NavigationDecision.prevent;
+            } else if (request.url.startsWith(jsonUrl)) {
+              pushPage(context, SuccessPage());
+              return NavigationDecision.prevent;
             }
             print('allowing navigation to $request');
+
             return NavigationDecision.navigate;
           },
           onPageFinished: (String url) {
