@@ -323,7 +323,7 @@ class _BalanceCardState extends State<BalanceCard>
             String id = loginUser.data.id.toString();
             String email = loginUser.data.emailAddress;
             String lockCode = loginUser.data.lockCode;
-            String nairaBalance = loginUser.data.nairaBalance;
+            String nairaBalance = loginUser.data.nairaBalance.toString();
 
             getCurrentDate().toString();
             SharedPrefrences.addStringToSP("lock_code", lockCode);

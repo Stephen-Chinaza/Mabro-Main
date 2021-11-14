@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mabro/constants/dimes/dimensions.dart';
+import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/toolbar.dart';
+import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
+import 'package:mabro/ui_views/widgets/buttons/custom_button.dart';
 
 class SuccessPage extends StatelessWidget {
   const SuccessPage({Key key}) : super(key: key);
@@ -22,80 +25,77 @@ class SuccessPage extends StatelessWidget {
         iconColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 300,
-              child: Stack(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: 600,
+            child: Card(
+              color: ColorConstants.primaryLighterColor,
+              child: Column(
                 children: [
-                  SucessContainer(
-                      color: ColorConstants.primaryColor.withOpacity(0.4),
-                      width: 200,
-                      height: 200,
-                      shadowColor:
-                          ColorConstants.primaryColor.withOpacity(0.2)),
-                  SucessContainer(
-                      color: ColorConstants.primaryColor.withOpacity(0.6),
-                      width: 180,
-                      height: 180,
-                      left: 4.0,
-                      top: 90),
-                  SucessContainer(
-                      color: ColorConstants.primaryColor.withOpacity(0.9),
-                      width: 160,
-                      height: 160,
-                      left: 3.6,
-                      top: 100),
-                  Positioned(
-                      top: 100,
-                      left: MediaQuery.of(context).size.width / 2.7,
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Icon(Icons.check,
-                              color: Colors.white, size: 100)))
-                ],
-              ),
-            ),
-            Text(
-              'Transaction Successful!',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            SizedBox(
-              height: Dims.screenHeight(context) * 0.2,
-            ),
-            Container(
-              height: 200,
-              child: Stack(
-                children: <Widget>[
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: SucessContainer(
-                          color: ColorConstants.primaryColor.withOpacity(0.4),
-                          width: 70,
-                          height: 70,
-                          left: 2.95,
-                          top: 80,
-                          shadowColor:
-                              ColorConstants.primaryColor.withOpacity(0.2)),
+                  Container(
+                    height: 300,
+                    child: Stack(
+                      children: [
+                        SucessContainer(
+                            color: Colors.green.withOpacity(0.4),
+                            width: 180,
+                            height: 180,
+                            shadowColor: Colors.green.withOpacity(0.2)),
+                        SucessContainer(
+                            color: Colors.green.withOpacity(0.6),
+                            width: 160,
+                            height: 160,
+                            left: 4.0,
+                            top: 40),
+                        SucessContainer(
+                            color: Colors.green.withOpacity(0.9),
+                            width: 140,
+                            height: 140,
+                            left: 3.6,
+                            top: 40),
+                        Positioned(
+                            top: 105,
+                            left: MediaQuery.of(context).size.width / 2.9,
+                            child: Align(
+                                alignment: Alignment.center,
+                                child: Icon(Icons.check,
+                                    color: Colors.white, size: 80)))
+                      ],
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.center,
+                  Text(
+                    'Transaction Successful'.toUpperCase(),
+                    style: TextStyle(fontSize: 16, color: ColorConstants.white),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'OK',
+                      'Your transaction is successful and your account has been credited',
                       style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
+                          fontSize: 14,
+                          color: ColorConstants.whiteLighterColor),
+                      textAlign: TextAlign.center,
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  CustomButton(
+                      margin: 10,
+                      height: 40,
+                      disableButton: true,
+                      onPressed: () {
+                        kopenPage(context, LandingPage());
+                      },
+                      text: 'Continue'),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

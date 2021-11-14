@@ -71,7 +71,7 @@ class _SignInPageState extends State<SignInPage> {
         });
   }
 
-  Widget _buildSignUpForm(BuildContext context) {
+  Widget _buildSignInForm(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height,
       child: Card(
@@ -352,11 +352,40 @@ class _SignInPageState extends State<SignInPage> {
                       loginUser.data.verifiedEmail.toString();
                   String verifiedPhone =
                       loginUser.data.verifiedPhone.toString();
+                  String accountNumber =
+                      loginUser.data.nairaWallet.accountNumber;
+                  String accountName = loginUser.data.nairaWallet.accountName;
+                  String bankName = loginUser.data.nairaWallet.bank;
+                  String bitcoinBalance =
+                      loginUser.data.bitcoin.balance.toString();
+                  String bitcoinAddress = loginUser.data.bitcoin.address;
+                  String litecoinBalance =
+                      loginUser.data.litecoin.balance.toString();
+                  String litecoinAddress = loginUser.data.litecoin.address;
+                  String dogecoinBalance =
+                      loginUser.data.dogecoin.balance.toString();
+                  String dogecoinAddress = loginUser.data.dogecoin.address;
 
                   SharedPrefrences.addStringToSP("lock_code", lockCode);
                   SharedPrefrences.addStringToSP("password", password);
                   SharedPrefrences.addStringToSP("surname", surName);
                   SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
+                  SharedPrefrences.addStringToSP(
+                      "account_number", accountNumber);
+                  SharedPrefrences.addStringToSP("account_name", accountName);
+                  SharedPrefrences.addStringToSP("bank", bankName);
+                  SharedPrefrences.addStringToSP(
+                      "bitcoin_balance", bitcoinBalance);
+                  SharedPrefrences.addStringToSP(
+                      "bitcoin_address", bitcoinAddress);
+                  SharedPrefrences.addStringToSP(
+                      "litecoin_balance", litecoinBalance);
+                  SharedPrefrences.addStringToSP(
+                      "litecoin_address", litecoinAddress);
+                  SharedPrefrences.addStringToSP(
+                      "dogecoin_balance", dogecoinBalance);
+                  SharedPrefrences.addStringToSP(
+                      "litecoin_address", dogecoinAddress);
 
                   SharedPrefrences.addStringToSP("first_name", firstName);
                   SharedPrefrences.addStringToSP("phone_number", phone);
@@ -450,7 +479,7 @@ class _SignInPageState extends State<SignInPage> {
                 padding: const EdgeInsets.all(2.0),
                 child: Column(children: <Widget>[
                   SafeArea(child: SizedBox(height: 5)),
-                  _buildSignUpForm(context),
+                  _buildSignInForm(context),
                 ]),
               ),
             ),
