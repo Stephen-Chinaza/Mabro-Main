@@ -10,6 +10,7 @@ import 'package:mabro/res/colors.dart';
 import 'package:mabro/ui_views/commons/bottomsheet_header.dart';
 import 'package:mabro/ui_views/commons/loading_page.dart';
 import 'package:mabro/ui_views/commons/scaffold_background_page.dart/scaffold_background.dart';
+import 'package:mabro/ui_views/commons/toolbar.dart';
 import 'package:mabro/ui_views/screens/landing_page/landing_page.dart';
 import 'package:mabro/ui_views/screens/menu_option_pages/account_page.dart';
 import 'package:mabro/ui_views/screens/select_payment_type/select_deposit_payment_type.dart';
@@ -74,7 +75,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     withdrawMethodController.text = 'Select withdrawal method';
   }
 
-  var formatter = NumberFormat('#,##,000');
+  var formatter = NumberFormat.currency(decimalDigits: 2, name: '');
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -86,7 +87,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     nairaBalance = (pref.getString('nairaBalance') ?? '');
 
     setState(() {
-      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+      nairaBalance = formatter.format(double.tryParse(nairaBalance));
     });
 
     accountNameController.text = accountName;
@@ -115,56 +116,31 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
               Scaffold(
                 key: _scaffoldKey,
                 backgroundColor: ColorConstants.primaryColor,
-                appBar: new AppBar(
-                  flexibleSpace: Container(
-                    decoration: BoxDecoration(
-                      color: ColorConstants.primaryLighterColor,
-                    ),
-                  ),
-                  title: new Text("", style: TextStyle(fontSize: 18)),
-                  leading: GestureDetector(
-                      onTap: () {
-                        kbackBtn(context);
-                      },
-                      child: Icon(
-                        Platform.isIOS
-                            ? Icons.arrow_back_ios
-                            : Icons.arrow_back,
-                        color: Colors.white,
-                        size: 27,
-                      )),
-                  bottom: TabBar(
-                    isScrollable: true,
-                    unselectedLabelColor: ColorConstants.whiteLighterColor,
-                    unselectedLabelStyle: TextStyle(fontSize: 14),
-                    labelStyle: TextStyle(fontSize: 14),
-                    labelColor: ColorConstants.whiteColor,
-                    tabs: [
-                      new Tab(text: 'Deposit funds'),
-                      new Tab(
-                        text: 'Withdraw funds',
-                      ),
-                    ],
-                    controller: _tabController,
-                    indicatorColor: Colors.white,
-                    labelPadding: EdgeInsets.symmetric(horizontal: 50),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                  ),
-                  bottomOpacity: 1,
+                appBar: TopBar(
+                  backgroundColorStart: ColorConstants.primaryColor,
+                  backgroundColorEnd: ColorConstants.secondaryColor,
+                  title: 'Fund Wallet',
+                  icon:
+                  Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+                  onPressed: null,
+                  textColor: Colors.white,
+                  iconColor: Colors.white,
                 ),
-                body: TabBarView(
-                  children: [
-                    SingleChildScrollView(child: _depositeFund()),
-                    SingleChildScrollView(child: _withdrawFund()),
-                  ],
-                  controller: _tabController,
-                ),
+                body: _depositFund(),
+
+                // body: TabBarView(
+                //   children: [
+                //     SingleChildScrollView(child: _depositFund()),
+                //     SingleChildScrollView(child: _withdrawFund()),
+                //   ],
+                //   controller: _tabController,
+                // ),
               ),
             ],
           );
   }
 
-  Widget _depositeFund() {
+  Widget _depositFund() {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: Container(
@@ -370,7 +346,6 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                 CustomButton(
                     disableButton: isAccountSet,
                     onPressed: () {
-                      withdrawFund();
                     },
                     text: 'Withdraw fund',
                     margin: 0),
@@ -414,7 +389,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
                                 Text(
                                   title,
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: ColorConstants.secondaryColor,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -541,84 +516,7 @@ class _DepositWithdrawPageState extends State<DepositWithdrawPage>
     );
   }
 
-  void withdrawFund() async {
-    if (withdrawAmountController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Enter amount to withdraw',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (pinController.text.isEmpty) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Enter transaction pin',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else if (userPin != pinController.text) {
-      ShowSnackBar.showInSnackBar(
-          value: 'Invalid pin entered',
-          context: context,
-          scaffoldKey: _scaffoldKey);
-    } else {
-      cPageState(state: true);
-      try {
-        var map = Map<String, dynamic>();
-        map['userId'] = userId;
-        map['amount'] = withdrawAmountController.text;
 
-        var response = await http
-            .post(HttpService.rootWithdrawFund, body: map)
-            .timeout(const Duration(seconds: 15), onTimeout: () {
-          cPageState(state: false);
-          ShowSnackBar.showInSnackBar(
-              value: 'The connection has timed out, please try again!',
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-          return null;
-        });
-
-        if (response.statusCode == 200) {
-          var body = jsonDecode(response.body);
-
-          WithdrawalData withdrawalData = WithdrawalData.fromJson(body);
-
-          bool status = withdrawalData.status;
-          String message = withdrawalData.message;
-          if (status) {
-            cPageState(state: false);
-
-            ShowSnackBar.showInSnackBar(
-                iconData: Icons.check_circle,
-                value: message,
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-            redirectPage();
-          } else if (!status) {
-            cPageState(state: false);
-            ShowSnackBar.showInSnackBar(
-                value: message,
-                context: context,
-                scaffoldKey: _scaffoldKey,
-                timer: 5);
-          }
-        } else {
-          cPageState(state: false);
-          ShowSnackBar.showInSnackBar(
-              value: 'network error',
-              context: context,
-              scaffoldKey: _scaffoldKey,
-              timer: 5);
-        }
-      } on SocketException {
-        cPageState(state: false);
-        ShowSnackBar.showInSnackBar(
-            value: 'check your internet connection',
-            context: context,
-            scaffoldKey: _scaffoldKey,
-            timer: 5);
-      }
-    }
-  }
 
   void cPageState({bool state = false}) {
     setState(() {

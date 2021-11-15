@@ -23,84 +23,79 @@ class HttpService {
   static final String token =
       'kOoT3jVQAK73GAsRrftjnnXzXS6o7lfLi9iMENmJOx1nYbDPgaiqk7vs5lEpfXg4LMF+wFZWWommwTf1CrqTU1ZZz/my4WZxuReq/uDdBIs=';
 
-  static var rootReg = Uri.parse('https://mabro.ng/dev2/register/create');
+  static var rootReg = Uri.parse('https://mabro.ng/dev3/register/create');
   static var verifyTransfer =
-      Uri.parse('https://mabro.ng/dev2/_app/transfer/user/verify');
+      Uri.parse('https://mabro.ng/dev3/_app/transfer/user/verify');
   static var transferFund =
-      Uri.parse('https://mabro.ng/dev2/_app/transfer/user/process');
+      Uri.parse('https://mabro.ng/dev3/_app/transfer/user/process');
   static var rootVerifyTransfer =
-      Uri.parse('https://mabro.ng/dev2/_app/transfer/bank/verify');
+      Uri.parse('https://mabro.ng/dev3/_app/transfer/bank/verify');
   static var rootTransferFund =
-      Uri.parse('https://mabro.ng/dev2/_app/transfer/bank/process');
+      Uri.parse('https://mabro.ng/dev3/_app/transfer/bank/process');
   static var rootUserInfo =
-      Uri.parse('https://mabro.ng/dev2/_app/account-details');
+      Uri.parse('https://mabro.ng/dev3/_app/account-details');
   static var rootAirCashInfo =
-      Uri.parse('https://mabro.ng/dev2/_app/airtime-to-cash/data');
+      Uri.parse('https://mabro.ng/dev3/_app/airtime-to-cash/data');
   static var rootAirCashSubmit =
-      Uri.parse('https://mabro.ng/dev2/_app/airtime-to-cash/process');
-  static var rootLogin = Uri.parse('https://mabro.ng/dev2/login/authenticate');
+      Uri.parse('https://mabro.ng/dev3/_app/airtime-to-cash/process');
+  static var rootLogin = Uri.parse('https://mabro.ng/dev3/login/authenticate');
   static var rootForgotPassword =
-      Uri.parse('https://mabro.ng/dev2/login/send-OTP');
+      Uri.parse('https://mabro.ng/dev3/login/send-OTP');
   static var rootSendEmailOtp =
-      Uri.parse('https://mabro.ng/dev2/register/verify-email-OTP');
+      Uri.parse('https://mabro.ng/dev3/register/verify-email-OTP');
   static var rootVerifyEmail =
-      Uri.parse('https://mabro.ng/dev2/register/verify-email-OTP');
+      Uri.parse('https://mabro.ng/dev3/register/verify-email-OTP');
   static var rootResetPassword =
-      Uri.parse('https://mabro.ng/dev2/login/create-password');
+      Uri.parse('https://mabro.ng/dev3/login/create-password');
   static var rootResendEmail =
-      Uri.parse('https://mabro.ng/dev/register/send-email-OTP');
+      Uri.parse('https://mabro.ng/dev3/register/send-email-OTP');
   static var rootUserPin =
-      Uri.parse('https://mabro.ng/dev2/register/create-lock-code');
+      Uri.parse('https://mabro.ng/dev3/register/create-lock-code');
   static var rootVerifyPhone =
-      Uri.parse('https://mabro.ng/dev2/_app/verify-phone-OTP');
+      Uri.parse('https://mabro.ng/dev3/_app/verify-phone-OTP');
   static var rootResendPhone =
-      Uri.parse('https://mabro.ng/dev2/_app/update-phone');
+      Uri.parse('https://mabro.ng/dev3/_app/update-phone');
   static var rootSendPhone =
-      Uri.parse('https://mabro.ng/dev2/_app/update-phone');
-  static var rootSettingsInfo =
-      Uri.parse('https://iceztech.com/mabro/settings/index/');
-  static var rootUpdateUsersData =
-      Uri.parse('https://iceztech.com/mabro/settings/update-profile');
-  static var rootWithdrawFund =
-      Uri.parse('https://iceztech.com/mabro/fund-account/withdraw');
+      Uri.parse('https://mabro.ng/dev3/_app/update-phone');
+
   static var rootUpdateSettings =
-      Uri.parse('https://mabro.ng/dev2/_app/update-settings');
+      Uri.parse('https://mabro.ng/dev3/_app/update-settings');
   static var rootUpdateUserPassword =
-      Uri.parse('https://mabro.ng/dev2/_app/change-password');
+      Uri.parse('https://mabro.ng/dev3/_app/change-password');
   static var rootUpdateUserPin =
-      Uri.parse('https://mabro.ng/dev2/_app/change-lock-code');
-  static var rootVerifyAccountNumber =
-      Uri.parse('https://iceztech.com/mabro/settings/verify-account-number');
-  static var rootVerifyBvn = Uri.parse('https://mabro.ng/dev2/_app/add-BVN');
+      Uri.parse('https://mabro.ng/dev3/_app/change-lock-code');
+
+  static var rootVerifyBvn = Uri.parse('https://mabro.ng/dev3/_app/add-BVN');
   static var rootUpdateAccount =
-      Uri.parse('https://mabro.ng/dev2/_app/update-bank-account');
+      Uri.parse('https://mabro.ng/dev3/_app/update-bank-account');
   static var rootBuyAirtime =
-      Uri.parse('https://mabro.ng/dev2/_app/airtime/pay');
+      Uri.parse('https://mabro.ng/dev3/_app/airtime/pay');
   static var rootBuyData =
-      Uri.parse('https://mabro.ng/dev2/_app/mobile-data/pay');
+      Uri.parse('https://mabro.ng/dev3/_app/mobile-data/pay');
   static var rootVerifyMeterNumber =
-      Uri.parse('https://mabro.ng/dev2/_app/electricity/verify-meter-number');
+      Uri.parse('https://mabro.ng/dev3/_app/electricity/verify-meter-number');
   static var rootPayElectricityBill =
-      Uri.parse('https://mabro.ng/dev2/_app/electricity/pay-bill');
+      Uri.parse('https://mabro.ng/dev3/_app/electricity/pay-bill');
   static var rootElectricityCompanyList =
-      'https://mabro.ng/dev2/_app/electricity/distribution-companies';
+      'https://mabro.ng/dev3/_app/electricity/distribution-companies';
   static var rootPayTvBill =
-      Uri.parse('https://mabro.ng/dev2/_app/tv/pay-subscription');
+      Uri.parse('https://mabro.ng/dev3/_app/tv/pay-subscription');
   static var rootTvSubscriptionList =
-      'https://mabro.ng/dev2/_app/electricity/distribution-companies';
+      'https://mabro.ng/dev3/_app/electricity/distribution-companies';
   static var rootTvPlanList =
-      'https://mabro.ng/dev2/_app/electricity/distribution-companies';
+      'https://mabro.ng/dev3/_app/electricity/distribution-companies';
   static var rootVerifySmartCard =
-      Uri.parse('https://mabro.ng/dev2/_app/tv/verify-smart-card');
+      Uri.parse('https://mabro.ng/dev3/_app/tv/verify-smart-card');
   static var rootVerifyCardPayment =
-      Uri.parse('https://mabro.ng/dev2/_app/naira-wallet/fund');
+      Uri.parse('https://mabro.ng/dev3/_app/naira-wallet/fund');
   static var rootVerifyOtp =
-      Uri.parse('https://mabro.ng/dev2/_app/naira-wallet/verify-OTP');
+      Uri.parse('https://mabro.ng/dev3/_app/naira-wallet/verify-OTP');
 
   //P2p Urls
-  static var rootP2PUserInfo = Uri.parse('https://mabro.ng/dev2/exchange/info/coins');
+  static var rootP2PUserInfo =
+      Uri.parse('https://mabro.ng/dev3/exchange/info/coins');
   static var rootCreateBuyAdInfo =
-      Uri.parse('https://mabro.ng/dev2/exchange/btc/buy/create-ad/save');
+      Uri.parse('https://mabro.ng/dev3/exchange/btc/buy/create-ad/save');
 
   static Future<ListBanks> getBankLists(BuildContext context, userId) async {
     try {
@@ -501,6 +496,46 @@ class HttpService {
   }
 
   static Future<AllTransactionHistory> transactionHistory(
+      BuildContext context, String user, String url) async {
+    try {
+      var map = Map<String, dynamic>();
+      map['userId'] = user;
+
+      var response = await http.post(Uri.parse(url), body: map, headers: {
+        'Authorization': 'Bearer ' + HttpService.token,
+      }).timeout(const Duration(seconds: 15), onTimeout: () {
+        ShowSnackBar.showInSnackBar(
+            value: 'The connection has timed out, please try again!',
+            context: context,
+            timer: 5);
+        return null;
+      });
+
+      if (response.statusCode == 200) {
+        var body = jsonDecode(response.body);
+
+        AllTransactionHistory allTransactionHistory =
+            AllTransactionHistory.fromJson(body);
+
+        bool status = allTransactionHistory.status;
+        String message = allTransactionHistory.message;
+        if (status) {
+          return allTransactionHistory;
+        } else if (!status) {
+          ShowSnackBar.showInSnackBar(
+              value: message, context: context, timer: 5);
+        }
+      } else {
+        ShowSnackBar.showInSnackBar(
+            value: 'network error', context: context, timer: 5);
+      }
+    } on SocketException {
+      ShowSnackBar.showInSnackBar(
+          value: 'check your internet connection', context: context, timer: 5);
+    }
+  }
+
+  static Future<AllTransactionHistory> coinLists(
       BuildContext context, String user, String url) async {
     try {
       var map = Map<String, dynamic>();

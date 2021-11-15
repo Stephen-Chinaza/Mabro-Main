@@ -10,6 +10,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:mabro/constants/navigator/navigation_constant.dart';
 import 'package:mabro/res/colors.dart';
+import 'package:mabro/ui_views/screens/menu_option_pages/account_page.dart';
 import 'package:mabro/ui_views/widgets/snackbar/snack.dart';
 import 'package:mabro/ui_views/widgets/texts/text_styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -334,7 +335,8 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
 
           SharedPrefrences.addStringToSP("phone_number", widget.phone);
 
-          _redirectuser();
+          pushPage(context, AccountPage());
+
         } else if (!status) {
           cPageState(state: false);
           ShowSnackBar.showInSnackBar(
@@ -425,8 +427,7 @@ class _PhoneOtpScreenState extends State<PhoneOtpScreen> {
 
   void _redirectuser() {
     Future.delayed(Duration(seconds: 2), () {
-      //kbackBtn(context);
-      pushPage(context, LandingPage());
+
     });
   }
 

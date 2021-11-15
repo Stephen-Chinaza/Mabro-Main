@@ -354,6 +354,8 @@ class _SignInPageState extends State<SignInPage> {
                       loginUser.data.verifiedPhone.toString();
                   String accountNumber =
                       loginUser.data.nairaWallet.accountNumber;
+                  String bvn = loginUser.data.nairaWallet.bvn;
+
                   String accountName = loginUser.data.nairaWallet.accountName;
                   String bankName = loginUser.data.nairaWallet.bank;
                   String bitcoinBalance =
@@ -370,6 +372,7 @@ class _SignInPageState extends State<SignInPage> {
                   SharedPrefrences.addStringToSP("password", password);
                   SharedPrefrences.addStringToSP("surname", surName);
                   SharedPrefrences.addStringToSP("nairaBalance", nairaBalance);
+                  SharedPrefrences.addStringToSP("bvn", bvn);
                   SharedPrefrences.addStringToSP(
                       "account_number", accountNumber);
                   SharedPrefrences.addStringToSP("account_name", accountName);

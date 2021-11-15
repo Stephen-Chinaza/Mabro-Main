@@ -61,7 +61,7 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
   String inputCurrencyType;
   String userId = '';
 
-  var formatter = NumberFormat("#,##0.00", "en_US");
+  var formatter = NumberFormat.currency(decimalDigits: 2, name: '');
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -86,12 +86,12 @@ class _BtcP2PBuySellState extends State<BtcP2PBuySell> {
     defaultusdSellingPrice = widget.usdSellingPrice;
 
     setState(() {
-      defaultSellingPrice = formatter.format(int.tryParse(defaultSellingPrice));
-      defaultBuyingPrice = formatter.format(int.tryParse(defaultBuyingPrice));
+      defaultSellingPrice = formatter.format(double.tryParse(defaultSellingPrice));
+      defaultBuyingPrice = formatter.format(double.tryParse(defaultBuyingPrice));
       defaultusdBuyingPrice =
-          formatter.format(int.tryParse(defaultusdBuyingPrice));
+          formatter.format(double.tryParse(defaultusdBuyingPrice));
       defaultusdSellingPrice =
-          formatter.format(int.tryParse(defaultusdSellingPrice));
+          formatter.format(double.tryParse(defaultusdSellingPrice));
     });
 
     SellingInputState = widget.sellInputState;

@@ -404,7 +404,7 @@ class _CoinExchangeState extends State<CoinExchange>
                             Text(
                               '1 $defaultCoinSubTitle = ' +
                                   formatter
-                                      .format(int.tryParse(defaultBuyingPrice)),
+                                      .format(double.tryParse(defaultBuyingPrice)),
                               style: TextStyle(
                                   color: Colors.orange,
                                   fontWeight: FontWeight.bold,
@@ -414,7 +414,7 @@ class _CoinExchangeState extends State<CoinExchange>
                             Text(
                               '1 $defaultCoinSubTitle = ' +
                                   formatter.format(
-                                      int.tryParse(defaultSellingPrice)) +
+                                      double.tryParse(defaultSellingPrice)) +
                                   'NGN',
                               style: TextStyle(
                                   color: Colors.green,
@@ -473,7 +473,7 @@ class _CoinExchangeState extends State<CoinExchange>
                                         SizedBox(height: 5),
                                         Text(
                                           'NGN ' +
-                                              formatter.format(int.tryParse(
+                                              formatter.format(double.tryParse(
                                                   defaultBuyingPrice)),
                                           style: TextStyle(
                                               color: ColorConstants.white,
@@ -520,7 +520,7 @@ class _CoinExchangeState extends State<CoinExchange>
                                         SizedBox(height: 5),
                                         Text(
                                           'NGN ' +
-                                              formatter.format(int.tryParse(
+                                              formatter.format(double.tryParse(
                                                   defaultSellingPrice)),
                                           style: TextStyle(
                                               color: ColorConstants.white,

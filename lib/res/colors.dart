@@ -39,6 +39,13 @@ class ColorConstants {
     tileMode: TileMode.clamp,
   );
 
+  static const primaryGradient2 = const LinearGradient(
+    colors: const [secondaryColor, primaryColor],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    tileMode: TileMode.clamp,
+  );
+
   static const disabledGradient = const LinearGradient(
     colors: const [whiteLighterColor, whiteLighterColor],
     begin: const FractionalOffset(0.2, 0.2),

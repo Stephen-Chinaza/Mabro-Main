@@ -33,7 +33,7 @@ class CustomButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           gradient: (!disableButton)
               ? ColorConstants.disabledGradient
-              : ColorConstants.primaryGradient,
+              : ColorConstants.primaryGradient2,
             border: Border.all(color: ColorConstants.transparent, width: 0.2)
 
         ),

@@ -67,7 +67,7 @@ class _LandingPageState extends State<LandingPage> {
           AllTransactions(
             user: userId,
           ),
-          MenuPage(),
+
         ],
       ),
       bottomNavigationBar: StreamBuilder<Object>(
@@ -90,8 +90,7 @@ class _LandingPageState extends State<LandingPage> {
                     title: Text('Wallet')),
                 FancyBottomNavigationItem(
                     icon: Icon(Icons.history), title: Text('History')),
-                FancyBottomNavigationItem(
-                    icon: Icon(Icons.person), title: Text('Profile')),
+
               ],
               onItemSelected: (int value) {
                 indexcontroller.add(value);

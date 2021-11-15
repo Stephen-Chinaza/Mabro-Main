@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -53,9 +53,10 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String email, firstname, username, userId, userPin;
   var mail, mail2;
-  bool bankState;
-  String accountNumber;
+  String bankState, hideAccountDetails;
+  String accountNumber, bank;
   String nairaBalance = '';
+  bool _obscureText = false;
 
   List<CoinList> coinList = [];
 
@@ -70,7 +71,9 @@ class _HomePageState extends State<HomePage> {
     mail = '';
     userPin = '';
     mail2 = '';
-    bankState = false;
+    bankState = '';
+    bank = '';
+    hideAccountDetails = '';
     getData();
 
     coinList = DemoData.coinlists;
@@ -92,7 +95,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  var formatter = NumberFormat("#,##0.00", "en_US");
+  var formatter = NumberFormat.currency(decimalDigits: 2, name: '');
 
   Future<void> getData() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -100,12 +103,13 @@ class _HomePageState extends State<HomePage> {
     userPin = (pref.getString('lock_code') ?? '');
     email = (pref.getString('email') ?? '');
     accountNumber = (pref.getString('account_number') ?? '');
+    bank = (pref.getString('bank') ?? '');
     firstname = (pref.getString('first_name') ?? '');
 
     nairaBalance = (pref.getString('nairaBalance') ?? '');
 
     setState(() {
-      nairaBalance = formatter.format(int.tryParse(nairaBalance));
+      nairaBalance = formatter.format(double.tryParse(nairaBalance));
 
       if (firstname == '') {
         username = '';
@@ -115,16 +119,23 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         if (accountNumber == '') {
-          bankState = true;
+          bankState = 'Click here to Enable Account number';
+          showInfoDialog(310, _buildBody(), title: 'Enable account Number');
         } else {
-          bankState = false;
+          bankState = accountNumber;
         }
-
-        if (bankState) {
-          showInfoDialog(310, _buildBody(), title: 'Account setup');
-        } else {}
       });
     });
+  }
+
+  String hideAccountNumber() {
+    if (bankState != 'Click here to Enable Account number') {
+      return hideAccountDetails = bankState.substring(0, 3) +
+          '****' +
+          bankState.substring(bankState.length - 3);
+    } else {
+      return '';
+    }
   }
 
   @override
@@ -257,7 +268,10 @@ class _HomePageState extends State<HomePage> {
             },
             child: Container(
               height: 100,
-              width: 150,
+              constraints: BoxConstraints(
+                minWidth: 200,
+                maxWidth: 300, //275
+              ),
               child: Card(
                   color: ColorConstants.primaryLighterColor,
                   child: (index == 0)
@@ -280,6 +294,147 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  FutureBuilder<AllTransactionHistory> buildTransactionHistory(
+      BuildContext context, String url) {
+    return FutureBuilder(
+      future: HttpService.transactionHistory(context, widget.user, url),
+      builder: (BuildContext context,
+          AsyncSnapshot<AllTransactionHistory> snapshot) {
+        AllTransactionHistory allTransactionHistory = snapshot.data;
+
+        if (snapshot.hasData) {
+          if (allTransactionHistory.data.transactions.length == 0) {
+            return Center(
+              child: Text(
+                'No Results for this transaction',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w200),
+              ),
+            );
+          } else {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                itemCount: allTransactionHistory.data.transactions.length,
+                scrollDirection: Axis.vertical,
+                itemBuilder: (BuildContext context, index) {
+                  return (index == 0)
+                      ? Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8.0),
+                                topRight: Radius.circular(8.0)),
+                            color: ColorConstants.primaryLighterColor,
+                            border: Border.all(
+                              color: ColorConstants
+                                  .whiteLighterColor, //                   <--- border color
+                              width: 0.2,
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      flex: 6,
+                                      child: Text(
+                                        'Recent Wallet transactions',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: ColorConstants.white,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          color: ColorConstants.secondaryColor,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Center(
+                                            child: Text(
+                                              'All Transactions',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: ColorConstants.white,
+                                                  fontWeight: FontWeight.w400),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ))
+                      : Container(
+                          child: transactionList(
+                          index: index,
+                          amount: allTransactionHistory
+                              .data.transactions[index].amount
+                              .toString(),
+                          createdDate: allTransactionHistory
+                              .data.transactions[index].createdAt,
+                          transactionTitle: allTransactionHistory
+                              .data.transactions[index].activity,
+                          transactionDetails: allTransactionHistory
+                              .data.transactions[index].description,
+                          currency: 'NGN',
+                          iconData: Icons.call_made,
+                          colorData: Colors.green,
+                        ));
+                },
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Center(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {});
+              },
+              child: Text(
+                'Error in network',
+                style: TextStyle(
+                    fontSize: 16,
+                    color: ColorConstants.secondaryColor,
+                    fontWeight: FontWeight.w200),
+              ),
+            ),
+          );
+        } else {
+          return Container(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          ColorConstants.secondaryColor),
+                    )),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
   Widget _buildWalletItem(
       {String coinName,
       String nairaEquivalent,
@@ -287,44 +442,63 @@ class _HomePageState extends State<HomePage> {
       String coinBalance,
       Color coinColor}) {
     return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(12.0),
+        child: Container(
+          width: 500,
+          constraints: BoxConstraints(
+            minWidth: 200,
+            maxWidth: 300, //275
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                coinName,
-                style: TextStyle(
-                    color: ColorConstants.whiteLighterColor,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600),
+              Expanded(
+                flex: 4,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        coinName,
+                        style: TextStyle(
+                            color: ColorConstants.whiteLighterColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(height: 12),
+                    Expanded(
+                      child: Text(
+                        nairaEquivalent,
+                        style: TextStyle(
+                            color: ColorConstants.whiteColor,
+                            fontSize: 22.0,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    SizedBox(height: 2),
+                    Expanded(
+                      child: Text(
+                        coinBalance,
+                        style: TextStyle(
+                            color: coinColor,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    )
+                  ],
+                ),
               ),
-              SizedBox(height: 12),
-              Text(
-                nairaEquivalent,
-                style: TextStyle(
-                    color: ColorConstants.whiteColor,
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w800),
-              ),
-              SizedBox(height: 2),
-              Text(
-                coinBalance,
-                style: TextStyle(
-                    color: coinColor,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0, left: 14),
+                  child: Image.asset(image, height: 40, width: 40),
+                ),
               ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 14),
-            child: Image.asset(image, height: 40, width: 40),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   SliverToBoxAdapter _buildToolbar(BuildContext context) {
@@ -423,20 +597,86 @@ class _HomePageState extends State<HomePage> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500,
                                   )),
-                              SizedBox(height: 8),
-                              Text(nairaBalance,
+                              SizedBox(height: 2),
+                              Text('NGN$nairaBalance',
                                   style: TextStyle(
                                     color: Colors.green[900],
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.w900,
                                   )),
+                              SizedBox(height: 5),
                             ],
                           )
                         ],
                       )),
                 )),
             Positioned(
-                top: 165,
+              top: 155,
+              right: 1,
+              left: 3,
+              child: (accountNumber == '')
+                  ? GestureDetector(
+                      onTap: () {
+                        showInfoDialog(310, _buildBody(),
+                            title: 'Enable account Number');
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.info, size: 18, color: Colors.orange[300]),
+                          SizedBox(width: 10),
+                          Text('Click here to enable Account number',
+                              style: TextStyle(
+                                color: Colors.orange[300],
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              )),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        Text('Acct no: ',
+                            style: TextStyle(
+                              color: ColorConstants.whiteLighterColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Visibility(
+                          visible: !_obscureText,
+                          child: Text(' $bankState $bank',
+                              style: TextStyle(
+                                color: Colors.orange[500],
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                              )),
+                        ),
+                        Visibility(
+                          visible: _obscureText,
+                          child: Text(hideAccountNumber(),
+                              style: TextStyle(
+                                color: Colors.orange[500],
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                              )),
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            _toggleIcon();
+                          },
+                          child: Icon(
+                            _obscureText
+                                ? FontAwesomeIcons.eye
+                                : FontAwesomeIcons.eyeSlash,
+                            size: 18.0,
+                            color: Colors.orange[500],
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+            Positioned(
+                top: 190,
                 right: 1,
                 left: 1,
                 child: _menuContainers(
@@ -461,6 +701,12 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _toggleIcon() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
   }
 
   Widget _menuContainers(
@@ -723,136 +969,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
-    );
-  }
-
-  _openPage(Widget page) {
-    kopenPage(context, page);
-  }
-
-  SliverToBoxAdapter _buildMenuHeader(BuildContext context, String title) {
-    return SliverToBoxAdapter(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0, left: 8.0),
-            child: Text(
-              title.toUpperCase(),
-              style: TextStyle(
-                  fontStyle: FontStyle.normal,
-                  fontSize: 14,
-                  color: ColorConstants.secondaryColor,
-                  fontWeight: FontWeight.w300),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  SliverGrid menuOption(
-      BuildContext context, GlobalKey<ScaffoldState> scaffoldKey) {
-    List<HomeMenu> subList = DemoData.menu;
-    int checkedItem = 0;
-
-    List<Widget> menuScreens = [
-      MabroTransferPage(),
-      BankTransferPage(),
-      DepositWithdrawPage(
-        indexNum: 0,
-      ),
-      DepositWithdrawPage(
-        indexNum: 1,
-      ),
-      NairaWalletPage(
-        user: userId,
-      ),
-      BtcP2PBuySell(),
-      ReceiveBtcPage(),
-      AirtimeToCashPage(),
-      SelectedDataRechargePage(),
-      SelectedMobileCarrierPage(),
-      SelectedCableTvPage(),
-      SelectedElectricitySubPage(),
-      //SelectedEducationSubPage(),
-      //BuySellGiftcardTran(),
-      //SelectedMobileCarrierPage(),
-      //NewsUpdatePage(),
-    ];
-
-    return SliverGrid(
-      gridDelegate:
-          SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              checkedItem = index;
-              if (checkedItem == 5) {
-                //_p2PUserInfo();
-              } else if (checkedItem == 7) {
-                _airtime2CashInfo();
-              } else {
-                kopenPage(context, menuScreens[checkedItem]);
-              }
-            },
-            child: Card(
-              elevation: 3,
-              color: ColorConstants.primaryLighterColor,
-              shape: RoundedRectangleBorder(
-                  side: new BorderSide(
-                      color: ColorConstants.whiteLighterColor, width: 0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              child: Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        // color: ColorConstants.whiteLighterColor,
-                        color: Color((Random().nextDouble() * 0xFFFFFF).toInt())
-                            .withOpacity(1.0),
-                        // color: Colors
-                        //     .primaries[Random().nextInt(Colors.primaries.length)],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Icon(
-                          subList[index].icon,
-                          size: 18,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        width: double.infinity,
-                        color: ColorConstants.transparent,
-                        child: Center(
-                          child: Text(
-                            subList[index].title,
-                            style: TextStyle(
-                                color: ColorConstants.whiteLighterColor,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-        childCount: subList.length,
-      ),
     );
   }
 
@@ -1201,12 +1317,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Divider _buildDivider() {
-    return Divider(
-      height: 8,
-    );
-  }
-
   Widget _buildRow(String title,
       {IconData icon,
       Widget page,
@@ -1260,37 +1370,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  SliverToBoxAdapter _buildPictureDisplay() {
-    return SliverToBoxAdapter(
-        child: Container(
-      color: ColorConstants.primaryColor,
-      height: 180,
-      child: Card(
-        color: ColorConstants.primaryColor,
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: PageIndicatorContainer(
-              align: IndicatorAlign.bottom,
-              length: 2,
-              indicatorSpace: 12.0,
-              padding: EdgeInsets.only(bottom: 8),
-              indicatorColor: ColorConstants.grey,
-              indicatorSelectorColor: ColorConstants.primaryColor,
-              shape: IndicatorShape.circle(size: 8),
-              child: PageView(
-                children: <Widget>[
-                  Image.asset('assets/images/crypto4.jpg', fit: BoxFit.cover),
-                  Image.asset('assets/images/crypto3.jpg', fit: BoxFit.cover)
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ));
   }
 
   void showInfoDialog(double height, Widget Widgets, {String title = 'Info'}) {
@@ -1355,7 +1434,7 @@ class _HomePageState extends State<HomePage> {
                               Navigator.pop(context);
                               kopenPage(context, AccountPage());
                             },
-                            text: 'Proceed'),
+                            text: 'Update Account'),
                       ],
                     ),
                   ),
@@ -1382,7 +1461,7 @@ class _HomePageState extends State<HomePage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            'Please to continue enjoying your smooth transactions with MABRO add your account details.',
+            'Your account number can only be enabled when you add your phone number and BVN to your account',
             style: TextStyle(
                 fontSize: 16, color: ColorConstants.whiteLighterColor),
           ),

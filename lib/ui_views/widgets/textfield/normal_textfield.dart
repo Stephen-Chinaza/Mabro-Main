@@ -42,6 +42,7 @@ class NormalFields extends StatelessWidget {
           onChanged: onChanged,
           controller: controller,
           maxLength: maxLength,
+          enabled: isEditable,
           focusNode: myFocusNode,
           keyboardType: textInputType ?? TextInputType.text,
           cursorColor: ColorConstants.secondaryColor,
@@ -68,7 +69,7 @@ class NormalFields extends StatelessWidget {
                   color: ColorConstants.whiteLighterColor,
                   fontSize: hintSize,
                   fontWeight: FontWeight.w300),
-              contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 13)),
+              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 13)),
         ),
       ),
     );
